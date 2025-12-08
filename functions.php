@@ -8,6 +8,9 @@
 function theme_setup()
 {
     add_theme_support('post-thumbnails');
+    register_nav_menus([
+        'main-menu' => __('Main Menu', 'project-end-of-year'),
+    ]);
 }
 add_action('after_setup_theme', 'theme_setup');
 
@@ -15,6 +18,8 @@ add_action('after_setup_theme', 'theme_setup');
 function theme_scripts()
 {
     wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array(), '1.0.0');
+    // Dashicons are loaded separately in admin by default; enqueue for frontend if needed
+    wp_enqueue_style('dashicons');
     wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'theme_scripts');

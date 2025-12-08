@@ -26,6 +26,7 @@
                     'theme_location' => 'main-menu',
                     'container'      => false,
                     'menu_class'     => 'header-menu',
+                    'fallback_cb'    => 'wp_page_menu',
                 ]);
             ?>
         </nav>

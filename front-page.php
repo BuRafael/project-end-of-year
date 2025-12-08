@@ -2,7 +2,6 @@
 get_header();
 ?>
 
-<main>
 
     <!-- HERO -->
     <section class="hero">
