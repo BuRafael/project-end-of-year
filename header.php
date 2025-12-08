@@ -10,7 +10,6 @@
 
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
-<main id="main-content">
     <header class="site-header">
     <div class="header-container">
 
