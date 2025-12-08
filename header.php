@@ -10,5 +10,5 @@
 
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
-<h1>AAAAAAAA</
+<h1>AAAAAAAA</h1>
     <main id="main-content">
