@@ -10,5 +10,51 @@
 
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
-<h1>AAAAAAAA</h1>
-    <main id="main-content">
+<main id="main-content">
+    <header class="site-header">
+    <div class="header-container">
+
+        <!-- LOGO -->
+        <div class="header-logo">
+            <a href="<?php echo esc_url(home_url('/')); ?>">CINEMUSIC</a>
+        </div>
+
+        <!-- MENU CENTRAL -->
+        <nav class="header-nav">
+            <?php
+                wp_nav_menu([
+                    'theme_location' => 'main-menu',
+                    'container'      => false,
+                    'menu_class'     => 'header-menu',
+                ]);
+            ?>
+        </nav>
+
+        <!-- ZONE DROITE (bouton + icône profil) -->
+        <div class="header-right">
+
+            <?php if (!is_user_logged_in()) : ?>
+
+                <!-- Bouton S'inscrire -->
+                <a href="<?php echo esc_url(site_url('/inscription')); ?>" class="btn-inscription">
+                    S'inscrire
+                </a>
+
+                <!-- Icône profil vers inscription -->
+                <a href="<?php echo esc_url(site_url('/inscription')); ?>" class="profil-icon">
+                    <span class="dashicons dashicons-admin-users"></span>
+                </a>
+
+            <?php else : ?>
+
+                <!-- Icône profil vers page profil -->
+                <a href="<?php echo esc_url(site_url('/profil')); ?>" class="profil-icon">
+                    <span class="dashicons dashicons-admin-users"></span>
+                </a>
+
+            <?php endif; ?>
+
+        </div>
+
+    </div>
+</header>

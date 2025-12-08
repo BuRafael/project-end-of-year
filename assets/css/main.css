@@ -175,3 +175,90 @@ body {
     background: #218838;
 }
 
+/* -------------------------------------- */
+/*               HEADER STYLE             */
+/* -------------------------------------- */
+
+.site-header {
+    background-color: #1A1A1A;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    color: #F4EFEC;
+}
+
+.header-container {
+    width: 90%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* LOGO */
+.header-logo a {
+    color: #F4EFEC;
+    font-size: 32px;
+    font-weight: 700;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.header-logo a:hover {
+    color: #700118;
+}
+
+/* MENU CENTRAL */
+.header-nav .header-menu {
+    list-style: none;
+    display: flex;
+    gap: 60px;
+}
+
+.header-nav .header-menu li a {
+    color: #F4EFEC;
+    text-decoration: none;
+    font-size: 20px;
+    transition: all .2s ease;
+}
+
+.header-nav .header-menu li a:hover {
+    color: #700118;
+    text-decoration: underline;
+}
+
+/* ZONE DROITE */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+/* Bouton S'inscrire */
+.btn-inscription {
+    border: 2px solid #F4EFEC;
+    padding: 10px 20px;
+    border-radius: 30px;
+    color: #F4EFEC;
+    text-decoration: none;
+    font-size: 16px;
+    transition: all .2s ease;
+}
+
+.btn-inscription:hover {
+    background-color: #700118;
+    border-color: #700118;
+    color: white;
+}
+
+/* Icône Profil */
+.profil-icon {
+    color: #F4EFEC;
+    text-decoration: none;
+    font-size: 28px;
+    transition: color .2s ease;
+}
+
+.profil-icon:hover {
+    color: #700118;
+}
