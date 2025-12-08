@@ -1,52 +1,62 @@
 <?php
-
 /**
  * Template Name: Login Template
  */
 get_header();
 ?>
 
-<div class="login-container">
-    <div class="login-form-wrapper">
-        <h1>Login</h1>
+<div class="page-wrapper">
 
-        <?php
-        if (isset($_GET['login']) && $_GET['login'] == 'failed') {
-            echo '<div class="error-message">Invalid username or password.</div>';
-        }
-        if (isset($_GET['login']) && $_GET['login'] == 'empty') {
-            echo '<div class="error-message">Please fill in all fields.</div>';
-        }
-        if (is_user_logged_in()) {
-            echo '<div class="success-message">You are already logged in. <a href="' . wp_logout_url(home_url()) . '">Logout</a></div>';
-        } else {
-        ?>
+    <!-- Logo -->
+    <div class="logo-box">
+        <span class="logo-icon">🎵</span>
+    </div>
 
-            <form method="post" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" class="login-form">
-                <?php wp_nonce_field('login_action', 'login_nonce'); ?>
+    <!-- Titre -->
+    <h1 class="main-title">
+        Bienvenue sur<br>CINEMUSIC&nbsp;!
+    </h1>
 
-                <div class="form-group">
-                    <label for="user_login">Username or Email</label>
-                    <input type="text" name="log" id="user_login" required>
+    <!-- Carte connexion -->
+    <div class="login-card">
+
+        <h2>Se connecter</h2>
+
+        <?php if ( isset($_GET['login']) && $_GET['login'] === 'failed' ) : ?>
+            <div class="error-message">Identifiants invalides.</div>
+        <?php endif; ?>
+
+        <?php if ( is_user_logged_in() ) : ?>
+            <div class="success-message">Vous êtes déjà connecté. <a href="<?php echo esc_url( wp_logout_url( home_url() ) ); ?>">Se déconnecter</a></div>
+        <?php else : ?>
+
+            <form method="post" action="<?php echo esc_url( $_SERVER['REQUEST_URI'] ); ?>" class="login-form">
+                <?php wp_nonce_field( 'login_action', 'login_nonce' ); ?>
+
+                <div class="mb-3">
+                    <input class="form-control custom-input" type="text" name="log" id="user_login" placeholder="Nom d'utilisateur ou email" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="user_pass">Password</label>
-                    <input type="password" name="pwd" id="user_pass" required>
+                <div class="mb-4 password-wrapper">
+                    <input class="form-control custom-input" type="password" name="pwd" id="passwordField" placeholder="Mot de passe" required>
+                    <span class="toggle-password" id="togglePassword">👁️</span>
                 </div>
 
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" name="rememberme" value="forever"> Remember me
+                        <input type="checkbox" name="rememberme" value="forever"> Se souvenir de moi
                     </label>
                 </div>
 
-                <button type="submit" name="login_submit" class="submit-btn">Login</button>
+                <div class="text-center" style="margin-top:16px;">
+                    <button type="submit" name="login_submit" class="btn-submit">Se connecter</button>
+                </div>
             </form>
 
-            <p class="register-link">Don't have an account? <a href="<?php echo esc_url(home_url('/signup')); ?>">Sign up</a></p>
+            <p class="register-link">Pas de compte ? <a href="<?php echo esc_url( home_url('/signup') ); ?>">Inscrivez-vous</a></p>
 
-        <?php } ?>
+        <?php endif; ?>
+
     </div>
 </div>
 

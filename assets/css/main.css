@@ -262,3 +262,121 @@ body {
 .profil-icon:hover {
     color: #700118;
 }
+
+:root {
+    --bg-main: #0b0b0b;
+    --card-bg: #111111;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg-main);
+    color: #f5f5f5;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Wrapper général */
+.page-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    padding: 40px 16px;
+}
+
+/* Logo */
+.logo-box {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 70px;
+    height: 70px;
+    border: 2px solid white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-box .logo-icon {
+    font-size: 32px;
+}
+
+/* Titre */
+.main-title {
+    font-size: 38px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Carte */
+.login-card {
+    width: 100%;
+    max-width: 430px;
+    background: var(--card-bg);
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.5);
+    padding: 40px 34px;
+    box-shadow: 0 0 35px rgba(255,255,255,0.07);
+}
+
+.login-card h2 {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 30px;
+    text-transform: lowercase;
+}
+
+/* Inputs */
+.custom-input {
+    border-radius: 999px;
+    background: #f7f0ea;
+    border: none;
+    padding: 10px 18px;
+    font-size: 14px;
+}
+
+.custom-input::placeholder {
+    color: #555;
+}
+
+/* Password */
+.password-wrapper {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #444;
+}
+
+/* Bouton */
+.btn-submit {
+    border-radius: 999px;
+    padding: 8px 30px;
+    background: #f7f0ea;
+    color: #111;
+    border: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.btn-submit:hover {
+    background: white;
+    color: #000;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+    .main-title {
+        font-size: 30px;
+    }
+}
