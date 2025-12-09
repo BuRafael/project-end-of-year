@@ -2,9 +2,11 @@
 get_header();
 ?>
 
-<div class="front-page-content">
-    <h1>Homepage</h1>
+<!-- DEBUG MARKER: front-page.php loaded from theme (2025-12-09) -->
 
+<div class="front-page-content">
+    <h1>Homepage - Front Page</h1>
+    
     <?php if (is_user_logged_in()) : ?>
         <div class="user-status logged-in">
             <p>Welcome, <strong><?= esc_html(wp_get_current_user()->display_name); ?></strong>!</p>
