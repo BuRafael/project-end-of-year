@@ -8,8 +8,15 @@
 function theme_setup()
 {
     add_theme_support('post-thumbnails');
+    add_theme_support('custom-logo', [
+        'height'      => 80,
+        'width'       => 200,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ]);
+
     register_nav_menus([
-        'main-menu' => __('Main Menu', 'project-end-of-year'),
+        'primary' => __('Primary Menu', 'project-end-of-year'),
     ]);
 }
 add_action('after_setup_theme', 'theme_setup');
@@ -17,10 +24,18 @@ add_action('after_setup_theme', 'theme_setup');
 // Enqueue styles and scripts
 function theme_scripts()
 {
-    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array(), '1.0.0');
-    // Dashicons are loaded separately in admin by default; enqueue for frontend if needed
-    wp_enqueue_style('dashicons');
-    wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array(), '1.0.0', true);
+    // External fonts / vendors
+    wp_enqueue_style('typekit-cinemusic', 'https://use.typekit.net/isz1tod.css', array(), null);
+    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), '5.3.3');
+
+    // Theme styles
+    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.0');
+
+    // Vendor scripts
+    wp_enqueue_script('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true);
+
+    // Theme scripts
+    wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap'), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'theme_scripts');
 

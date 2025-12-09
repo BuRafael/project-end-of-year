@@ -10,4 +10,54 @@
 <body <?php body_class(); ?>>
     <?php wp_body_open(); ?>
 
+    <header class="site-header">
+        <div class="header-container container-fluid">
+            <div class="header-logo">
+                <a href="<?php echo esc_url(home_url('/')); ?>">
+                    <?php
+                    if (function_exists('the_custom_logo') && has_custom_logo()) {
+                        the_custom_logo();
+                    } else {
+                        echo esc_html(get_bloginfo('name', 'display'));
+                    }
+                    ?>
+                </a>
+            </div>
+
+            <nav class="header-nav" aria-label="<?php esc_attr_e('Navigation principale', 'project-end-of-year'); ?>">
+                <?php
+                wp_nav_menu(array(
+                    'theme_location' => 'primary',
+                    'menu_class'     => 'header-menu',
+                    'container'      => false,
+                    'fallback_cb'    => function () {
+                        ?>
+                        <ul class="header-menu">
+                            <li><a href="<?php echo esc_url(home_url('/films')); ?>">Films</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/musique')); ?>">Musique</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/favoris')); ?>">Favoris</a></li>
+                        </ul>
+                        <?php
+                    },
+                ));
+                ?>
+            </nav>
+
+            <div class="header-right">
+                <?php if (!is_user_logged_in()) : ?>
+                    <a class="btn-inscription" href="<?php echo esc_url(home_url('/inscription')); ?>">
+                        <?php esc_html_e("S'inscrire", 'project-end-of-year'); ?>
+                    </a>
+                <?php endif; ?>
+
+                <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
+                    <svg class="profil-svg" width="65" height="72" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="currentColor"/>
+                        <path d="M32.5002 44.8718C21.9793 44.8718 13.0152 51.7433 9.60059 61.3703C10.4324 62.2827 11.3087 63.1457 12.2255 63.955C14.7682 55.1164 22.7448 48.4616 32.5002 48.4616C42.2555 48.4616 50.2321 55.1164 52.7748 63.955C53.6916 63.1457 54.5679 62.2827 55.3997 61.3704C51.9851 51.7433 43.021 44.8718 32.5002 44.8718Z" fill="currentColor"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
     <main id="main-content">
