@@ -1,0 +1,146 @@
+/* Header */
+.site-header {
+	background-color: #1A1A1A;
+	height: 120px;
+	display: flex;
+	align-items: center;
+	color: #F4EFEC;
+	border-bottom: 1px solid #F4EFEC;
+}
+
+.header-container {
+	width: calc(100% - 160px);
+	margin: 0 80px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+}
+
+.header-logo {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+}
+
+.header-logo a {
+	color: #F4EFEC;
+	font-size: 32px;
+	font-family: 'futura-pt', 'Futura', 'Century Gothic', sans-serif;
+	font-weight: 700;
+	text-decoration: none;
+	transition: color .2s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.header-logo a:hover {
+	color: #700118;
+}
+
+.header-nav {
+	flex-grow: 1;
+	display: flex;
+	justify-content: center;
+}
+
+.header-nav .header-menu {
+	list-style: none;
+	display: flex;
+	gap: 60px;
+	margin: 0;
+	padding: 0;
+}
+
+.header-nav .header-menu li a {
+	color: #F4EFEC;
+	text-decoration: none;
+	font-size: 20px;
+	transition: all .2s ease;
+	position: relative;
+}
+
+.header-nav .header-menu li a:hover {
+	color: #700118;
+}
+
+.header-nav .header-menu li a:hover::after {
+	content: '';
+	position: absolute;
+	bottom: -5px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 35px;
+	height: 2px;
+	background-color: #700118;
+}
+
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 25px;
+	flex-shrink: 0;
+}
+
+.btn-inscription {
+	border: 2px solid #F4EFEC;
+	padding: 10px 20px;
+	border-radius: 30px;
+	color: #000000;
+	background-color: #F4EFEC;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: bold;
+	font-family: 'Futura', 'Century Gothic', sans-serif;
+	transition: all .2s ease;
+}
+
+.btn-inscription:hover {
+	background-color: #700118;
+	border-color: #700118;
+	color: #F4EFEC;
+}
+
+.profil-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+	position: relative;
+	width: 65px;
+	height: 72px;
+}
+
+.profil-icon .profil-svg {
+	width: 65px;
+	height: 72px;
+	display: block;
+	color: #F4EFEC;
+	transition: color .15s ease, transform .15s ease;
+}
+
+.profil-icon::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	width: 65px;
+	height: 72px;
+	border-radius: 50%;
+	background: transparent;
+	transition: background .15s ease, opacity .15s ease, transform .15s ease;
+	opacity: 0;
+	transform: scale(0.9);
+}
+
+.profil-icon:hover .profil-svg {
+	color: #700118;
+	transform: translateY(-2px);
+}
+
+.profil-icon:hover::before {
+	background: #F4EFEC;
+	opacity: 1;
+	transform: scale(1);
+}
+

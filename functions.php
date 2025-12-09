@@ -1,73 +1,197 @@
-    </main>
+<?php
+/**
+ * Theme Functions
+ */
 
-    <footer class="site-footer">
-        <div class="footer-container">
-            <div class="footer-left">
-                <?php
-                wp_nav_menu(array(
-                    'theme_location' => 'footer',
-                    'menu_class'     => 'footer-menu',
-                    'container'      => false,
-                    'fallback_cb'    => function () {
-                        ?>
-                        <ul class="footer-menu">
-                            <li><a href="<?php echo esc_url(home_url('/films')); ?>">Films</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/musique')); ?>">Musique</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/favoris')); ?>">Favoris</a></li>
-                        </ul>
-                        <?php
-                    },
+// Theme setup
+function theme_setup()
+{
+    add_theme_support('post-thumbnails');
+    add_theme_support('custom-logo', [
+        'height'      => 80,
+        'width'       => 200,
+        'flex-height' => true,
+        'flex-width'  => true,
+    ]);
+
+    register_nav_menus([
+        'primary' => __('Primary Menu', 'project-end-of-year'),
+        'footer'  => __('Footer Menu', 'project-end-of-year'),
+    ]);
+}
+add_action('after_setup_theme', 'theme_setup');
+
+// Enqueue styles and scripts
+function theme_scripts()
+{
+    // External fonts / vendors
+    wp_enqueue_style('typekit-cinemusic', 'https://use.typekit.net/isz1tod.css', array(), null);
+    wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), '5.3.3');
+
+    // Theme styles
+    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.0');
+    wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap'), '1.0.0', true);
+}
+add_action('wp_enqueue_scripts', 'theme_scripts');
+
+// Handle user registration
+function handle_user_registration()
+{
+    if (isset($_POST['register_submit']) && isset($_POST['register_nonce']) && wp_verify_nonce($_POST['register_nonce'], 'register_action')) {
+        $username = sanitize_user($_POST['user_login']);
+        $email = sanitize_email($_POST['user_email']);
+        $password = $_POST['user_pass'];
+        $password_confirm = $_POST['user_pass_confirm'];
+
+        if ($password !== $password_confirm) {
+            wp_redirect(home_url('/signup?registration=error'));
+            exit;
+        }
+
+        $user_id = wp_create_user($username, $password, $email);
+
+        if (!is_wp_error($user_id)) {
+            if (isset($_POST['first_name'])) {
+                update_user_meta($user_id, 'first_name', sanitize_text_field($_POST['first_name']));
+            }
+            if (isset($_POST['last_name'])) {
+                update_user_meta($user_id, 'last_name', sanitize_text_field($_POST['last_name']));
+            }
+            if (isset($_POST['phone'])) {
+                update_user_meta($user_id, 'phone', sanitize_text_field($_POST['phone']));
+            }
+            if (isset($_POST['student_id'])) {
+                update_user_meta($user_id, 'student_id', sanitize_text_field($_POST['student_id']));
+            }
+
+            $first_name = isset($_POST['first_name']) ? sanitize_text_field($_POST['first_name']) : '';
+            $last_name = isset($_POST['last_name']) ? sanitize_text_field($_POST['last_name']) : '';
+            if ($first_name || $last_name) {
+                wp_update_user(array(
+                    'ID' => $user_id,
+                    'display_name' => trim($first_name . ' ' . $last_name),
+                    'first_name' => $first_name,
+                    'last_name' => $last_name
                 ));
-                ?>
-            </div>
+            }
 
-            <div class="footer-center">
-                <div class="footer-picto">
-                    <?php
-                    $footer_logo_path = get_template_directory() . '/assets/images/Logo.svg';
-                    $footer_logo_uri  = get_template_directory_uri() . '/assets/images/Logo.svg';
-                    if (file_exists($footer_logo_path)) {
-                        echo '<img src="' . esc_url($footer_logo_uri) . '" alt="' . esc_attr(get_bloginfo('name')) . '" class="logo-img" loading="lazy">';
-                    } elseif (has_custom_logo()) {
-                        $logo_id = get_theme_mod('custom_logo');
-                        echo wp_get_attachment_image($logo_id, 'full', false, array('class' => 'logo-img', 'loading' => 'lazy'));
-                    }
-                    ?>
-                </div>
-                <div class="footer-logo-text"><?php echo esc_html(get_bloginfo('name', 'display')); ?></div>
-            </div>
+            wp_redirect(home_url('/signup?registration=success'));
+            exit;
+        } else {
+            wp_redirect(home_url('/signup?registration=error'));
+            exit;
+        }
+    }
+}
+add_action('template_redirect', 'handle_user_registration');
 
-            <div class="footer-right">
-                <a href="https://facebook.com" class="social-icon" aria-label="Facebook" target="_blank" rel="noopener">
-                    <svg class="social-svg" width="20" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-                        <path d="M9.04623 5.865V8.613H7.03223V11.973H9.04623V21.959H13.1802V11.974H15.9552C15.9552 11.974 16.2152 10.363 16.3412 8.601H13.1972V6.303C13.1972 5.96 13.6472 5.498 14.0932 5.498H16.3472V2H13.2832C8.94323 2 9.04623 5.363 9.04623 5.865Z" fill="currentColor"/>
-                    </svg>
-                </a>
-                <a href="https://x.com" class="social-icon" aria-label="X" target="_blank" rel="noopener">
-                    <svg class="social-svg" width="20" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-                        <path d="M22 5.90692C21.2504 6.2343 20.4565 6.44896 19.644 6.54392C20.4968 6.04315 21.138 5.24903 21.448 4.30992C20.64 4.78025 19.7587 5.11152 18.841 5.28992C18.4545 4.88513 17.9897 4.56331 17.4748 4.3441C16.9598 4.12489 16.4056 4.01289 15.846 4.01492C13.58 4.01492 11.743 5.82492 11.743 8.05492C11.743 8.37092 11.779 8.67992 11.849 8.97492C10.2236 8.89761 8.63212 8.48233 7.17617 7.75556C5.72022 7.02879 4.43176 6.0065 3.393 4.75392C3.02883 5.36832 2.83742 6.0697 2.839 6.78392C2.8397 7.45189 3.00683 8.10915 3.32529 8.69631C3.64375 9.28348 4.1035 9.78203 4.663 10.1469C4.01248 10.1259 3.37602 9.95225 2.805 9.63992V9.68992C2.805 11.6479 4.22 13.2809 6.095 13.6529C5.74261 13.7464 5.37958 13.7938 5.015 13.7939C4.75 13.7939 4.493 13.7689 4.242 13.7189C4.51008 14.5268 5.02311 15.2312 5.70982 15.7343C6.39653 16.2373 7.22284 16.514 8.074 16.5259C6.61407 17.6505 4.82182 18.258 2.979 18.2529C2.647 18.2529 2.321 18.2329 2 18.1969C3.88125 19.3876 6.06259 20.0182 8.289 20.0149C15.836 20.0149 19.962 13.8579 19.962 8.51892L19.948 7.99592C20.7529 7.42959 21.4481 6.72177 22 5.90692Z" fill="currentColor"/>
-                    </svg>
-                </a>
-                <a href="https://instagram.com" class="social-icon" aria-label="Instagram" target="_blank" rel="noopener">
-                    <svg class="social-svg" width="28" height="21" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-                        <rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                        <circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                        <circle cx="17" cy="7" r="1" fill="currentColor"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
+// Handle user login
+function handle_user_login()
+{
+    if (isset($_POST['login_submit']) && isset($_POST['login_nonce']) && wp_verify_nonce($_POST['login_nonce'], 'login_action')) {
+        $username = sanitize_user($_POST['log']);
+        $password = $_POST['pwd'];
+        $remember = isset($_POST['rememberme']) ? true : false;
 
-        <div class="footer-legal">
-            © <?php echo esc_html(date_i18n('Y')); ?> <?php echo esc_html(get_bloginfo('name')); ?>.
-            <?php esc_html_e('Tous droits réservés.', 'project-end-of-year'); ?>
-            <a href="<?php echo esc_url(home_url('/mentions-legales')); ?>"><?php esc_html_e('Mentions légales', 'project-end-of-year'); ?></a>
-            <?php esc_html_e('et', 'project-end-of-year'); ?>
-            <a href="<?php echo esc_url(home_url('/politique-de-confidentialite')); ?>"><?php esc_html_e('politique de confidentialité', 'project-end-of-year'); ?></a>.
-        </div>
-    </footer>
+        if (empty($username) || empty($password)) {
+            wp_redirect(home_url('/login?login=empty'));
+            exit;
+        }
 
-    <?php wp_footer(); ?>
-    </body>
+        $creds = array(
+            'user_login'    => $username,
+            'user_password' => $password,
+            'remember'      => $remember
+        );
 
-    </html>
+        $user = wp_signon($creds, false);
+
+        if (!is_wp_error($user)) {
+            wp_redirect(home_url());
+            exit;
+        } else {
+            wp_redirect(home_url('/login?login=failed'));
+            exit;
+        }
+    }
+}
+add_action('template_redirect', 'handle_user_login');
+
+// Redirect after login
+function redirect_after_login($redirect_to, $request, $user)
+{
+    if (!is_wp_error($user)) {
+        return home_url();
+    }
+    return $redirect_to;
+}
+add_filter('login_redirect', 'redirect_after_login', 10, 3);
+
+// Helper function to get user custom field
+function get_user_custom_field($user_id, $field_name)
+{
+    return get_user_meta($user_id, $field_name, true);
+}
+
+// Add custom fields to user profile in admin
+function add_custom_user_profile_fields($user)
+{
+?>
+    <h3>Additional Information</h3>
+    <table class="form-table">
+        <tr>
+            <th><label for="phone">Phone Number</label></th>
+            <td>
+                <input type="tel" name="phone" id="phone" value="<?php echo esc_attr(get_user_meta($user->ID, 'phone', true)); ?>" class="regular-text" />
+            </td>
+        </tr>
+        <tr>
+            <th><label for="student_id">Student ID</label></th>
+            <td>
+                <input type="text" name="student_id" id="student_id" value="<?php echo esc_attr(get_user_meta($user->ID, 'student_id', true)); ?>" class="regular-text" />
+            </td>
+        </tr>
+    </table>
+<?php
+}
+add_action('show_user_profile', 'add_custom_user_profile_fields');
+add_action('edit_user_profile', 'add_custom_user_profile_fields');
+
+// Save custom fields in admin
+function save_custom_user_profile_fields($user_id)
+{
+    if (!current_user_can('edit_user', $user_id)) {
+        return false;
+    }
+
+    if (isset($_POST['phone'])) {
+        update_user_meta($user_id, 'phone', sanitize_text_field($_POST['phone']));
+    }
+    if (isset($_POST['student_id'])) {
+        update_user_meta($user_id, 'student_id', sanitize_text_field($_POST['student_id']));
+    }
+}
+add_action('personal_options_update', 'save_custom_user_profile_fields');
+add_action('edit_user_profile_update', 'save_custom_user_profile_fields');
+
+// Add custom columns to users list table
+function add_custom_user_columns($columns)
+{
+    $columns['phone'] = 'Phone';
+    $columns['student_id'] = 'Student ID';
+    return $columns;
+}
+add_filter('manage_users_columns', 'add_custom_user_columns');
+
+// Display custom column data in users list
+function show_custom_user_column_data($value, $column_name, $user_id)
+{
+    if ($column_name == 'phone') {
+        return get_user_meta($user_id, 'phone', true) ?: '—';
+    }
+    if ($column_name == 'student_id') {
+        return get_user_meta($user_id, 'student_id', true) ?: '—';
+    }
+    return $value;
+}
+add_filter('manage_users_custom_column', 'show_custom_user_column_data', 10, 3);
