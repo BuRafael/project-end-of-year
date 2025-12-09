@@ -26,15 +26,15 @@ get_header();
             <div class="carousel-viewport">
                 <div class="carousel-track">
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/your-name.jpg' ); ?>" alt="Your Name">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Your name affiche.jpg' ); ?>" alt="Your Name">
                         <span class="slide-title">Your Name</span>
                     </div>
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/stranger-things.jpg' ); ?>" alt="Stranger Things">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Stranger things affiche.jpg' ); ?>" alt="Stranger Things">
                         <span class="slide-title">Stranger Things</span>
                     </div>
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/interstellar.jpg' ); ?>" alt="Interstellar">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/affiche interstellar.png' ); ?>" alt="Interstellar">
                         <span class="slide-title">Interstellar</span>
                     </div>
                 </div>
@@ -73,7 +73,7 @@ get_header();
             <div class="top-header">Top 5 films</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/inception.jpg' ); ?>" alt="Inception">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Inception affiche.jpg' ); ?>" alt="Inception">
                     <div class="top-info">
                         <span class="top-title">Inception</span>
                         <span class="top-sub">Christopher Nolan</span>
@@ -81,7 +81,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/lalaland.jpg' ); ?>" alt="La La Land">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/affiche lalaland.jpg' ); ?>" alt="La La Land">
                     <div class="top-info">
                         <span class="top-title">La La Land</span>
                         <span class="top-sub">Damien Chazelle</span>
@@ -89,7 +89,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/parasite.jpg' ); ?>" alt="Parasite">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/affiche Parasite.jpg' ); ?>" alt="Parasite">
                     <div class="top-info">
                         <span class="top-title">Parasite</span>
                         <span class="top-sub">Bong Joon-ho</span>
@@ -97,7 +97,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/interstellar.jpg' ); ?>" alt="Interstellar">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/affiche interstellar.png' ); ?>" alt="Interstellar">
                     <div class="top-info">
                         <span class="top-title">Interstellar</span>
                         <span class="top-sub">Christopher Nolan</span>
@@ -105,7 +105,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/spiderman.jpg' ); ?>" alt="Spider-Man">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/affiche spiderman.jpg' ); ?>" alt="Spider-Man">
                     <div class="top-info">
                         <span class="top-title">Spider-Man vs</span>
                         <span class="top-sub">Richon Sorairo</span>
@@ -119,7 +119,7 @@ get_header();
             <div class="top-header">Top 5 séries</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/stranger-things.jpg' ); ?>" alt="Stranger Things">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Stranger things affiche.jpg' ); ?>" alt="Stranger Things">
                     <div class="top-info">
                         <span class="top-title">Stranger Things</span>
                         <span class="top-sub">The Duffer Brothers</span>
@@ -127,7 +127,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/breaking-bad.jpg' ); ?>" alt="Breaking Bad">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Breaking bad affiche.jpg' ); ?>" alt="Breaking Bad">
                     <div class="top-info">
                         <span class="top-title">Breaking Bad</span>
                         <span class="top-sub">Vince Gilligan</span>
@@ -135,7 +135,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/euphoria.jpg' ); ?>" alt="Euphoria">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Euphoria affiche.jpg' ); ?>" alt="Euphoria">
                     <div class="top-info">
                         <span class="top-title">Euphoria</span>
                         <span class="top-sub">Sam Levinson</span>
@@ -143,7 +143,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/mercredi.jpg' ); ?>" alt="Mercredi">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Mercredi affiche.jpg' ); ?>" alt="Mercredi">
                     <div class="top-info">
                         <span class="top-title">Mercredi</span>
                         <span class="top-sub">Tim Burton</span>
@@ -151,7 +151,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/witcher.jpg' ); ?>" alt="The Witcher">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/The witcher affiche.jpg' ); ?>" alt="The Witcher">
                     <div class="top-info">
                         <span class="top-title">The Witcher</span>
                         <span class="top-sub">Lauren Schmidt Hissrich</span>
@@ -165,7 +165,7 @@ get_header();
             <div class="top-header">Top 5 animés</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/your-name.jpg' ); ?>" alt="Your Name">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Your name affiche.jpg' ); ?>" alt="Your Name">
                     <div class="top-info">
                         <span class="top-title">Your Name</span>
                         <span class="top-sub">Makoto Shinkai</span>
@@ -173,7 +173,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/chihiro.jpg' ); ?>" alt="Chihiro">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Chihiro affiche.jpg' ); ?>" alt="Chihiro">
                     <div class="top-info">
                         <span class="top-title">Chihiro</span>
                         <span class="top-sub">Hayao Miyazaki</span>
@@ -181,7 +181,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/attack-on-titan.jpg' ); ?>" alt="Attaque des Titans">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/attaques des titans affiche.png' ); ?>" alt="Attaque des Titans">
                     <div class="top-info">
                         <span class="top-title">Attaque des Titans</span>
                         <span class="top-sub">Hajime Isayama</span>
@@ -189,7 +189,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/demon-slayer.jpg' ); ?>" alt="Demon Slayer">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/Demon slayer affiche.jpg' ); ?>" alt="Demon Slayer">
                     <div class="top-info">
                         <span class="top-title">Demon Slayer</span>
                         <span class="top-sub">Koyoharu Gotouge</span>
@@ -197,7 +197,7 @@ get_header();
                     <button class="like-btn" data-liked="false">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/Image/jujutsu-kaisen.jpg' ); ?>" alt="Jujutsu Kaisen">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Imagefrontpage/Image/jujutsu kaisen affiche.jpg' ); ?>" alt="Jujutsu Kaisen">
                     <div class="top-info">
                         <span class="top-title">Jujutsu Kaisen</span>
                         <span class="top-sub">Gege Akutami</span>
