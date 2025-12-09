@@ -1,21 +1,68 @@
-// Main JavaScript file
+// Main JavaScript - CINEMUSIC Theme
 
 document.addEventListener('DOMContentLoaded', function() {
-    initScrollTop();
     initCarousel();
+    initScrollToTop();
+    initHearts();
     initTogglePassword();
 });
 
-// Scroll top button
-function initScrollTop() {
-    const scrollBtn = document.getElementById("scrollTopBtn");
+// ========== CAROUSEL ==========
+function initCarousel() {
+    const track = document.querySelector('.carousel-track');
+    const slides = document.querySelectorAll('.slide');
+    const dots = document.querySelectorAll('.dot');
+    const arrowLeft = document.querySelector('.carousel-arrow.left');
+    const arrowRight = document.querySelector('.carousel-arrow.right');
+
+    if (!track || slides.length === 0) return;
+
+    let currentIndex = 0;
+    const slideWidth = 100; // 100% width per slide
+
+    function updateCarousel() {
+        track.style.transform = `translateX(-${currentIndex * slideWidth}%)`;
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentIndex);
+        });
+    }
+
+    // Arrow navigation
+    if (arrowLeft) {
+        arrowLeft.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateCarousel();
+        });
+    }
+
+    if (arrowRight) {
+        arrowRight.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateCarousel();
+        });
+    }
+
+    // Dot navigation
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            currentIndex = index;
+            updateCarousel();
+        });
+    });
+
+    updateCarousel();
+}
+
+// ========== SCROLL TO TOP ==========
+function initScrollToTop() {
+    const scrollBtn = document.getElementById('scrollToTop');
     if (!scrollBtn) return;
 
     window.addEventListener('scroll', () => {
         if (window.scrollY > 300) {
-            scrollBtn.classList.add('show');
+            scrollBtn.style.display = 'flex';
         } else {
-            scrollBtn.classList.remove('show');
+            scrollBtn.style.display = 'none';
         }
     });
 
@@ -24,50 +71,29 @@ function initScrollTop() {
     });
 }
 
-// Carousel functionality
-function initCarousel() {
-    const carousel = document.querySelector('.carousel-image-wrapper');
-    const images = document.querySelectorAll('.carousel-image');
-    const dots = document.querySelectorAll('.dot');
-    const arrowLeft = document.querySelector('.carousel-arrow.left');
-    const arrowRight = document.querySelector('.carousel-arrow.right');
+// ========== HEARTS (Like buttons) ==========
+function initHearts() {
+    const likeButtons = document.querySelectorAll('.like-btn');
 
-    if (!carousel || images.length === 0) return;
-
-    let currentIndex = 0;
-
-    function showImage(index) {
-        images.forEach((img, i) => {
-            img.style.display = i === index ? 'block' : 'none';
-        });
-        dots.forEach((dot, i) => {
-            dot.classList.toggle('active', i === index);
-        });
-    }
-
-    if (arrowRight) {
-        arrowRight.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % images.length;
-            showImage(currentIndex);
-        });
-    }
-
-    if (arrowLeft) {
-        arrowLeft.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            showImage(currentIndex);
-        });
-    }
-
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            currentIndex = index;
-            showImage(currentIndex);
+    likeButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const isLiked = this.getAttribute('data-liked') === 'true';
+            
+            if (isLiked) {
+                this.setAttribute('data-liked', 'false');
+                this.textContent = '♡'; // empty heart
+                this.style.color = '#ffffff';
+            } else {
+                this.setAttribute('data-liked', 'true');
+                this.textContent = '♥'; // filled heart
+                this.style.color = '#700118'; // red color
+            }
         });
     });
 }
 
-// Toggle password visibility for login template
+// ========== PASSWORD TOGGLE (for login template) ==========
 function initTogglePassword() {
     const toggle = document.getElementById('togglePassword');
     const pwd = document.getElementById('passwordField');
@@ -79,3 +105,44 @@ function initTogglePassword() {
         toggle.textContent = type === 'password' ? '👁️' : '🙈';
     });
 }
+
+
+if (nextBtn && prevBtn) {
+  nextBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    updateCarousel(currentIndex);
+  });
+
+  prevBtn.addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    updateCarousel(currentIndex);
+  });
+
+  dots.forEach((dot, i) => {
+    dot.addEventListener("click", () => {
+      currentIndex = i;
+      updateCarousel(currentIndex);
+    });
+  });
+}
+
+// BOUTON RETOUR EN HAUT
+const scrollBtn = document.querySelector(".scroll-to-top");
+
+if (scrollBtn) {
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 400) {
+      scrollBtn.style.display = "flex";
+    } else {
+      scrollBtn.style.display = "none";
+    }
+  });
+
+  scrollBtn.addEventListener("click", () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // caché au départ
+  scrollBtn.style.display = "none";
+}
+
