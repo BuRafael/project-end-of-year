@@ -17,6 +17,7 @@ function theme_setup()
 
     register_nav_menus([
         'primary' => __('Primary Menu', 'project-end-of-year'),
+        'footer'  => __('Footer Menu', 'project-end-of-year'),
     ]);
 }
 add_action('after_setup_theme', 'theme_setup');

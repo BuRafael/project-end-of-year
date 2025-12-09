@@ -13,14 +13,12 @@
     <header class="site-header">
         <div class="header-container container-fluid">
             <div class="header-logo">
+                <?php
+                $theme_logo_uri = get_template_directory_uri() . '/assets/images/Logo.svg';
+                ?>
                 <a href="<?php echo esc_url(home_url('/')); ?>">
-                    <?php
-                    if (function_exists('the_custom_logo') && has_custom_logo()) {
-                        the_custom_logo();
-                    } else {
-                        echo esc_html(get_bloginfo('name', 'display'));
-                    }
-                    ?>
+                    <img src="<?php echo esc_url($theme_logo_uri); ?>" class="brand-logo" alt="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>" loading="lazy">
+                    <span class="brand-text"><?php echo esc_html(get_bloginfo('name', 'display')); ?></span>
                 </a>
             </div>
 
