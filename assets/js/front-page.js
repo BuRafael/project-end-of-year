@@ -1,12 +1,19 @@
-// Front page JavaScript (carousel, scroll-to-top, hearts)
+/**
+ * Front Page JavaScript
+ * Handles carousel, scroll-to-top, hearts (likes), and form interactions
+ */
+
 document.addEventListener('DOMContentLoaded', function() {
     initCarousel();
     initScrollToTop();
     initHearts();
-    initTogglePassword();
+    initCtaButton();
 });
 
-// ========== CAROUSEL ==========
+/**
+ * ========== CAROUSEL ==========
+ * Manages the image carousel with arrow and dot navigation
+ */
 function initCarousel() {
     const track = document.querySelector('.carousel-track');
     const slides = document.querySelectorAll('.slide');
@@ -40,19 +47,13 @@ function initCarousel() {
             updateCarousel();
         });
     }
-
-    // Dot navigation
-    dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => {
-            currentIndex = index;
-            updateCarousel();
-        });
-    });
-
     updateCarousel();
 }
 
-// ========== SCROLL TO TOP ==========
+/**
+ * ========== SCROLL TO TOP ==========
+ * Shows/hides button and scrolls to top smoothly
+ */
 function initScrollToTop() {
     const scrollBtn = document.getElementById('scrollToTop');
     if (!scrollBtn) return;
@@ -70,7 +71,10 @@ function initScrollToTop() {
     });
 }
 
-// ========== HEARTS (Like buttons) ==========
+/**
+ * ========== HEARTS (Like Buttons) ==========
+ * Toggle heart icons for films/series/anime
+ */
 function initHearts() {
     const likeButtons = document.querySelectorAll('.like-btn');
 
@@ -92,7 +96,20 @@ function initHearts() {
     });
 }
 
-// ========== PASSWORD TOGGLE (for login template) ==========
+/**
+ * ========== CTA BUTTON ==========
+ * Handle registration button click
+ */
+function initCtaButton() {
+    const ctaBtn = document.querySelector('.cta-btn');
+    if (!ctaBtn) return;
+
+    ctaBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        // Redirect to registration page
+        window.location.href = '/register';
+    });
+}// ========== PASSWORD TOGGLE (for login template) ==========
 function initTogglePassword() {
     const toggle = document.getElementById('togglePassword');
     const pwd = document.getElementById('passwordField');

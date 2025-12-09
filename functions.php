@@ -30,6 +30,13 @@ function theme_scripts()
 
     // Theme styles
     wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.0');
+    
+    // Front page specific styles and scripts
+    if (is_front_page()) {
+        wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('theme-style'), '1.0.0');
+        wp_enqueue_script('front-page-script', get_template_directory_uri() . '/assets/js/front-page.js', array(), '1.0.0', true);
+    }
+    
     wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap'), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'theme_scripts');
