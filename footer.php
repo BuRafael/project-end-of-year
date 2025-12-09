@@ -34,7 +34,7 @@
                     }
                     ?>
                 </div>
-                <div class="footer-logo-text"><?php echo esc_html(get_bloginfo('name', 'display')); ?></div>
+                <div class="footer-logo-text">CINEMUSIC</div>
             </div>
 
             <div class="footer-right">

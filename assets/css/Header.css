@@ -35,6 +35,12 @@
 	gap: 8px;
 }
 
+.header-logo .brand-logo {
+    height: 72px;
+    width: auto;
+    display: inline-block;
+}
+
 .header-logo a:hover {
 	color: #700118;
 }
