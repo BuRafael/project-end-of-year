@@ -2,8 +2,6 @@
 get_header();
 ?>
 
-<!-- CINEMUSIC - Front Page Template -->
-
 <main class="home-container">
 
     <!-- HERO -->
