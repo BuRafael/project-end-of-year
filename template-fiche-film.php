@@ -1,19 +1,12 @@
 <?php
 /**
  * Template Name: Fiche Film
+ * Template Post Type: page
  * Description: Template pour afficher la fiche détaillée d'un film
  */
 
 get_header();
-
-// Passer le chemin des images au JavaScript
-$template_uri = get_template_directory_uri();
 ?>
-
-<script>
-    // Chemin des images pour JavaScript
-    const themeImagePath = '<?php echo esc_js($template_uri); ?>/assets/image/Fiche films/';
-</script>
 
 <!-- ===== CONTENU FICHE FILM ===== -->
 <main class="movie-page container py-5">
@@ -146,6 +139,11 @@ $template_uri = get_template_directory_uri();
     </section>
 
 </main>
+
+<script>
+    // Chemin des images pour JavaScript
+    const themeImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
+</script>
 
 <?php
 get_footer();

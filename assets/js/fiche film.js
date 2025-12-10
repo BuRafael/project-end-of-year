@@ -1,3 +1,10 @@
+/**
+ * Fiche Film JavaScript
+ * Gère les pistes, commentaires, films similaires et interactions
+ */
+
+document.addEventListener('DOMContentLoaded', function() {
+
 // === PISTES ===
 const tracks = [
     { id: 1, title: "Half Remembered Dream", artist: "Hans Zimmer", duration: "1:12" },
@@ -10,33 +17,35 @@ const tracks = [
 const tracksTable = document.getElementById("tracksTable");
 const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Fiche films/';
 
-tracks.forEach(t => {
-    tracksTable.innerHTML += `
-        <tr>
-            <td>${t.id}</td>
-            <td>
-                <div class="movie-track-info">
-                    <img src="${imagePath}inception affiche film.jpg" class="movie-track-cover" alt="${t.title}">
-                    <div>
-                        <div class="movie-track-title">${t.title}</div>
-                        <div class="movie-track-artist">${t.artist}</div>
+if (tracksTable) {
+    tracks.forEach(t => {
+        tracksTable.innerHTML += `
+            <tr>
+                <td>${t.id}</td>
+                <td>
+                    <div class="movie-track-info">
+                        <img src="${imagePath}inception affiche film.jpg" class="movie-track-cover" alt="${t.title}">
+                        <div>
+                            <div class="movie-track-title">${t.title}</div>
+                            <div class="movie-track-artist">${t.artist}</div>
+                        </div>
                     </div>
-                </div>
-            </td>
-            <td class="col-links">
-                <span class="track-icons">
-                    <i class="bi bi-spotify"></i>
-                    <i class="bi bi-apple"></i>
-                    <i class="bi bi-play-fill"></i>
-                </span>
-            </td>
-            <td class="col-duration text-center">${t.duration}</td>
-            <td class="col-like text-end">
-                <i class="bi bi-heart track-like"></i>
-            </td>
-        </tr>
-    `;
-});
+                </td>
+                <td class="col-links">
+                    <span class="track-icons">
+                        <i class="bi bi-spotify"></i>
+                        <i class="bi bi-apple"></i>
+                        <i class="bi bi-play-fill"></i>
+                    </span>
+                </td>
+                <td class="col-duration text-center">${t.duration}</td>
+                <td class="col-like text-end">
+                    <i class="bi bi-heart track-like"></i>
+                </td>
+            </tr>
+        `;
+    });
+}
 
 // === COMMENTAIRES ===
 const comments = [
@@ -48,18 +57,20 @@ const comments = [
 
 const commentsZone = document.getElementById("commentsZone");
 
-comments.forEach(c => {
-    commentsZone.innerHTML += `
-        <div class="col-12 col-md-3">
-            <div class="comment-card">
-                <div class="comment-user">
-                    <i class="bi bi-person"></i>${c.user}
+if (commentsZone) {
+    comments.forEach(c => {
+        commentsZone.innerHTML += `
+            <div class="col-12 col-md-3">
+                <div class="comment-card">
+                    <div class="comment-user">
+                        <i class="bi bi-person"></i>${c.user}
+                    </div>
+                    <div class="comment-text">${c.text}</div>
                 </div>
-                <div class="comment-text">${c.text}</div>
             </div>
-        </div>
-    `;
-});
+        `;
+    });
+}
 
 // === CARROUSEL : FILMS SIMILAIRES DYNAMIQUE ===
 const allSimilarMovies = [
@@ -81,6 +92,7 @@ const leftArrow = carouselArrows[0];
 const rightArrow = carouselArrows[1];
 
 function renderCarousel() {
+    if (!similarMovies) return;
     similarMovies.innerHTML = '';
     for (let i = 0; i < itemsPerPage; i++) {
         const index = (carouselIndex + i) % allSimilarMovies.length;
@@ -148,6 +160,7 @@ const moreComments = [
 ];
 
 function appendTracks(list, markAppended = false) {
+    if (!tracksTable) return;
     list.forEach(t => {
         const tr = document.createElement('tr');
         if (markAppended) tr.classList.add('appended-track');
@@ -179,6 +192,7 @@ function appendTracks(list, markAppended = false) {
 }
 
 function appendComments(list, markAppended = false) {
+    if (!commentsZone) return;
     list.forEach(c => {
         const col = document.createElement('div');
         col.className = 'col-12 col-md-3';
@@ -224,3 +238,5 @@ if (commentsMoreBtn) {
         }
     });
 }
+
+}); // Fin DOMContentLoaded

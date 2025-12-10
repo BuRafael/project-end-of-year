@@ -32,12 +32,23 @@ function create_theme_pages()
             'post_name'      => 'inception',
             'post_status'    => 'publish',
             'post_type'      => 'page',
-            'page_template'  => 'Fiche film.php',
             'post_content'   => ''
         ]);
+        
+        // Set the page template
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-fiche-film.php');
+        }
+    } else {
+        // Update template if page exists but template is not set
+        $current_template = get_post_meta($inception_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-fiche-film.php') {
+            update_post_meta($inception_page->ID, '_wp_page_template', 'template-fiche-film.php');
+        }
     }
 }
 add_action('after_switch_theme', 'create_theme_pages');
+add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
 
 // Enqueue styles and scripts
 function theme_scripts()
@@ -46,6 +57,9 @@ function theme_scripts()
     wp_enqueue_style('typekit-cinemusic', 'https://use.typekit.net/isz1tod.css', array(), null);
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), '5.3.3');
     wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css', array(), '1.11.1');
+    
+    // Bootstrap JS
+    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true);
 
     // Theme styles
     wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.0');
@@ -57,12 +71,12 @@ function theme_scripts()
     }
     
     // Fiche film template styles and scripts
-    if (is_page_template('Fiche film.php')) {
+    if (is_page_template('template-fiche-film.php')) {
         wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('theme-style', 'bootstrap'), '1.0.0');
-        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/fiche film.js', array('bootstrap'), '1.0.0', true);
+        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/fiche film.js', array('bootstrap-js'), '1.0.0', true);
     }
     
-    wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap'), '1.0.0', true);
+    wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap-js'), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'theme_scripts');
 

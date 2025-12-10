@@ -81,7 +81,12 @@ get_header();
             <div class="top-header">Top 5 films</div>
             <ul class="top-list">
                 <li>
-                    <a href="<?php echo esc_url( home_url('/inception') ); ?>" class="top-item-link">
+                    <?php 
+                    // Lien vers la page fiche film Inception
+                    $inception_page = get_page_by_path('inception');
+                    $inception_url = $inception_page ? get_permalink($inception_page->ID) : home_url('/inception/');
+                    ?>
+                    <a href="<?php echo esc_url($inception_url); ?>" class="top-item-link">
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
                         <div class="top-info">
                             <span class="top-title">Inception</span>
