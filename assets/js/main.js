@@ -1,24 +1,6 @@
-// Main JavaScript - site-wide helpers (kept minimal)
-
-// If you need front-page-specific behavior, it's now in `assets/js/front-page.js`.
-
-// Main JavaScript file
+// Main JavaScript - Global site-wide helpers
 
 document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('.site-header');
-
-    const handleHeaderShadow = () => {
-        if (!header) return;
-        if (window.scrollY > 10) {
-            header.classList.add('is-scrolled');
-        } else {
-            header.classList.remove('is-scrolled');
-        }
-    };
-
-    handleHeaderShadow();
-    window.addEventListener('scroll', handleHeaderShadow, { passive: true });
-
     // Smooth scroll for in-page anchors
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
         anchor.addEventListener('click', (e) => {
@@ -31,55 +13,5 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
-    // Ripple effect on buttons / social icons / upload
-    const rippleTargets = document.querySelectorAll('.btn-inscription, .social-icon, .btn-upload, .btn-ghost, .btn-register-primary');
-    rippleTargets.forEach((el) => {
-        el.style.position = el.style.position || 'relative';
-        el.style.overflow = 'hidden';
-
-        el.addEventListener('pointerdown', (e) => {
-            const rect = el.getBoundingClientRect();
-            const ripple = document.createElement('span');
-            ripple.className = 'ripple';
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            ripple.style.width = ripple.style.height = `${size}px`;
-            ripple.style.left = `${x}px`;
-            ripple.style.top = `${y}px`;
-            el.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 450);
-        });
-    });
-
-    // Password visibility toggles
-    const toggleButtons = document.querySelectorAll('[data-toggle-password]');
-    toggleButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            const targetId = btn.getAttribute('data-toggle-password');
-            const input = document.getElementById(targetId);
-            if (!input) return;
-            const isHidden = input.type === 'password';
-            input.type = isHidden ? 'text' : 'password';
-            btn.classList.toggle('is-active', isHidden);
-        });
-    });
-
-    // Avatar preview
-    const avatarInput = document.getElementById('avatar_file');
-    if (avatarInput) {
-        avatarInput.addEventListener('change', (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            
-            const avatarCircle = document.querySelector('.avatar-circle');
-            if (!avatarCircle) return;
-            
-            // Remplace tout le contenu du cercle par la nouvelle image
-            avatarCircle.innerHTML = '<img src="' + url + '" alt="Aperçu" id="avatarPreviewImg" style="width:100%;height:100%;object-fit:cover;">';
-        });
-    }
 });
 

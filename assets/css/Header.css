@@ -116,7 +116,7 @@
 	text-decoration: none;
 	position: relative;
 	width: 65px;
-	height: 72px;
+	height: 65px;
 }
 
 .profil-icon .profil-svg {
@@ -127,27 +127,20 @@
 	transition: color .15s ease, transform .15s ease;
 }
 
-.profil-icon::before {
-	content: '';
-	position: absolute;
-	inset: 0;
+.profil-icon .profil-avatar {
 	width: 65px;
-	height: 72px;
+	height: 65px;
 	border-radius: 50%;
-	background: transparent;
-	transition: background .15s ease, opacity .15s ease, transform .15s ease;
-	opacity: 0;
-	transform: scale(0.9);
+	object-fit: cover;
+	display: block;
+	border: 2px solid #F4EFEC;
 }
 
 .profil-icon:hover .profil-svg {
 	color: #700118;
-	transform: translateY(-2px);
 }
 
-.profil-icon:hover::before {
-	background: #F4EFEC;
-	opacity: 1;
-	transform: scale(1);
+.profil-icon:hover .profil-avatar {
+	opacity: 0.8;
 }
 

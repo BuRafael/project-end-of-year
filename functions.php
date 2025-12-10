@@ -47,6 +47,27 @@ function create_theme_pages()
         }
     }
 
+    // Create Signup Step 1 page
+    $signup_page = get_page_by_path('inscription');
+    if (!$signup_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Inscription',
+            'post_name'      => 'inscription',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-register.php');
+        }
+    } else {
+        $current_template = get_post_meta($signup_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-register.php') {
+            update_post_meta($signup_page->ID, '_wp_page_template', 'template-register.php');
+        }
+    }
+
     // Create Signup Step 2 page
     $step2_page = get_page_by_path('signup-step2');
     if (!$step2_page) {
@@ -67,6 +88,27 @@ function create_theme_pages()
             update_post_meta($step2_page->ID, '_wp_page_template', 'template-register-step2.php');
         }
     }
+
+    // Create Login page
+    $login_page = get_page_by_path('login');
+    if (!$login_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Connexion',
+            'post_name'      => 'login',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'Connexion.php');
+        }
+    } else {
+        $current_template = get_post_meta($login_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'Connexion.php') {
+            update_post_meta($login_page->ID, '_wp_page_template', 'Connexion.php');
+        }
+    }
 }
 add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
@@ -82,21 +124,30 @@ function theme_scripts()
     // Bootstrap JS
     wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true);
 
-    // Theme styles
-    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.3');
+    // Base styles (reset + global)
+    wp_enqueue_style('base-style', get_template_directory_uri() . '/assets/css/base.css', array('bootstrap'), '1.0.0');
+    
+    // Header and Footer styles (loaded on all pages)
+    wp_enqueue_style('header-style', get_template_directory_uri() . '/assets/css/Header.css', array('base-style'), '1.0.0');
+    wp_enqueue_style('footer-style', get_template_directory_uri() . '/assets/css/footer.css', array('base-style'), '1.0.0');
+    
+    // Header and Footer scripts (loaded on all pages)
+    wp_enqueue_script('header-script', get_template_directory_uri() . '/assets/js/Header.js', array(), '1.0.0', true);
+    wp_enqueue_script('footer-script', get_template_directory_uri() . '/assets/js/footer.js', array(), '1.0.0', true);
     
     // Front page specific styles and scripts
     if (is_front_page()) {
-        wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('theme-style'), '1.0.0');
+        wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('header-style', 'footer-style'), '1.0.0');
         wp_enqueue_script('front-page-script', get_template_directory_uri() . '/assets/js/front-page.js', array(), '1.0.0', true);
     }
     
     // Fiche film template styles and scripts
     if (is_page_template('template-fiche-film.php')) {
-        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('theme-style', 'bootstrap'), '1.0.0');
+        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), '1.0.0');
         wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/fiche film.js', array('bootstrap-js'), '1.0.0', true);
     }
     
+    // Global script (smooth scroll)
     wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap-js'), '1.0.0', true);
 }
 add_action('wp_enqueue_scripts', 'theme_scripts');
@@ -111,7 +162,19 @@ function handle_user_registration()
         $password_confirm = $_POST['user_pass_confirm'];
 
         if ($password !== $password_confirm) {
-            wp_redirect(home_url('/signup?registration=error'));
+            wp_redirect(home_url('/inscription?registration=error'));
+            exit;
+        }
+
+        // Vérifier si l'email existe déjà
+        if (email_exists($email)) {
+            wp_redirect(home_url('/inscription?registration=email_exists'));
+            exit;
+        }
+
+        // Vérifier si l'username existe déjà
+        if (username_exists($username)) {
+            wp_redirect(home_url('/inscription?registration=username_exists'));
             exit;
         }
 
@@ -144,7 +207,8 @@ function handle_user_registration()
 
             // Connecter automatiquement l'utilisateur
             wp_set_current_user($user_id);
-            wp_set_auth_cookie($user_id);
+            wp_set_auth_cookie($user_id, true, is_ssl());
+            do_action('wp_login', $username, get_user_by('ID', $user_id));
 
             // Rediriger vers le step 2 (avatar)
             $step2_page = get_page_by_path('signup-step2');
@@ -153,6 +217,7 @@ function handle_user_registration()
             } else {
                 wp_redirect(home_url('/signup-step2'));
             }
+            exit;
             exit;
         } else {
             wp_redirect(home_url('/signup?registration=error'));
