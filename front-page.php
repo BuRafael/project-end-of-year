@@ -233,7 +233,9 @@ get_header();
                 Rejoignez notre communauté et plongez dans<br>
                 l'univers musical de tous vos films et séries favoris !
             </p>
-            <button class="cta-btn" type="button">S'inscrire</button>
+            <?php if (!is_user_logged_in()) : ?>
+                <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="cta-btn">S'inscrire</a>
+            <?php endif; ?>
         </div>
     </section>
 

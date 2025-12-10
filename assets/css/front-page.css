@@ -407,6 +407,7 @@
 }
 
 .cta-btn {
+  display: inline-block;
   border: none;
   border-radius: 999px;
   padding: 12px 32px;
@@ -416,6 +417,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1rem;
+  text-decoration: none;
 }
 
 .cta-btn:hover {
