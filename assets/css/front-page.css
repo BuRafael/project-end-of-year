@@ -108,14 +108,14 @@
 .slide-content {
   position: absolute;
   bottom: 40px;
-  left: 40px;
+  left: 70px;
   right: auto;
   padding: 30px;
   background: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(10px);
   color: #F4EFEC;
   text-align: left;
-  display: none;
+  display: flex;
   flex-direction: column;
   gap: 20px;
   justify-content: flex-start;
@@ -125,7 +125,7 @@
 }
 
 .slide-title {
-  font-size: 3.5em;
+  font-size: 2.8em;
   font-weight: bold;
   text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
   margin: 0;
@@ -195,13 +195,17 @@
   transform: translateX(-50%);
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   z-index: 20;
 }
 
 .dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  min-width: 6px;
+  min-height: 6px;
+  display: block;
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.6);
@@ -211,12 +215,12 @@
 
 .dot:hover {
   background: rgba(255, 255, 255, 0.85);
-  transform: scale(1.15);
+  transform: scale(1.05);
 }
 
 .dot.active {
   background: #700118;
-  transform: scale(1.2);
+  transform: scale(1.15);
 }
 
 /* ==================================================
@@ -397,13 +401,7 @@
 }
 
 .cta-text p::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 50px;
-  width: 150px;
-  height: 1px;
-  background: #F4EFEC;
+  content: none;
 }
 
 .cta-btn {
