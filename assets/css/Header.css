@@ -11,9 +11,9 @@
 .header-container {
 	width: calc(100% - 160px);
 	margin: 0 80px;
-	display: flex;
+	display: grid;
+	grid-template-columns: 1fr auto 1fr;
 	align-items: center;
-	justify-content: space-between;
 	gap: 24px;
 }
 
@@ -46,9 +46,9 @@
 }
 
 .header-nav {
-	flex-grow: 1;
 	display: flex;
 	justify-content: center;
+	grid-column: 2;
 }
 
 .header-nav .header-menu {
@@ -85,8 +85,9 @@
 .header-right {
 	display: flex;
 	align-items: center;
+	justify-content: flex-end;
 	gap: 25px;
-	flex-shrink: 0;
+	grid-column: 3;
 }
 
 .btn-inscription {

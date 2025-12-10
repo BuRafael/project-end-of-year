@@ -82,7 +82,17 @@ function handle_user_registration()
                 ));
             }
 
-            wp_redirect(home_url('/signup?registration=success'));
+            // Connecter automatiquement l'utilisateur
+            wp_set_current_user($user_id);
+            wp_set_auth_cookie($user_id);
+
+            // Rediriger vers le step 2 (avatar)
+            $step2_page = get_page_by_path('signup-step2');
+            if ($step2_page) {
+                wp_redirect(get_permalink($step2_page->ID));
+            } else {
+                wp_redirect(home_url('/signup-step2'));
+            }
             exit;
         } else {
             wp_redirect(home_url('/signup?registration=error'));

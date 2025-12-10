@@ -68,25 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Avatar preview
     const avatarInput = document.getElementById('avatar_file');
-    const avatarPlaceholder = document.getElementById('avatarPlaceholder');
-    const avatarPreviewImg = document.getElementById('avatarPreviewImg');
     if (avatarInput) {
         avatarInput.addEventListener('change', (e) => {
             const file = e.target.files && e.target.files[0];
             if (!file) return;
             const url = URL.createObjectURL(file);
-            if (avatarPreviewImg) {
-                avatarPreviewImg.src = url;
-                avatarPreviewImg.style.display = 'block';
-            } else if (avatarPlaceholder) {
-                const img = document.createElement('img');
-                img.id = 'avatarPreviewImg';
-                img.src = url;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-                avatarPlaceholder.replaceWith(img);
-            }
+            
+            const avatarCircle = document.querySelector('.avatar-circle');
+            if (!avatarCircle) return;
+            
+            // Remplace tout le contenu du cercle par la nouvelle image
+            avatarCircle.innerHTML = '<img src="' + url + '" alt="Aperçu" id="avatarPreviewImg" style="width:100%;height:100%;object-fit:cover;">';
         });
     }
 });

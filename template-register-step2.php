@@ -3,7 +3,31 @@
  * Template Name: Register Step 2 (Avatar)
  */
 
-get_header();
+// Page sans header/footer : structure minimale + wp_head/wp_footer pour charger les styles/scripts
+
+$upload_feedback = '';
+?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+    <meta charset="<?php bloginfo('charset'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-step.css'); ?>">
+    <?php wp_head(); ?>
+</head>
+<body <?php body_class('page-register-avatar'); ?>>
+
+<section class="register-hero register-hero--step2">
+<?php wp_footer(); ?>
+</body>
+</html>
+
+<?php
+/**
+ * Template Name: Register Step 2 (Avatar)
+ */
+
+// Page sans header/footer
 
 $upload_feedback = '';
 
@@ -34,12 +58,12 @@ if (is_user_logged_in() && isset($_POST['avatar_submit']) && isset($_POST['avata
 
 <section class="register-hero register-hero--step2">
     <div class="register-hero__logo">
-        <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
+        <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
     </div>
 
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
-        <h1><?php esc_html_e('CINEMUSIC !', 'project-end-of-year'); ?></h1>
+        <h1><?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?></h1>
     </div>
 
     <div class="register-card register-card--avatar">
@@ -70,6 +94,7 @@ if (is_user_logged_in() && isset($_POST['avatar_submit']) && isset($_POST['avata
             <form method="post" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" class="register-form register-form--avatar" enctype="multipart/form-data">
                 <?php wp_nonce_field('upload_avatar', 'avatar_nonce'); ?>
                 <label class="btn-upload">
+                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/upload.svg'); ?>" alt="" class="upload-icon">
                     <?php esc_html_e('Importer une image', 'project-end-of-year'); ?>
                     <input type="file" name="avatar_file" id="avatar_file" accept="image/*" hidden>
                 </label>
@@ -90,7 +115,5 @@ if (is_user_logged_in() && isset($_POST['avatar_submit']) && isset($_POST['avata
         <?php endif; ?>
     </div>
 </section>
-
 <?php
-get_footer();
 

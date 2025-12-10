@@ -602,7 +602,8 @@ button, .btn {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+  font-weight: 100;
     line-height: 1.6;
 }
 
