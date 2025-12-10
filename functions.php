@@ -21,6 +21,24 @@ function theme_setup()
 }
 add_action('after_setup_theme', 'theme_setup');
 
+// Create default pages on theme activation
+function create_theme_pages()
+{
+    // Create Fiche Film Inception page
+    $inception_page = get_page_by_path('inception');
+    if (!$inception_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Inception',
+            'post_name'      => 'inception',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'page_template'  => 'Fiche film.php',
+            'post_content'   => ''
+        ]);
+    }
+}
+add_action('after_switch_theme', 'create_theme_pages');
+
 // Enqueue styles and scripts
 function theme_scripts()
 {
