@@ -43,7 +43,9 @@ if (is_user_logged_in() && isset($_POST['avatar_submit']) && isset($_POST['avata
             if ($movefile && !isset($movefile['error'])) {
                 // Save URL in user meta.
                 update_user_meta(get_current_user_id(), 'avatar_url', esc_url_raw($movefile['url']));
-                $upload_feedback = '<div class="success-message">Photo enregistrée !</div>';
+                // Rediriger vers la page d'accueil
+                wp_redirect(home_url('/'));
+                exit;
             } else {
                 $upload_feedback = '<div class="error-message">Erreur lors de l\'upload : ' . esc_html($movefile['error']) . '</div>';
             }
@@ -51,7 +53,9 @@ if (is_user_logged_in() && isset($_POST['avatar_submit']) && isset($_POST['avata
             $upload_feedback = '<div class="error-message">Format non supporté. Utilise JPG, PNG, WEBP ou GIF.</div>';
         }
     } else {
-        $upload_feedback = '<div class="error-message">Choisis une image avant de terminer.</div>';
+        // Si pas d'image sélectionnée, rediriger quand même vers la page d'accueil
+        wp_redirect(home_url('/'));
+        exit;
     }
 }
 ?>

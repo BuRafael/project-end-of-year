@@ -46,6 +46,27 @@ function create_theme_pages()
             update_post_meta($inception_page->ID, '_wp_page_template', 'template-fiche-film.php');
         }
     }
+
+    // Create Signup Step 2 page
+    $step2_page = get_page_by_path('signup-step2');
+    if (!$step2_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Inscription - Étape 2',
+            'post_name'      => 'signup-step2',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-register-step2.php');
+        }
+    } else {
+        $current_template = get_post_meta($step2_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-register-step2.php') {
+            update_post_meta($step2_page->ID, '_wp_page_template', 'template-register-step2.php');
+        }
+    }
 }
 add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
@@ -62,7 +83,7 @@ function theme_scripts()
     wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true);
 
     // Theme styles
-    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.0');
+    wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.3');
     
     // Front page specific styles and scripts
     if (is_front_page()) {
