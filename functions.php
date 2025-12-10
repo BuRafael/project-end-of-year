@@ -27,6 +27,7 @@ function theme_scripts()
     // External fonts / vendors
     wp_enqueue_style('typekit-cinemusic', 'https://use.typekit.net/isz1tod.css', array(), null);
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), '5.3.3');
+    wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css', array(), '1.11.1');
 
     // Theme styles
     wp_enqueue_style('theme-style', get_template_directory_uri() . '/assets/css/main.css', array('bootstrap'), '1.0.0');
@@ -35,6 +36,12 @@ function theme_scripts()
     if (is_front_page()) {
         wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('theme-style'), '1.0.0');
         wp_enqueue_script('front-page-script', get_template_directory_uri() . '/assets/js/front-page.js', array(), '1.0.0', true);
+    }
+    
+    // Fiche film template styles and scripts
+    if (is_page_template('Fiche film.php')) {
+        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('theme-style', 'bootstrap'), '1.0.0');
+        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/fiche film.js', array('bootstrap'), '1.0.0', true);
     }
     
     wp_enqueue_script('theme-script', get_template_directory_uri() . '/assets/js/main.js', array('bootstrap'), '1.0.0', true);
