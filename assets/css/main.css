@@ -359,13 +359,13 @@ a {
   bottom: 8px;
   text-align: center;
   font-size: 10px;
-  color: #ffffff;
+  color: #F4EFEC;
   font-family: 'futura-pt', 'Futura', 'Century Gothic', sans-serif;
   font-weight: 100;
 }
 
 .footer-legal a {
-  color: #ffffff;
+  color: #F4EFEC;
   text-decoration: underline;
 }
 
@@ -408,7 +408,7 @@ button, .btn {
 .register-form-wrapper {
   width: 100%;
   max-width: 400px;
-  background: #fff;
+  background: #F4EFEC;
   padding: 2rem;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -449,7 +449,7 @@ button, .btn {
   width: 100%;
   padding: 0.75rem;
   background: #0073aa;
-  color: #fff;
+  color: #F4EFEC;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
@@ -542,7 +542,7 @@ button, .btn {
   display: inline-block;
   padding: 0.75rem 1.5rem;
   background: #0073aa;
-  color: #fff;
+  color: #F4EFEC;
   text-decoration: none;
   border-radius: 4px;
   transition: background 0.3s;
@@ -906,13 +906,13 @@ body {
     bottom: 8px;
     text-align: center;
     font-size: 10px;
-    color: #ffffff;
+    color: #F4EFEC;
     font-family: 'futura-pt', 'Futura', 'Century Gothic', sans-serif;
     font-weight: 100;
 }
 
 .footer-legal a {
-    color: #ffffff;
+    color: #F4EFEC;
     text-decoration: underline;
 }
 
@@ -955,7 +955,7 @@ body {
 .register-form-wrapper {
     width: 100%;
     max-width: 400px;
-    background: #fff;
+    background: #F4EFEC;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -996,7 +996,7 @@ body {
     width: 100%;
     padding: 0.75rem;
     background: #0073aa;
-    color: #fff;
+    color: #F4EFEC;
     border: none;
     border-radius: 4px;
     font-size: 1rem;
@@ -1087,7 +1087,7 @@ body {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     background: #0073aa;
-    color: #fff;
+    color: #F4EFEC;
     text-decoration: none;
     border-radius: 4px;
     transition: background 0.3s;

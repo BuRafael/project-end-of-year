@@ -14,7 +14,7 @@
         <div class="header-container container-fluid">
             <div class="header-logo">
                 <?php
-                $theme_logo_uri = get_template_directory_uri() . '/assets/images/Logo.svg';
+                $theme_logo_uri = get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg';
                 ?>
                 <a href="<?php echo esc_url(home_url('/')); ?>">
                     <img src="<?php echo esc_url($theme_logo_uri); ?>" class="brand-logo" alt="<?php echo esc_attr(get_bloginfo('name', 'display')); ?>" loading="lazy">

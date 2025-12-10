@@ -24,8 +24,8 @@
             <div class="footer-center">
                 <div class="footer-picto">
                     <?php
-                    $footer_logo_path = get_template_directory() . '/assets/images/Logo.svg';
-                    $footer_logo_uri  = get_template_directory_uri() . '/assets/images/Logo.svg';
+                    $footer_logo_path = get_template_directory() . '/assets/image/Icones et Logo/Logo.svg';
+                    $footer_logo_uri  = get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg';
                     if (file_exists($footer_logo_path)) {
                         echo '<img src="' . esc_url($footer_logo_uri) . '" alt="' . esc_attr(get_bloginfo('name')) . '" class="logo-img" loading="lazy">';
                     } elseif (has_custom_logo()) {
