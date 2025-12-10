@@ -39,12 +39,12 @@ get_header();
             </div>
 
             <button class="carousel-arrow right" aria-label="Image suivante" type="button">❯</button>
-        </div>
 
-        <div class="carousel-dots">
-            <button class="dot active" data-slide="0" type="button" aria-label="Slide 1"></button>
-            <button class="dot" data-slide="1" type="button" aria-label="Slide 2"></button>
-            <button class="dot" data-slide="2" type="button" aria-label="Slide 3"></button>
+            <div class="carousel-dots">
+                <button class="dot active" data-slide="0" type="button" aria-label="Slide 1"></button>
+                <button class="dot" data-slide="1" type="button" aria-label="Slide 2"></button>
+                <button class="dot" data-slide="2" type="button" aria-label="Slide 3"></button>
+            </div>
         </div>
     </section>
 
