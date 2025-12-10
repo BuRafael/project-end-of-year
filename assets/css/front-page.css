@@ -305,10 +305,20 @@
   padding: 12px 12px;
   border-top: 1px solid #222;
   transition: background 0.2s ease;
+  position: relative;
 }
 
 .top-list li:hover {
   background: rgba(112, 1, 24, 0.1);
+}
+
+.top-item-link {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
 }
 
 .top-list li img {
@@ -327,28 +337,20 @@
   min-width: 0;
 }
 
-.top-title-link {
+.top-title {
   font-size: 1.1rem;
   font-weight: 600;
   color: #F4EFEC;
-  text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.top-title-link:hover {
+.top-item-link:hover .top-title {
   color: #700118;
 }
 
-.top-composer-link {
+.top-sub {
   font-size: 0.9rem;
   color: #999;
-  text-decoration: underline;
-  transition: color 0.2s ease;
-  margin-top: 2px;
-}
-
-.top-composer-link:hover {
-  color: #700118;
 }
 
 .like-btn {

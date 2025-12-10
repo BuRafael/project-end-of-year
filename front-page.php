@@ -81,11 +81,18 @@ get_header();
             <div class="top-header">Top 5 films</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
-                    <div class="top-info">
-                        <a href="#" class="top-title-link">Inception</a>
-                        <a href="#" class="top-composer-link">Christopher Nolan</a>
-                    </div>
+                    <?php 
+                    // Lien vers la page fiche film Inception
+                    $inception_page = get_page_by_path('inception');
+                    $inception_url = $inception_page ? get_permalink($inception_page->ID) : home_url('/inception/');
+                    ?>
+                    <a href="<?php echo esc_url($inception_url); ?>" class="top-item-link">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
+                        <div class="top-info">
+                            <span class="top-title">Inception</span>
+                            <span class="top-sub">Christopher Nolan</span>
+                        </div>
+                    </a>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
