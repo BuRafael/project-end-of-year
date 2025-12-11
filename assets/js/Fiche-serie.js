@@ -19,6 +19,11 @@ const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'asse
 
 if (tracksTable) {
     tracks.forEach(t => {
+        // Créer un lien cliquable si l'artiste est Hans Zimmer
+        const artistHtml = t.artist === 'Hans Zimmer' 
+            ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
+            : `<div class="movie-track-artist">${t.artist}</div>`;
+        
         tracksTable.innerHTML += `
             <tr>
                 <td>${t.id}</td>
@@ -27,7 +32,7 @@ if (tracksTable) {
                         <img src="${imagePath}" class="movie-track-cover" alt="${t.title}">
                         <div>
                             <div class="movie-track-title">${t.title}</div>
-                            <div class="movie-track-artist">${t.artist}</div>
+                            ${artistHtml}
                         </div>
                     </div>
                 </td>

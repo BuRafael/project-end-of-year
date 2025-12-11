@@ -219,8 +219,9 @@
     font-weight: 700;
     background: transparent;
     padding: 14px 10px;
-}
     font-size: 1rem;
+}
+
 .movie-tracks-table tbody tr {
     border-bottom: 1px solid rgba(244, 239, 236, 0.2);
     background: transparent;
@@ -306,6 +307,18 @@
 
 .movie-track-artist:hover {
     color: rgba(112, 1, 24, 1);
+}
+
+/* Lien vers compositeur */
+a.movie-track-artist {
+    color: #999;
+    text-decoration: underline;
+    font-size: 0.75rem;
+}
+
+a.movie-track-artist:hover {
+    color: rgba(112, 1, 24, 1);
+    text-decoration: underline;
 }
 
 /* icônes cerclées comme sur la maquette */

@@ -151,6 +151,27 @@ function create_theme_pages()
             update_post_meta($stranger_things_page->ID, '_wp_page_template', 'template-fiche-serie.php');
         }
     }
+
+    // Create Hans Zimmer Composer page
+    $hans_zimmer_page = get_page_by_path('hans-zimmer');
+    if (!$hans_zimmer_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Hans Zimmer',
+            'post_name'      => 'hans-zimmer',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-fiche-compositeur.php');
+        }
+    } else {
+        $current_template = get_post_meta($hans_zimmer_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-fiche-compositeur.php') {
+            update_post_meta($hans_zimmer_page->ID, '_wp_page_template', 'template-fiche-compositeur.php');
+        }
+    }
 }
 add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
@@ -212,6 +233,19 @@ function theme_scripts()
         ));
     }
     
+    // Fiche compositeur template styles and scripts
+    if (is_page_template('template-fiche-compositeur.php') || $current_template === 'template-fiche-compositeur.php') {
+        wp_enqueue_style('fiche-compositeur-style', get_template_directory_uri() . '/assets/css/Fiche-compositeur.css', array('header-style', 'footer-style', 'bootstrap'), time());
+        wp_enqueue_script('fiche-compositeur-script', get_template_directory_uri() . '/assets/js/fiche-compositeur.js', array('bootstrap-js'), time(), true);
+        
+        // Passer les variables AJAX au JS (pour les commentaires)
+        wp_localize_script('fiche-compositeur-script', 'composerComments', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('composer_comment_nonce'),
+            'composer_id' => 'hans-zimmer' // ID du compositeur actuel
+        ));
+    }
+    
     // Registration template styles and scripts
     if (is_page_template('template-register.php') || $current_template === 'template-register.php') {
         wp_enqueue_style('register-style', get_template_directory_uri() . '/assets/css/register-step.css', array('base-style'), $version);
@@ -247,6 +281,11 @@ function enqueue_custom_template_styles() {
     // Fiche film page
     if (is_page_template('template-fiche-film.php')) {
         echo '<link rel="stylesheet" href="' . esc_url(get_template_directory_uri() . '/assets/css/Fiche film.css') . '?v=' . $version . '">' . "\n";
+    }
+    
+    // Fiche compositeur page
+    if (is_page_template('template-fiche-compositeur.php')) {
+        echo '<link rel="stylesheet" href="' . esc_url(get_template_directory_uri() . '/assets/css/Fiche-compositeur.css') . '?v=' . $version . '">' . "\n";
     }
 }
 add_action('wp_head', 'enqueue_custom_template_styles', 5);
