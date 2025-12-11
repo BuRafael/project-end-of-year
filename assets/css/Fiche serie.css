@@ -3,48 +3,54 @@
    Styles spécifiques pour la page de détail d'une série
    ================================================== */
 
-/* Importer les styles communs de base */
-@import url('./Fiche film.css');
-
-/* Overrides pour la fiche série */
+/* Les styles de base (Fiche film.css) sont chargés via WordPress */
+/* Ce fichier contient uniquement les overrides et styles spécifiques aux séries */
 
 .series-selects {
     width: 100%;
-    margin-top: 16px;
-}
-
-.series-selects .form-label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 6px;
-    color: rgba(112, 1, 24, 1);
-    font-size: 0.9rem;
+    margin-top: 32px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
 }
 
 .series-selects .form-select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #444;
-    border-radius: 4px;
-    background-color: #1A1A1A;
-    color: #F4EFEC;
-    font-size: 0.9rem;
-    transition: border-color 0.3s ease, background-color 0.3s ease;
+    width: 145px;
+    height: 42px;
+    padding: 8px 14px;
+    border: 2px solid #700118;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #700118 0%, #8B0120 100%);
+    color: #FFFFFF;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(112, 1, 24, 0.3);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='white' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 32px;
 }
 
 .series-selects .form-select:hover {
-    border-color: rgba(112, 1, 24, 0.8);
+    background: linear-gradient(135deg, #8B0120 0%, #A5012A 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(112, 1, 24, 0.4);
 }
 
 .series-selects .form-select:focus {
     outline: none;
-    border-color: rgba(112, 1, 24, 1);
-    box-shadow: 0 0 0 3px rgba(112, 1, 24, 0.2);
+    border-color: #A5012A;
+    box-shadow: 0 0 0 4px rgba(112, 1, 24, 0.2), 0 6px 16px rgba(112, 1, 24, 0.4);
 }
 
 .series-selects .form-select option {
-    background-color: #1A1A1A;
-    color: #F4EFEC;
+    background-color: #FFFFFF;
+    color: #1A1A1A;
+    font-weight: 500;
+    padding: 8px;
 }
 
 .series-selects .mb-3 {
