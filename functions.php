@@ -172,6 +172,48 @@ function create_theme_pages()
             update_post_meta($hans_zimmer_page->ID, '_wp_page_template', 'template-fiche-compositeur.php');
         }
     }
+
+    // Create Films page
+    $films_page = get_page_by_path('films');
+    if (!$films_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Films',
+            'post_name'      => 'films',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-films.php');
+        }
+    } else {
+        $current_template = get_post_meta($films_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-films.php') {
+            update_post_meta($films_page->ID, '_wp_page_template', 'template-films.php');
+        }
+    }
+
+    // Create Series page
+    $series_page = get_page_by_path('series');
+    if (!$series_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Séries',
+            'post_name'      => 'series',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-series.php');
+        }
+    } else {
+        $current_template = get_post_meta($series_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-series.php') {
+            update_post_meta($series_page->ID, '_wp_page_template', 'template-series.php');
+        }
+    }
 }
 add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
@@ -276,6 +318,13 @@ function theme_scripts()
     if (is_page_template('template-profil.php') || $current_template === 'template-profil.php') {
         wp_enqueue_style('profil-style', get_template_directory_uri() . '/assets/css/profil.css', array('header-style', 'footer-style'), $version);
         wp_enqueue_script('profil-script', get_template_directory_uri() . '/assets/js/profil.js', array(), $version, true);
+    }
+    
+    // Films & Series pages styles and scripts
+    if (is_page_template('template-films.php') || is_page_template('template-series.php') || 
+        $current_template === 'template-films.php' || $current_template === 'template-series.php') {
+        wp_enqueue_style('movies-series-style', get_template_directory_uri() . '/assets/css/movies-series.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/movies-series.css'));
+        wp_enqueue_script('movies-series-script', get_template_directory_uri() . '/assets/js/movies-series.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/movies-series.js'), true);
     }
     
     // Global script (smooth scroll)
@@ -490,6 +539,145 @@ function show_custom_user_column_data($value, $column_name, $user_id)
 }
 add_filter('manage_users_custom_column', 'show_custom_user_column_data', 10, 3);
 
+// ===== GESTION DES FILMS ET SÉRIES =====
+
+// Créer une table personnalisée pour les films et séries
+function create_movies_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        title varchar(255) NOT NULL,
+        type varchar(20) NOT NULL,
+        genre varchar(100) NOT NULL,
+        year varchar(4),
+        affiche varchar(255),
+        synopsis text,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        PRIMARY KEY  (id),
+        KEY type (type),
+        KEY genre (genre)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+    
+    // Insérer les données si la table est vide
+    $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
+    if ($count == 0) {
+        insert_default_movies();
+    }
+}
+add_action('after_switch_theme', 'create_movies_table');
+add_action('admin_init', 'create_movies_table');
+
+// Insérer les films et séries par défaut
+function insert_default_movies() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    $movies = [
+        // FILMS - ACTION
+        ['title' => 'Inception', 'type' => 'film', 'genre' => 'Action', 'year' => '2010', 'affiche' => 'Inception.jpg'],
+        ['title' => 'The Matrix', 'type' => 'film', 'genre' => 'Action', 'year' => '1999', 'affiche' => 'The Matrix.jpg'],
+        ['title' => 'John Wick', 'type' => 'film', 'genre' => 'Action', 'year' => '2014', 'affiche' => 'John Wick.jpg'],
+        ['title' => 'Mad Max: Fury Road', 'type' => 'film', 'genre' => 'Action', 'year' => '2015', 'affiche' => 'Mad Max.jpg'],
+        ['title' => 'The Dark Knight', 'type' => 'film', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'The Dark Knight.jpg'],
+        
+        // FILMS - COMÉDIE
+        ['title' => 'La La Land', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2016', 'affiche' => 'La La Land.jpg'],
+        ['title' => 'Jumanji', 'type' => 'film', 'genre' => 'Comédie', 'year' => '1995', 'affiche' => 'Jumanji.jpg'],
+        ['title' => 'Superbad', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2007', 'affiche' => 'Superbad.jpg'],
+        ['title' => 'The Grand Budapest Hotel', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2014', 'affiche' => 'Grand Budapest.jpg'],
+        ['title' => 'Amélie', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2001', 'affiche' => 'Amelie.jpg'],
+        
+        // FILMS - DRAME
+        ['title' => 'Interstellar', 'type' => 'film', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'Interstellar.jpg'],
+        ['title' => 'The Shawshank Redemption', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'Shawshank.jpg'],
+        ['title' => 'Forrest Gump', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'Forrest Gump.jpg'],
+        ['title' => 'The Pursuit of Happyness', 'type' => 'film', 'genre' => 'Drame', 'year' => '2006', 'affiche' => 'Pursuit Happiness.jpg'],
+        ['title' => 'Parasite', 'type' => 'film', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Parasite.jpg'],
+        
+        // FILMS - SCIENCE-FICTION
+        ['title' => 'Blade Runner 2049', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'Blade Runner.jpg'],
+        ['title' => 'Dune', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2021', 'affiche' => 'Dune.jpg'],
+        ['title' => 'Avatar', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2009', 'affiche' => 'Avatar.jpg'],
+        ['title' => 'Tenet', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2020', 'affiche' => 'Tenet.jpg'],
+        ['title' => 'Minority Report', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2002', 'affiche' => 'Minority Report.jpg'],
+        
+        // FILMS - HORREUR
+        ['title' => 'The Shining', 'type' => 'film', 'genre' => 'Horreur', 'year' => '1980', 'affiche' => 'The Shining.jpg'],
+        ['title' => 'Hereditary', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Hereditary.jpg'],
+        ['title' => 'The Ring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2002', 'affiche' => 'The Ring.jpg'],
+        ['title' => 'A Quiet Place', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Quiet Place.jpg'],
+        ['title' => 'The Conjuring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2013', 'affiche' => 'Conjuring.jpg'],
+        
+        // FILMS - ROMANCE
+        ['title' => 'The Notebook', 'type' => 'film', 'genre' => 'Romance', 'year' => '2004', 'affiche' => 'The Notebook.jpg'],
+        ['title' => 'Titanic', 'type' => 'film', 'genre' => 'Romance', 'year' => '1997', 'affiche' => 'Titanic.jpg'],
+        ['title' => 'Pride and Prejudice', 'type' => 'film', 'genre' => 'Romance', 'year' => '2005', 'affiche' => 'Pride Prejudice.jpg'],
+        ['title' => 'Crazy Rich Asians', 'type' => 'film', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'Crazy Rich Asians.jpg'],
+        ['title' => 'About Time', 'type' => 'film', 'genre' => 'Romance', 'year' => '2013', 'affiche' => 'About Time.jpg'],
+        
+        // FILMS ANIMÉS - ACTION
+        ['title' => 'Your Name', 'type' => 'film', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'Your Name.jpg'],
+        ['title' => 'Demon Slayer Movie', 'type' => 'film', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'Demon Slayer.jpg'],
+        ['title' => 'Jujutsu Kaisen 0', 'type' => 'film', 'genre' => 'Action', 'year' => '2021', 'affiche' => 'JJK 0.jpg'],
+        
+        // SÉRIES - ACTION
+        ['title' => 'Stranger Things', 'type' => 'serie', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'Stranger Things.jpg'],
+        ['title' => 'Breaking Bad', 'type' => 'serie', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'Breaking Bad.jpg'],
+        ['title' => 'Game of Thrones', 'type' => 'serie', 'genre' => 'Action', 'year' => '2011', 'affiche' => 'Game of Thrones.jpg'],
+        ['title' => 'The Witcher', 'type' => 'serie', 'genre' => 'Action', 'year' => '2019', 'affiche' => 'The Witcher.jpg'],
+        ['title' => 'Arrow', 'type' => 'serie', 'genre' => 'Action', 'year' => '2012', 'affiche' => 'Arrow.jpg'],
+        
+        // SÉRIES - COMÉDIE
+        ['title' => 'The Office', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2005', 'affiche' => 'The Office.jpg'],
+        ['title' => 'Parks and Recreation', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2009', 'affiche' => 'Parks Recreation.jpg'],
+        ['title' => 'Brooklyn Nine-Nine', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2013', 'affiche' => 'Brooklyn 99.jpg'],
+        ['title' => 'The Good Place', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2016', 'affiche' => 'Good Place.jpg'],
+        ['title' => 'Community', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2009', 'affiche' => 'Community.jpg'],
+        
+        // SÉRIES - DRAME
+        ['title' => 'Euphoria', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Euphoria.jpg'],
+        ['title' => 'True Detective', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'True Detective.jpg'],
+        ['title' => 'The Crown', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2016', 'affiche' => 'The Crown.jpg'],
+        ['title' => 'Better Call Saul', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2015', 'affiche' => 'Better Call Saul.jpg'],
+        ['title' => 'The Marvelous Mrs. Maisel', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2017', 'affiche' => 'Mrs Maisel.jpg'],
+        
+        // SÉRIES - SCIENCE-FICTION
+        ['title' => 'The Mandalorian', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2019', 'affiche' => 'The Mandalorian.jpg'],
+        ['title' => 'Westworld', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2016', 'affiche' => 'Westworld.jpg'],
+        ['title' => 'Dark', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'Dark.jpg'],
+        ['title' => 'The Expanse', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2015', 'affiche' => 'The Expanse.jpg'],
+        ['title' => 'Orphan Black', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2013', 'affiche' => 'Orphan Black.jpg'],
+        
+        // SÉRIES - HORREUR
+        ['title' => 'Wednesday', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2022', 'affiche' => 'Wednesday.jpg'],
+        ['title' => 'Supernatural', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2005', 'affiche' => 'Supernatural.jpg'],
+        ['title' => 'The Haunting of Hill House', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Haunting Hill.jpg'],
+        ['title' => 'American Horror Story', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2011', 'affiche' => 'AHS.jpg'],
+        ['title' => 'The Twilight Zone', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '1959', 'affiche' => 'Twilight Zone.jpg'],
+        
+        // SÉRIES - ROMANCE
+        ['title' => 'Bridgerton', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2020', 'affiche' => 'Bridgerton.jpg'],
+        ['title' => 'Outlander', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2014', 'affiche' => 'Outlander.jpg'],
+        ['title' => 'The Crown', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2016', 'affiche' => 'Crown Romance.jpg'],
+        ['title' => 'You', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'You.jpg'],
+        ['title' => 'Emily in Paris', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2020', 'affiche' => 'Emily Paris.jpg'],
+        
+        // SÉRIES ANIMÉS
+        ['title' => 'Attack on Titan', 'type' => 'serie', 'genre' => 'Action', 'year' => '2013', 'affiche' => 'SNK.jpg'],
+        ['title' => 'Jujutsu Kaisen', 'type' => 'serie', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'JJK.jpg'],
+    ];
+    
+    foreach ($movies as $movie) {
+        $wpdb->insert($table_name, $movie);
+    }
+}
+
 // ===== GESTION DES COMMENTAIRES AJAX =====
 
 // Créer une table personnalisée pour les commentaires de films
@@ -668,3 +856,46 @@ function get_movie_comments() {
 }
 add_action('wp_ajax_get_movie_comments', 'get_movie_comments');
 add_action('wp_ajax_nopriv_get_movie_comments', 'get_movie_comments');
+
+// ===== SEARCH MOVIES API =====
+
+// Endpoint AJAX pour la recherche autocomplete
+function search_movies() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    $search = isset($_GET['q']) ? sanitize_text_field($_GET['q']) : '';
+    
+    if (strlen($search) < 2) {
+        wp_send_json([]);
+        return;
+    }
+    
+    $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT id, title, type, genre FROM $table_name WHERE title LIKE %s LIMIT 10",
+        '%' . $wpdb->esc_like($search) . '%'
+    ));
+    
+    wp_send_json($results);
+}
+add_action('wp_ajax_search_movies', 'search_movies');
+add_action('wp_ajax_nopriv_search_movies', 'search_movies');
+
+// Récupérer les films/séries par genre
+function get_movies_by_genre() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    $type = sanitize_text_field($_GET['type']); // 'film' ou 'serie'
+    $genre = sanitize_text_field($_GET['genre']);
+    
+    $results = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE type = %s AND genre = %s ORDER BY year DESC",
+        $type, $genre
+    ));
+    
+    wp_send_json(['movies' => $results]);
+}
+add_action('wp_ajax_get_movies_by_genre', 'get_movies_by_genre');
+add_action('wp_ajax_nopriv_get_movies_by_genre', 'get_movies_by_genre');
+
