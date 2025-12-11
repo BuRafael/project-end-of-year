@@ -92,32 +92,10 @@
 
 /* META */
 .composer-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px 20px;
-    margin-top: 12px;
-}
-
-.composer-meta > div {
-    flex: 0 0 auto;
-}
-
-.composer-meta > .col-6 {
-    flex: 0 0 calc(50% - 10px);
-}
-
-.composer-meta > .col-sm-3 {
-    flex: 0 0 calc(25% - 15px);
-}
-
-@media (max-width: 576px) {
-    .composer-meta > .col-sm-3 {
-        flex: 0 0 calc(50% - 10px);
-    }
-}
-
-.composer-meta > .col-12 {
-    flex: 0 0 100%;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px 16px;
+    margin-top: 8px;
 }
 
 .composer-meta-label {
@@ -126,7 +104,7 @@
     text-transform: uppercase;
     font-size: 0.8rem;
     letter-spacing: 1px;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
 }
 
 .composer-meta-value {
@@ -435,7 +413,7 @@
     margin-bottom: 8px;
 }
 
-/* ===== FILMOGRAPHIE (similaire au carousel films similaires) ===== */
+/* ===== COMPOSITEURS SIMILAIRES (même style que films similaires) ===== */
 .carousel-arrow {
     background: rgba(244, 239, 236, 0.1);
     border: 2px solid rgba(244, 239, 236, 0.5);
@@ -459,8 +437,8 @@
     font-size: 1.5rem;
 }
 
-/* cartes filmographie */
-.filmography-card {
+/* Cartes compositeurs similaires */
+.similar-composer-card {
     position: relative;
     border-radius: 8px;
     overflow: hidden;
@@ -469,23 +447,23 @@
     animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
 }
 
-.filmography-card:hover {
+.similar-composer-card:hover {
     transform: translateY(-8px);
     box-shadow: 0 15px 40px rgba(112, 1, 24, 0.3);
 }
 
-.filmography-card img {
+.similar-composer-card img {
     width: 100%;
     height: 280px;
     object-fit: cover;
     transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.filmography-card:hover img {
+.similar-composer-card:hover img {
     transform: scale(1.1);
 }
 
-.filmography-card-overlay {
+.similar-composer-overlay {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -495,13 +473,13 @@
     color: rgba(244, 239, 236, 1);
 }
 
-.filmography-card-title {
+.similar-composer-name {
     font-size: 1rem;
     font-weight: 700;
     margin-bottom: 4px;
 }
 
-.filmography-card-year {
+.similar-composer-specialty {
     font-size: 0.85rem;
     color: #999;
 }

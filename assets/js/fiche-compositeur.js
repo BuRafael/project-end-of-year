@@ -330,58 +330,58 @@ if (typeof composerComments === 'undefined') {
     loadComments();
 }
 
-// === CARROUSEL : FILMOGRAPHIE ===
-const filmographyMovies = document.getElementById("filmographyMovies");
+// === CARROUSEL : COMPOSITEURS SIMILAIRES ===
+const similarComposers = document.getElementById("similarComposers");
 
-if (filmographyMovies) {
-    const films = [
-        { title: "Inception", year: "2010", image: "inception affiche film.jpg" },
-        { title: "Interstellar", year: "2014", image: "interstellar affiche similaire.jpg" },
-        { title: "The Dark Knight", year: "2008", image: "Dark city.jpg" },
-        { title: "Tenet", year: "2020", image: "Tenet.jpg" },
-        { title: "The Prestige", year: "2006", image: "the-prestige-md-web.jpg" },
-        { title: "Arrival", year: "2016", image: "arrival affiche similaire.jpg" },
-        { title: "Shutter Island", year: "2010", image: "shutter island affiche similaire.jpg" },
-        { title: "The Matrix", year: "1999", image: "matrix affiche similaire.jpg" }
+if (similarComposers) {
+    const composers = [
+        { name: "John Williams", specialty: "Star Wars, Indiana Jones", image: "John Williams.jpg" },
+        { name: "Ennio Morricone", specialty: "The Good, the Bad and the Ugly", image: "Ennio Morricone.jpg" },
+        { name: "Howard Shore", specialty: "The Lord of the Rings", image: "Howard Shore.jpg" },
+        { name: "Danny Elfman", specialty: "Batman, Edward Scissorhands", image: "Danny Elfman.jpg" },
+        { name: "Alexandre Desplat", specialty: "The Grand Budapest Hotel", image: "Alexandre Desplat.jpg" },
+        { name: "Michael Giacchino", specialty: "Up, Star Trek", image: "Michael Giacchino.jpg" },
+        { name: "Thomas Newman", specialty: "American Beauty, Skyfall", image: "Thomas Newman.jpg" },
+        { name: "Ludwig Göransson", specialty: "Black Panther, Tenet", image: "Ludwig Goransson.jpg" }
     ];
 
     let currentIndex = 0;
 
-    function renderFilmography() {
-        if (!filmographyMovies) return;
+    function renderComposers() {
+        if (!similarComposers) return;
         
-        filmographyMovies.innerHTML = '';
-        const visibleFilms = films.slice(currentIndex, currentIndex + 4);
+        similarComposers.innerHTML = '';
+        const visibleComposers = composers.slice(currentIndex, currentIndex + 4);
         
-        visibleFilms.forEach(film => {
+        visibleComposers.forEach(composer => {
             const col = document.createElement('div');
             col.className = 'col-3';
             col.innerHTML = `
-                <div class="filmography-card">
-                    <img src="${filmImagePath}${film.image}" alt="${film.title}">
-                    <div class="filmography-card-overlay">
-                        <div class="filmography-card-title">${film.title}</div>
-                        <div class="filmography-card-year">${film.year}</div>
+                <div class="similar-composer-card">
+                    <img src="${imagePath}${composer.image}" alt="${composer.name}" onerror="this.src='${imagePath}Hans Zimmer.jpg'">
+                    <div class="similar-composer-overlay">
+                        <div class="similar-composer-name">${composer.name}</div>
+                        <div class="similar-composer-specialty">${composer.specialty}</div>
                     </div>
                 </div>
             `;
-            filmographyMovies.appendChild(col);
+            similarComposers.appendChild(col);
         });
     }
 
-    renderFilmography();
+    renderComposers();
 
     // Flèches de navigation
     const arrows = document.querySelectorAll('.carousel-arrow');
     if (arrows.length >= 2) {
         arrows[0].addEventListener('click', () => {
             currentIndex = Math.max(0, currentIndex - 1);
-            renderFilmography();
+            renderComposers();
         });
 
         arrows[1].addEventListener('click', () => {
-            currentIndex = Math.min(films.length - 4, currentIndex + 1);
-            renderFilmography();
+            currentIndex = Math.min(composers.length - 4, currentIndex + 1);
+            renderComposers();
         });
     }
 }

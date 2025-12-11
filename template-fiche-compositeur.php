@@ -20,7 +20,7 @@ get_header();
             <!-- PHOTO -->
             <div class="col-md-4 col-lg-3">
                 <div class="composer-poster-wrapper text-center text-md-start">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche Compositeur/Hans Zimmer.jpg' ); ?>" alt="Photo Hans Zimmer"
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche Compositeur/hans Zimmer photo correct.png' ); ?>" alt="Photo Hans Zimmer"
                          class="composer-poster img-fluid shadow">
                 </div>
             </div>
@@ -47,13 +47,9 @@ get_header();
                         <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Nationalité</div>
                         <div class="composer-meta-value">Allemand, Américain</div>
                     </div>
-                    <div class="col-6 col-sm-3 mb-3">
+                    <div class="col-12 mb-2">
                         <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Films composés</div>
-                        <div class="composer-meta-value">150+</div>
-                    </div>
-                    <div class="col-6 col-sm-3 mb-3">
-                        <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Oscars</div>
-                        <div class="composer-meta-value">2</div>
+                        <div class="composer-meta-value text-white">150+</div>
                     </div>
                     <div class="col-12 mb-2">
                         <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Récompenses</div>
@@ -145,17 +141,17 @@ get_header();
         </div>
     </section>
 
-    <!-- ===== FILMOGRAPHIE ===== -->
+    <!-- ===== COMPOSITEURS SIMILAIRES ===== -->
     <section class="composer-section mt-5 mb-4">
-        <h3 class="section-title mb-3">Films composés</h3>
+        <h3 class="section-title mb-3">Compositeurs similaires</h3>
 
         <div class="d-flex align-items-center">
             <button class="carousel-arrow d-flex align-items-center justify-content-center">
                 <i class="bi bi-chevron-left"></i>
             </button>
 
-            <div class="row flex-grow-1 mx-3 g-3" id="filmographyMovies">
-                <!-- JS insère 4 films -->
+            <div class="row flex-grow-1 mx-3 g-3" id="similarComposers">
+                <!-- JS insère 4 compositeurs -->
             </div>
 
             <button class="carousel-arrow d-flex align-items-center justify-content-center" type="button">
