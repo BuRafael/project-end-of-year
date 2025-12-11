@@ -22,7 +22,7 @@ get_header();
                 <div class="movie-poster-wrapper text-center text-md-start">
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg' ); ?>" alt="Affiche Inception"
                          class="movie-poster img-fluid shadow">
-                    <button id="movieLikeBtn" class="btn btn-link fs-4 p-0 movie-like-btn" aria-pressed="false" type="button">
+                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button">
                         <i class="bi bi-heart" aria-hidden="true"></i>
                     </button>
                 </div>
@@ -72,7 +72,7 @@ get_header();
     </section>
 
     <!-- ===== PISTES ===== -->
-    <section class="movie-section mt-4">
+    <section class="movie-section mt-5">
         <div class="table-responsive">
             <table class="table movie-tracks-table align-middle mb-3">
                 <thead>
@@ -99,22 +99,46 @@ get_header();
     <section class="movie-section mt-5">
         <h3 class="section-title mb-3">Commentaires</h3>
 
+        <?php if ( is_user_logged_in() ) : 
+            $current_user = wp_get_current_user();
+            $profile_photo = get_user_meta( $current_user->ID, 'avatar_url', true );
+        ?>
         <div class="comment-input-row d-flex align-items-center gap-3 pb-3 mb-4">
-            <div class="comment-avatar rounded-circle d-flex align-items-center justify-content-center">
+            <div class="comment-avatar rounded-circle overflow-hidden d-flex align-items-center justify-content-center">
+                <?php if ( ! empty( $profile_photo ) ) : ?>
+                    <img src="<?php echo esc_url( $profile_photo ); ?>" alt="Photo de profil" class="w-100 h-100" style="object-fit: cover;">
+                <?php else : ?>
+                    <i class="bi bi-person"></i>
+                <?php endif; ?>
+            </div>
+            <div class="flex-grow-1">
+                <input type="text"
+                       class="form-control comment-input"
+                       placeholder="Écrire un commentaire"
+                       data-user-name="<?php echo esc_attr( $current_user->display_name ); ?>"
+                       maxlength="200">
+            </div>
+        </div>
+        <?php else : ?>
+        <div class="comment-input-row d-flex align-items-center gap-3 pb-3 mb-4">
+            <div class="comment-avatar rounded-circle d-flex align-items-center justify-content-center" style="opacity: 0.5;">
                 <i class="bi bi-person"></i>
             </div>
             <div class="flex-grow-1">
                 <input type="text"
                        class="form-control comment-input"
-                       placeholder="Écrire un commentaire">
+                       placeholder="Connectez-vous pour commenter"
+                       maxlength="200"
+                       disabled>
             </div>
         </div>
+        <?php endif; ?>
 
         <div class="row g-3" id="commentsZone">
             <!-- JS charge les commentaires -->
         </div>
 
-        <div class="text-center mt-4">
+        <div class="text-center mt-4" id="commentsMoreBtnWrapper" style="display: none;">
             <button id="commentsMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>
         </div>
     </section>
@@ -135,6 +159,20 @@ get_header();
             <button class="carousel-arrow d-flex align-items-center justify-content-center" type="button">
                 <i class="bi bi-chevron-right"></i>
             </button>
+        </div>
+    </section>
+
+    <!-- ===== CTA SECTION ===== -->
+    <section class="cta-section">
+        <div class="cta-text">
+            <p>
+                Ne ratez plus jamais vos bandes originales préférées.<br>
+                Rejoignez notre communauté et plongez dans<br>
+                l'univers musical de tous vos films et séries favoris !
+            </p>
+            <?php if (!is_user_logged_in()) : ?>
+                <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="cta-btn">S'inscrire</a>
+            <?php endif; ?>
         </div>
     </section>
 

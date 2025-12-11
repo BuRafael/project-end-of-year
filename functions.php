@@ -155,6 +155,9 @@ function theme_scripts()
     // Base styles (reset + global)
     wp_enqueue_style('base-style', get_template_directory_uri() . '/assets/css/base.css', array('bootstrap'), $version);
     
+    // Animations & Transitions
+    wp_enqueue_style('animations-style', get_template_directory_uri() . '/assets/css/animations.css', array('base-style'), $version);
+    
     // Header and Footer styles (loaded on all pages)
     wp_enqueue_style('header-style', get_template_directory_uri() . '/assets/css/Header.css', array('base-style'), $version);
     wp_enqueue_style('footer-style', get_template_directory_uri() . '/assets/css/footer.css', array('base-style'), $version);
@@ -177,8 +180,15 @@ function theme_scripts()
     
     // Fiche film template styles and scripts
     if (is_page_template('template-fiche-film.php') || $current_template === 'template-fiche-film.php') {
-        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), $version);
-        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/fiche film.js', array('bootstrap-js'), $version, true);
+        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), time());
+        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('bootstrap-js'), time(), true);
+        
+        // Passer les variables AJAX au JS
+        wp_localize_script('fiche-film-script', 'movieComments', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('movie_comment_nonce'),
+            'movie_id' => 'inception' // ID du film actuel
+        ));
     }
     
     // Registration template styles and scripts
@@ -405,3 +415,179 @@ function show_custom_user_column_data($value, $column_name, $user_id)
     return $value;
 }
 add_filter('manage_users_custom_column', 'show_custom_user_column_data', 10, 3);
+
+// ===== GESTION DES COMMENTAIRES AJAX =====
+
+// Créer une table personnalisée pour les commentaires de films
+function create_movie_comments_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movie_comments';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        movie_id varchar(100) NOT NULL,
+        user_id bigint(20) NOT NULL,
+        comment_text text NOT NULL,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+add_action('after_switch_theme', 'create_movie_comments_table');
+
+// Ajouter un commentaire
+function add_movie_comment() {
+    // Temporairement désactiver la vérification nonce pour debug
+    // check_ajax_referer('movie_comment_nonce', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        return;
+    }
+    
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movie_comments';
+    
+    // Vérifier que la table existe
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+        create_movie_comments_table();
+    }
+    
+    $movie_id = sanitize_text_field($_POST['movie_id']);
+    $comment_text = sanitize_textarea_field($_POST['comment_text']);
+    $user_id = get_current_user_id();
+    
+    $inserted = $wpdb->insert(
+        $table_name,
+        [
+            'movie_id' => $movie_id,
+            'user_id' => $user_id,
+            'comment_text' => $comment_text
+        ],
+        ['%s', '%d', '%s']
+    );
+    
+    if ($inserted) {
+        $comment_id = $wpdb->insert_id;
+        $user = get_userdata($user_id);
+        $avatar = get_user_meta($user_id, 'avatar_url', true);
+        
+        wp_send_json_success([
+            'comment_id' => $comment_id,
+            'user_name' => $user->display_name,
+            'avatar' => $avatar,
+            'comment_text' => $comment_text,
+            'created_at' => current_time('mysql')
+        ]);
+    } else {
+        wp_send_json_error(['message' => 'Erreur lors de l\'ajout du commentaire']);
+    }
+}
+add_action('wp_ajax_add_movie_comment', 'add_movie_comment');
+
+// Modifier un commentaire
+function edit_movie_comment() {
+    // check_ajax_referer('movie_comment_nonce', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        return;
+    }
+    
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movie_comments';
+    
+    $comment_id = intval($_POST['comment_id']);
+    $comment_text = sanitize_textarea_field($_POST['comment_text']);
+    $user_id = get_current_user_id();
+    
+    // Vérifier que l'utilisateur est bien l'auteur
+    $comment = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE id = %d AND user_id = %d",
+        $comment_id, $user_id
+    ));
+    
+    if (!$comment) {
+        wp_send_json_error(['message' => 'Commentaire non trouvé ou non autorisé']);
+    }
+    
+    $updated = $wpdb->update(
+        $table_name,
+        ['comment_text' => $comment_text],
+        ['id' => $comment_id, 'user_id' => $user_id],
+        ['%s'],
+        ['%d', '%d']
+    );
+    
+    if ($updated !== false) {
+        wp_send_json_success(['comment_text' => $comment_text]);
+    } else {
+        wp_send_json_error(['message' => 'Erreur lors de la modification']);
+    }
+}
+add_action('wp_ajax_edit_movie_comment', 'edit_movie_comment');
+
+// Supprimer un commentaire
+function delete_movie_comment() {
+    // check_ajax_referer('movie_comment_nonce', 'nonce');
+    
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        return;
+    }
+    
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movie_comments';
+    
+    $comment_id = intval($_POST['comment_id']);
+    $user_id = get_current_user_id();
+    
+    $deleted = $wpdb->delete(
+        $table_name,
+        ['id' => $comment_id, 'user_id' => $user_id],
+        ['%d', '%d']
+    );
+    
+    if ($deleted) {
+        wp_send_json_success(['message' => 'Commentaire supprimé']);
+    } else {
+        wp_send_json_error(['message' => 'Erreur lors de la suppression']);
+    }
+}
+add_action('wp_ajax_delete_movie_comment', 'delete_movie_comment');
+
+// Récupérer les commentaires d'un film
+function get_movie_comments() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movie_comments';
+    
+    $movie_id = sanitize_text_field($_POST['movie_id']);
+    $current_user_id = get_current_user_id();
+    
+    $comments = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE movie_id = %s ORDER BY created_at DESC",
+        $movie_id
+    ));
+    
+    $comments_data = [];
+    foreach ($comments as $comment) {
+        $user = get_userdata($comment->user_id);
+        $avatar = get_user_meta($comment->user_id, 'avatar_url', true);
+        
+        $comments_data[] = [
+            'id' => $comment->id,
+            'user_name' => $user->display_name,
+            'avatar' => $avatar,
+            'comment_text' => $comment->comment_text,
+            'is_author' => ($comment->user_id == $current_user_id),
+            'created_at' => $comment->created_at
+        ];
+    }
+    
+    wp_send_json_success(['comments' => $comments_data]);
+}
+add_action('wp_ajax_get_movie_comments', 'get_movie_comments');
+add_action('wp_ajax_nopriv_get_movie_comments', 'get_movie_comments');
