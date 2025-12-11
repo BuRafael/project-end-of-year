@@ -7,8 +7,11 @@
 
 get_header();
 
-// Enqueue specific styles for series
-wp_enqueue_style('fiche-serie', get_template_directory_uri() . '/assets/css/Fiche serie.css', array(), filemtime(get_template_directory() . '/assets/css/Fiche serie.css'));
+// Enqueue film styles first (base styles)
+wp_enqueue_style('fiche-film', get_template_directory_uri() . '/assets/css/Fiche film.css', array(), filemtime(get_template_directory() . '/assets/css/Fiche film.css'));
+
+// Enqueue specific styles for series (overrides)
+wp_enqueue_style('fiche-serie', get_template_directory_uri() . '/assets/css/Fiche serie.css', array('fiche-film'), filemtime(get_template_directory() . '/assets/css/Fiche serie.css'));
 
 // Enqueue specific script for series
 wp_enqueue_script('fiche-serie', get_template_directory_uri() . '/assets/js/Fiche-serie.js', array(), filemtime(get_template_directory() . '/assets/js/Fiche-serie.js'), true);
@@ -26,7 +29,7 @@ wp_enqueue_script('fiche-serie', get_template_directory_uri() . '/assets/js/Fich
             <!-- POSTER -->
             <div class="col-md-4 col-lg-3">
                 <div class="movie-poster-wrapper text-center text-md-start">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Affiche Stranger Things"
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things2.jpg' ); ?>" alt="Affiche Stranger Things"
                          class="movie-poster img-fluid shadow">
                     <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button">
                         <i class="bi bi-heart" aria-hidden="true"></i>
@@ -34,30 +37,24 @@ wp_enqueue_script('fiche-serie', get_template_directory_uri() . '/assets/js/Fich
                 </div>
 
                 <!-- SELECTS SAISON / EPISODE -->
-                <div class="series-selects mt-4">
-                    <div class="mb-3">
-                        <label for="seasonSelect" class="form-label small" style="color: rgba(112, 1, 24, 1);">Saison</label>
-                        <select id="seasonSelect" class="form-select form-select-sm" aria-label="Choisir une saison">
-                            <option value="1">Saison 1</option>
-                            <option value="2">Saison 2</option>
-                            <option value="3">Saison 3</option>
-                            <option value="4">Saison 4</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label for="episodeSelect" class="form-label small" style="color: rgba(112, 1, 24, 1);">Épisode</label>
-                        <select id="episodeSelect" class="form-select form-select-sm" aria-label="Choisir un épisode">
-                            <option value="1">Épisode 1</option>
-                            <option value="2">Épisode 2</option>
-                            <option value="3">Épisode 3</option>
-                            <option value="4">Épisode 4</option>
-                            <option value="5">Épisode 5</option>
-                            <option value="6">Épisode 6</option>
-                            <option value="7">Épisode 7</option>
-                            <option value="8">Épisode 8</option>
-                            <option value="9">Épisode 9</option>
-                        </select>
-                    </div>
+                <div class="series-selects mt-5">
+                    <select id="seasonSelect" class="form-select form-select-sm" aria-label="Choisir une saison">
+                        <option value="1">Saison 1</option>
+                        <option value="2">Saison 2</option>
+                        <option value="3">Saison 3</option>
+                        <option value="4">Saison 4</option>
+                    </select>
+                    <select id="episodeSelect" class="form-select form-select-sm" aria-label="Choisir un épisode">
+                        <option value="1">Épisode 1</option>
+                        <option value="2">Épisode 2</option>
+                        <option value="3">Épisode 3</option>
+                        <option value="4">Épisode 4</option>
+                        <option value="5">Épisode 5</option>
+                        <option value="6">Épisode 6</option>
+                        <option value="7">Épisode 7</option>
+                        <option value="8">Épisode 8</option>
+                        <option value="9">Épisode 9</option>
+                    </select>
                 </div>
             </div>
 
