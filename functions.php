@@ -857,6 +857,178 @@ function get_movie_comments() {
 add_action('wp_ajax_get_movie_comments', 'get_movie_comments');
 add_action('wp_ajax_nopriv_get_movie_comments', 'get_movie_comments');
 
+// ===== GESTION DES COMMENTAIRES COMPOSITEURS =====
+
+// Créer une table pour les commentaires de compositeurs
+function create_composer_comments_table() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'composer_comments';
+    $charset_collate = $wpdb->get_charset_collate();
+
+    $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+        id mediumint(9) NOT NULL AUTO_INCREMENT,
+        composer_id varchar(100) NOT NULL,
+        user_id bigint(20) NOT NULL,
+        comment_text text NOT NULL,
+        created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        PRIMARY KEY  (id)
+    ) $charset_collate;";
+
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    dbDelta($sql);
+}
+add_action('after_switch_theme', 'create_composer_comments_table');
+
+// Ajouter un commentaire compositeur
+function add_composer_comment() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        return;
+    }
+    
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'composer_comments';
+    
+    // Vérifier que la table existe
+    if($wpdb->get_var("SHOW TABLES LIKE '$table_name'") != $table_name) {
+        create_composer_comments_table();
+    }
+    
+    $composer_id = sanitize_text_field($_POST['composer_id']);
+    $comment_text = sanitize_textarea_field($_POST['comment_text']);
+    $user_id = get_current_user_id();
+    
+    $inserted = $wpdb->insert(
+        $table_name,
+        [
+            'composer_id' => $composer_id,
+            'user_id' => $user_id,
+            'comment_text' => $comment_text
+        ],
+        ['%s', '%d', '%s']
+    );
+    
+    if ($inserted) {
+        $comment_id = $wpdb->insert_id;
+        $user = get_userdata($user_id);
+        $avatar = get_user_meta($user_id, 'avatar_url', true);
+        
+        // Récupérer le timestamp exact de la base de données
+        $comment = $wpdb->get_row($wpdb->prepare("SELECT created_at FROM $table_name WHERE id = %d", $comment_id), ARRAY_A);
+        
+        wp_send_json_success([
+            'comment_id' => $comment_id,
+            'user_name' => $user->display_name,
+            'avatar' => $avatar,
+            'comment_text' => $comment_text,
+            'created_at' => $comment['created_at']
+        ]);
+    } else {
+        wp_send_json_error(['message' => 'Erreur lors de l\'ajout du commentaire']);
+    }
+}
+add_action('wp_ajax_add_composer_comment', 'add_composer_comment');
+
+// Modifier un commentaire compositeur
+function edit_composer_comment() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        return;
+    }
+    
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'composer_comments';
+    
+    $comment_id = intval($_POST['comment_id']);
+    $comment_text = sanitize_textarea_field($_POST['comment_text']);
+    $user_id = get_current_user_id();
+    
+    // Vérifier que l'utilisateur est bien l'auteur
+    $comment = $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE id = %d AND user_id = %d",
+        $comment_id, $user_id
+    ));
+    
+    if (!$comment) {
+        wp_send_json_error(['message' => 'Commentaire non trouvé ou non autorisé']);
+    }
+    
+    $updated = $wpdb->update(
+        $table_name,
+        ['comment_text' => $comment_text],
+        ['id' => $comment_id, 'user_id' => $user_id],
+        ['%s'],
+        ['%d', '%d']
+    );
+    
+    if ($updated !== false) {
+        wp_send_json_success(['comment_text' => $comment_text]);
+    } else {
+        wp_send_json_error(['message' => 'Erreur lors de la modification']);
+    }
+}
+add_action('wp_ajax_edit_composer_comment', 'edit_composer_comment');
+
+// Supprimer un commentaire compositeur
+function delete_composer_comment() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        return;
+    }
+    
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'composer_comments';
+    
+    $comment_id = intval($_POST['comment_id']);
+    $user_id = get_current_user_id();
+    
+    $deleted = $wpdb->delete(
+        $table_name,
+        ['id' => $comment_id, 'user_id' => $user_id],
+        ['%d', '%d']
+    );
+    
+    if ($deleted) {
+        wp_send_json_success(['message' => 'Commentaire supprimé']);
+    } else {
+        wp_send_json_error(['message' => 'Erreur lors de la suppression']);
+    }
+}
+add_action('wp_ajax_delete_composer_comment', 'delete_composer_comment');
+
+// Récupérer les commentaires d'un compositeur
+function get_composer_comments() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'composer_comments';
+    
+    $composer_id = sanitize_text_field($_POST['composer_id']);
+    $current_user_id = get_current_user_id();
+    
+    $comments = $wpdb->get_results($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE composer_id = %s ORDER BY created_at DESC",
+        $composer_id
+    ));
+    
+    $comments_data = [];
+    foreach ($comments as $comment) {
+        $user = get_userdata($comment->user_id);
+        $avatar = get_user_meta($comment->user_id, 'avatar_url', true);
+        
+        $comments_data[] = [
+            'id' => $comment->id,
+            'user_name' => $user->display_name,
+            'avatar' => $avatar,
+            'comment_text' => $comment->comment_text,
+            'is_author' => ($comment->user_id == $current_user_id),
+            'created_at' => $comment->created_at
+        ];
+    }
+    
+    wp_send_json_success(['comments' => $comments_data]);
+}
+add_action('wp_ajax_get_composer_comments', 'get_composer_comments');
+add_action('wp_ajax_nopriv_get_composer_comments', 'get_composer_comments');
+
 // ===== SEARCH MOVIES API =====
 
 // Endpoint AJAX pour la recherche autocomplete
