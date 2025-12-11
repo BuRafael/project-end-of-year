@@ -130,6 +130,27 @@ function create_theme_pages()
             update_post_meta($profil_page->ID, '_wp_page_template', 'template-profil.php');
         }
     }
+
+    // Create Stranger Things Series page
+    $stranger_things_page = get_page_by_path('stranger-things');
+    if (!$stranger_things_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'Stranger Things',
+            'post_name'      => 'stranger-things',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-fiche-serie.php');
+        }
+    } else {
+        $current_template = get_post_meta($stranger_things_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-fiche-serie.php') {
+            update_post_meta($stranger_things_page->ID, '_wp_page_template', 'template-fiche-serie.php');
+        }
+    }
 }
 add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists

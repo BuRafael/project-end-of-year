@@ -337,9 +337,31 @@
   min-width: 0;
 }
 
+.top-title-link {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #F4EFEC;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.top-composer-link {
+  display: block;
+  font-size: 12px;
+  font-weight: 400;
+  color: #999;
+  text-decoration: none;
+  margin-top: 2px;
+}
+
+.top-list li:hover .top-title-link {
+  color: #700118;
+}
+
 .top-title {
-  font-size: 1.1rem;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
   color: #F4EFEC;
   transition: color 0.2s ease;
 }
@@ -349,7 +371,8 @@
 }
 
 .top-sub {
-  font-size: 0.9rem;
+  font-size: 12px;
+  font-weight: 400;
   color: #999;
 }
 

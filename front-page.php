@@ -86,13 +86,11 @@ get_header();
                     $inception_page = get_page_by_path('inception');
                     $inception_url = $inception_page ? get_permalink($inception_page->ID) : home_url('/inception/');
                     ?>
-                    <a href="<?php echo esc_url($inception_url); ?>" class="top-item-link">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
-                        <div class="top-info">
-                            <span class="top-title">Inception</span>
-                            <span class="top-sub">Christopher Nolan</span>
-                        </div>
-                    </a>
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
+                    <div class="top-info">
+                        <a href="<?php echo esc_url($inception_url); ?>" class="top-title-link">Inception</a>
+                        <a href="<?php echo esc_url($inception_url); ?>" class="top-composer-link">Christopher Nolan</a>
+                    </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
@@ -137,8 +135,8 @@ get_header();
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Stranger Things">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Stranger Things</a>
-                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">The Duffer Brothers</a>
+                        <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="top-title-link">Stranger Things</a>
+                        <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="top-composer-link">The Duffer Brothers</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>

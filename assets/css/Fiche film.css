@@ -393,6 +393,8 @@
 .comment-avatar {
     width: 44px;
     height: 44px;
+    min-width: 44px;
+    min-height: 44px;
     border: 2px solid rgba(244, 239, 236, 1);
     font-size: 1.2rem;
     flex-shrink: 0;
@@ -786,4 +788,48 @@
     background: #700118;
     color: #F4EFEC;
     transform: translateY(-2px);
+}
+/* ==================================================
+   SERIES SELECTS (Saison / Épisode)
+   ================================================== */
+.series-selects {
+    width: 100%;
+}
+
+.series-selects .form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: rgba(112, 1, 24, 1);
+}
+
+.series-selects .form-select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #1A1A1A;
+    color: #F4EFEC;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.series-selects .form-select:hover {
+    border-color: rgba(112, 1, 24, 0.8);
+}
+
+.series-selects .form-select:focus {
+    outline: none;
+    border-color: rgba(112, 1, 24, 1);
+    box-shadow: 0 0 0 3px rgba(112, 1, 24, 0.2);
+}
+
+.series-selects .form-select option {
+    background-color: #1A1A1A;
+    color: #F4EFEC;
+}
+
+/* Comment input row alignment fix */
+.comment-input-row {
+    align-items: flex-start !important;
 }

@@ -51,7 +51,7 @@
                         ?>
                         <ul class="header-menu">
                             <li><a href="<?php echo esc_url(home_url('/films')); ?>">Films</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/musique')); ?>">Musique</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/series')); ?>">Séries</a></li>
                             <li><a href="<?php echo esc_url(home_url('/favoris')); ?>">Favoris</a></li>
                         </ul>
                         <?php
@@ -61,13 +61,23 @@
             </nav>
 
             <div class="header-right">
-                <?php if (!is_user_logged_in()) : ?>
-                    <a class="btn-inscription" href="<?php echo esc_url(home_url('/inscription')); ?>">
-                        <?php esc_html_e("S'inscrire", 'project-end-of-year'); ?>
-                    </a>
+                <?php if ( ! is_front_page() ) : ?>
+                    <form role="search" method="get" class="header-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+                        <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>">
+                        <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>">
+                            <i class="bi bi-search"></i>
+                        </button>
+                    </form>
                 <?php endif; ?>
 
-                <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
+                <div class="header-actions">
+                    <?php if (!is_user_logged_in()) : ?>
+                        <a class="btn-inscription" href="<?php echo esc_url(home_url('/inscription')); ?>">
+                            <?php esc_html_e("S'inscrire", 'project-end-of-year'); ?>
+                        </a>
+                    <?php endif; ?>
+
+                    <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
                     <?php
                     if (is_user_logged_in()) {
                         $user_id = get_current_user_id();
@@ -98,7 +108,8 @@
                         <?php
                     }
                     ?>
-                </a>
+                    </a>
+                </div>
             </div>
         </div>
     </header>

@@ -61,6 +61,16 @@
 	text-align: center;
 }
 
+.profil-error-message {
+	background: rgba(207, 92, 92, 0.12);
+	border: 1px solid rgba(207, 92, 92, 0.35);
+	color: #f6b3b3;
+	padding: 12px 16px;
+	border-radius: 4px;
+	font-size: 14px;
+	text-align: center;
+}
+
 .profil-content {
 	width: 100%;
 	display: flex;
