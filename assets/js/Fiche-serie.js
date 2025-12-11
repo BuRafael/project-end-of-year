@@ -311,35 +311,60 @@ loadComments();
 
 // === SÉRIES SIMILAIRES ===
 const similarMoviesContainer = document.getElementById('similarMovies');
-if (similarMoviesContainer) {
-    const similarSeries = [
-        { title: "Breaking Bad", image: "Breaking Bad.jpg" },
-        { title: "Euphoria", image: "Euphoria.jpg" },
-        { title: "Wednesday", image: "Wednesday.jpg" },
-        { title: "The Witcher", image: "The Witcher.jpg" }
-    ];
+const carouselArrows = document.querySelectorAll('.carousel-arrow');
+const leftArrow = carouselArrows[0];
+const rightArrow = carouselArrows[1];
 
-    similarSeries.forEach(serie => {
+const allSimilarSeries = [
+    { title: "Breaking Bad",    image: imagePath + "interstellar affiche similaire.jpg" },
+    { title: "Euphoria",        image: imagePath + "shutter island affiche similaire.jpg" },
+    { title: "Wednesday",       image: imagePath + "matrix affiche similaire.jpg" },
+    { title: "The Witcher",     image: imagePath + "arrival affiche similaire.jpg" },
+    { title: "The Mandalorian", image: imagePath + "Tenet.jpg" },
+    { title: "Dark",            image: imagePath + "Dark city.jpg" },
+    { title: "The Boys",        image: imagePath + "the-prestige-md-web.jpg" },
+    { title: "Loki",            image: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" }
+];
+
+let carouselIndex = 0;
+const itemsPerPage = 4;
+
+function renderSimilarCarousel() {
+    if (!similarMoviesContainer) return;
+    similarMoviesContainer.innerHTML = '';
+    for (let i = 0; i < itemsPerPage; i++) {
+        const index = (carouselIndex + i) % allSimilarSeries.length;
+        const serie = allSimilarSeries[index];
         const card = document.createElement('div');
-        card.className = 'col-12 col-sm-6 col-md-4 col-lg-3';
+        card.className = 'col-6 col-md-3';
         card.innerHTML = `
             <div class="similar-card">
-                <img src="${imagePath}${serie.image}" alt="${serie.title}" class="similar-card-img">
+                <img src="${serie.image}" alt="${serie.title}" class="similar-card-img">
                 <div class="similar-card-title">${serie.title}</div>
             </div>
         `;
         similarMoviesContainer.appendChild(card);
-    });
+    }
 }
 
-// === BOUTONS CAROUSEL (Séries similaires) ===
-const carouselArrows = document.querySelectorAll('.carousel-arrow');
-carouselArrows.forEach(arrow => {
-    arrow.addEventListener('click', function() {
-        const isLeft = this.classList.contains('carousel-arrow.left');
-        console.log(isLeft ? 'Scroll left' : 'Scroll right');
-    });
-});
+function animateSimilar(delta) {
+    if (!similarMoviesContainer) return;
+    similarMoviesContainer.classList.add('is-transitioning');
+    setTimeout(() => {
+        carouselIndex = (carouselIndex + delta + allSimilarSeries.length) % allSimilarSeries.length;
+        renderSimilarCarousel();
+        similarMoviesContainer.classList.remove('is-transitioning');
+    }, 140);
+}
+
+if (leftArrow) {
+    leftArrow.addEventListener('click', () => animateSimilar(-1));
+}
+if (rightArrow) {
+    rightArrow.addEventListener('click', () => animateSimilar(1));
+}
+
+renderSimilarCarousel();
 
 // === LIKE BUTTON (SERIE) ===
 const movieLikeBtn = document.getElementById('movieLikeBtn');

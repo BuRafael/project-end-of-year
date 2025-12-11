@@ -598,6 +598,15 @@ a.movie-track-artist:hover {
     transform: scale(0.96);
 }
 
+#similarMovies {
+    transition: opacity 0.2s ease;
+}
+
+#similarMovies.is-transitioning {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
 .similar-card {
     background: rgba(244, 239, 236, 1);
     border-radius: 8px;

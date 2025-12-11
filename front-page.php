@@ -96,8 +96,8 @@ get_header();
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/La La Land.jpg' ); ?>" alt="La La Land">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">La La Land</a>
-                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Damien Chazelle</a>
+                        <a href="<?php echo esc_url(home_url('/la-la-land')); ?>" class="top-title-link">La La Land</a>
+                        <a href="<?php echo esc_url(home_url('/la-la-land')); ?>" class="top-composer-link">Damien Chazelle</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>

@@ -152,6 +152,27 @@ function create_theme_pages()
         }
     }
 
+    // Create La La Land Film page
+    $la_la_land_page = get_page_by_path('la-la-land');
+    if (!$la_la_land_page) {
+        $page_id = wp_insert_post([
+            'post_title'     => 'La La Land',
+            'post_name'      => 'la-la-land',
+            'post_status'    => 'publish',
+            'post_type'      => 'page',
+            'post_content'   => ''
+        ]);
+        
+        if ($page_id && !is_wp_error($page_id)) {
+            update_post_meta($page_id, '_wp_page_template', 'template-fiche-film.php');
+        }
+    } else {
+        $current_template = get_post_meta($la_la_land_page->ID, '_wp_page_template', true);
+        if ($current_template !== 'template-fiche-film.php') {
+            update_post_meta($la_la_land_page->ID, '_wp_page_template', 'template-fiche-film.php');
+        }
+    }
+
     // Create Hans Zimmer Composer page
     $hans_zimmer_page = get_page_by_path('hans-zimmer');
     if (!$hans_zimmer_page) {
@@ -264,14 +285,18 @@ function theme_scripts()
     
     // Fiche film template styles and scripts
     if (is_page_template('template-fiche-film.php') || $current_template === 'template-fiche-film.php') {
-        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), time());
-        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('bootstrap-js'), time(), true);
+        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/Fiche film.css'));
+        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-film.js'), true);
+        
+        // Récupérer le slug de la page actuelle pour le movie_id
+        global $post;
+        $movie_slug = isset($post->post_name) ? $post->post_name : 'inception';
         
         // Passer les variables AJAX au JS
         wp_localize_script('fiche-film-script', 'movieComments', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('movie_comment_nonce'),
-            'movie_id' => 'inception' // ID du film actuel
+            'movie_id' => $movie_slug
         ));
     }
     
@@ -580,7 +605,7 @@ function insert_default_movies() {
     
     $movies = [
         // FILMS - ACTION
-        ['title' => 'Inception', 'type' => 'film', 'genre' => 'Action', 'year' => '2010', 'affiche' => 'Inception.jpg'],
+        ['title' => 'Inception', 'type' => 'film', 'genre' => 'Action', 'year' => '2010', 'affiche' => 'inception affiche film.jpg'],
         ['title' => 'The Matrix', 'type' => 'film', 'genre' => 'Action', 'year' => '1999', 'affiche' => 'The Matrix.jpg'],
         ['title' => 'John Wick', 'type' => 'film', 'genre' => 'Action', 'year' => '2014', 'affiche' => 'John Wick.jpg'],
         ['title' => 'Mad Max: Fury Road', 'type' => 'film', 'genre' => 'Action', 'year' => '2015', 'affiche' => 'Mad Max.jpg'],
@@ -738,14 +763,17 @@ function add_movie_comment() {
         $avatar = get_user_meta($user_id, 'avatar_url', true);
         
         // Récupérer le timestamp exact de la base de données
-        $comment = $wpdb->get_row("SELECT created_at FROM $wpdb->prefix" . "movie_comments WHERE id = %d", ARRAY_A, $comment_id);
+        $created_at = $wpdb->get_var($wpdb->prepare(
+            "SELECT created_at FROM $table_name WHERE id = %d",
+            $comment_id
+        ));
         
         wp_send_json_success([
             'comment_id' => $comment_id,
             'user_name' => $user->display_name,
             'avatar' => $avatar,
             'comment_text' => $comment_text,
-            'created_at' => $comment['created_at'] // Utiliser le timestamp de la BD
+            'created_at' => $created_at ? $created_at : current_time('mysql') // Utiliser le timestamp de la BD
         ]);
     } else {
         wp_send_json_error(['message' => 'Erreur lors de l\'ajout du commentaire']);
@@ -858,6 +886,60 @@ add_action('wp_ajax_get_movie_comments', 'get_movie_comments');
 add_action('wp_ajax_nopriv_get_movie_comments', 'get_movie_comments');
 
 // ===== SEARCH MOVIES API =====
+
+// Fonction pour obtenir les infos d'un film par slug
+function get_movie_data_by_slug($slug) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    // Mapping des slugs vers les titres de films
+    $slug_mapping = array(
+        'inception' => 'Inception',
+        'la-la-land' => 'La La Land',
+        'the-matrix' => 'The Matrix',
+        'john-wick' => 'John Wick',
+        'mad-max' => 'Mad Max: Fury Road',
+        'the-dark-knight' => 'The Dark Knight',
+        'jumanji' => 'Jumanji',
+        'superbad' => 'Superbad',
+        'grand-budapest' => 'The Grand Budapest Hotel',
+        'amelie' => 'Amélie',
+        'interstellar' => 'Interstellar',
+        'shawshank' => 'The Shawshank Redemption',
+        'forrest-gump' => 'Forrest Gump',
+        'pursuit-happiness' => 'The Pursuit of Happyness',
+        'parasite' => 'Parasite',
+        'blade-runner' => 'Blade Runner 2049',
+        'dune' => 'Dune',
+        'avatar' => 'Avatar',
+        'tenet' => 'Tenet',
+        'minority-report' => 'Minority Report',
+        'the-shining' => 'The Shining',
+        'hereditary' => 'Hereditary',
+        'the-ring' => 'The Ring',
+        'quiet-place' => 'A Quiet Place',
+        'conjuring' => 'The Conjuring',
+        'the-notebook' => 'The Notebook',
+        'titanic' => 'Titanic',
+        'pride-prejudice' => 'Pride and Prejudice',
+        'crazy-rich-asians' => 'Crazy Rich Asians',
+        'about-time' => 'About Time',
+        'your-name' => 'Your Name',
+        'demon-slayer-movie' => 'Demon Slayer Movie',
+        'jjk-0' => 'Jujutsu Kaisen 0'
+    );
+    
+    $title = isset($slug_mapping[$slug]) ? $slug_mapping[$slug] : null;
+    
+    if (!$title) {
+        return null;
+    }
+    
+    return $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE title = %s",
+        $title
+    ));
+}
 
 // Endpoint AJAX pour la recherche autocomplete
 function search_movies() {

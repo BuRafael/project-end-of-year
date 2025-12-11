@@ -21,22 +21,31 @@ carousels.forEach(carousel => {
         const offset = -(currentIndex * (cardWidth + gap));
         track.style.transform = `translateX(${offset}px)`;
     }
-    
-    leftBtn.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateCarousel();
-        }
-    });
-    
-    rightBtn.addEventListener('click', () => {
+
+    function animateCarousel(delta) {
+        const viewport = carousel.querySelector('.carousel-viewport');
         const cardCount = track.querySelectorAll('.carousel-card').length;
-        const cardsPerView = Math.floor(carousel.querySelector('.carousel-viewport').offsetWidth / 220);
-        if (currentIndex < cardCount - cardsPerView) {
-            currentIndex++;
+        const cardsPerView = Math.max(1, Math.floor((viewport ? viewport.offsetWidth : 0) / 220));
+        const maxIndex = Math.max(0, cardCount - cardsPerView);
+
+        const nextIndex = Math.min(Math.max(currentIndex + delta, 0), maxIndex);
+        if (nextIndex === currentIndex) return;
+
+        track.classList.add('is-transitioning');
+        setTimeout(() => {
+            currentIndex = nextIndex;
             updateCarousel();
-        }
-    });
+            track.classList.remove('is-transitioning');
+        }, 140);
+    }
+
+    if (leftBtn) {
+        leftBtn.addEventListener('click', () => animateCarousel(-1));
+    }
+    
+    if (rightBtn) {
+        rightBtn.addEventListener('click', () => animateCarousel(1));
+    }
     
     // Mettre à jour au redimensionnement
     window.addEventListener('resize', updateCarousel);

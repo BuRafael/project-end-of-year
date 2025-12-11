@@ -6,6 +6,60 @@
  */
 
 get_header();
+
+// Récupérer les infos du film basé sur le slug
+global $post;
+$page_slug = isset($post->post_name) ? $post->post_name : 'inception';
+$movie = get_movie_data_by_slug($page_slug);
+
+// Infos supplémentaires codées pour chaque film
+$movie_info = array(
+    'inception' => array(
+        'duration' => '2h28',
+        'rating' => '8,8/10',
+        'director' => 'Christopher Nolan',
+        'cast' => 'Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy, Dileep Rao, Ken Watanabe',
+        'synopsis' => 'Dom Cobb est un voleur expérimenté dans l\'art périlleux de l\'extraction : sa spécialité consiste à s\'approprier les secrets les plus précieux d\'un individu, enfouis au plus profond de son subconscient, pendant qu\'il rêve et que son esprit est particulièrement vulnérable. Très recherché pour ses talents dans l\'univers trouble de l\'espionnage industriel, Cobb est aussi devenu un fugitif traqué dans le monde entier. Cependant, une ultime mission pourrait lui permettre de retrouver sa vie d\'avant.'
+    ),
+    'la-la-land' => array(
+        'duration' => '2h08',
+        'rating' => '8,0/10',
+        'director' => 'Damien Chazelle',
+        'cast' => 'Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt',
+        'synopsis' => 'Mia, une actrice en herbe qui sert les clients d\'un café sur les plateaux de cinéma, rencontre Sebastian, un pianiste de jazz passionné. Tous deux rêvent de réussir dans leurs domaines respectifs. Avec l\'aide l\'un de l\'autre, ils se soutiennent et s\'inspirent mutuellement, naviguant dans l\'industrie du divertissement de Los Angeles tout en approfondissant leur relation amoureuse.',
+        'genres_display' => 'Comédie • Drame • Musical • Romance'
+    ),
+    'stranger-things' => array(
+        'duration' => '50min/épisode',
+        'rating' => '8,7/10',
+        'director' => 'Matt Duffer, Ross Duffer',
+        'cast' => 'Millie Bobby Brown, Finn Wolfhard, Winona Ryder',
+        'synopsis' => 'Dans les années 80, à Hawkins dans l\'Indiana, un jeune garçon disparaît mystérieusement. Ses amis, sa famille et la police locale se lancent dans une quête extraordinaire pour le retrouver.'
+    )
+);
+
+// Définir les variables
+if ($movie) {
+    $title = $movie->title;
+    $year = $movie->year;
+    $affiche = $movie->affiche;
+    $info = isset($movie_info[$page_slug]) ? $movie_info[$page_slug] : $movie_info['inception'];
+    $genre = isset($info['genres_display']) ? $info['genres_display'] : $movie->genre;
+} else if (isset($movie_info[$page_slug])) {
+    $info = $movie_info[$page_slug];
+    $title = ucwords(str_replace('-', ' ', $page_slug));
+    $genre = 'Romance';
+    $year = 2016;
+    $affiche = $page_slug . ' affiche film.jpg';
+        $genre = isset($info['genres_display']) ? $info['genres_display'] : $genre;
+} else {
+    $title = 'Inception';
+    $year = 2010;
+    $affiche = 'inception affiche film.jpg';
+    $genre = 'Action';
+    $info = $movie_info['inception'];
+}
+
 ?>
 
 <!-- ===== CONTENU FICHE FILM ===== -->
@@ -13,14 +67,23 @@ get_header();
 
     <!-- TITRE + INFOS GENERALES -->
     <section class="movie-header mb-5">
-        <h1 class="fw-bold mb-1">Inception</h1>
-        <p class="movie-sub small text-secondary mb-4">2010 – 12 pistes</p>
+        <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
+        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – 12 pistes</p>
 
         <div class="row g-4">
             <!-- POSTER -->
             <div class="col-md-4 col-lg-3">
                 <div class="movie-poster-wrapper text-center text-md-start">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg' ); ?>" alt="Affiche Inception"
+                    <?php 
+                    $poster_path = get_template_directory() . '/assets/image/Fiche films/' . $affiche;
+                    $poster_url = get_template_directory_uri() . '/assets/image/Fiche films/' . $affiche;
+                    
+                    // Si l'affiche n'existe pas, utiliser celle d'Inception par défaut
+                    if (!file_exists($poster_path)) {
+                        $poster_url = get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg';
+                    }
+                    ?>
+                    <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow">
                     <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button">
                         <i class="bi bi-heart" aria-hidden="true"></i>
@@ -32,38 +95,32 @@ get_header();
             <div class="col-md-8 col-lg-9">
                 <h5 class="mb-2" style="color: rgba(112, 1, 24, 1);">Synopsis</h5>
                 <p class="movie-synopsis small text-light mb-4">
-                    Dom Cobb est un voleur expérimenté dans l'art périlleux de l'extraction : sa spécialité
-                    consiste à s'approprier les secrets les plus précieux d'un individu, enfouis au plus
-                    profond de son subconscient, pendant qu'il rêve et que son esprit est particulièrement
-                    vulnérable. Très recherché pour ses talents dans l'univers trouble de l'espionnage
-                    industriel, Cobb est aussi devenu un fugitif traqué dans le monde entier. Cependant,
-                    une ultime mission pourrait lui permettre de retrouver sa vie d'avant.
+                    <?php echo esc_html($info['synopsis']); ?>
                 </p>
 
                 <div class="row movie-meta small">
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Durée</div>
-                        <div class="movie-meta-value">2h28</div>
+                        <div class="movie-meta-value"><?php echo esc_html($info['duration']); ?></div>
                     </div>
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Note</div>
-                        <div class="movie-meta-value">8,8/10</div>
+                        <div class="movie-meta-value"><?php echo esc_html($info['rating']); ?></div>
                     </div>
                     <div class="col-12 mb-2">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Réalisateur</div>
-                        <div class="movie-meta-value text-white">Christopher Nolan</div>
+                        <div class="movie-meta-value text-white"><?php echo esc_html($info['director']); ?></div>
                     </div>
                     <div class="col-12 mb-2">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Acteurs</div>
                         <div class="movie-meta-value text-white">
-                            Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy,
-                            Dileep Rao, Ken Watanabe
+                            <?php echo esc_html($info['cast']); ?>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Genre</div>
                         <div class="movie-meta-value text-white">
-                            Science-fiction, Thriller.
+                            <?php echo esc_html($genre); ?>
                         </div>
                     </div>
                 </div>
@@ -181,6 +238,7 @@ get_header();
 <script>
     // Chemin des images pour JavaScript
     const themeImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
+    window.currentMovieSlug = '<?php echo esc_js($page_slug); ?>';
 </script>
 
 <?php

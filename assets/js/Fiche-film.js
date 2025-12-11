@@ -6,30 +6,74 @@
 document.addEventListener('DOMContentLoaded', function() {
 
 // === PISTES ===
-const tracks = [
-    { id: 1, title: "Half Remembered Dream", artist: "Hans Zimmer", duration: "1:12" },
-    { id: 2, title: "We Built Our Own World", artist: "Hans Zimmer", duration: "1:55" },
-    { id: 3, title: "Dream Is Collapsing", artist: "Hans Zimmer", duration: "2:28" },
-    { id: 4, title: "Radical Notion", artist: "Hans Zimmer", duration: "3:42" },
-    { id: 5, title: "Old Souls", artist: "Hans Zimmer", duration: "7:44" }
-];
-
-const tracksTable = document.getElementById("tracksTable");
 const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Fiche films/';
+const currentMovieSlug = window.currentMovieSlug || 'inception';
 
-if (tracksTable) {
-    tracks.forEach(t => {
-        // Créer un lien cliquable si l'artiste est Hans Zimmer
-        const artistHtml = t.artist === 'Hans Zimmer' 
+function getTracks(slug) {
+    if (slug === 'la-la-land') {
+        return [
+            { id: 1, title: "Another Day of Sun", artist: "La La Land Cast", duration: "3:48", cover: "La La Land.jpg" },
+            { id: 2, title: "Someone in the Crowd", artist: "Emma Stone, Callie Hernandez, Sonoya Mizuno, Jessica Rothe", duration: "4:19", cover: "La La Land.jpg" },
+            { id: 3, title: "Mia & Sebastian's Theme", artist: "Justin Hurwitz", duration: "1:37", cover: "La La Land.jpg" },
+            { id: 4, title: "A Lovely Night", artist: "Ryan Gosling, Emma Stone", duration: "3:56", cover: "La La Land.jpg" },
+            { id: 5, title: "Herman's Habit", artist: "Justin Hurwitz", duration: "1:51", cover: "La La Land.jpg" },
+            { id: 6, title: "City of Stars (Pier)", artist: "Ryan Gosling", duration: "1:51", cover: "La La Land.jpg" },
+            { id: 7, title: "Planetarium", artist: "Justin Hurwitz", duration: "4:18", cover: "La La Land.jpg" },
+            { id: 8, title: "Summer Montage / Madeline", artist: "Justin Hurwitz", duration: "2:05", cover: "La La Land.jpg" },
+            { id: 9, title: "City of Stars (Duet)", artist: "Ryan Gosling, Emma Stone", duration: "2:29", cover: "La La Land.jpg" },
+            { id: 10, title: "Start a Fire", artist: "John Legend", duration: "3:18", cover: "La La Land.jpg" },
+            { id: 11, title: "Engagement Party", artist: "Justin Hurwitz", duration: "1:01", cover: "La La Land.jpg" },
+            { id: 12, title: "Audition (The Fools Who Dream)", artist: "Emma Stone", duration: "3:48", cover: "La La Land.jpg" },
+            { id: 13, title: "Epilogue", artist: "Justin Hurwitz", duration: "7:40", cover: "La La Land.jpg" },
+            { id: 14, title: "The End", artist: "Justin Hurwitz", duration: "1:52", cover: "La La Land.jpg" },
+            { id: 15, title: "City of Stars (Humming)", artist: "Emma Stone", duration: "2:43", cover: "La La Land.jpg" }
+        ];
+    }
+
+    // Default Inception tracks (COMPLET)
+    return [
+        { id: 1, title: "Half Remembered Dream", artist: "Hans Zimmer", duration: "1:12", cover: "inception affiche film.jpg" },
+        { id: 2, title: "We Built Our Own World", artist: "Hans Zimmer", duration: "1:55", cover: "inception affiche film.jpg" },
+        { id: 3, title: "Dream Is Collapsing", artist: "Hans Zimmer", duration: "2:28", cover: "inception affiche film.jpg" },
+        { id: 4, title: "Radical Notion", artist: "Hans Zimmer", duration: "3:42", cover: "inception affiche film.jpg" },
+        { id: 5, title: "Old Souls", artist: "Hans Zimmer", duration: "7:44", cover: "inception affiche film.jpg" },
+        { id: 6, title: "Mombasa", artist: "Hans Zimmer", duration: "4:00", cover: "inception affiche film.jpg" },
+        { id: 7, title: "One Simple Idea", artist: "Hans Zimmer", duration: "2:15", cover: "inception affiche film.jpg" },
+        { id: 8, title: "Stay", artist: "Hans Zimmer", duration: "5:30", cover: "inception affiche film.jpg" },
+        { id: 9, title: "Dream Within a Dream", artist: "Hans Zimmer", duration: "3:05", cover: "inception affiche film.jpg" },
+        { id: 10, title: "Time (Instrumental)", artist: "Hans Zimmer", duration: "6:20", cover: "inception affiche film.jpg" },
+        { id: 11, title: "The Comet - Hans Zimmer", artist: "Hans Zimmer", duration: "3:25", cover: "inception affiche film.jpg" },
+        { id: 12, title: "Waiting for a Train", artist: "Hans Zimmer", duration: "2:40", cover: "inception affiche film.jpg" },
+        { id: 13, title: "Hallway Fight", artist: "Hans Zimmer", duration: "1:30", cover: "inception affiche film.jpg" },
+        { id: 14, title: "We Are Not Going Back", artist: "Hans Zimmer", duration: "3:15", cover: "inception affiche film.jpg" },
+        { id: 15, title: "Rotating Hallway", artist: "Hans Zimmer", duration: "2:10", cover: "inception affiche film.jpg" }
+    ];
+}
+
+const tracks = getTracks(currentMovieSlug);
+const tracksTable = document.getElementById("tracksTable");
+const tracksMoreBtn = document.getElementById('tracksMoreBtn');
+let tracksLimit = 5;
+const TRACKS_STEP = 5;
+
+function renderTracks(limit = tracksLimit) {
+    if (!tracksTable) return;
+    tracksLimit = limit;
+    tracksTable.innerHTML = '';
+    const slice = tracks.slice(0, tracksLimit);
+    slice.forEach(t => {
+        const artistHtml = t.artist === 'Hans Zimmer'
             ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
             : `<div class="movie-track-artist">${t.artist}</div>`;
+
+        const coverSrc = imagePath + (t.cover || 'inception affiche film.jpg');
         
         tracksTable.innerHTML += `
             <tr>
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
-                        <img src="${imagePath}inception affiche film.jpg" class="movie-track-cover" alt="${t.title}">
+                        <img src="${coverSrc}" class="movie-track-cover" alt="${t.title}">
                         <div>
                             <div class="movie-track-title">${t.title}</div>
                             ${artistHtml}
@@ -51,8 +95,31 @@ if (tracksTable) {
             </tr>
         `;
     });
+    if (tracksMoreBtn) {
+        if (tracksLimit >= tracks.length) {
+            tracksMoreBtn.style.display = 'inline-block';
+            tracksMoreBtn.innerText = 'Afficher moins';
+        } else {
+            tracksMoreBtn.style.display = 'inline-block';
+            tracksMoreBtn.innerText = 'Afficher plus…';
+        }
+    }
+}
 
-    // Like/unlike tracks (event delegation so it works for appended rows too)
+if (tracksTable) {
+    renderTracks(TRACKS_STEP);
+
+    if (tracksMoreBtn) {
+        tracksMoreBtn.addEventListener('click', () => {
+            if (tracksLimit >= tracks.length) {
+                renderTracks(TRACKS_STEP);
+            } else {
+                const nextLimit = Math.min(tracksLimit + TRACKS_STEP, tracks.length);
+                renderTracks(nextLimit);
+            }
+        });
+    }
+
     tracksTable.addEventListener('click', function (e) {
         const target = e.target;
         if (!target.classList.contains('track-like')) return;
@@ -303,57 +370,92 @@ function deleteComment(commentId, element) {
 loadComments();
 
 // === CARROUSEL : FILMS SIMILAIRES DYNAMIQUE ===
-const allSimilarMovies = [
-    { title: "Interstellar",    img: imagePath + "interstellar affiche similaire.jpg" },
-    { title: "Shutter Island",  img: imagePath + "shutter island affiche similaire.jpg" },
-    { title: "Matrix",          img: imagePath + "matrix affiche similaire.jpg" },
-    { title: "Arrival",         img: imagePath + "arrival affiche similaire.jpg" },
-    { title: "Inception",       img: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" },
-    { title: "Tenet",           img: imagePath + "Tenet.jpg" },
-    { title: "Dark City",       img: imagePath + "Dark city.jpg" },
-    { title: "The Prestige",    img: imagePath + "the-prestige-md-web.jpg" }
-];
+const defaultCover = imagePath + 'inception affiche film.jpg';
 
+function getSimilarMovies(slug) {
+    if (slug === 'interstellar') {
+        return [
+            { title: "Interstellar",    img: imagePath + "interstellar affiche similaire.jpg" },
+            { title: "Tenet",           img: imagePath + "Tenet.jpg" },
+            { title: "Shutter Island",  img: imagePath + "shutter island affiche similaire.jpg" },
+            { title: "The Matrix",      img: imagePath + "matrix affiche similaire.jpg" },
+            { title: "Memento",         img: imagePath + "the-prestige-md-web.jpg" },
+            { title: "The Prestige",    img: imagePath + "the-prestige-md-web.jpg" },
+            { title: "Predestination",  img: imagePath + "arrival affiche similaire.jpg" },
+            { title: "Arrival",         img: imagePath + "arrival affiche similaire.jpg" },
+            { title: "Coherence",       img: imagePath + "interstellar affiche similaire.jpg" },
+            { title: "Paprika",         img: defaultCover }
+        ];
+    }
+
+    return [
+        { title: "Interstellar",    img: imagePath + "interstellar affiche similaire.jpg" },
+        { title: "Shutter Island",  img: imagePath + "shutter island affiche similaire.jpg" },
+        { title: "Matrix",          img: imagePath + "matrix affiche similaire.jpg" },
+        { title: "Arrival",         img: imagePath + "arrival affiche similaire.jpg" },
+        { title: "Inception",       img: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" },
+        { title: "Tenet",           img: imagePath + "Tenet.jpg" },
+        { title: "Dark City",       img: imagePath + "Dark city.jpg" },
+        { title: "The Prestige",    img: imagePath + "the-prestige-md-web.jpg" }
+    ];
+}
+
+// === CARROUSEL : FILMS SIMILAIRES (initialisation différée) ===
 let carouselIndex = 0;
 const itemsPerPage = 4;
-const similarMovies = document.getElementById("similarMovies");
-const carouselArrows = document.querySelectorAll('.carousel-arrow');
-const leftArrow = carouselArrows[0];
-const rightArrow = carouselArrows[1];
 
-function renderCarousel() {
-    if (!similarMovies) return;
-    similarMovies.innerHTML = '';
-    for (let i = 0; i < itemsPerPage; i++) {
-        const index = (carouselIndex + i) % allSimilarMovies.length;
-        const m = allSimilarMovies[index];
-        similarMovies.innerHTML += `
-            <div class="col-6 col-md-3">
-                <div class="similar-card">
-                    <img src="${m.img}" alt="${m.title}">
-                    <div class="similar-card-title">${m.title}</div>
+function initCarousel() {
+    const slug = window.currentMovieSlug || 'inception';
+    const allSimilarMovies = getSimilarMovies(slug);
+    const similarMovies = document.getElementById("similarMovies");
+    const carouselArrows = document.querySelectorAll('.carousel-arrow');
+    const leftArrow = carouselArrows[0];
+    const rightArrow = carouselArrows[1];
+
+    function renderCarousel() {
+        if (!similarMovies) return;
+        similarMovies.innerHTML = '';
+        for (let i = 0; i < itemsPerPage; i++) {
+            const index = (carouselIndex + i) % allSimilarMovies.length;
+            const m = allSimilarMovies[index];
+            similarMovies.innerHTML += `
+                <div class="col-6 col-md-3">
+                    <div class="similar-card">
+                        <img src="${m.img}" alt="${m.title}">
+                        <div class="similar-card-title">${m.title}</div>
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        }
     }
+
+    function animateCarousel(delta) {
+        if (!similarMovies) return;
+        similarMovies.classList.add('is-transitioning');
+        setTimeout(() => {
+            carouselIndex = (carouselIndex + delta + allSimilarMovies.length) % allSimilarMovies.length;
+            renderCarousel();
+            similarMovies.classList.remove('is-transitioning');
+        }, 140);
+    }
+
+    if (leftArrow) {
+        leftArrow.addEventListener('click', function () {
+            animateCarousel(-1);
+        });
+    }
+
+    if (rightArrow) {
+        rightArrow.addEventListener('click', function () {
+            animateCarousel(1);
+        });
+    }
+
+    renderCarousel();
 }
 
-if (leftArrow) {
-    leftArrow.addEventListener('click', function () {
-        carouselIndex = (carouselIndex - 1 + allSimilarMovies.length) % allSimilarMovies.length;
-        renderCarousel();
-    });
-}
-
-if (rightArrow) {
-    rightArrow.addEventListener('click', function () {
-        carouselIndex = (carouselIndex + 1) % allSimilarMovies.length;
-        renderCarousel();
-    });
-}
-
-// render initial
-renderCarousel();
+// Initialiser le carrousel une fois le DOM chargé
+initCarousel();
 
 // ===== BOUTON LIKE AFFICHE =====
 const likeBtn = document.getElementById('movieLikeBtn');
@@ -369,59 +471,9 @@ if (likeBtn) {
     });
 }
 
-// === AFFICHER PLUS : PISTES & COMMENTAIRES ===
-const tracksMoreBtn = document.getElementById('tracksMoreBtn');
+// === AFFICHER PLUS : COMMENTAIRES ===
 const commentsMoreBtn = document.getElementById('commentsMoreBtn');
-
-// données supplémentaires (exemples) — peuvent être adaptées
-const moreTracks = [
-    { id: 6, title: "Mombasa", artist: "Hans Zimmer", duration: "4:00" },
-    { id: 7, title: "One Simple Idea", artist: "Hans Zimmer", duration: "2:15" },
-    { id: 8, title: "Stay", artist: "Hans Zimmer", duration: "5:30" },
-    { id: 9, title: "Dream Within a Dream", artist: "Hans Zimmer", duration: "3:05" },
-    { id: 10, title: "Time (Instrumental)", artist: "Hans Zimmer", duration: "6:20" }
-];
-
 const moreComments = [];
-
-function appendTracks(list, markAppended = false) {
-    if (!tracksTable) return;
-    list.forEach(t => {
-        const tr = document.createElement('tr');
-        if (markAppended) tr.classList.add('appended-track');
-        
-        // Créer un lien cliquable si l'artiste est Hans Zimmer
-        const artistHtml = t.artist === 'Hans Zimmer' 
-            ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
-            : `<div class="movie-track-artist">${t.artist}</div>`;
-        
-        tr.innerHTML = `
-            <td>${t.id}</td>
-            <td>
-                <div class="movie-track-info">
-                    <img src="${imagePath}inception affiche film.jpg" class="movie-track-cover" alt="${t.title}">
-                    <div>
-                        <div class="movie-track-title">${t.title}</div>
-                        ${artistHtml}
-                    </div>
-                </div>
-            </td>
-            <td class="col-links">
-                <span class="track-icons">
-                    <i class="bi bi-spotify" aria-label="Spotify"></i>
-                    <i class="bi bi-amazon" aria-label="Amazon Music"></i>
-                    <i class="bi bi-youtube" aria-label="YouTube Music"></i>
-                    <i class="bi bi-apple" aria-label="Apple Music"></i>
-                </span>
-            </td>
-            <td class="col-duration text-center">${t.duration}</td>
-            <td class="col-like text-end">
-                <i class="bi bi-heart track-like"></i>
-            </td>
-        `;
-        tracksTable.appendChild(tr);
-    });
-}
 
 function appendComments(list, markAppended = false) {
     if (!commentsZone) return;
@@ -438,21 +490,6 @@ function appendComments(list, markAppended = false) {
             </div>
         `;
         commentsZone.appendChild(col);
-    });
-}
-
-let tracksExpanded = false;
-if (tracksMoreBtn) {
-    tracksMoreBtn.addEventListener('click', function () {
-        if (!tracksExpanded) {
-            appendTracks(moreTracks, true);
-            this.innerText = 'Afficher moins';
-            tracksExpanded = true;
-        } else {
-            document.querySelectorAll('#tracksTable tr.appended-track').forEach(r => r.remove());
-            this.innerText = 'Afficher plus…';
-            tracksExpanded = false;
-        }
     });
 }
 
