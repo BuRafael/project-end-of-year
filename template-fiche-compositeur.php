@@ -39,11 +39,11 @@ get_header();
                 </p>
 
                 <div class="row composer-meta small">
-                    <div class="col-6 col-sm-3 mb-3">
+                    <div class="col-auto mb-3">
                         <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Naissance</div>
                         <div class="composer-meta-value">12 septembre 1957</div>
                     </div>
-                    <div class="col-6 col-sm-3 mb-3">
+                    <div class="col-auto mb-3">
                         <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Nationalité</div>
                         <div class="composer-meta-value">Allemand, Américain</div>
                     </div>
@@ -70,7 +70,6 @@ get_header();
 
     <!-- ===== PISTES CELEBRES ===== -->
     <section class="composer-section mt-5">
-        <h3 class="section-title mb-3">Compositions célèbres</h3>
         <div class="table-responsive">
             <table class="table composer-tracks-table align-middle mb-3">
                 <thead>
