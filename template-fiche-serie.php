@@ -6,15 +6,6 @@
  */
 
 get_header();
-
-// Enqueue film styles first (base styles)
-wp_enqueue_style('fiche-film', get_template_directory_uri() . '/assets/css/Fiche film.css', array(), filemtime(get_template_directory() . '/assets/css/Fiche film.css'));
-
-// Enqueue specific styles for series (overrides)
-wp_enqueue_style('fiche-serie', get_template_directory_uri() . '/assets/css/Fiche serie.css', array('fiche-film'), filemtime(get_template_directory() . '/assets/css/Fiche serie.css'));
-
-// Enqueue specific script for series
-wp_enqueue_script('fiche-serie', get_template_directory_uri() . '/assets/js/Fiche-serie.js', array(), filemtime(get_template_directory() . '/assets/js/Fiche-serie.js'), true);
 ?>
 
 <!-- ===== CONTENU FICHE SERIE ===== -->
@@ -78,7 +69,7 @@ wp_enqueue_script('fiche-serie', get_template_directory_uri() . '/assets/js/Fich
                         <div class="movie-meta-value">8,7/10</div>
                     </div>
                     <div class="col-12 mb-2">
-                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Créateurs</div>
+                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Réalisateur</div>
                         <div class="movie-meta-value text-white">The Duffer Brothers</div>
                     </div>
                     <div class="col-12 mb-2">

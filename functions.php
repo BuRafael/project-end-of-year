@@ -233,6 +233,20 @@ function theme_scripts()
         ));
     }
     
+    // Fiche série template styles and scripts
+    if (is_page_template('template-fiche-serie.php') || $current_template === 'template-fiche-serie.php') {
+        wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/Fiche film.css'));
+        wp_enqueue_style('fiche-serie-style', get_template_directory_uri() . '/assets/css/Fiche serie.css', array('fiche-film-style'), filemtime(get_template_directory() . '/assets/css/Fiche serie.css'));
+        wp_enqueue_script('fiche-serie-script', get_template_directory_uri() . '/assets/js/Fiche-serie.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-serie.js'), true);
+        
+        // Passer les variables AJAX au JS
+        wp_localize_script('fiche-serie-script', 'movieComments', array(
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce('movie_comment_nonce'),
+            'movie_id' => 'stranger-things' // ID de la série actuelle
+        ));
+    }
+    
     // Fiche compositeur template styles and scripts
     if (is_page_template('template-fiche-compositeur.php') || $current_template === 'template-fiche-compositeur.php') {
         wp_enqueue_style('fiche-compositeur-style', get_template_directory_uri() . '/assets/css/Fiche-compositeur.css', array('header-style', 'footer-style', 'bootstrap'), time());
@@ -535,12 +549,15 @@ function add_movie_comment() {
         $user = get_userdata($user_id);
         $avatar = get_user_meta($user_id, 'avatar_url', true);
         
+        // Récupérer le timestamp exact de la base de données
+        $comment = $wpdb->get_row("SELECT created_at FROM $wpdb->prefix" . "movie_comments WHERE id = %d", ARRAY_A, $comment_id);
+        
         wp_send_json_success([
             'comment_id' => $comment_id,
             'user_name' => $user->display_name,
             'avatar' => $avatar,
             'comment_text' => $comment_text,
-            'created_at' => current_time('mysql')
+            'created_at' => $comment['created_at'] // Utiliser le timestamp de la BD
         ]);
     } else {
         wp_send_json_error(['message' => 'Erreur lors de l\'ajout du commentaire']);
