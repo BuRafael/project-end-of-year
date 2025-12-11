@@ -65,7 +65,7 @@
                     <form role="search" method="get" class="header-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
                         <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>">
                         <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>">
-                            <i class="bi bi-search"></i>
+                            <span class="search-icon">🔍</span>
                         </button>
                     </form>
                 <?php endif; ?>

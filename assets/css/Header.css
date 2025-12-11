@@ -99,34 +99,42 @@
 .header-search {
 	display: flex;
 	align-items: center;
-	gap: 8px;
-	background: #0d0d0f;
-	border: 1px solid #2a2a2a;
-	border-radius: 24px;
-	padding: 6px 10px;
+	background: #F4EFEC;
+	border-radius: 999px;
+	overflow: hidden;
 	width: 220px;
 }
 
 .header-search input {
-	background: transparent;
+	flex: 1;
 	border: none;
-	color: #F4EFEC;
-	width: 100%;
+	background: transparent;
+	padding: 10px 16px;
+	color: #1A1A1A;
 	outline: none;
 	font-size: 0.95rem;
+}
+
+.header-search input::placeholder {
+	color: #999;
 }
 
 .header-search button {
 	background: transparent;
 	border: none;
-	color: #F4EFEC;
+	padding: 0 16px;
+	color: #111;
 	cursor: pointer;
-	font-size: 1rem;
-	transition: color .2s ease;
+	font-size: 1.1rem;
+	transition: transform 0.2s ease;
 }
 
 .header-search button:hover {
-	color: #700118;
+	transform: scale(1.1);
+}
+
+.header-search .search-icon {
+	display: inline-block;
 }
 
 .btn-inscription {
