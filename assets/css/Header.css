@@ -38,7 +38,8 @@
 .header-logo .brand-logo {
     height: 90px;
     width: auto;
-    display: inline-block;
+	display: inline-block;
+		  filter: brightness(0) invert(1); /* Force white rendering for dark header */
 }
 
 .header-logo a:hover {

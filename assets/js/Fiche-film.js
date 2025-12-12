@@ -30,31 +30,30 @@ function getTracks(slug) {
         ];
     }
 
-    // Default Inception tracks (COMPLET)
+    // Default Inception tracks (12 pistes officielles OST)
     return [
         { id: 1, title: "Half Remembered Dream", artist: "Hans Zimmer", duration: "1:12", cover: "inception affiche film.jpg" },
-        { id: 2, title: "We Built Our Own World", artist: "Hans Zimmer", duration: "1:55", cover: "inception affiche film.jpg" },
+        { id: 2, title: "We Built Our Own World", artist: "Hans Zimmer", duration: "1:56", cover: "inception affiche film.jpg" },
         { id: 3, title: "Dream Is Collapsing", artist: "Hans Zimmer", duration: "2:28", cover: "inception affiche film.jpg" },
-        { id: 4, title: "Radical Notion", artist: "Hans Zimmer", duration: "3:42", cover: "inception affiche film.jpg" },
+        { id: 4, title: "Radical Notion", artist: "Hans Zimmer", duration: "3:43", cover: "inception affiche film.jpg" },
         { id: 5, title: "Old Souls", artist: "Hans Zimmer", duration: "7:44", cover: "inception affiche film.jpg" },
-        { id: 6, title: "Mombasa", artist: "Hans Zimmer", duration: "4:00", cover: "inception affiche film.jpg" },
-        { id: 7, title: "One Simple Idea", artist: "Hans Zimmer", duration: "2:15", cover: "inception affiche film.jpg" },
-        { id: 8, title: "Stay", artist: "Hans Zimmer", duration: "5:30", cover: "inception affiche film.jpg" },
-        { id: 9, title: "Dream Within a Dream", artist: "Hans Zimmer", duration: "3:05", cover: "inception affiche film.jpg" },
-        { id: 10, title: "Time (Instrumental)", artist: "Hans Zimmer", duration: "6:20", cover: "inception affiche film.jpg" },
-        { id: 11, title: "The Comet - Hans Zimmer", artist: "Hans Zimmer", duration: "3:25", cover: "inception affiche film.jpg" },
-        { id: 12, title: "Waiting for a Train", artist: "Hans Zimmer", duration: "2:40", cover: "inception affiche film.jpg" },
-        { id: 13, title: "Hallway Fight", artist: "Hans Zimmer", duration: "1:30", cover: "inception affiche film.jpg" },
-        { id: 14, title: "We Are Not Going Back", artist: "Hans Zimmer", duration: "3:15", cover: "inception affiche film.jpg" },
-        { id: 15, title: "Rotating Hallway", artist: "Hans Zimmer", duration: "2:10", cover: "inception affiche film.jpg" }
+        { id: 6, title: "528491", artist: "Hans Zimmer", duration: "2:23", cover: "inception affiche film.jpg" },
+        { id: 7, title: "Mombasa", artist: "Hans Zimmer", duration: "4:54", cover: "inception affiche film.jpg" },
+        { id: 8, title: "One Simple Idea", artist: "Hans Zimmer", duration: "2:28", cover: "inception affiche film.jpg" },
+        { id: 9, title: "Dream Within a Dream", artist: "Hans Zimmer", duration: "5:04", cover: "inception affiche film.jpg" },
+        { id: 10, title: "Waiting for a Train", artist: "Hans Zimmer", duration: "9:30", cover: "inception affiche film.jpg" },
+        { id: 11, title: "Paradox", artist: "Hans Zimmer", duration: "3:25", cover: "inception affiche film.jpg" },
+        { id: 12, title: "Time", artist: "Hans Zimmer", duration: "4:36", cover: "inception affiche film.jpg" }
     ];
 }
 
 const tracks = getTracks(currentMovieSlug);
 const tracksTable = document.getElementById("tracksTable");
 const tracksMoreBtn = document.getElementById('tracksMoreBtn');
-let tracksLimit = 5;
+const TRACKS_MIN = 5;
 const TRACKS_STEP = 5;
+// Pour Inception, afficher d'emblée toutes les pistes, mais permettre "Afficher moins" à 5
+let tracksLimit = currentMovieSlug === 'inception' ? tracks.length : TRACKS_MIN;
 
 function renderTracks(limit = tracksLimit) {
     if (!tracksTable) return;
@@ -112,7 +111,7 @@ if (tracksTable) {
     if (tracksMoreBtn) {
         tracksMoreBtn.addEventListener('click', () => {
             if (tracksLimit >= tracks.length) {
-                renderTracks(TRACKS_STEP);
+                renderTracks(TRACKS_MIN);
             } else {
                 const nextLimit = Math.min(tracksLimit + TRACKS_STEP, tracks.length);
                 renderTracks(nextLimit);
@@ -375,28 +374,30 @@ const defaultCover = imagePath + 'inception affiche film.jpg';
 function getSimilarMovies(slug) {
     if (slug === 'interstellar') {
         return [
-            { title: "Interstellar",    img: imagePath + "interstellar affiche similaire.jpg" },
-            { title: "Tenet",           img: imagePath + "Tenet.jpg" },
-            { title: "Shutter Island",  img: imagePath + "shutter island affiche similaire.jpg" },
-            { title: "The Matrix",      img: imagePath + "matrix affiche similaire.jpg" },
-            { title: "Memento",         img: imagePath + "the-prestige-md-web.jpg" },
-            { title: "The Prestige",    img: imagePath + "the-prestige-md-web.jpg" },
-            { title: "Predestination",  img: imagePath + "arrival affiche similaire.jpg" },
-            { title: "Arrival",         img: imagePath + "arrival affiche similaire.jpg" },
-            { title: "Coherence",       img: imagePath + "interstellar affiche similaire.jpg" },
-            { title: "Paprika",         img: defaultCover }
+            { title: "Inception",       img: defaultCover },
+            { title: "Tenet",           img: imagePath + "tenet2.jpg" },
+                { title: "The Prestige",    img: imagePath + "The Prestige.webp" },
+            { title: "Memento",         img: imagePath + "momento.jpg" },
+            { title: "Arrival",         img: defaultCover },
+            { title: "Contact",         img: defaultCover },
+            { title: "Ad Astra",        img: defaultCover },
+            { title: "Gravity",         img: defaultCover }
         ];
     }
 
     return [
         { title: "Interstellar",    img: imagePath + "interstellar affiche similaire.jpg" },
+        { title: "Tenet",           img: imagePath + "tenet2.jpg" },
+            { title: "The Prestige",    img: imagePath + "The Prestige.webp" },
+        { title: "Memento",         img: imagePath + "momento.jpg" },
         { title: "Shutter Island",  img: imagePath + "shutter island affiche similaire.jpg" },
-        { title: "Matrix",          img: imagePath + "matrix affiche similaire.jpg" },
-        { title: "Arrival",         img: imagePath + "arrival affiche similaire.jpg" },
-        { title: "Inception",       img: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" },
-        { title: "Tenet",           img: imagePath + "Tenet.jpg" },
+        { title: "Paprika",         img: imagePath + "paprika.webp" },
+        { title: "Coherence",       img: imagePath + "coherence.webp" },
         { title: "Dark City",       img: imagePath + "Dark city.jpg" },
-        { title: "The Prestige",    img: imagePath + "the-prestige-md-web.jpg" }
+        { title: "Source Code",     img: imagePath + "Source code.jpg" },
+        { title: "Ex Machina",      img: imagePath + "Ex machina.jpg" },
+        { title: "Edge of Tomorrow",img: imagePath + "Edge of Tomorrow.jpg" },
+        { title: "Minority Report", img: imagePath + "Minority report.jpg" }
     ];
 }
 
