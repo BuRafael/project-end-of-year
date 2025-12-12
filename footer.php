@@ -67,6 +67,14 @@
         </div>
     </footer>
 
+    <!-- Scroll to Top Button -->
+    <?php 
+    // Ne pas afficher sur la page profil
+    if (!is_page('profil') && !is_page('mon-profil') && !is_page_template('template-profil.php') && !is_page_template('template-userprofil.php')) : 
+    ?>
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Revenir en haut" type="button" style="display: none;">↑</button>
+    <?php endif; ?>
+
     <?php wp_footer(); ?>
     </body>
 

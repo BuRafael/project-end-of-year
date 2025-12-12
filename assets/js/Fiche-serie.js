@@ -233,6 +233,13 @@ if (seasonSelect && episodeSelect) {
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('track-like')) {
         e.target.classList.toggle('liked');
+        if (e.target.classList.contains('liked')) {
+            e.target.classList.remove('bi-heart');
+            e.target.classList.add('bi-heart-fill');
+        } else {
+            e.target.classList.remove('bi-heart-fill');
+            e.target.classList.add('bi-heart');
+        }
     }
 });
 
@@ -504,17 +511,18 @@ const carouselArrows = document.querySelectorAll('.carousel-arrow');
 const leftArrow = carouselArrows[0];
 const rightArrow = carouselArrows[1];
 
+const serieImagePath = imagePath.replace('Piste séries/', 'Fiche série/');
 const allSimilarSeries = [
-    { title: "Dark",                         image: imagePath + "Dark city.jpg" },
-    { title: "The OA",                       image: imagePath + "shutter island affiche similaire.jpg" },
-    { title: "Supernatural",                 image: imagePath + "matrix affiche similaire.jpg" },
-    { title: "The X-Files",                  image: imagePath + "arrival affiche similaire.jpg" },
-    { title: "Twin Peaks",                   image: imagePath + "Tenet.jpg" },
-    { title: "It (1990)",                    image: imagePath + "interstellar affiche similaire.jpg" },
-    { title: "Locke & Key",                  image: imagePath + "the-prestige-md-web.jpg" },
-    { title: "The Society",                  image: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" },
-    { title: "I Am Not Okay With This",      image: imagePath + "interstellar affiche similaire.jpg" },
-    { title: "Wayward Pines",                image: imagePath + "Dark city.jpg" }
+    { title: "Dark",                         image: serieImagePath + "dark.jpg" },
+    { title: "The OA",                       image: serieImagePath + "The OA.webp" },
+    { title: "Supernatural",                 image: serieImagePath + "Supernatural.webp" },
+    { title: "The X-Files",                  image: serieImagePath + "The x-files.jpg" },
+    { title: "Twin Peaks",                   image: serieImagePath + "Twin peaks.jpg" },
+    { title: "It (1990)",                    image: serieImagePath + "It.webp" },
+    { title: "Locke & Key",                  image: serieImagePath + "locke and key.jpg" },
+    { title: "The Society",                  image: serieImagePath + "the society.webp" },
+    { title: "I Am Not Okay With This",      image: serieImagePath + "i am not okay with this.jpg" },
+    { title: "Wayward Pines",                image: serieImagePath + "wayward pines.jpg" }
 ];
 
 let carouselIndex = 0;
@@ -562,6 +570,14 @@ const movieLikeBtn = document.getElementById('movieLikeBtn');
 if (movieLikeBtn) {
     movieLikeBtn.addEventListener('click', function() {
         this.classList.toggle('liked');
+        const icon = this.querySelector('i');
+        if (this.classList.contains('liked')) {
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
+        } else {
+            icon.classList.remove('bi-heart-fill');
+            icon.classList.add('bi-heart');
+        }
         this.setAttribute('aria-pressed', this.classList.contains('liked'));
     });
 }

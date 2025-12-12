@@ -34,7 +34,7 @@ get_header();
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Stranger Things">
                         <div class="slide-content">
                             <span class="slide-title">Stranger Things</span>
-                            <a href="<?php echo esc_url(home_url('/inception')); ?>" class="btn-voir">Voir</a>
+                            <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="btn-voir">Voir</a>
                         </div>
                     </div>
                     <div class="slide">

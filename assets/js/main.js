@@ -13,5 +13,29 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // Scroll to top button
+    initScrollToTop();
 });
+
+/**
+ * ========== SCROLL TO TOP ==========
+ * Shows/hides button and scrolls to top smoothly
+ */
+function initScrollToTop() {
+    const scrollBtn = document.getElementById('scrollToTop');
+    if (!scrollBtn) return;
+
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 300) {
+            scrollBtn.style.display = 'flex';
+        } else {
+            scrollBtn.style.display = 'none';
+        }
+    });
+
+    scrollBtn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
 
