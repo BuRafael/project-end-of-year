@@ -1113,6 +1113,34 @@ function get_movie_data_by_slug($slug) {
     ));
 }
 
+// Fonction pour obtenir les infos d'une série par slug
+function get_series_data_by_slug($slug) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    // Mapping des slugs vers les titres de séries
+    $slug_mapping = array(
+        'stranger-things' => 'Stranger Things',
+        'the-crown' => 'The Crown',
+        'breaking-bad' => 'Breaking Bad',
+        'game-of-thrones' => 'Game of Thrones',
+        'the-office' => 'The Office',
+        'friends' => 'Friends',
+        'the-last-of-us' => 'The Last of Us'
+    );
+    
+    $title = isset($slug_mapping[$slug]) ? $slug_mapping[$slug] : null;
+    
+    if (!$title) {
+        return null;
+    }
+    
+    return $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE title = %s",
+        $title
+    ));
+}
+
 // Endpoint AJAX pour la recherche autocomplete
 function search_movies() {
     global $wpdb;

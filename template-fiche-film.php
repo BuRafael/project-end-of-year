@@ -28,13 +28,6 @@ $movie_info = array(
         'cast' => 'Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt',
         'synopsis' => 'Mia, une actrice en herbe qui sert les clients d\'un café sur les plateaux de cinéma, rencontre Sebastian, un pianiste de jazz passionné. Tous deux rêvent de réussir dans leurs domaines respectifs. Avec l\'aide l\'un de l\'autre, ils se soutiennent et s\'inspirent mutuellement, naviguant dans l\'industrie du divertissement de Los Angeles tout en approfondissant leur relation amoureuse.',
         'genres_display' => 'Comédie • Drame • Musical • Romance'
-    ),
-    'stranger-things' => array(
-        'duration' => '50min/épisode',
-        'rating' => '8,7/10',
-        'director' => 'Matt Duffer, Ross Duffer',
-        'cast' => 'Millie Bobby Brown, Finn Wolfhard, Winona Ryder',
-        'synopsis' => 'Dans les années 80, à Hawkins dans l\'Indiana, un jeune garçon disparaît mystérieusement. Ses amis, sa famille et la police locale se lancent dans une quête extraordinaire pour le retrouver.'
     )
 );
 

@@ -5,31 +5,176 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
-// === PISTES ===
-const tracks = [
-    { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12" },
-    { id: 2, title: "From Russia with Love", artist: "Kyle Dixon & Michael Stein", duration: "1:55" },
-    { id: 3, title: "Lab Rat", artist: "Kyle Dixon & Michael Stein", duration: "2:28" },
-    { id: 4, title: "Demogorgon", artist: "Kyle Dixon & Michael Stein", duration: "3:42" },
-    { id: 5, title: "Barb", artist: "Kyle Dixon & Michael Stein", duration: "7:44" }
-];
+// === PISTES PAR SAISON ET ÉPISODE ===
+const allTracks = {
+    1: { // Saison 1
+        1: [ // Épisode 1
+            { id: 1, title: "Kids", artist: "Kyle Dixon & Michael Stein", duration: "1:23", image: "Main theme Stranger Things.png" },
+            { id: 2, title: "The Upside Down", artist: "Kyle Dixon & Michael Stein", duration: "2:15", image: "Main theme Stranger Things.png" },
+            { id: 3, title: "Stranger Things (Main Theme)", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" },
+            { id: 4, title: "Coffee & Contemplation", artist: "Kyle Dixon & Michael Stein", duration: "1:58", image: "Main theme Stranger Things.png" },
+            { id: 5, title: "Biking to School", artist: "Kyle Dixon & Michael Stein", duration: "1:41", image: "Main theme Stranger Things.png" },
+            { id: 6, title: "Nancy & Barb", artist: "Kyle Dixon & Michael Stein", duration: "2:04", image: "Main theme Stranger Things.png" },
+            { id: 7, title: "Agents", artist: "Kyle Dixon & Michael Stein", duration: "1:47", image: "Main theme Stranger Things.png" },
+            { id: 8, title: "Talking to Australia", artist: "Kyle Dixon & Michael Stein", duration: "2:32", image: "Main theme Stranger Things.png" },
+            { id: 9, title: "Friendship", artist: "Kyle Dixon & Michael Stein", duration: "1:56", image: "Main theme Stranger Things.png" },
+            { id: 10, title: "Hawkins", artist: "Kyle Dixon & Michael Stein", duration: "3:12", image: "Main theme Stranger Things.png" },
+            { id: 11, title: "Are You Sure?", artist: "Kyle Dixon & Michael Stein", duration: "2:18", image: "Main theme Stranger Things.png" },
+            { id: 12, title: "In Pursuit", artist: "Kyle Dixon & Michael Stein", duration: "2:45", image: "Main theme Stranger Things.png" },
+            { id: 13, title: "Over", artist: "Kyle Dixon & Michael Stein", duration: "1:53", image: "Main theme Stranger Things.png" }
+        ],
+        2: [ // Épisode 2
+            { id: 1, title: "Eleven", artist: "Kyle Dixon & Michael Stein", duration: "2:08", image: "Main theme Stranger Things.png" },
+            { id: 2, title: "Photos In The Woods", artist: "Kyle Dixon & Michael Stein", duration: "1:45", image: "Main theme Stranger Things.png" },
+            { id: 3, title: "Lay-Z-Boy", artist: "Kyle Dixon & Michael Stein", duration: "2:22", image: "Main theme Stranger Things.png" },
+            { id: 4, title: "This Isn't You", artist: "Kyle Dixon & Michael Stein", duration: "3:01", image: "Main theme Stranger Things.png" }
+        ],
+        3: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        4: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        5: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        6: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        7: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        8: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        9: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ]
+    },
+    2: { // Saison 2
+        1: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        2: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        3: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        4: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        5: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        6: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        7: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        8: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        9: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ]
+    },
+    3: { // Saison 3
+        1: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        2: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        3: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        4: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        5: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        6: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        7: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        8: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        9: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ]
+    },
+    4: { // Saison 4
+        1: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        2: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        3: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        4: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        5: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        6: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        7: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        8: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ],
+        9: [
+            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
+        ]
+    }
+};
 
 const tracksTable = document.getElementById("tracksTable");
-const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Fiche films/';
+const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Piste séries/';
+const seasonSelect = document.getElementById("seasonSelect");
+const episodeSelect = document.getElementById("episodeSelect");
 
-if (tracksTable) {
-    tracks.forEach(t => {
+const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
+
+// Fonction pour afficher les pistes
+function displayTracks(season, episode) {
+    if (!tracksTable) return;
+    
+    const tracks = (allTracks[season] && allTracks[season][episode]) ? allTracks[season][episode] : [];
+    tracksTable.innerHTML = '';
+    
+    tracks.forEach((t, index) => {
         // Créer un lien cliquable si l'artiste est Hans Zimmer
         const artistHtml = t.artist === 'Hans Zimmer' 
             ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
             : `<div class="movie-track-artist">${t.artist}</div>`;
         
+        // Utiliser l'image spécifique de la piste si elle existe, sinon utiliser le chemin par défaut
+        const trackImage = t.image ? imagePath + t.image : imagePath;
+        
+        // Ajouter une classe spéciale pour la première piste (index 0)
+        const isFirstTrack = index === 0 ? 'first-track-image' : '';
+        
+        // Masquer les pistes au-delà du nombre d'affichage
+        const displayStyle = index < TRACKS_DISPLAY_COUNT ? '' : 'display: none;';
+        
         tracksTable.innerHTML += `
-            <tr>
+            <tr style="${displayStyle}">
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
-                        <img src="${imagePath}" class="movie-track-cover" alt="${t.title}">
+                        <img src="${trackImage}" class="movie-track-cover ${isFirstTrack}" alt="${t.title}">
                         <div>
                             <div class="movie-track-title">${t.title}</div>
                             ${artistHtml}
@@ -51,22 +196,66 @@ if (tracksTable) {
             </tr>
         `;
     });
+    
+    // Gérer l'affichage du bouton "Afficher plus"
+    updateTracksMoreBtn(tracks.length);
+}
 
-    // Like/unlike tracks (event delegation so it works for appended rows too)
-    document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('track-like')) {
-            e.target.classList.toggle('liked');
-        }
+// Fonction pour mettre à jour le bouton "Afficher plus"
+function updateTracksMoreBtn(totalTracks) {
+    const tracksMoreBtn = document.getElementById("tracksMoreBtn");
+    if (!tracksMoreBtn) return;
+    
+    if (totalTracks > TRACKS_DISPLAY_COUNT) {
+        tracksMoreBtn.style.display = 'block';
+        tracksMoreBtn.textContent = 'Afficher plus…';
+        tracksMoreBtn.classList.remove('show-less');
+    } else {
+        tracksMoreBtn.style.display = 'none';
+    }
+}
+
+// Afficher les pistes de la saison 1 épisode 1 par défaut
+displayTracks(1, 1);
+
+// Gestion des changements de saison et épisode
+if (seasonSelect && episodeSelect) {
+    seasonSelect.addEventListener('change', function() {
+        displayTracks(parseInt(this.value), parseInt(episodeSelect.value));
+    });
+    
+    episodeSelect.addEventListener('change', function() {
+        displayTracks(parseInt(seasonSelect.value), parseInt(this.value));
     });
 }
 
-// === AFFICHER PLUS (PISTES) ===
+// Like/unlike tracks (event delegation so it works for appended rows too)
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('track-like')) {
+        e.target.classList.toggle('liked');
+    }
+});
+
+// === AFFICHER PLUS / AFFICHER MOINS (PISTES) ===
 const tracksMoreBtn = document.getElementById("tracksMoreBtn");
 if (tracksMoreBtn) {
     tracksMoreBtn.addEventListener('click', function() {
         const rows = tracksTable.querySelectorAll('tr');
-        rows.forEach(row => row.style.display = 'table-row');
-        tracksMoreBtn.style.display = 'none';
+        const isExpanded = this.classList.contains('show-less');
+        
+        if (isExpanded) {
+            // Masquer les pistes au-delà du compte
+            rows.forEach((row, index) => {
+                row.style.display = index < TRACKS_DISPLAY_COUNT ? 'table-row' : 'none';
+            });
+            this.textContent = 'Afficher plus…';
+            this.classList.remove('show-less');
+        } else {
+            // Afficher toutes les pistes
+            rows.forEach(row => row.style.display = 'table-row');
+            this.textContent = 'Afficher moins…';
+            this.classList.add('show-less');
+        }
     });
 }
 
@@ -316,14 +505,16 @@ const leftArrow = carouselArrows[0];
 const rightArrow = carouselArrows[1];
 
 const allSimilarSeries = [
-    { title: "Breaking Bad",    image: imagePath + "interstellar affiche similaire.jpg" },
-    { title: "Euphoria",        image: imagePath + "shutter island affiche similaire.jpg" },
-    { title: "Wednesday",       image: imagePath + "matrix affiche similaire.jpg" },
-    { title: "The Witcher",     image: imagePath + "arrival affiche similaire.jpg" },
-    { title: "The Mandalorian", image: imagePath + "Tenet.jpg" },
-    { title: "Dark",            image: imagePath + "Dark city.jpg" },
-    { title: "The Boys",        image: imagePath + "the-prestige-md-web.jpg" },
-    { title: "Loki",            image: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" }
+    { title: "Dark",                         image: imagePath + "Dark city.jpg" },
+    { title: "The OA",                       image: imagePath + "shutter island affiche similaire.jpg" },
+    { title: "Supernatural",                 image: imagePath + "matrix affiche similaire.jpg" },
+    { title: "The X-Files",                  image: imagePath + "arrival affiche similaire.jpg" },
+    { title: "Twin Peaks",                   image: imagePath + "Tenet.jpg" },
+    { title: "It (1990)",                    image: imagePath + "interstellar affiche similaire.jpg" },
+    { title: "Locke & Key",                  image: imagePath + "the-prestige-md-web.jpg" },
+    { title: "The Society",                  image: imagePath + "inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg" },
+    { title: "I Am Not Okay With This",      image: imagePath + "interstellar affiche similaire.jpg" },
+    { title: "Wayward Pines",                image: imagePath + "Dark city.jpg" }
 ];
 
 let carouselIndex = 0;

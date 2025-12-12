@@ -6,6 +6,43 @@
  */
 
 get_header();
+
+// Récupérer les infos de la série basé sur le slug
+global $post;
+$page_slug = isset($post->post_name) ? $post->post_name : 'stranger-things';
+
+// Infos supplémentaires codées pour chaque série
+$series_info = array(
+    'stranger-things' => array(
+        'title' => 'Stranger Things',
+        'aired' => '2016 - À nos jours',
+        'seasons' => '4',
+        'rating' => '8,7/10',
+        'director' => 'The Duffer Brothers',
+        'cast' => 'Winona Ryder, David Harbour, Finn Wolfhard, Millie Bobby Brown, Gaten Matarazzo, Caleb McLaughlin, Noah Schnapp, Sadie Sink',
+        'synopsis' => 'Quand un enfant disparaît mystérieusement en 1983, ses amis, sa famille et la police locale doivent affronter des forces et des mystères bien plus grands que la réalité. Stranger Things mélange l\'angoisse, la nostalgie et la science-fiction pour raconter une histoire captivante où rien n\'est ce qu\'il semble être. Une série qui a captivé des millions de fans à travers le monde.',
+        'poster' => 'Stranger Things2.jpg',
+        'genres_display' => 'Science-fiction • Drame • Mystère',
+        'total_tracks' => '207' // Total de pistes dans toute la série
+    )
+);
+
+// Définir les variables par défaut
+$title = 'Stranger Things';
+$aired = '2016 - À nos jours';
+$poster = 'Stranger Things2.jpg';
+$genre = 'Science-fiction • Drame • Mystère';
+$info = $series_info['stranger-things'];
+
+// Si les infos de la série existent, les utiliser
+if (isset($series_info[$page_slug])) {
+    $title = $series_info[$page_slug]['title'];
+    $aired = $series_info[$page_slug]['aired'];
+    $poster = $series_info[$page_slug]['poster'];
+    $genre = $series_info[$page_slug]['genres_display'];
+    $info = $series_info[$page_slug];
+}
+
 ?>
 
 <!-- ===== CONTENU FICHE SERIE ===== -->
@@ -13,14 +50,23 @@ get_header();
 
     <!-- TITRE + INFOS GENERALES -->
     <section class="movie-header mb-5">
-        <h1 class="fw-bold mb-1">Stranger Things</h1>
-        <p class="movie-sub small text-secondary mb-4">2016 - À nos jours – 42 épisodes</p>
+        <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
+        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($aired); ?> – <?php echo esc_html($info['total_tracks']); ?> pistes</p>
 
         <div class="row g-4">
             <!-- POSTER -->
             <div class="col-md-4 col-lg-3">
                 <div class="movie-poster-wrapper text-center text-md-start">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things2.jpg' ); ?>" alt="Affiche Stranger Things"
+                    <?php 
+                    $poster_path = get_template_directory() . '/assets/image/Fiche série/' . $poster;
+                    $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/' . $poster;
+                    
+                    // Si l'affiche n'existe pas, utiliser celle de Stranger Things par défaut
+                    if (!file_exists($poster_path)) {
+                        $poster_url = get_template_directory_uri() . '/assets/image/Front Page/Stranger Things2.jpg';
+                    }
+                    ?>
+                    <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow">
                     <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button">
                         <i class="bi bi-heart" aria-hidden="true"></i>
@@ -53,36 +99,32 @@ get_header();
             <div class="col-md-8 col-lg-9">
                 <h5 class="mb-2" style="color: rgba(112, 1, 24, 1);">Synopsis</h5>
                 <p class="movie-synopsis small text-light mb-4">
-                    Quand un enfant disparaît mystérieusement en 1983, ses amis, sa famille et la police locale 
-                    doivent affronter des forces et des mystères bien plus grands que la réalité. Stranger Things 
-                    mélange l'angoisse, la nostalgie et la science-fiction pour raconter une histoire captivante 
-                    où rien n'est ce qu'il semble être. Une série qui a captivé des millions de fans à travers le monde.
+                    <?php echo esc_html($info['synopsis']); ?>
                 </p>
 
                 <div class="row movie-meta small">
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Saisons</div>
-                        <div class="movie-meta-value">4</div>
+                        <div class="movie-meta-value"><?php echo esc_html($info['seasons']); ?></div>
                     </div>
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Note</div>
-                        <div class="movie-meta-value">8,7/10</div>
+                        <div class="movie-meta-value"><?php echo esc_html($info['rating']); ?></div>
                     </div>
                     <div class="col-12 mb-2">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Réalisateur</div>
-                        <div class="movie-meta-value text-white">The Duffer Brothers</div>
+                        <div class="movie-meta-value text-white"><?php echo esc_html($info['director']); ?></div>
                     </div>
                     <div class="col-12 mb-2">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Acteurs</div>
                         <div class="movie-meta-value text-white">
-                            Winona Ryder, David Harbour, Finn Wolfhard, Millie Bobby Brown,
-                            Gaten Matarazzo, Caleb McLaughlin, Noah Schnapp, Sadie Sink
+                            <?php echo esc_html($info['cast']); ?>
                         </div>
                     </div>
                     <div class="col-12">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Genre</div>
                         <div class="movie-meta-value text-white">
-                            Science-fiction, Drame, Mystère
+                            <?php echo esc_html($genre); ?>
                         </div>
                     </div>
                 </div>
@@ -199,7 +241,7 @@ get_header();
 
 <script>
     // Chemin des images pour JavaScript
-    const themeImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
+    const themeImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Piste séries/';
 </script>
 
 <?php

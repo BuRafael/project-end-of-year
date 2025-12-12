@@ -81,3 +81,19 @@
     align-items: flex-start !important;
 }
 
+/* Rotation pour toutes les images de pistes */
+.movie-track-cover {
+    transform: rotate(-90deg);
+}
+
+.movie-tracks-table tbody tr:hover .movie-track-cover {
+    transform: rotate(-90deg) scale(1.1);
+}
+
+/* Centrer le bouton "Afficher plus/moins" */
+.movie-page .text-center {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
