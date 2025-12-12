@@ -606,96 +606,96 @@ function insert_default_movies() {
     $movies = [
         // FILMS - ACTION
         ['title' => 'Inception', 'type' => 'film', 'genre' => 'Action', 'year' => '2010', 'affiche' => 'inception affiche film.jpg'],
-        ['title' => 'The Matrix', 'type' => 'film', 'genre' => 'Action', 'year' => '1999', 'affiche' => 'The Matrix.jpg'],
-        ['title' => 'John Wick', 'type' => 'film', 'genre' => 'Action', 'year' => '2014', 'affiche' => 'John Wick.jpg'],
-        ['title' => 'Mad Max: Fury Road', 'type' => 'film', 'genre' => 'Action', 'year' => '2015', 'affiche' => 'Mad Max.jpg'],
-        ['title' => 'The Dark Knight', 'type' => 'film', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'The Dark Knight.jpg'],
+        ['title' => 'The Matrix', 'type' => 'film', 'genre' => 'Action', 'year' => '1999', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'John Wick', 'type' => 'film', 'genre' => 'Action', 'year' => '2014', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'Mad Max: Fury Road', 'type' => 'film', 'genre' => 'Action', 'year' => '2015', 'affiche' => 'the-prestige-md-web.jpg'],
+        ['title' => 'The Dark Knight', 'type' => 'film', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'Dark city.jpg'],
         
         // FILMS - COMÉDIE
         ['title' => 'La La Land', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2016', 'affiche' => 'La La Land.jpg'],
-        ['title' => 'Jumanji', 'type' => 'film', 'genre' => 'Comédie', 'year' => '1995', 'affiche' => 'Jumanji.jpg'],
-        ['title' => 'Superbad', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2007', 'affiche' => 'Superbad.jpg'],
-        ['title' => 'The Grand Budapest Hotel', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2014', 'affiche' => 'Grand Budapest.jpg'],
-        ['title' => 'Amélie', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2001', 'affiche' => 'Amelie.jpg'],
+        ['title' => 'Jumanji', 'type' => 'film', 'genre' => 'Comédie', 'year' => '1995', 'affiche' => 'inception affiche film.jpg'],
+        ['title' => 'Superbad', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2007', 'affiche' => 'shutter island affiche similaire.jpg'],
+        ['title' => 'The Grand Budapest Hotel', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2014', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'Amélie', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2001', 'affiche' => 'the-prestige-md-web.jpg'],
         
         // FILMS - DRAME
-        ['title' => 'Interstellar', 'type' => 'film', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'Interstellar.jpg'],
-        ['title' => 'The Shawshank Redemption', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'Shawshank.jpg'],
-        ['title' => 'Forrest Gump', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'Forrest Gump.jpg'],
-        ['title' => 'The Pursuit of Happyness', 'type' => 'film', 'genre' => 'Drame', 'year' => '2006', 'affiche' => 'Pursuit Happiness.jpg'],
-        ['title' => 'Parasite', 'type' => 'film', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Parasite.jpg'],
+        ['title' => 'Interstellar', 'type' => 'film', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'interstellar affiche similaire.jpg'],
+        ['title' => 'The Shawshank Redemption', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'shutter island affiche similaire.jpg'],
+        ['title' => 'Forrest Gump', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'The Pursuit of Happyness', 'type' => 'film', 'genre' => 'Drame', 'year' => '2006', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'Parasite', 'type' => 'film', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Dark city.jpg'],
         
         // FILMS - SCIENCE-FICTION
-        ['title' => 'Blade Runner 2049', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'Blade Runner.jpg'],
-        ['title' => 'Dune', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2021', 'affiche' => 'Dune.jpg'],
-        ['title' => 'Avatar', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2009', 'affiche' => 'Avatar.jpg'],
+        ['title' => 'Blade Runner 2049', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg'],
+        ['title' => 'Dune', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2021', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'Avatar', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2009', 'affiche' => 'interstellar affiche similaire.jpg'],
         ['title' => 'Tenet', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2020', 'affiche' => 'Tenet.jpg'],
-        ['title' => 'Minority Report', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2002', 'affiche' => 'Minority Report.jpg'],
+        ['title' => 'Minority Report', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2002', 'affiche' => 'matrix affiche similaire.jpg'],
         
         // FILMS - HORREUR
-        ['title' => 'The Shining', 'type' => 'film', 'genre' => 'Horreur', 'year' => '1980', 'affiche' => 'The Shining.jpg'],
-        ['title' => 'Hereditary', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Hereditary.jpg'],
-        ['title' => 'The Ring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2002', 'affiche' => 'The Ring.jpg'],
-        ['title' => 'A Quiet Place', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Quiet Place.jpg'],
-        ['title' => 'The Conjuring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2013', 'affiche' => 'Conjuring.jpg'],
+        ['title' => 'The Shining', 'type' => 'film', 'genre' => 'Horreur', 'year' => '1980', 'affiche' => 'shutter island affiche similaire.jpg'],
+        ['title' => 'Hereditary', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'The Ring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2002', 'affiche' => 'the-prestige-md-web.jpg'],
+        ['title' => 'A Quiet Place', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'inception affiche film.jpg'],
+        ['title' => 'The Conjuring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2013', 'affiche' => 'matrix affiche similaire.jpg'],
         
         // FILMS - ROMANCE
-        ['title' => 'The Notebook', 'type' => 'film', 'genre' => 'Romance', 'year' => '2004', 'affiche' => 'The Notebook.jpg'],
-        ['title' => 'Titanic', 'type' => 'film', 'genre' => 'Romance', 'year' => '1997', 'affiche' => 'Titanic.jpg'],
-        ['title' => 'Pride and Prejudice', 'type' => 'film', 'genre' => 'Romance', 'year' => '2005', 'affiche' => 'Pride Prejudice.jpg'],
-        ['title' => 'Crazy Rich Asians', 'type' => 'film', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'Crazy Rich Asians.jpg'],
-        ['title' => 'About Time', 'type' => 'film', 'genre' => 'Romance', 'year' => '2013', 'affiche' => 'About Time.jpg'],
+        ['title' => 'The Notebook', 'type' => 'film', 'genre' => 'Romance', 'year' => '2004', 'affiche' => 'La La Land.jpg'],
+        ['title' => 'Titanic', 'type' => 'film', 'genre' => 'Romance', 'year' => '1997', 'affiche' => 'Tenet.jpg'],
+        ['title' => 'Pride and Prejudice', 'type' => 'film', 'genre' => 'Romance', 'year' => '2005', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'Crazy Rich Asians', 'type' => 'film', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'interstellar affiche similaire.jpg'],
+        ['title' => 'About Time', 'type' => 'film', 'genre' => 'Romance', 'year' => '2013', 'affiche' => 'inception affiche film.jpg'],
         
         // FILMS ANIMÉS - ACTION
-        ['title' => 'Your Name', 'type' => 'film', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'Your Name.jpg'],
-        ['title' => 'Demon Slayer Movie', 'type' => 'film', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'Demon Slayer.jpg'],
-        ['title' => 'Jujutsu Kaisen 0', 'type' => 'film', 'genre' => 'Action', 'year' => '2021', 'affiche' => 'JJK 0.jpg'],
+        ['title' => 'Your Name', 'type' => 'film', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'inception affiche film.jpg'],
+        ['title' => 'Demon Slayer Movie', 'type' => 'film', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'Jujutsu Kaisen 0', 'type' => 'film', 'genre' => 'Action', 'year' => '2021', 'affiche' => 'matrix affiche similaire.jpg'],
         
         // SÉRIES - ACTION
-        ['title' => 'Stranger Things', 'type' => 'serie', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'Stranger Things.jpg'],
-        ['title' => 'Breaking Bad', 'type' => 'serie', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'Breaking Bad.jpg'],
-        ['title' => 'Game of Thrones', 'type' => 'serie', 'genre' => 'Action', 'year' => '2011', 'affiche' => 'Game of Thrones.jpg'],
-        ['title' => 'The Witcher', 'type' => 'serie', 'genre' => 'Action', 'year' => '2019', 'affiche' => 'The Witcher.jpg'],
-        ['title' => 'Arrow', 'type' => 'serie', 'genre' => 'Action', 'year' => '2012', 'affiche' => 'Arrow.jpg'],
+        ['title' => 'Stranger Things', 'type' => 'serie', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'Tenet.jpg'],
+        ['title' => 'Breaking Bad', 'type' => 'serie', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'Game of Thrones', 'type' => 'serie', 'genre' => 'Action', 'year' => '2011', 'affiche' => 'the-prestige-md-web.jpg'],
+        ['title' => 'The Witcher', 'type' => 'serie', 'genre' => 'Action', 'year' => '2019', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'Arrow', 'type' => 'serie', 'genre' => 'Action', 'year' => '2012', 'affiche' => 'inception affiche film.jpg'],
         
         // SÉRIES - COMÉDIE
-        ['title' => 'The Office', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2005', 'affiche' => 'The Office.jpg'],
-        ['title' => 'Parks and Recreation', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2009', 'affiche' => 'Parks Recreation.jpg'],
-        ['title' => 'Brooklyn Nine-Nine', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2013', 'affiche' => 'Brooklyn 99.jpg'],
-        ['title' => 'The Good Place', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2016', 'affiche' => 'Good Place.jpg'],
-        ['title' => 'Community', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2009', 'affiche' => 'Community.jpg'],
+        ['title' => 'The Office', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2005', 'affiche' => 'La La Land.jpg'],
+        ['title' => 'Parks and Recreation', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2009', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'Brooklyn Nine-Nine', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2013', 'affiche' => 'shutter island affiche similaire.jpg'],
+        ['title' => 'The Good Place', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2016', 'affiche' => 'interstellar affiche similaire.jpg'],
+        ['title' => 'Community', 'type' => 'serie', 'genre' => 'Comédie', 'year' => '2009', 'affiche' => 'inception affiche film.jpg'],
         
         // SÉRIES - DRAME
-        ['title' => 'Euphoria', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Euphoria.jpg'],
-        ['title' => 'True Detective', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'True Detective.jpg'],
-        ['title' => 'The Crown', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2016', 'affiche' => 'The Crown.jpg'],
-        ['title' => 'Better Call Saul', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2015', 'affiche' => 'Better Call Saul.jpg'],
-        ['title' => 'The Marvelous Mrs. Maisel', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2017', 'affiche' => 'Mrs Maisel.jpg'],
+        ['title' => 'Euphoria', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'True Detective', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'the-prestige-md-web.jpg'],
+        ['title' => 'The Crown', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2016', 'affiche' => 'interstellar affiche similaire.jpg'],
+        ['title' => 'Better Call Saul', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2015', 'affiche' => 'shutter island affiche similaire.jpg'],
+        ['title' => 'The Marvelous Mrs. Maisel', 'type' => 'serie', 'genre' => 'Drame', 'year' => '2017', 'affiche' => 'La La Land.jpg'],
         
         // SÉRIES - SCIENCE-FICTION
-        ['title' => 'The Mandalorian', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2019', 'affiche' => 'The Mandalorian.jpg'],
-        ['title' => 'Westworld', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2016', 'affiche' => 'Westworld.jpg'],
-        ['title' => 'Dark', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'Dark.jpg'],
-        ['title' => 'The Expanse', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2015', 'affiche' => 'The Expanse.jpg'],
-        ['title' => 'Orphan Black', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2013', 'affiche' => 'Orphan Black.jpg'],
+        ['title' => 'The Mandalorian', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2019', 'affiche' => 'Tenet.jpg'],
+        ['title' => 'Westworld', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2016', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'Dark', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'The Expanse', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2015', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'Orphan Black', 'type' => 'serie', 'genre' => 'Science-Fiction', 'year' => '2013', 'affiche' => 'inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg'],
         
         // SÉRIES - HORREUR
-        ['title' => 'Wednesday', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2022', 'affiche' => 'Wednesday.jpg'],
-        ['title' => 'Supernatural', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2005', 'affiche' => 'Supernatural.jpg'],
-        ['title' => 'The Haunting of Hill House', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Haunting Hill.jpg'],
-        ['title' => 'American Horror Story', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2011', 'affiche' => 'AHS.jpg'],
-        ['title' => 'The Twilight Zone', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '1959', 'affiche' => 'Twilight Zone.jpg'],
+        ['title' => 'Wednesday', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2022', 'affiche' => 'shutter island affiche similaire.jpg'],
+        ['title' => 'Supernatural', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2005', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'The Haunting of Hill House', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'the-prestige-md-web.jpg'],
+        ['title' => 'American Horror Story', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '2011', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'The Twilight Zone', 'type' => 'serie', 'genre' => 'Horreur', 'year' => '1959', 'affiche' => 'inception affiche film.jpg'],
         
         // SÉRIES - ROMANCE
-        ['title' => 'Bridgerton', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2020', 'affiche' => 'Bridgerton.jpg'],
-        ['title' => 'Outlander', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2014', 'affiche' => 'Outlander.jpg'],
-        ['title' => 'The Crown', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2016', 'affiche' => 'Crown Romance.jpg'],
-        ['title' => 'You', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'You.jpg'],
-        ['title' => 'Emily in Paris', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2020', 'affiche' => 'Emily Paris.jpg'],
+        ['title' => 'Bridgerton', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2020', 'affiche' => 'La La Land.jpg'],
+        ['title' => 'Outlander', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2014', 'affiche' => 'Tenet.jpg'],
+        ['title' => 'The Crown', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2016', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'You', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'interstellar affiche similaire.jpg'],
+        ['title' => 'Emily in Paris', 'type' => 'serie', 'genre' => 'Romance', 'year' => '2020', 'affiche' => 'shutter island affiche similaire.jpg'],
         
         // SÉRIES ANIMÉS
-        ['title' => 'Attack on Titan', 'type' => 'serie', 'genre' => 'Action', 'year' => '2013', 'affiche' => 'SNK.jpg'],
-        ['title' => 'Jujutsu Kaisen', 'type' => 'serie', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'JJK.jpg'],
+        ['title' => 'Attack on Titan', 'type' => 'serie', 'genre' => 'Action', 'year' => '2013', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'Jujutsu Kaisen', 'type' => 'serie', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'matrix affiche similaire.jpg'],
     ];
     
     foreach ($movies as $movie) {
