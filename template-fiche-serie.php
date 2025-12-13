@@ -24,6 +24,54 @@ $series_info = array(
         'poster' => 'Stranger Things2.jpg',
         'genres_display' => 'Science-fiction • Drame • Mystère',
         'total_tracks' => '207' // Total de pistes dans toute la série
+    ),
+    'breaking-bad' => array(
+        'title' => 'Breaking Bad',
+        'aired' => '2008 - 2013',
+        'seasons' => '5',
+        'rating' => '9,5/10',
+        'director' => 'Vince Gilligan',
+        'cast' => 'Bryan Cranston, Aaron Paul, Anna Gunn, Dean Norris, Betsy Brandt, RJ Mitte',
+        'synopsis' => 'Walter White, un professeur de chimie surqualifié et père de famille, apprend qu\'il est atteint d\'un cancer du poumon incurable. Pour assurer l\'avenir financier de sa famille, il se lance dans la production de méthamphétamine avec Jesse Pinkman, un de ses anciens élèves. Une descente aux enfers magistrale.',
+        'poster' => 'breaking bad.webp',
+        'genres_display' => 'Drame • Crime • Thriller',
+        'total_tracks' => '156'
+    ),
+    'euphoria' => array(
+        'title' => 'Euphoria',
+        'aired' => '2019 - À nos jours',
+        'seasons' => '2',
+        'rating' => '8,3/10',
+        'director' => 'Sam Levinson',
+        'cast' => 'Zendaya, Hunter Schafer, Jacob Elordi, Maude Apatow, Angus Cloud, Eric Dane',
+        'synopsis' => 'Rue Bennett est une jeune femme qui lutte contre son addiction aux drogues. Elle tente de trouver sa place dans le monde tout en naviguant dans les complexités de l\'amour, des pertes et des traumatismes. Une série audacieuse et visuellement stupéfiante qui explore les défis de la jeunesse moderne.',
+        'poster' => 'euphoria.jpg',
+        'genres_display' => 'Drame • Teen',
+        'total_tracks' => '98'
+    ),
+    'wednesday' => array(
+        'title' => 'Wednesday',
+        'aired' => '2022 - À nos jours',
+        'seasons' => '1',
+        'rating' => '8,1/10',
+        'director' => 'Tim Burton',
+        'cast' => 'Jenna Ortega, Gwendoline Christie, Riki Lindhome, Jamie McShane, Hunter Doohan',
+        'synopsis' => 'Wednesday Addams est envoyée à l\'académie Nevermore, un pensionnat pour jeunes marginaux. Elle tente de maîtriser ses pouvoirs psychiques émergents, de déjouer une monstrueuse série de meurtres qui terrorise la ville locale, et de résoudre le mystère surnaturel qui a impliqué ses parents il y a 25 ans.',
+        'poster' => 'wednesday.jpg',
+        'genres_display' => 'Comédie noire • Fantasy • Mystère',
+        'total_tracks' => '89'
+    ),
+    'the-witcher' => array(
+        'title' => 'The Witcher',
+        'aired' => '2019 - À nos jours',
+        'seasons' => '3',
+        'rating' => '8,2/10',
+        'director' => 'Lauren Schmidt Hissrich',
+        'cast' => 'Henry Cavill, Anya Chalotra, Freya Allan, Joey Batey, MyAnna Buring',
+        'synopsis' => 'Geralt de Riv, un chasseur de monstres solitaire, se bat pour trouver sa place dans un monde où les humains sont souvent plus méchants que les bêtes. Destinée le lie à une puissante sorcière et à une jeune princesse dont le destin pourrait changer le monde.',
+        'poster' => 'the witcher.webp',
+        'genres_display' => 'Fantasy • Action • Aventure',
+        'total_tracks' => '145'
     )
 );
 
@@ -58,13 +106,7 @@ if (isset($series_info[$page_slug])) {
             <div class="col-md-4 col-lg-3">
                 <div class="movie-poster-wrapper text-center text-md-start">
                     <?php 
-                    $poster_path = get_template_directory() . '/assets/image/Fiche série/' . $poster;
                     $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/' . $poster;
-                    
-                    // Si l'affiche n'existe pas, utiliser celle de Stranger Things par défaut
-                    if (!file_exists($poster_path)) {
-                        $poster_url = get_template_directory_uri() . '/assets/image/Front Page/Stranger Things2.jpg';
-                    }
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow">
@@ -231,9 +273,7 @@ if (isset($series_info[$page_slug])) {
                 Rejoignez notre communauté et plongez dans<br>
                 l'univers musical de tous vos films et séries favoris !
             </p>
-            <?php if (!is_user_logged_in()) : ?>
-                <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="cta-btn">S'inscrire</a>
-            <?php endif; ?>
+            <?php echo cinemusic_signup_button(); ?>
         </div>
     </section>
 

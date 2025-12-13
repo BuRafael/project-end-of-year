@@ -24,7 +24,7 @@ get_header();
             <div class="carousel-viewport">
                 <div class="carousel-track">
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Kimi no na wa.webp' ); ?>" alt="Your Name">
                         <div class="slide-content">
                             <span class="slide-title">Your Name</span>
                             <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="btn-voir">Découvrir</a>
@@ -52,7 +52,7 @@ get_header();
                         </div>
                     </div>
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Attaque des titans.jpg' ); ?>" alt="L'Attaque des Titans">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Attaque des Titans.jpg' ); ?>" alt="L'Attaque des Titans">
                         <div class="slide-content">
                             <span class="slide-title">L'Attaque des Titans</span>
                             <a href="<?php echo esc_url(home_url('/attaque-des-titans')); ?>" class="btn-voir">Découvrir</a>
@@ -120,24 +120,24 @@ get_header();
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Parasite.jpg' ); ?>" alt="Parasite">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/parasite')); ?>" class="top-title-link">Parasite</a>
-                        <a href="<?php echo esc_url(home_url('/parasite')); ?>" class="top-composer-link">Bong Joon-ho</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Parasite</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Bong Joon-ho</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Interstellar.jpg' ); ?>" alt="Interstellar">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Interstellar.png' ); ?>" alt="Interstellar">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/interstellar')); ?>" class="top-title-link">Interstellar</a>
-                        <a href="<?php echo esc_url(home_url('/interstellar')); ?>" class="top-composer-link">Christopher Nolan</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Interstellar</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Arrival.jpg' ); ?>" alt="Arrival">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Spiderman.jpg' ); ?>" alt="Spider-Man">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-title-link">Arrival</a>
-                        <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-composer-link">Denis Villeneuve</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Spider-Man vs</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Richon Sorairo</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
@@ -157,34 +157,34 @@ get_header();
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/breaking bad.webp' ); ?>" alt="Breaking Bad">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Breaking Bad.jpg' ); ?>" alt="Breaking Bad">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/breaking-bad')); ?>" class="top-title-link">Breaking Bad</a>
-                        <a href="<?php echo esc_url(home_url('/breaking-bad')); ?>" class="top-composer-link">Vince Gilligan</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Breaking Bad</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Vince Gilligan</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/euphoria.jpg' ); ?>" alt="Euphoria">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Euphoria.jpg' ); ?>" alt="Euphoria">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/euphoria')); ?>" class="top-title-link">Euphoria</a>
-                        <a href="<?php echo esc_url(home_url('/euphoria')); ?>" class="top-composer-link">Sam Levinson</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Euphoria</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Sam Levinson</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/wednesday.jpg' ); ?>" alt="Wednesday">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Wednesday.jpg' ); ?>" alt="Wednesday">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/wednesday')); ?>" class="top-title-link">Wednesday</a>
-                        <a href="<?php echo esc_url(home_url('/wednesday')); ?>" class="top-composer-link">Tim Burton</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Wednesday</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Tim Burton</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/the witcher.webp' ); ?>" alt="The Witcher">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/The Witcher.jpg' ); ?>" alt="The Witcher">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/the-witcher')); ?>" class="top-title-link">The Witcher</a>
-                        <a href="<?php echo esc_url(home_url('/the-witcher')); ?>" class="top-composer-link">Lauren Schmidt Hissrich</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">The Witcher</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Lauren Schmidt Hissrich</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
@@ -196,42 +196,42 @@ get_header();
             <div class="top-header">Top 5 animés</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Kimi no na wa.webp' ); ?>" alt="Your Name">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="top-title-link">Your Name</a>
-                        <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="top-composer-link">Makoto Shinkai</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Your Name</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Makoto Shinkai</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Le Voyage de Chihiro">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Chihiro.jpg' ); ?>" alt="Le Voyage de Chihiro">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/chihiro')); ?>" class="top-title-link">Le Voyage de Chihiro</a>
-                        <a href="<?php echo esc_url(home_url('/chihiro')); ?>" class="top-composer-link">Hayao Miyazaki</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Le Voyage de Chihiro</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Hayao Miyazaki</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="L'Attaque des Titans">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/SNK.png' ); ?>" alt="L'Attaque des Titans">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/attaque-des-titans')); ?>" class="top-title-link">L'Attaque des Titans</a>
-                        <a href="<?php echo esc_url(home_url('/attaque-des-titans')); ?>" class="top-composer-link">Hajime Isayama</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">L'Attaque des Titans</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Hajime Isayama</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/demon slayer.jpg' ); ?>" alt="Demon Slayer">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Demon Slayer.jpg' ); ?>" alt="Demon Slayer">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/demon-slayer')); ?>" class="top-title-link">Demon Slayer</a>
-                        <a href="<?php echo esc_url(home_url('/demon-slayer')); ?>" class="top-composer-link">Koyoharu Gotouge</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Demon Slayer</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Koyoharu Gotouge</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/jujutsu kaisen.jpg' ); ?>" alt="Jujutsu Kaisen">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/JJK.jpg' ); ?>" alt="Jujutsu Kaisen">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/jujutsu-kaisen')); ?>" class="top-title-link">Jujutsu Kaisen</a>
-                        <a href="<?php echo esc_url(home_url('/jujutsu-kaisen')); ?>" class="top-composer-link">Gege Akutami</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-title-link">Jujutsu Kaisen</a>
+                        <a href="<?php echo esc_url(home_url('/inception')); ?>" class="top-composer-link">Gege Akutami</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>

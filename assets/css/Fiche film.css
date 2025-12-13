@@ -72,7 +72,7 @@
 }
 
 .movie-poster:hover {
-    transform: scale(1.03) translateY(-5px);
+    transform: scale(1.03);
     box-shadow: 0 15px 50px rgba(112, 1, 24, 0.3);
 }
 

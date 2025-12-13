@@ -168,7 +168,7 @@ get_header();
                 l'univers musical de tous vos films et séries favoris !
             </p>
             <?php if (!is_user_logged_in()) : ?>
-                <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="cta-btn">S'inscrire</a>
+                <?php echo cinemusic_signup_button(); ?>
             <?php endif; ?>
         </div>
     </section>

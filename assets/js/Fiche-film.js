@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // === PISTES ===
 const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Fiche films/';
+const trackImagePath = typeof themeTrackImagePath !== 'undefined' ? themeTrackImagePath : 'assets/image/Pistes film/';
 const currentMovieSlug = window.currentMovieSlug || 'inception';
 
 function getTracks(slug) {
@@ -27,6 +28,38 @@ function getTracks(slug) {
             { id: 13, title: "Epilogue", artist: "Justin Hurwitz", duration: "7:40", cover: "La La Land.jpg" },
             { id: 14, title: "The End", artist: "Justin Hurwitz", duration: "1:52", cover: "La La Land.jpg" },
             { id: 15, title: "City of Stars (Humming)", artist: "Emma Stone", duration: "2:43", cover: "La La Land.jpg" }
+        ];
+    }
+
+    if (slug === 'parasite') {
+        return [
+            { id: 1, title: "Opening", artist: "Jung Jae-il", duration: "2:15", cover: "Parasite piste.png" },
+            { id: 2, title: "Conciliation I", artist: "Jung Jae-il", duration: "2:08", cover: "Parasite piste.png" },
+            { id: 3, title: "On the Way to Rich House", artist: "Jung Jae-il", duration: "2:42", cover: "Parasite piste.png" },
+            { id: 4, title: "Conciliation II", artist: "Jung Jae-il", duration: "1:56", cover: "Parasite piste.png" },
+            { id: 5, title: "Plum Juice", artist: "Jung Jae-il", duration: "2:34", cover: "Parasite piste.png" },
+            { id: 6, title: "Mr. Yoon and Park", artist: "Jung Jae-il", duration: "2:28", cover: "Parasite piste.png" },
+            { id: 7, title: "Conciliation III", artist: "Jung Jae-il", duration: "2:11", cover: "Parasite piste.png" },
+            { id: 8, title: "The Belt of Faith", artist: "Jung Jae-il", duration: "2:50", cover: "Parasite piste.png" },
+            { id: 9, title: "Moon Gwang Left", artist: "Jung Jae-il", duration: "2:19", cover: "Parasite piste.png" },
+            { id: 10, title: "Camping", artist: "Jung Jae-il", duration: "2:46", cover: "Parasite piste.png" },
+            { id: 11, title: "The Hellgate", artist: "Jung Jae-il", duration: "3:02", cover: "Parasite piste.png" },
+            { id: 12, title: "Heartrending Story of Bubu", artist: "Jung Jae-il", duration: "2:33", cover: "Parasite piste.png" },
+            { id: 13, title: "Zappaguri", artist: "Jung Jae-il", duration: "2:24", cover: "Parasite piste.png" },
+            { id: 14, title: "Ghost", artist: "Jung Jae-il", duration: "2:17", cover: "Parasite piste.png" },
+            { id: 15, title: "The Family Is Busy", artist: "Jung Jae-il", duration: "2:45", cover: "Parasite piste.png" },
+            { id: 16, title: "Busy to Survive", artist: "Jung Jae-il", duration: "2:38", cover: "Parasite piste.png" },
+            { id: 17, title: "The Frontal Lobe of Ki Taek", artist: "Jung Jae-il", duration: "2:52", cover: "Parasite piste.png" },
+            { id: 18, title: "Water, Ocean", artist: "Jung Jae-il", duration: "3:18", cover: "Parasite piste.png" },
+            { id: 19, title: "Water, Ocean Again", artist: "Jung Jae-il", duration: "2:41", cover: "Parasite piste.png" },
+            { id: 20, title: "It Is Sunday Morning", artist: "Jung Jae-il", duration: "2:29", cover: "Parasite piste.png" },
+            { id: 21, title: "Blood and Sword", artist: "Jung Jae-il", duration: "3:05", cover: "Parasite piste.png" },
+            { id: 22, title: "Yasan", artist: "Jung Jae-il", duration: "2:36", cover: "Parasite piste.png" },
+            { id: 23, title: "Moving", artist: "Jung Jae-il", duration: "2:14", cover: "Parasite piste.png" },
+            { id: 24, title: "Ending", artist: "Jung Jae-il", duration: "3:47", cover: "Parasite piste.png" },
+            { id: 25, title: "Soju One Glass", artist: "Jung Jae-il", duration: "2:19", cover: "Parasite piste.png" },
+            { id: 26, title: "Extraits de Rodelinda", artist: "Georg Friedrich Handel", duration: "2:15", cover: "Parasite piste.png" },
+            { id: 27, title: "In ginocchio da te", artist: "Gianni Morandi", duration: "2:47", cover: "Parasite piste.png" }
         ];
     }
 
@@ -65,7 +98,12 @@ function renderTracks(limit = tracksLimit) {
             ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
             : `<div class="movie-track-artist">${t.artist}</div>`;
 
-        const coverSrc = imagePath + (t.cover || 'inception affiche film.jpg');
+        // Déterminer le chemin correct selon si c'est une image de piste ou d'affiche
+        let coverPath = imagePath;
+        if (t.cover && t.cover.includes('piste')) {
+            coverPath = trackImagePath;
+        }
+        const coverSrc = coverPath + (t.cover || 'inception affiche film.jpg');
         
         tracksTable.innerHTML += `
             <tr>

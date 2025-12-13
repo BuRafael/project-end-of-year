@@ -101,15 +101,18 @@ function initHearts() {
  * Handle registration button click
  */
 function initCtaButton() {
-    const ctaBtn = document.querySelector('.cta-btn');
+    // Scope to CTA section to avoid hijacking header buttons
+    const ctaSection = document.querySelector('.cta-section');
+    const ctaBtn = ctaSection ? ctaSection.querySelector('.cta-btn') : null;
     if (!ctaBtn) return;
 
     ctaBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Redirect to registration page
-        window.location.href = '/register';
+        // Redirect to the actual inscription page
+        window.location.href = '/inscription';
     });
-}// ========== PASSWORD TOGGLE (for login template) ==========
+}
+// ========== PASSWORD TOGGLE (for login template) ==========
 function initTogglePassword() {
     const toggle = document.getElementById('togglePassword');
     const pwd = document.getElementById('passwordField');
