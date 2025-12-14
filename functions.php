@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Helper: render site-wide Sign Up (S'inscrire) button only when logged out
@@ -63,10 +64,10 @@ function create_theme_pages()
         
         // Animes
         array('title' => 'Your Name', 'slug' => 'your-name', 'template' => 'template-fiche-film.php'),
-        array('title' => 'Le Voyage de Chihiro', 'slug' => 'chihiro', 'template' => 'template-fiche-film.php'),
-        array('title' => 'L\'Attaque des Titans', 'slug' => 'attaque-des-titans', 'template' => 'template-fiche-film.php'),
-        array('title' => 'Demon Slayer', 'slug' => 'demon-slayer', 'template' => 'template-fiche-film.php'),
-        array('title' => 'Jujutsu Kaisen', 'slug' => 'jujutsu-kaisen', 'template' => 'template-fiche-film.php')
+        array('title' => 'Spirited Away', 'slug' => 'spirited-away', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Attack on Titan', 'slug' => 'attack-on-titan', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Demon Slayer', 'slug' => 'demon-slayer', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Jujutsu Kaisen', 'slug' => 'jujutsu-kaisen', 'template' => 'template-fiche-serie.php')
     );
 
     foreach ($all_pages as $page_data) {
@@ -152,8 +153,11 @@ function theme_scripts()
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), '5.3.3');
     wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css', array(), '1.11.1');
     
-    // Bootstrap JS
-    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true);
+    // jQuery (already in WordPress but ensure it's loaded)
+    wp_enqueue_script('jquery');
+    
+    // Bootstrap JS (depends on jQuery for some components)
+    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.3.3', true);
 
     // Base styles (reset + global)
     wp_enqueue_style('base-style', get_template_directory_uri() . '/assets/css/base.css', array('bootstrap'), $version);
@@ -205,10 +209,13 @@ function theme_scripts()
         wp_enqueue_script('fiche-serie-script', get_template_directory_uri() . '/assets/js/Fiche-serie.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-serie.js'), true);
         
         // Passer les variables AJAX au JS
+        // Récupérer le slug de la page actuelle pour le movie_id (comme pour les films)
+        global $post;
+        $serie_slug = isset($post->post_name) ? $post->post_name : 'stranger-things';
         wp_localize_script('fiche-serie-script', 'movieComments', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('movie_comment_nonce'),
-            'movie_id' => 'stranger-things' // ID de la série actuelle
+            'movie_id' => $serie_slug // ID unique de la série courante
         ));
     }
     
@@ -470,6 +477,7 @@ function create_movies_table() {
     $table_name = $wpdb->prefix . 'movies';
     $charset_collate = $wpdb->get_charset_collate();
 
+
     $sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         title varchar(255) NOT NULL,
@@ -484,8 +492,11 @@ function create_movies_table() {
         KEY genre (genre)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    if (!function_exists('dbDelta')) {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    }
     dbDelta($sql);
+
     
     // Insérer les données si la table est vide
     $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
@@ -618,8 +629,8 @@ function create_movie_comments_table() {
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
+
 }
 add_action('after_switch_theme', 'create_movie_comments_table');
 
@@ -800,8 +811,12 @@ function create_composer_comments_table() {
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
+
+// Mutualisé pour toutes les fonctions qui en ont besoin
+if (!function_exists('dbDelta')) {
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+}
 }
 add_action('after_switch_theme', 'create_composer_comments_table');
 

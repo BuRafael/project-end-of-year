@@ -1,3 +1,6 @@
+if (!function_exists('wp_handle_upload')) {
+    require_once ABSPATH . 'wp-admin/includes/file.php';
+}
 <?php
 /**
  * Template Name: Register Step 2 (Avatar)
@@ -19,7 +22,6 @@ if (isset($_POST['avatar_submit'])) {
         $file      = $_FILES['avatar_file'];
         $allowed   = array('image/jpeg', 'image/png', 'image/webp', 'image/gif');
         if (in_array($file['type'], $allowed, true)) {
-            require_once ABSPATH . 'wp-admin/includes/file.php';
             $overrides = array('test_form' => false);
             $movefile  = wp_handle_upload($file, $overrides);
             if ($movefile && !isset($movefile['error'])) {

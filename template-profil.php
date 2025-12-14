@@ -1,3 +1,6 @@
+if (!function_exists('wp_upload_bits')) {
+    require_once(ABSPATH . 'wp-admin/includes/file.php');
+}
 <?php
 /**
  * Template Name: Profil Utilisateur
@@ -21,7 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['profil_nonce']) && wp
         $allowed_types = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
         if (in_array($file['type'], $allowed_types)) {
             // Upload le fichier dans WordPress
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
             $upload = wp_upload_bits($file['name'], null, file_get_contents($file['tmp_name']));
             
             if (!$upload['error']) {

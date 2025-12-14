@@ -38,10 +38,10 @@ get_header();
                         </div>
                     </div>
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception bannière.jpg' ); ?>" alt="Inception">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
                         <div class="slide-content">
-                            <span class="slide-title">Inception</span>
-                            <a href="<?php echo esc_url(home_url('/inception')); ?>" class="btn-voir">Découvrir</a>
+                            <span class="slide-title">Spirited Away</span>
+                            <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
@@ -55,7 +55,7 @@ get_header();
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Attaque des titans.jpg' ); ?>" alt="L'Attaque des Titans">
                         <div class="slide-content">
                             <span class="slide-title">L'Attaque des Titans</span>
-                            <a href="<?php echo esc_url(home_url('/attaque-des-titans')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@ get_header();
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Arrival.jpg' ); ?>" alt="Arrival">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Arrival.webp' ); ?>" alt="Arrival">
                     <div class="top-info">
                         <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-title-link">Arrival</a>
                         <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-composer-link">Denis Villeneuve</a>
@@ -204,18 +204,18 @@ get_header();
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Le Voyage de Chihiro">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/chihiro')); ?>" class="top-title-link">Le Voyage de Chihiro</a>
-                        <a href="<?php echo esc_url(home_url('/chihiro')); ?>" class="top-composer-link">Hayao Miyazaki</a>
+                        <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="top-title-link">Spirited Away</a>
+                        <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="top-composer-link">Hayao Miyazaki</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="L'Attaque des Titans">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="Attack on Titan">
                     <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/attaque-des-titans')); ?>" class="top-title-link">L'Attaque des Titans</a>
-                        <a href="<?php echo esc_url(home_url('/attaque-des-titans')); ?>" class="top-composer-link">Hajime Isayama</a>
+                        <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="top-title-link">Attack on Titan</a>
+                        <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="top-composer-link">Hajime Isayama</a>
                     </div>
                     <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
                 </li>

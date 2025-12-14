@@ -23,36 +23,6 @@ $movie_info = array(
         'affiche' => 'inception affiche film.jpg',
         'year' => 2010
     ),
-    'la-la-land' => array(
-        'duration' => '2h08',
-        'rating' => '8,0/10',
-        'director' => 'Damien Chazelle',
-        'cast' => 'Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt',
-        'synopsis' => 'Mia, une actrice en herbe qui sert les clients d\'un café sur les plateaux de cinéma, rencontre Sebastian, un pianiste de jazz passionné. Tous deux rêvent de réussir dans leurs domaines respectifs. Avec l\'aide l\'un de l\'autre, ils se soutiennent et s\'inspirent mutuellement, naviguant dans l\'industrie du divertissement de Los Angeles tout en approfondissant leur relation amoureuse.',
-        'genres_display' => 'Comédie • Drame • Musical • Romance',
-        'affiche' => 'La La Land.jpg',
-        'year' => 2016
-    ),
-    'parasite' => array(
-        'duration' => '2h12',
-        'rating' => '8,5/10',
-        'director' => 'Bong Joon-ho',
-        'cast' => 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik, Park So-dam',
-        'synopsis' => 'Toute la famille de Ki-taek est au chômage, et s\'intéresse fortement au train de vie de la richissime famille Park. Un jour, leur fils réussit à se faire recommander pour donner des cours particuliers d\'anglais chez les Park. C\'est le début d\'un engrenage incontrôlable, dont personne ne sortira véritablement indemne.',
-        'genres_display' => 'Thriller • Drame • Comédie noire',
-        'affiche' => 'Parasite.jpg',
-        'year' => 2019
-    ),
-    'interstellar' => array(
-        'duration' => '2h49',
-        'rating' => '8,6/10',
-        'director' => 'Christopher Nolan',
-        'cast' => 'Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine',
-        'synopsis' => 'Dans un futur proche, la Terre est devenue hostile à toute forme de vie. Un groupe d\'explorateurs utilise un vaisseau interstellaire récemment découvert pour repousser les limites humaines et partir à la conquête des distances astronomiques dans un voyage interstellaire.',
-        'genres_display' => 'Science-fiction • Drame • Aventure',
-        'affiche' => 'Interstellar.jpg',
-        'year' => 2014
-    ),
     'arrival' => array(
         'duration' => '1h56',
         'rating' => '7,9/10',
@@ -63,69 +33,209 @@ $movie_info = array(
         'affiche' => 'Arrival.webp',
         'year' => 2016
     ),
-    'wicked' => array(
-        'duration' => '2h40',
-        'rating' => '8,2/10',
-        'director' => 'Jon M. Chu',
-        'cast' => 'Cynthia Erivo, Ariana Grande, Jonathan Bailey, Michelle Yeoh',
-        'synopsis' => 'L\'histoire méconnue des sorcières du Pays d\'Oz. Avant que Dorothy n\'arrive du Kansas, deux jeunes femmes se rencontrent à l\'Université de Shiz. L\'une, née avec une peau vert émeraude, est intelligente et incomprise. L\'autre est belle, ambitieuse et très populaire. Comment sont-elles devenues Glinda la Bonne et la Méchante Sorcière de l\'Ouest ?',
-        'genres_display' => 'Fantasy • Musical • Romance',
-        'affiche' => 'inception affiche film.jpg',
-        'year' => 2024
+    'spirited-away' => array(
+        'duration' => '2h05',
+        'rating' => '8,6/10',
+        'director' => 'Hayao Miyazaki',
+        'cast' => 'Rumi Hiiragi, Miyu Irino, Mari Natsuki, Takashi Naitô',
+        'synopsis' => 'Chihiro, une fillette de 10 ans, découvre un monde magique dominé par des dieux, des sorcières et des esprits, où les humains sont transformés en bêtes. Pour sauver ses parents, elle devra faire preuve de courage et de persévérance.',
+        'genres_display' => 'Animation • Aventure • Fantastique',
+        'affiche' => 'chihiro.jpg',
+        'year' => 2001
     ),
     'your-name' => array(
         'duration' => '1h46',
         'rating' => '8,4/10',
         'director' => 'Makoto Shinkai',
-        'cast' => 'Ryūnosuke Kamiki, Mone Kamishiraishi, Ryō Narita, Aoi Yūki',
-        'synopsis' => 'Mitsuha, une lycéenne coincée dans une petite ville de montagne, et Taki, un lycéen de Tokyo, se retrouvent mystérieusement liés. Quand un jour ils se réveillent dans le corps de l\'autre, cette connexion étrange va bouleverser leurs vies.',
-        'genres_display' => 'Animation • Romance • Fantasy',
+        'cast' => 'Ryûnosuke Kamiki, Mone Kamishiraishi, Ryô Narita, Aoi Yûki',
+        'synopsis' => 'Deux lycéens, Mitsuha et Taki, vivent chacun dans une région différente du Japon et échangent mystérieusement leurs corps. Leur quête pour se retrouver bouleverse le temps et l’espace.',
+        'genres_display' => 'Animation • Drame • Romance',
         'affiche' => 'your name.jpg',
         'year' => 2016
     ),
-    'chihiro' => array(
-        'duration' => '2h05',
+    'la-la-land' => array(
+        'duration' => '2h08',
+        'rating' => '8,0/10',
+        'director' => 'Damien Chazelle',
+        'cast' => 'Ryan Gosling, Emma Stone, John Legend, J.K. Simmons',
+        'synopsis' => 'Mia, une actrice en devenir, et Sebastian, un passionné de jazz, tentent de réaliser leurs rêves à Los Angeles. Leur histoire d’amour est mise à l’épreuve par leurs ambitions.',
+        'genres_display' => 'Comédie musicale • Drame • Romance',
+        'affiche' => 'La La Land.jpg',
+        'year' => 2016
+    ),
+    'parasite' => array(
+        'duration' => '2h12',
         'rating' => '8,6/10',
-        'director' => 'Hayao Miyazaki',
-        'cast' => 'Rumi Hiiragi, Miyu Irino, Mari Natsuki, Takashi Naitō',
-        'synopsis' => 'Chihiro, 10 ans, a tout d\'une petite fille capricieuse. Elle s\'apprête à emménager avec ses parents dans une nouvelle demeure. Sur la route, la petite famille se retrouve face à un immense bâtiment. Le père décide de visiter les lieux, mais très vite, la promenade tourne au cauchemar : les parents de Chihiro sont transformés en cochons.',
-        'genres_display' => 'Animation • Aventure • Fantasy',
-        'affiche' => 'chihiro.jpg',
-        'year' => 2001
-    ),
-    'attaque-des-titans' => array(
-        'duration' => '1h54',
-        'rating' => '8,1/10',
-        'director' => 'Hajime Isayama',
-        'cast' => 'Yūki Kaji, Marina Inoue, Yui Ishikawa, Hiroshi Kamiya',
-        'synopsis' => 'Il y a plus d\'un siècle, l\'humanité a été presque entièrement décimée par des titans, des créatures gigantesques apparemment dénuées d\'intelligence. Les survivants se sont barricadés dans une cité protégée par des murailles. Mais un jour, un titan colossal défonce la première muraille...',
-        'genres_display' => 'Animation • Action • Dark Fantasy',
-        'affiche' => 'attack on titan.jpg',
-        'year' => 2013
-    ),
-    'demon-slayer' => array(
-        'duration' => '1h57',
-        'rating' => '8,3/10',
-        'director' => 'Koyoharu Gotouge',
-        'cast' => 'Natsuki Hanae, Akari Kitō, Yoshitsugu Matsuoka, Hiro Shimono',
-        'synopsis' => 'Depuis les temps anciens, il existe des rumeurs concernant des démons mangeurs d\'hommes qui se cachent dans les bois. Tanjiro Kamado vit dans les montagnes avec sa famille. Un jour, il rentre chez lui pour découvrir que toute sa famille a été massacrée par un démon. Sa petite sœur Nezuko est la seule survivante, mais elle a été transformée en démon.',
-        'genres_display' => 'Animation • Action • Fantasy',
-        'affiche' => 'demon slayer.jpg',
+        'director' => 'Bong Joon-ho',
+        'cast' => 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik',
+        'synopsis' => 'La famille Kim, au chômage, s’intéresse de près à la richissime famille Park. Un enchaînement d’événements inattendus va lier leur destin.',
+        'genres_display' => 'Thriller • Drame • Comédie noire',
+        'affiche' => 'Parasite.jpg',
         'year' => 2019
     ),
-    'jujutsu-kaisen' => array(
-        'duration' => '1h45',
-        'rating' => '8,5/10',
-        'director' => 'Gege Akutami',
-        'cast' => 'Junya Enoki, Yūma Uchida, Asami Seto, Mikako Komatsu',
-        'synopsis' => 'Yûji Itadori, un lycéen au talent athlétique exceptionnel, vit avec son grand-père dans une ville de province. Avant de mourir, ce dernier lui transmet deux messages importants : "aide toujours les gens" et "meurs entouré de gens". Un soir, des monstres appelés Fléaux, attirés par un objet maudit, se manifestent dans son lycée...',
-        'genres_display' => 'Animation • Action • Fantasy',
-        'affiche' => 'jujutsu kaisen.jpg',
-        'year' => 2020
-    )
+    'interstellar' => array(
+        'duration' => '2h49',
+        'rating' => '8,6/10',
+        'director' => 'Christopher Nolan',
+        'cast' => 'Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine',
+        'synopsis' => 'Dans un futur proche, la Terre se meurt. Un groupe d’explorateurs utilise un trou de ver pour franchir les limites du voyage spatial humain et sauver l’humanité.',
+        'genres_display' => 'Science-fiction • Drame • Aventure',
+        'affiche' => 'Interstellar.jpg',
+        'year' => 2014
+    ),
 );
 
-// Définir les variables à partir du tableau $movie_info
+// Ajouter les pistes pour chaque film
+$movie_tracks = array(
+            'spirited-away' => array(
+                array('id' => 1, 'title' => 'One Summer’s Day', 'artist' => 'Joe Hisaishi', 'duration' => '2:25', 'cover' => 'spirited away piste.png'),
+                array('id' => 2, 'title' => 'A Road to Somewhere', 'artist' => 'Joe Hisaishi', 'duration' => '3:46', 'cover' => 'spirited away piste.png'),
+                array('id' => 3, 'title' => 'The Empty Restaurant', 'artist' => 'Joe Hisaishi', 'duration' => '3:27', 'cover' => 'spirited away piste.png'),
+                array('id' => 4, 'title' => 'Nighttime Coming', 'artist' => 'Joe Hisaishi', 'duration' => '2:20', 'cover' => 'spirited away piste.png'),
+                array('id' => 5, 'title' => 'Dragon Boy', 'artist' => 'Joe Hisaishi', 'duration' => '1:55', 'cover' => 'spirited away piste.png'),
+                array('id' => 6, 'title' => 'Sootballs', 'artist' => 'Joe Hisaishi', 'duration' => '2:57', 'cover' => 'spirited away piste.png'),
+                array('id' => 7, 'title' => 'Procession of the Gods', 'artist' => 'Joe Hisaishi', 'duration' => '3:00', 'cover' => 'spirited away piste.png'),
+                array('id' => 8, 'title' => 'Yubaba', 'artist' => 'Joe Hisaishi', 'duration' => '2:38', 'cover' => 'spirited away piste.png'),
+                array('id' => 9, 'title' => 'Bathhouse Morning', 'artist' => 'Joe Hisaishi', 'duration' => '2:42', 'cover' => 'spirited away piste.png'),
+                array('id' => 10, 'title' => 'Day of the River', 'artist' => 'Joe Hisaishi', 'duration' => '3:05', 'cover' => 'spirited away piste.png'),
+                array('id' => 11, 'title' => 'It’s Hard Work', 'artist' => 'Joe Hisaishi', 'duration' => '2:30', 'cover' => 'spirited away piste.png'),
+                array('id' => 12, 'title' => 'The Stink Spirit', 'artist' => 'Joe Hisaishi', 'duration' => '3:20', 'cover' => 'spirited away piste.png'),
+                array('id' => 13, 'title' => 'Sen’s Courage', 'artist' => 'Joe Hisaishi', 'duration' => '3:23', 'cover' => 'spirited away piste.png'),
+                array('id' => 14, 'title' => 'The Sixth Station', 'artist' => 'Joe Hisaishi', 'duration' => '3:57', 'cover' => 'spirited away piste.png'),
+                array('id' => 15, 'title' => 'Yubaba’s Panic', 'artist' => 'Joe Hisaishi', 'duration' => '1:48', 'cover' => 'spirited away piste.png'),
+                array('id' => 16, 'title' => 'The House at Swamp Bottom', 'artist' => 'Joe Hisaishi', 'duration' => '2:50', 'cover' => 'spirited away piste.png'),
+                array('id' => 17, 'title' => 'Reprise', 'artist' => 'Joe Hisaishi', 'duration' => '2:35', 'cover' => 'spirited away piste.png'),
+                array('id' => 18, 'title' => 'The Return', 'artist' => 'Joe Hisaishi', 'duration' => '3:30', 'cover' => 'spirited away piste.png'),
+                array('id' => 19, 'title' => 'Always with Me', 'artist' => 'Joe Hisaishi', 'duration' => '3:35', 'cover' => 'spirited away piste.png'),
+            ),
+        'your-name' => array(
+            array('id' => 1, 'title' => 'Dream Lantern', 'artist' => 'RADWIMPS', 'duration' => '2:09', 'cover' => 'your name piste.png'),
+            array('id' => 2, 'title' => 'School Road', 'artist' => 'RADWIMPS', 'duration' => '1:11', 'cover' => 'your name piste.png'),
+            array('id' => 3, 'title' => 'Itomori High School', 'artist' => 'RADWIMPS', 'duration' => '1:37', 'cover' => 'your name piste.png'),
+            array('id' => 4, 'title' => 'First View of Tokyo', 'artist' => 'RADWIMPS', 'duration' => '1:43', 'cover' => 'your name piste.png'),
+            array('id' => 5, 'title' => 'Cafe at Last', 'artist' => 'RADWIMPS', 'duration' => '1:57', 'cover' => 'your name piste.png'),
+            array('id' => 6, 'title' => 'Theme of Mitsuha', 'artist' => 'RADWIMPS', 'duration' => '2:28', 'cover' => 'your name piste.png'),
+            array('id' => 7, 'title' => 'Unusual Changes of Two', 'artist' => 'RADWIMPS', 'duration' => '1:42', 'cover' => 'your name piste.png'),
+            array('id' => 8, 'title' => 'Zenzenzense (movie ver.)', 'artist' => 'RADWIMPS', 'duration' => '4:46', 'cover' => 'your name piste.png'),
+            array('id' => 9, 'title' => 'Goshintai', 'artist' => 'RADWIMPS', 'duration' => '2:01', 'cover' => 'your name piste.png'),
+            array('id' => 10, 'title' => 'Date', 'artist' => 'RADWIMPS', 'duration' => '2:18', 'cover' => 'your name piste.png'),
+            array('id' => 11, 'title' => 'Autumn Festival', 'artist' => 'RADWIMPS', 'duration' => '1:45', 'cover' => 'your name piste.png'),
+            array('id' => 12, 'title' => 'Memories of Time', 'artist' => 'RADWIMPS', 'duration' => '1:47', 'cover' => 'your name piste.png'),
+            array('id' => 13, 'title' => 'Visit to Hida', 'artist' => 'RADWIMPS', 'duration' => '2:11', 'cover' => 'your name piste.png'),
+            array('id' => 14, 'title' => 'Disappeared Town', 'artist' => 'RADWIMPS', 'duration' => '2:50', 'cover' => 'your name piste.png'),
+            array('id' => 15, 'title' => 'Library', 'artist' => 'RADWIMPS', 'duration' => '2:01', 'cover' => 'your name piste.png'),
+            array('id' => 16, 'title' => 'Two People', 'artist' => 'RADWIMPS', 'duration' => '2:17', 'cover' => 'your name piste.png'),
+            array('id' => 17, 'title' => 'Katawaredoki', 'artist' => 'RADWIMPS', 'duration' => '2:47', 'cover' => 'your name piste.png'),
+            array('id' => 18, 'title' => 'Sparkle (movie ver.)', 'artist' => 'RADWIMPS', 'duration' => '8:54', 'cover' => 'your name piste.png'),
+            array('id' => 19, 'title' => 'Date 2', 'artist' => 'RADWIMPS', 'duration' => '2:18', 'cover' => 'your name piste.png'),
+            array('id' => 20, 'title' => 'Nandemonaiya (movie ver.)', 'artist' => 'RADWIMPS', 'duration' => '5:45', 'cover' => 'your name piste.png'),
+            array('id' => 21, 'title' => 'Dreams of Tomorrow', 'artist' => 'RADWIMPS', 'duration' => '1:55', 'cover' => 'your name piste.png'),
+            array('id' => 22, 'title' => 'Reunion', 'artist' => 'RADWIMPS', 'duration' => '1:26', 'cover' => 'your name piste.png'),
+            array('id' => 23, 'title' => 'Epilogue', 'artist' => 'RADWIMPS', 'duration' => '2:21', 'cover' => 'your name piste.png')
+        ),
+    'inception' => array(
+        array('id' => 1, 'title' => 'Half Remembered Dream'),
+        array('id' => 2, 'title' => 'We Built Our Own World'),
+        array('id' => 3, 'title' => 'Dream Is Collapsing'),
+        array('id' => 4, 'title' => 'Radical Notion'),
+        array('id' => 5, 'title' => 'Old Souls'),
+        array('id' => 6, 'title' => '528491'),
+        array('id' => 7, 'title' => 'Mombasa'),
+        array('id' => 8, 'title' => 'One Simple Idea'),
+        array('id' => 9, 'title' => 'Dream Within a Dream'),
+        array('id' => 10, 'title' => 'Waiting for a Train'),
+        array('id' => 11, 'title' => 'Paradox'),
+        array('id' => 12, 'title' => 'Time'),
+    ),
+    'la-la-land' => array(
+        array('id' => 1, 'title' => 'Another Day of Sun'),
+        array('id' => 2, 'title' => 'Someone in the Crowd'),
+        array('id' => 3, 'title' => "Mia & Sebastian's Theme"),
+        array('id' => 4, 'title' => 'A Lovely Night'),
+        array('id' => 5, 'title' => "Herman's Habit"),
+        array('id' => 6, 'title' => 'City of Stars (Pier)'),
+        array('id' => 7, 'title' => 'Planetarium'),
+        array('id' => 8, 'title' => 'Summer Montage / Madeline'),
+        array('id' => 9, 'title' => 'City of Stars (Duet)'),
+        array('id' => 10, 'title' => 'Start a Fire'),
+        array('id' => 11, 'title' => 'Engagement Party'),
+        array('id' => 12, 'title' => 'Audition (The Fools Who Dream)'),
+        array('id' => 13, 'title' => 'Epilogue'),
+        array('id' => 14, 'title' => 'The End'),
+        array('id' => 15, 'title' => 'City of Stars (Humming)'),
+    ),
+    'parasite' => array(
+        array('id' => 1, 'title' => 'Opening'),
+        array('id' => 2, 'title' => 'Conciliation I'),
+        array('id' => 3, 'title' => 'On the Way to Rich House'),
+        array('id' => 4, 'title' => 'Conciliation II'),
+        array('id' => 5, 'title' => 'Plum Juice'),
+        array('id' => 6, 'title' => 'Mr. Yoon and Park'),
+        array('id' => 7, 'title' => 'Conciliation III'),
+        array('id' => 8, 'title' => 'The Belt of Faith'),
+        array('id' => 9, 'title' => 'Moon Gwang Left'),
+        array('id' => 10, 'title' => 'Camping'),
+        array('id' => 11, 'title' => 'The Hellgate'),
+        array('id' => 12, 'title' => 'Heartrending Story of Bubu'),
+        array('id' => 13, 'title' => 'Zappaguri'),
+        array('id' => 14, 'title' => 'Ghost'),
+        array('id' => 15, 'title' => 'The Family Is Busy'),
+        array('id' => 16, 'title' => 'Busy to Survive'),
+        array('id' => 17, 'title' => 'The Frontal Lobe of Ki Taek'),
+        array('id' => 18, 'title' => 'Water, Ocean'),
+        array('id' => 19, 'title' => 'Water, Ocean Again'),
+        array('id' => 20, 'title' => 'It Is Sunday Morning'),
+        array('id' => 21, 'title' => 'Blood and Sword'),
+        array('id' => 22, 'title' => 'Yasan'),
+        array('id' => 23, 'title' => 'Moving'),
+        array('id' => 24, 'title' => 'Ending'),
+        array('id' => 25, 'title' => 'Soju One Glass'),
+        array('id' => 26, 'title' => 'Extraits de Rodelinda'),
+        array('id' => 27, 'title' => 'In ginocchio da te'),
+    ),
+    'interstellar' => array(
+        array('id' => 1, 'title' => 'Dreaming of the Crash'),
+        array('id' => 2, 'title' => 'Cornfield Chase'),
+        array('id' => 3, 'title' => 'Dust'),
+        array('id' => 4, 'title' => 'Day One'),
+        array('id' => 5, 'title' => 'Message from Home'),
+        array('id' => 6, 'title' => 'The Wormhole'),
+        array('id' => 7, 'title' => 'Mountains'),
+        array('id' => 8, 'title' => 'Afraid of Time'),
+        array('id' => 9, 'title' => 'Detach'),
+        array('id' => 10, 'title' => 'Running Out'),
+        array('id' => 11, 'title' => 'Tick-Tock'),
+        array('id' => 12, 'title' => "Where We're Going"),
+        array('id' => 13, 'title' => 'Do Not Go Gentle'),
+        array('id' => 14, 'title' => 'No Time for Caution'),
+        array('id' => 15, 'title' => 'Murph'),
+        array('id' => 16, 'title' => 'Stay')
+    ),
+    'arrival' => array(
+        array('id' => 1, 'title' => 'On the Nature of Daylight'),
+        array('id' => 2, 'title' => 'Arrival'),
+        array('id' => 3, 'title' => 'Heptapod B'),
+        array('id' => 4, 'title' => 'Sapir-Whorf'),
+        array('id' => 5, 'title' => 'Transmutation at a Distance'),
+        array('id' => 6, 'title' => 'Logograms'),
+        array('id' => 7, 'title' => 'Decyphering'),
+        array('id' => 8, 'title' => 'Kangaru'),
+        array('id' => 9, 'title' => 'Hydraulic Lift'),
+        array('id' => 10, 'title' => 'First Encounter'),
+        array('id' => 11, 'title' => 'Strange Atmosphere'),
+        array('id' => 12, 'title' => 'Ultimatum'),
+        array('id' => 13, 'title' => 'Hitting the Egg'),
+        array('id' => 14, 'title' => 'The Casio'),
+        array('id' => 15, 'title' => 'One of Twelve'),
+        array('id' => 16, 'title' => 'Rise'),
+        array('id' => 17, 'title' => 'Extreme Hectopods'),
+        array('id' => 18, 'title' => 'This Is Not a Dream'),
+        array('id' => 19, 'title' => 'War'),
+        array('id' => 20, 'title' => 'Birth')
+    ),
+);
+
+
 if (isset($movie_info[$page_slug])) {
     $info = $movie_info[$page_slug];
     $title = ucwords(str_replace('-', ' ', $page_slug));
@@ -141,6 +251,12 @@ if (isset($movie_info[$page_slug])) {
     $info = $movie_info['inception'];
 }
 
+// Calculer le nombre de pistes
+$num_tracks = 12; // Default
+if (isset($movie_tracks[$page_slug])) {
+    $num_tracks = count($movie_tracks[$page_slug]);
+}
+
 ?>
 
 <!-- ===== CONTENU FICHE FILM ===== -->
@@ -149,7 +265,7 @@ if (isset($movie_info[$page_slug])) {
     <!-- TITRE + INFOS GENERALES -->
     <section class="movie-header mb-5">
         <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
-        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – 12 pistes</p>
+        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – <?php echo intval($num_tracks); ?> piste<?php echo $num_tracks > 1 ? 's' : ''; ?></p>
 
         <div class="row g-4">
             <!-- POSTER -->
@@ -280,7 +396,7 @@ if (isset($movie_info[$page_slug])) {
         <h3 class="section-title mb-3">Films similaires</h3>
 
         <div class="d-flex align-items-center">
-            <button class="carousel-arrow d-flex align-items-center justify-content-center">
+            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
                 <i class="bi bi-chevron-left"></i>
             </button>
 
@@ -288,7 +404,7 @@ if (isset($movie_info[$page_slug])) {
                 <!-- JS insère 4 films -->
             </div>
 
-            <button class="carousel-arrow d-flex align-items-center justify-content-center" type="button">
+            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
                 <i class="bi bi-chevron-right"></i>
             </button>
         </div>

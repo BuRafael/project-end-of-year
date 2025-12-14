@@ -4,15 +4,6 @@
 	 ================================================== */
 
 
-:root {
-	--reg-primary: #700118;
-	--reg-white: #F4EFEC;
-	--reg-bg: #0d0d0f;
-	--reg-panel: #1a1a1a;
-	--reg-border: #F4EFEC;
-	--reg-muted: #c7c8cc;
-	--reg-shadow: 0 0 18px 4px rgba(244, 239, 236, 0.45);
-}
 
 body {
 	background: var(--reg-bg);

@@ -1,3 +1,5 @@
+
+
 /**
  * Fiche Série JavaScript
  * Gère les pistes, commentaires, séries similaires et interactions
@@ -5,172 +7,154 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
-// === PISTES PAR SAISON ET ÉPISODE ===
-const allTracks = {
-    1: { // Saison 1
-        1: [ // Épisode 1
-            { id: 1, title: "Kids", artist: "Kyle Dixon & Michael Stein", duration: "1:23", image: "Main theme Stranger Things.png" },
-            { id: 2, title: "The Upside Down", artist: "Kyle Dixon & Michael Stein", duration: "2:15", image: "Main theme Stranger Things.png" },
-            { id: 3, title: "Stranger Things (Main Theme)", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" },
-            { id: 4, title: "Coffee & Contemplation", artist: "Kyle Dixon & Michael Stein", duration: "1:58", image: "Main theme Stranger Things.png" },
-            { id: 5, title: "Biking to School", artist: "Kyle Dixon & Michael Stein", duration: "1:41", image: "Main theme Stranger Things.png" },
-            { id: 6, title: "Nancy & Barb", artist: "Kyle Dixon & Michael Stein", duration: "2:04", image: "Main theme Stranger Things.png" },
-            { id: 7, title: "Agents", artist: "Kyle Dixon & Michael Stein", duration: "1:47", image: "Main theme Stranger Things.png" },
-            { id: 8, title: "Talking to Australia", artist: "Kyle Dixon & Michael Stein", duration: "2:32", image: "Main theme Stranger Things.png" },
-            { id: 9, title: "Friendship", artist: "Kyle Dixon & Michael Stein", duration: "1:56", image: "Main theme Stranger Things.png" },
-            { id: 10, title: "Hawkins", artist: "Kyle Dixon & Michael Stein", duration: "3:12", image: "Main theme Stranger Things.png" },
-            { id: 11, title: "Are You Sure?", artist: "Kyle Dixon & Michael Stein", duration: "2:18", image: "Main theme Stranger Things.png" },
-            { id: 12, title: "In Pursuit", artist: "Kyle Dixon & Michael Stein", duration: "2:45", image: "Main theme Stranger Things.png" },
-            { id: 13, title: "Over", artist: "Kyle Dixon & Michael Stein", duration: "1:53", image: "Main theme Stranger Things.png" }
-        ],
-        2: [ // Épisode 2
-            { id: 1, title: "Eleven", artist: "Kyle Dixon & Michael Stein", duration: "2:08", image: "Main theme Stranger Things.png" },
-            { id: 2, title: "Photos In The Woods", artist: "Kyle Dixon & Michael Stein", duration: "1:45", image: "Main theme Stranger Things.png" },
-            { id: 3, title: "Lay-Z-Boy", artist: "Kyle Dixon & Michael Stein", duration: "2:22", image: "Main theme Stranger Things.png" },
-            { id: 4, title: "This Isn't You", artist: "Kyle Dixon & Michael Stein", duration: "3:01", image: "Main theme Stranger Things.png" }
-        ],
-        3: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        4: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        5: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        6: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        7: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        8: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        9: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ]
-    },
-    2: { // Saison 2
-        1: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        2: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        3: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        4: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        5: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        6: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        7: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        8: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        9: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ]
-    },
-    3: { // Saison 3
-        1: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        2: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        3: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        4: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        5: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        6: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        7: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        8: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        9: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ]
-    },
-    4: { // Saison 4
-        1: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        2: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        3: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        4: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        5: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        6: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        7: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        8: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ],
-        9: [
-            { id: 1, title: "Main Theme", artist: "Kyle Dixon & Michael Stein", duration: "1:12", image: "Main theme Stranger Things.png" }
-        ]
-    }
-};
 
+// === PISTES PAR SAISON ET ÉPISODE ===
+const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
+const allTracks = window.allTracks || {};
 const tracksTable = document.getElementById("tracksTable");
 const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Piste séries/';
 const seasonSelect = document.getElementById("seasonSelect");
 const episodeSelect = document.getElementById("episodeSelect");
+let currentTracks = [];
+let tracksPage = 1;
 
-const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
+function renderSeasonEpisodeSelects() {
+    if (!seasonSelect || !episodeSelect) return;
+    seasonSelect.innerHTML = '<option value="" disabled selected hidden>Saison</option>';
+    episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
+    const serieSlug = window.currentSerieSlug || '';
+    // Cas particulier pour Euphoria : 2 saisons, 8 épisodes chacune
+    if (serieSlug === 'euphoria') {
+        for (let s = 1; s <= 2; s++) {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = 'Saison ' + s;
+            seasonSelect.appendChild(opt);
+        }
+        // Par défaut, afficher 8 épisodes
+        for (let e = 1; e <= 8; e++) {
+            const opt = document.createElement('option');
+            opt.value = e;
+            opt.textContent = 'Épisode ' + e;
+            episodeSelect.appendChild(opt);
+        }
+        seasonSelect.value = 1;
+        episodeSelect.value = 1;
+        displayTracks(1, 1);
+    } else if (serieSlug === 'wednesday') {
+        // Cas particulier pour Wednesday : 1 saison, 8 épisodes
+        const opt = document.createElement('option');
+        opt.value = 1;
+        opt.textContent = 'Saison 1';
+        seasonSelect.appendChild(opt);
+        for (let e = 1; e <= 8; e++) {
+            const epOpt = document.createElement('option');
+            epOpt.value = e;
+            epOpt.textContent = 'Épisode ' + e;
+            episodeSelect.appendChild(epOpt);
+        }
+        seasonSelect.value = 1;
+        episodeSelect.value = 1;
+        displayTracks(1, 1);
+    } else {
+        // Générique : basé sur la structure allTracks
+        Object.keys(allTracks).forEach(seasonNum => {
+            const opt = document.createElement('option');
+            opt.value = seasonNum;
+            opt.textContent = 'Saison ' + seasonNum;
+            seasonSelect.appendChild(opt);
+        });
+        const firstSeason = Object.keys(allTracks)[0];
+        if (allTracks[firstSeason]) {
+            const episodeNums = Object.keys(allTracks[firstSeason]);
+            episodeNums.forEach(epNum => {
+                const opt = document.createElement('option');
+                opt.value = epNum;
+                opt.textContent = 'Épisode ' + epNum;
+                episodeSelect.appendChild(opt);
+            });
+            seasonSelect.value = firstSeason;
+            episodeSelect.value = episodeNums[0];
+            displayTracks(parseInt(firstSeason), parseInt(episodeNums[0]));
+        }
+    }
+}
+
+if (seasonSelect && episodeSelect && tracksTable) {
+    renderSeasonEpisodeSelects();
+    seasonSelect.addEventListener('change', function() {
+        episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
+        const serieSlug = window.currentSerieSlug || '';
+        if (serieSlug === 'euphoria') {
+            for (let e = 1; e <= 8; e++) {
+                const opt = document.createElement('option');
+                opt.value = e;
+                opt.textContent = 'Épisode ' + e;
+                episodeSelect.appendChild(opt);
+            }
+            episodeSelect.value = 1;
+            displayTracks(parseInt(this.value), 1);
+        } else if (serieSlug === 'wednesday') {
+            for (let e = 1; e <= 8; e++) {
+                const opt = document.createElement('option');
+                opt.value = e;
+                opt.textContent = 'Épisode ' + e;
+                episodeSelect.appendChild(opt);
+            }
+            episodeSelect.value = 1;
+            displayTracks(1, 1);
+        } else {
+            const season = this.value;
+            if (allTracks[season]) {
+                const episodeNums = Object.keys(allTracks[season]);
+                episodeNums.forEach(epNum => {
+                    const opt = document.createElement('option');
+                    opt.value = epNum;
+                    opt.textContent = 'Épisode ' + epNum;
+                    episodeSelect.appendChild(opt);
+                });
+                const firstEp = episodeNums[0];
+                episodeSelect.value = firstEp;
+                displayTracks(parseInt(season), parseInt(firstEp));
+            } else {
+                episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
+                tracksTable.innerHTML = `<tr><td colspan=\"5\" style=\"text-align:center; color: #888; font-style: italic;\">Rien à écouter pour le moment...</td></tr>`;
+                updateTracksMoreBtn(0);
+            }
+        }
+    });
+    episodeSelect.addEventListener('change', function() {
+        displayTracks(parseInt(seasonSelect.value), parseInt(this.value));
+    });
+}
+
 
 // Fonction pour afficher les pistes
 function displayTracks(season, episode) {
     if (!tracksTable) return;
-    
     const tracks = (allTracks[season] && allTracks[season][episode]) ? allTracks[season][episode] : [];
+    currentTracks = tracks;
+    tracksPage = 1;
+    renderTracksPage();
+    updateTracksMoreBtn(tracks.length);
+}
+
+function renderTracksPage() {
     tracksTable.innerHTML = '';
-    
-    tracks.forEach((t, index) => {
-        // Créer un lien cliquable si l'artiste est Hans Zimmer
+    const start = 0;
+    const end = tracksPage * TRACKS_DISPLAY_COUNT;
+    if (!currentTracks || currentTracks.length === 0) {
+        tracksTable.innerHTML = `<tr><td colspan="5" style="text-align:center; color: #888; font-style: italic;">Rien à écouter pour le moment...</td></tr>`;
+        return;
+    }
+    currentTracks.slice(0, end).forEach((t, index) => {
         const artistHtml = t.artist === 'Hans Zimmer' 
             ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
             : `<div class="movie-track-artist">${t.artist}</div>`;
-        
-        // Utiliser l'image spécifique de la piste si elle existe, sinon utiliser le chemin par défaut
         const trackImage = t.image ? imagePath + t.image : imagePath;
-        
-        // Ajouter une classe spéciale pour la première piste (index 0)
         const isFirstTrack = index === 0 ? 'first-track-image' : '';
-        
-        // Masquer les pistes au-delà du nombre d'affichage
-        const displayStyle = index < TRACKS_DISPLAY_COUNT ? '' : 'display: none;';
-        
         tracksTable.innerHTML += `
-            <tr style="${displayStyle}">
+            <tr>
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
@@ -196,9 +180,6 @@ function displayTracks(season, episode) {
             </tr>
         `;
     });
-    
-    // Gérer l'affichage du bouton "Afficher plus"
-    updateTracksMoreBtn(tracks.length);
 }
 
 // Fonction pour mettre à jour le bouton "Afficher plus"
@@ -215,19 +196,6 @@ function updateTracksMoreBtn(totalTracks) {
     }
 }
 
-// Afficher les pistes de la saison 1 épisode 1 par défaut
-displayTracks(1, 1);
-
-// Gestion des changements de saison et épisode
-if (seasonSelect && episodeSelect) {
-    seasonSelect.addEventListener('change', function() {
-        displayTracks(parseInt(this.value), parseInt(episodeSelect.value));
-    });
-    
-    episodeSelect.addEventListener('change', function() {
-        displayTracks(parseInt(seasonSelect.value), parseInt(this.value));
-    });
-}
 
 // Like/unlike tracks (event delegation so it works for appended rows too)
 document.addEventListener('click', function(e) {
@@ -247,21 +215,20 @@ document.addEventListener('click', function(e) {
 const tracksMoreBtn = document.getElementById("tracksMoreBtn");
 if (tracksMoreBtn) {
     tracksMoreBtn.addEventListener('click', function() {
-        const rows = tracksTable.querySelectorAll('tr');
-        const isExpanded = this.classList.contains('show-less');
-        
-        if (isExpanded) {
-            // Masquer les pistes au-delà du compte
-            rows.forEach((row, index) => {
-                row.style.display = index < TRACKS_DISPLAY_COUNT ? 'table-row' : 'none';
-            });
+        const totalTracks = currentTracks.length;
+        const maxPages = Math.ceil(totalTracks / TRACKS_DISPLAY_COUNT);
+        if (tracksPage < maxPages) {
+            tracksPage++;
+            renderTracksPage();
+            if (tracksPage === maxPages) {
+                this.textContent = 'Afficher moins…';
+                this.classList.add('show-less');
+            }
+        } else {
+            tracksPage = 1;
+            renderTracksPage();
             this.textContent = 'Afficher plus…';
             this.classList.remove('show-less');
-        } else {
-            // Afficher toutes les pistes
-            rows.forEach(row => row.style.display = 'table-row');
-            this.textContent = 'Afficher moins…';
-            this.classList.add('show-less');
         }
     });
 }
@@ -270,12 +237,8 @@ if (tracksMoreBtn) {
 const commentsZone = document.getElementById("commentsZone");
 const commentInput = document.querySelector('.comment-input');
 
-// Vérifier que movieComments est défini
-if (typeof movieComments === 'undefined') {
-    console.error('movieComments n\'est pas défini');
-}
-
-// Charger les commentaires existants
+// Charger les commentaires au démarrage
+loadComments();
 function loadComments() {
     if (!commentsZone || typeof movieComments === 'undefined') return;
     
@@ -289,14 +252,15 @@ function loadComments() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success && data.data.comments.length > 0) {
-            commentsZone.innerHTML = '';
+        // Nettoyer le wrapper
+        commentsZone.innerHTML = '';
+        const moreBtnWrapper = document.getElementById('commentsMoreBtnWrapper');
+        if (moreBtnWrapper) moreBtnWrapper.style.display = 'none';
+        if (data.success && Array.isArray(data.data.comments) && data.data.comments.length > 0) {
             data.data.comments.forEach(c => {
                 renderComment(c);
             });
-            
             // Afficher le bouton "Afficher plus" si plus de 8 commentaires
-            const moreBtnWrapper = document.getElementById('commentsMoreBtnWrapper');
             if (moreBtnWrapper && data.data.comments.length > 8) {
                 moreBtnWrapper.style.display = 'block';
             }
@@ -401,12 +365,9 @@ function renderComment(commentData) {
 
 // Publier un commentaire
 if (commentInput && !commentInput.disabled && typeof movieComments !== 'undefined') {
-    console.log('Event listener ajouté pour les commentaires');
     commentInput.addEventListener('keypress', function(e) {
-        console.log('Touche pressée:', e.key);
         if (e.key === 'Enter' && this.value.trim()) {
             const commentText = this.value.trim();
-            console.log('Envoi du commentaire:', commentText);
             
             fetch(movieComments.ajax_url, {
                 method: 'POST',
@@ -419,11 +380,9 @@ if (commentInput && !commentInput.disabled && typeof movieComments !== 'undefine
                 })
             })
             .then(response => {
-                console.log('Réponse reçue:', response);
                 return response.json();
             })
             .then(data => {
-                console.log('Données:', data);
                 if (data.success) {
                     // Supprimer le message vide
                     const emptyMsg = commentsZone.querySelector('.text-center');
@@ -446,16 +405,10 @@ if (commentInput && !commentInput.disabled && typeof movieComments !== 'undefine
                 }
             })
             .catch(error => {
-                console.error('Erreur fetch:', error);
             });
         }
     });
 } else {
-    console.log('Conditions non remplies:', {
-        commentInput: !!commentInput,
-        disabled: commentInput?.disabled,
-        movieComments: typeof movieComments
-    });
 }
 
 // Modifier un commentaire
@@ -495,7 +448,9 @@ function deleteComment(commentId, element) {
             element.remove();
             
             // Réafficher le message vide si plus de commentaires
-            if (commentsZone.children.length === 0) {
+            // On vérifie s'il reste des commentaires visibles (hors éléments vides)
+            const hasRealComments = Array.from(commentsZone.children).some(child => child.dataset && child.dataset.commentId);
+            if (!hasRealComments) {
                 commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
             }
         }
@@ -505,65 +460,126 @@ function deleteComment(commentId, element) {
 // Charger les commentaires au démarrage
 loadComments();
 
+
 // === SÉRIES SIMILAIRES ===
-const similarMoviesContainer = document.getElementById('similarMovies');
-const carouselArrows = document.querySelectorAll('.carousel-arrow');
-const leftArrow = carouselArrows[0];
-const rightArrow = carouselArrows[1];
-
 const serieImagePath = imagePath.replace('Piste séries/', 'Fiche série/');
-const allSimilarSeries = [
-    { title: "Dark",                         image: serieImagePath + "dark.jpg" },
-    { title: "The OA",                       image: serieImagePath + "The OA.webp" },
-    { title: "Supernatural",                 image: serieImagePath + "Supernatural.webp" },
-    { title: "The X-Files",                  image: serieImagePath + "The x-files.jpg" },
-    { title: "Twin Peaks",                   image: serieImagePath + "Twin peaks.jpg" },
-    { title: "It (1990)",                    image: serieImagePath + "It.webp" },
-    { title: "Locke & Key",                  image: serieImagePath + "locke and key.jpg" },
-    { title: "The Society",                  image: serieImagePath + "the society.webp" },
-    { title: "I Am Not Okay With This",      image: serieImagePath + "i am not okay with this.jpg" },
-    { title: "Wayward Pines",                image: serieImagePath + "wayward pines.jpg" }
-];
+// Récupérer le slug de la série courante depuis le body ou une variable globale injectée par PHP
+let currentSerieSlug = document.body.dataset.serieSlug || window.currentSerieSlug || '';
+if (!currentSerieSlug && typeof page_slug !== 'undefined') currentSerieSlug = page_slug;
 
-let carouselIndex = 0;
-const itemsPerPage = 4;
-
-function renderSimilarCarousel() {
-    if (!similarMoviesContainer) return;
-    similarMoviesContainer.innerHTML = '';
-    for (let i = 0; i < itemsPerPage; i++) {
-        const index = (carouselIndex + i) % allSimilarSeries.length;
-        const serie = allSimilarSeries[index];
-        const card = document.createElement('div');
-        card.className = 'col-6 col-md-3';
-        card.innerHTML = `
+const similarSeriesMap = {
+                        'jujutsu-kaisen': [
+                            { title: "My Hero Academia", image: serieImagePath + "my hero academia.jpg" },
+                            { title: "Demon Slayer (Kimetsu no Yaiba)", image: serieImagePath + "demon slayer.jpg" },
+                            { title: "Tokyo Ghoul", image: serieImagePath + "tokyo ghoul.jpg" },
+                            { title: "Attack on Titan", image: serieImagePath + "attack on titan.jpg" },
+                            { title: "Blue Exorcist", image: serieImagePath + "blue exorcist.webp" },
+                            { title: "Noragami", image: serieImagePath + "noragami.jpg" },
+                            { title: "Mob Psycho 100", image: serieImagePath + "mob psycho 100.jpg" },
+                            { title: "Hunter x Hunter", image: serieImagePath + "hunter x hunter.jpg" },
+                            { title: "Black Clover", image: serieImagePath + "black clover.jpg" },
+                            { title: "Dorohedoro", image: serieImagePath + "dorohedoro.jpg" }
+                        ],
+                    'demon-slayer': [
+                        { title: "Jujutsu Kaisen", image: serieImagePath + "jujutsu kaisen.jpg" },
+                        { title: "Blue Exorcist", image: serieImagePath + "blue exorcist.webp" },
+                        { title: "Noragami", image: serieImagePath + "noragami.jpg" },
+                        { title: "Seraph of the End", image: serieImagePath + "seraph of the end.jpg" },
+                        { title: "Fire Force", image: serieImagePath + "fire force.jpg" },
+                        { title: "Black Clover", image: serieImagePath + "black clover.jpg" },
+                        { title: "Attack on Titan", image: serieImagePath + "attack on titan.jpg" },
+                        { title: "Tokyo Ghoul", image: serieImagePath + "tokyo ghoul.jpg" },
+                        { title: "My Hero Academia", image: serieImagePath + "my hero academia.jpg" },
+                        { title: "Claymore", image: serieImagePath + "claymore.jpg" }
+                    ],
+                'attack-on-titan': [
+                    { title: "Fullmetal Alchemist: Brotherhood", image: serieImagePath + "fullmetal alchemist brotherhood.jpg" },
+                    { title: "Vinland Saga", image: serieImagePath + "vinland saga.jpg" },
+                    { title: "Tokyo Ghoul", image: serieImagePath + "tokyo ghoul.jpg" },
+                    { title: "Neon Genesis Evangelion", image: serieImagePath + "neon genesis evangelion.jpg" },
+                    { title: "Akame ga Kill!", image: serieImagePath + "akame ga kill!.webp" },
+                    { title: "Claymore", image: serieImagePath + "claymore.jpg" },
+                    { title: "Berserk (1997)", image: serieImagePath + "berserk.jpg" },
+                    { title: "86 Eighty-Six", image: serieImagePath + "86 eighty-six.jpg" },
+                    { title: "Kabaneri of the Iron Fortress", image: serieImagePath + "kabaneri of the iron fortress.jpg" },
+                    { title: "Devilman Crybaby", image: serieImagePath + "devilman crybaby.jpg" }
+                ],
+            'the-witcher': [
+                { title: "Game of Thrones", image: serieImagePath + "game of thrones.jpg" },
+                { title: "House of the Dragon", image: serieImagePath + "house of the dragon.jpg" },
+                { title: "Vikings", image: serieImagePath + "vikings.jpg" },
+                { title: "Vikings: Valhalla", image: serieImagePath + "vikings valhalla.jpg" },
+                { title: "The Last Kingdom", image: serieImagePath + "the last kingdom.jpg" },
+                { title: "Wheel of Time", image: serieImagePath + "wheel of time.jpg" },
+                { title: "Shadow and Bone", image: serieImagePath + "shadow and bone.jpg" },
+                { title: "His Dark Materials", image: serieImagePath + "his dark materials.jpg" },
+                { title: "Carnival Row", image: serieImagePath + "carnival row.webp" },
+                { title: "Merlin", image: serieImagePath + "merlin.jpg" }
+            ],
+        'wednesday': [
+            { title: "Chilling Adventures of Sabrina", image: serieImagePath + "the chilling adventures of sabrina.jpg" },
+            { title: "The Umbrella Academy", image: serieImagePath + "the umbrella academy.webp" },
+            { title: "Locke & Key", image: serieImagePath + "locke and key.jpg" },
+            { title: "A Series of Unfortunate Events", image: serieImagePath + "a series of unfortunate events.jpg" },
+            { title: "Riverdale", image: serieImagePath + "riverdale.jpg" },
+            { title: "Shadow and Bone", image: serieImagePath + "shadow and bone.jpg" },
+            { title: "The Sandman", image: serieImagePath + "the sandman.webp" },
+            { title: "Deadly Class", image: serieImagePath + "deadly class.webp" },
+            { title: "Fate: The Winx Saga", image: serieImagePath + "fate the winx saga.jpg" },
+            { title: "Chilling Adventures of Sabrina", image: serieImagePath + "the chilling adventures of sabrina.jpg" }
+        ],
+    'breaking-bad': [
+        { title: "Better Call Saul",        image: serieImagePath + "better call saul.jpg" },
+        { title: "Ozark",                   image: serieImagePath + "ozark.webp" },
+        { title: "Narcos",                  image: serieImagePath + "narcos.jpg" },
+        { title: "The Wire",                image: serieImagePath + "the wire.jpg" },
+        { title: "Fargo",                   image: serieImagePath + "fargo.webp" },
+        { title: "Peaky Blinders",          image: serieImagePath + "peaky blinders.jpg" },
+        { title: "The Sopranos",            image: serieImagePath + "the sopranos.webp" },
+        { title: "Boardwalk Empire",        image: serieImagePath + "boardwalk empire.jpg" },
+        { title: "Power",                   image: serieImagePath + "power.jpg" },
+        { title: "Snowfall",                image: serieImagePath + "snowfall.JPG" }
+    ],
+    'stranger-things': [
+        { title: "Dark",                    image: serieImagePath + "dark.jpg" },
+        { title: "The OA",                  image: serieImagePath + "The OA.webp" },
+        { title: "Sense8",                  image: serieImagePath + "sense8.jpg" },
+        { title: "Twin Peaks",              image: serieImagePath + "twin peaks.jpg" },
+        { title: "The X-Files",             image: serieImagePath + "the x-files.jpg" },
+        { title: "Fringe",                  image: serieImagePath + "fringe.jpg" },
+        { title: "Wayward Pines",           image: serieImagePath + "wayward pines.jpg" },
+        { title: "The Leftovers",           image: serieImagePath + "the leftovers.jpg" },
+        { title: "Locke & Key",             image: serieImagePath + "locke and key.jpg" },
+        { title: "1899",                    image: serieImagePath + "1899.jpg" }
+    ]
+    ,
+    'euphoria': [
+        { title: "Skins", image: serieImagePath + "Skins.jpg" },
+        { title: "Sex Education", image: serieImagePath + "Sex Education.jpg" },
+        { title: "13 Reasons Why", image: serieImagePath + "13 Reasons Why.jpg" },
+        { title: "The End of the F***ing World", image: serieImagePath + "The End of the Fing World.webp" },
+        { title: "Elite", image: serieImagePath + "Elite.webp" },
+        { title: "We Are Who We Are", image: serieImagePath + "We Are Who We Are.jpg" },
+        { title: "Gossip Girl (2021)", image: serieImagePath + "Gossip Girl (2021).jpg" },
+        { title: "Generation", image: serieImagePath + "Generation.jpg" },
+        { title: "Trinkets", image: serieImagePath + "Trinkets.jpg" },
+        { title: "Skam", image: serieImagePath + "Skam.jpg" }
+    ]
+    // Ajoute d'autres slugs ici si besoin
+};
+const allSimilarSeries = similarSeriesMap[currentSerieSlug] || similarSeriesMap['breaking-bad'];
+initGenericCarousel({
+    containerId: 'similarMovies',
+    items: allSimilarSeries,
+    getCardHtml: (serie) => `
+        <div class="col-6 col-md-3">
             <div class="similar-card">
-                <img src="${serie.image}" alt="${serie.title}" class="similar-card-img">
+                <img src="${serie.image}" alt="${serie.title}" class="similar-card-img" onerror="this.onerror=null;this.src='${serieImagePath}placeholder.jpg';">
                 <div class="similar-card-title">${serie.title}</div>
             </div>
-        `;
-        similarMoviesContainer.appendChild(card);
-    }
-}
-
-function animateSimilar(delta) {
-    if (!similarMoviesContainer) return;
-    similarMoviesContainer.classList.add('is-transitioning');
-    setTimeout(() => {
-        carouselIndex = (carouselIndex + delta + allSimilarSeries.length) % allSimilarSeries.length;
-        renderSimilarCarousel();
-        similarMoviesContainer.classList.remove('is-transitioning');
-    }, 140);
-}
-
-if (leftArrow) {
-    leftArrow.addEventListener('click', () => animateSimilar(-1));
-}
-if (rightArrow) {
-    rightArrow.addEventListener('click', () => animateSimilar(1));
-}
-
-renderSimilarCarousel();
+        </div>
+    `
+});
 
 // === LIKE BUTTON (SERIE) ===
 const movieLikeBtn = document.getElementById('movieLikeBtn');
