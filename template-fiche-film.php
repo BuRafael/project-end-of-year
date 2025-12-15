@@ -1,4 +1,11 @@
 <?php
+// Récupérer les infos du film basé sur le slug
+global $post;
+$page_slug = isset($post->post_name) ? $post->post_name : 'inception';
+add_filter('body_class', function($classes) use ($page_slug) {
+    $classes[] = 'slug-' . $page_slug;
+    return $classes;
+});
 /**
  * Template Name: Fiche Film
  * Template Post Type: page

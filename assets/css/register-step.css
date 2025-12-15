@@ -1,9 +1,12 @@
-/* ==================================================
-	 Register / Avatar Pages
-	 Palette: #700118 (primary), #F4EFEC (white), #0d0d0f/#1a1a1f (background)
-	 ================================================== */
-
-
+:root {
+  --reg-primary: #700118;
+  --reg-white: #F4EFEC;
+  --reg-bg: #0d0d0f;
+  --reg-panel: #1a1a1a;
+  --reg-border: #F4EFEC;
+  --reg-muted: #c7c8cc;
+  --reg-shadow: 0 0 18px 4px rgba(244, 239, 236, 0.45);
+}
 
 body {
 	background: var(--reg-bg);
@@ -36,6 +39,9 @@ body {
 
 .register-hero__title {
 	display: flex;
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
 	align-items: center;
 	gap: 20px;
 	flex-direction: column;
@@ -44,29 +50,33 @@ body {
 
 .register-hero__title p {   
 	display: block;
-	margin: 0;
+	margin: 0 0 8px 0;
 	color: var(--reg-white);
 	letter-spacing: 0.5px;
 	font-weight: 900;
-	font-size: 48px;
+	font-size: 2.5rem;
+	text-align: center;
+}
 }
 
 .register-hero__title h1 {
 	margin: 0;
-	font-size: 48px;
+	font-size: 3rem;
 	letter-spacing: 0.5px;
 	color: var(--reg-white);
 	font-weight: 900;
 	display: flex;
 	align-items: center;
 	gap: 20px;
+	justify-content: center;
+	text-align: center;
 }
 
 .register-card {
 	width: 455px;
 	max-width: 100%;
-	background: var(--reg-panel);
-	border: 3px solid var(--reg-border);
+	background: #1A1A1A;
+	border: 3px solid #F4EFEC;
 	border-radius: 16px;
 	padding: 40px 35px 45px;
 	box-shadow: var(--reg-shadow);
@@ -224,8 +234,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	background: var(--reg-panel);
-	border: 3px solid var(--reg-border);
+	background: #1A1A1A;
+	border: 3px solid #F4EFEC;
 	border-radius: 16px;
 	box-shadow: var(--reg-shadow);
 	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -255,15 +265,16 @@ body {
 	display: grid;
 	place-items: center;
 	overflow: hidden;
-	background: #16161c;
-}
-
-.avatar-circle img {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-}
-
+	background: #1A1A1A;
+	border: 3px solid #F4EFEC;
+	padding: 40px 35px 45px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	animation: slideInCard 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+	margin: 24px auto 40px;
 .avatar-placeholder {
 	width: 100%;
 	height: 100%;
@@ -366,17 +377,16 @@ button.btn-upload {
 	border-radius: 30px;
 	border: none;
 	color: #1a1a1a;
-	background: #5A5A5A;
-	text-decoration: none;
-	font-weight: 400;
-	font-size: 0.9rem;
-	transition: background 0.2s ease, color 0.2s ease;
-}
-
-.btn-ghost:hover {
-	background: #1E1E1E;
-	color: #F4EFEC;
-}
+	background: #1A1A1A;
+	border: 3px solid #F4EFEC;
+	padding: 40px 35px 45px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	box-shadow: var(--reg-shadow);
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+	animation: slideInCard 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+	margin: 60px auto 80px;
 
 /* Small text links inside messages */
 .success-message a,
@@ -403,6 +413,8 @@ button.btn-upload {
 	.register-card,
 	.register-card--avatar {
 		padding: 26px 22px;
+		margin: 40px auto 60px;
+		max-width: 100%;
 	}
 
 	.avatar-actions {

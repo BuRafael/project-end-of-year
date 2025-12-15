@@ -1,4 +1,11 @@
 <?php
+// Récupérer les infos de la série basé sur le slug
+global $post;
+$page_slug = isset($post->post_name) ? $post->post_name : 'stranger-things';
+add_filter('body_class', function($classes) use ($page_slug) {
+    $classes[] = 'slug-' . $page_slug;
+    return $classes;
+});
 /**
  * Template Name: Fiche Série
  * Template Post Type: page
@@ -511,8 +518,3 @@ $tracks_js = isset($all_tracks_data[$page_slug]) ? json_encode($all_tracks_data[
 <?php
 get_footer();
 ?>
-// Injecter le slug dans le body pour JS
-add_filter('body_class', function($classes) use ($page_slug) {
-    echo '<script>document.addEventListener("DOMContentLoaded",function(){document.body.dataset.serieSlug="' . esc_js($page_slug) . '";});</script>';
-    return $classes;
-});

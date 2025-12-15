@@ -139,8 +139,10 @@ add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
 
 // Enqueue styles and scripts
-function theme_scripts()
-{
+function theme_scripts() {
+    $version = filemtime(get_template_directory() . '/functions.php'); // Use file modification time as cache buster
+    // Bouton scroll-to-top sur toutes les pages
+    wp_enqueue_script('scroll-to-top', get_template_directory_uri() . '/assets/js/scroll-to-top.js', array(), $version, true);
     $version = filemtime(get_template_directory() . '/functions.php'); // Use file modification time as cache buster
     
     // Disable script/style concatenation for Local environment
@@ -254,6 +256,7 @@ function theme_scripts()
     if (is_page_template('template-films.php') || is_page_template('template-series.php') || 
         $current_template === 'template-films.php' || $current_template === 'template-series.php') {
         wp_enqueue_style('movies-series-style', get_template_directory_uri() . '/assets/css/movies-series.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/movies-series.css'));
+        wp_enqueue_style('page-media-layout-style', get_template_directory_uri() . '/assets/css/page-media-layout.css', array('movies-series-style'), filemtime(get_template_directory() . '/assets/css/page-media-layout.css'));
         wp_enqueue_script('movies-series-script', get_template_directory_uri() . '/assets/js/movies-series.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/movies-series.js'), true);
     }
     

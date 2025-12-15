@@ -65,14 +65,14 @@ a {
   width: 58px;
   height: 58px;
   border-radius: 50%;
-  border: none;
+  border: 2px solid #fff;
   background: #700118;
   color: #F4EFEC;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 20px rgba(112, 1, 24, 0.4);
+  box-shadow: none;
   font-size: 32px;
   transition: all 0.3s ease;
   z-index: 99;
@@ -83,5 +83,5 @@ a {
 .scroll-to-top:hover {
   background: #700118;
   transform: translateY(-5px) scale(1.08);
-  box-shadow: 0 10px 30px rgba(112, 1, 24, 0.6);
+  box-shadow: none;
 }

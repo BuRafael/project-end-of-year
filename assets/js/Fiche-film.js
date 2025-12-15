@@ -11,6 +11,21 @@ const trackImagePath = typeof themeTrackImagePath !== 'undefined' ? themeTrackIm
 const currentMovieSlug = window.currentMovieSlug || 'inception';
 
 function getTracks(slug) {
+            if (slug === 'parasite') {
+                const cover = 'Parasite piste.png';
+                return [
+                    { id: 1, title: "Opening", artist: "Jung Jaeil", duration: "1:31", cover },
+                    { id: 2, title: "Conciliation", artist: "Jung Jaeil", duration: "2:36", cover },
+                    { id: 3, title: "On the Way to Rich House", artist: "Jung Jaeil", duration: "1:38", cover },
+                    { id: 4, title: "The Frontal Lobe", artist: "Jung Jaeil", duration: "2:17", cover },
+                    { id: 5, title: "Zappaguri", artist: "Jung Jaeil", duration: "2:51", cover },
+                    { id: 6, title: "Camping", artist: "Jung Jaeil", duration: "2:21", cover },
+                    { id: 7, title: "The Belt of Faith", artist: "Jung Jaeil", duration: "3:23", cover },
+                    { id: 8, title: "Water, Ocean", artist: "Jung Jaeil", duration: "2:40", cover },
+                    { id: 9, title: "Wish", artist: "Jung Jaeil", duration: "1:38", cover },
+                    { id: 10, title: "End Credits", artist: "Jung Jaeil", duration: "3:36", cover }
+                ];
+            }
         if (slug === 'your-name') {
             return [
                 { id: 1, title: 'Dream Lantern', artist: 'RADWIMPS', duration: '2:09', cover: 'your name piste.png' },
@@ -84,6 +99,25 @@ function getTracks(slug) {
             { id: 18, title: "This Is Not a Dream", artist: "Jóhann Jóhannsson", duration: "3:07", cover: cover },
             { id: 19, title: "War", artist: "Jóhann Jóhannsson", duration: "2:22", cover: cover },
             { id: 20, title: "Birth", artist: "Jóhann Jóhannsson", duration: "3:10", cover: cover }
+        ];
+    }
+    if (slug === 'la-la-land') {
+        const cover = 'La la land piste.png';
+        return [
+            { id: 1, title: "Another Day of Sun", artist: "La La Land Cast", duration: "3:48", cover },
+            { id: 2, title: "Someone in the Crowd", artist: "Emma Stone, Callie Hernandez, Sonoya Mizuno, Jessica Rothe", duration: "4:19", cover },
+            { id: 3, title: "Mia & Sebastian's Theme", artist: "Justin Hurwitz", duration: "1:37", cover },
+            { id: 4, title: "A Lovely Night", artist: "Ryan Gosling, Emma Stone", duration: "3:56", cover },
+            { id: 5, title: "Herman's Habit", artist: "Justin Hurwitz", duration: "1:51", cover },
+            { id: 6, title: "City of Stars", artist: "Ryan Gosling, Emma Stone", duration: "2:29", cover },
+            { id: 7, title: "Planetarium", artist: "Justin Hurwitz", duration: "4:18", cover },
+            { id: 8, title: "Summer Montage / Madeline", artist: "Justin Hurwitz", duration: "2:05", cover },
+            { id: 9, title: "Start a Fire", artist: "John Legend", duration: "3:12", cover },
+            { id: 10, title: "Engagement Party", artist: "Justin Hurwitz", duration: "1:28", cover },
+            { id: 11, title: "Audition (The Fools Who Dream)", artist: "Emma Stone", duration: "3:48", cover },
+            { id: 12, title: "Epilogue", artist: "Justin Hurwitz", duration: "7:40", cover },
+            { id: 13, title: "The End", artist: "Justin Hurwitz", duration: "0:44", cover },
+            { id: 14, title: "City of Stars (Humming)", artist: "Emma Stone", duration: "2:44", cover }
         ];
     }
     if (slug === 'spirited-away') {
