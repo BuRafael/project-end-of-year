@@ -1,7 +1,8 @@
+<?php
 if (!function_exists('wp_handle_upload')) {
     require_once ABSPATH . 'wp-admin/includes/file.php';
 }
-<?php
+
 /**
  * Template Name: Register Step 2 (Avatar)
  */
@@ -69,7 +70,7 @@ if (isset($_POST['avatar_submit'])) {
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?>
+            <strong><?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?></strong>
             <div class="register-hero__logo">
                 <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
             </div>
@@ -77,49 +78,40 @@ if (isset($_POST['avatar_submit'])) {
     </div>
 
     <div class="register-card register-card--avatar">
-        <h2><?php esc_html_e('Ajoute une photo de profil!', 'project-end-of-year'); ?></h2>
-
+        <h2 style="margin-bottom: 18px;"><?php esc_html_e('Ajoute une photo de profil!', 'project-end-of-year'); ?></h2>
         <?php
         if (!empty($upload_feedback)) {
             echo $upload_feedback; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         }
         ?>
-
-        <?php
-        // Afficher le formulaire TOUJOURS (pas de vérification is_user_logged_in)
-        // Les utilisateurs non connectés verront juste le formulaire
-        $current_avatar = is_user_logged_in() ? get_user_meta(get_current_user_id(), 'avatar_url', true) : false;
-        ?>
-            <div class="avatar-preview">
+        <form method="post" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" class="register-form register-form--avatar" enctype="multipart/form-data" style="margin-top: 0;">
+            <div class="avatar-preview" style="margin-bottom: 18px;">
                 <div class="avatar-circle">
-                    <?php if ($current_avatar) : ?>
+                    <?php if (!empty($current_avatar)) : ?>
                         <img src="<?php echo esc_url($current_avatar); ?>" alt="<?php esc_attr_e('Photo de profil', 'project-end-of-year'); ?>" id="avatarPreviewImg">
-                    <?php else : ?>
-                        <svg width="60" height="60" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" style="color: #c7c8cc;">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="currentColor"/>
-                            <path d="M32.5002 44.8718C21.9793 44.8718 13.0152 51.7433 9.60059 61.3703C10.4324 62.2827 11.3087 63.1457 12.2255 63.955C14.7682 55.1164 22.7448 48.4616 32.5002 48.4616C42.2555 48.4616 50.2321 55.1164 52.7748 63.955C53.6916 63.1457 54.5679 62.2827 55.3997 61.3704C51.9851 51.7433 43.021 44.8718 32.5002 44.8718Z" fill="currentColor"/>
-                        </svg>
-                    <?php endif; ?>
+                                        <?php else : ?>
+                                            <svg class="profil-svg" width="48" height="48" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" style="opacity:0.7;">
+                                                <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="#c7c8cc"/>
+                                                <path d="M32.5002 44.8718C21.9793 44.8718 13.0152 51.7433 9.60059 61.3703C10.4324 62.2827 11.3087 63.1457 12.2255 63.955C14.7682 55.1164 22.7448 48.4616 32.5002 48.4616C42.2555 48.4616 50.2321 55.1164 52.7748 63.955C53.6916 63.1457 54.5679 62.2827 55.3997 61.3704C51.9851 51.7433 43.021 44.8718 32.5002 44.8718Z" fill="#c7c8cc"/>
+                                            </svg>
+                                        <?php endif; ?>
                 </div>
             </div>
-
-            <form method="post" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>" class="register-form register-form--avatar" enctype="multipart/form-data">
-                <?php wp_nonce_field('upload_avatar', 'avatar_nonce'); ?>
-                <input type="file" name="avatar_file" id="avatar_file" accept="image/*" hidden>
-                <button type="button" class="btn-upload" onclick="document.getElementById('avatar_file').click();">
-                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/upload.svg'); ?>" alt="" class="upload-icon">
-                    <?php esc_html_e('Importer une image', 'project-end-of-year'); ?>
+            <?php wp_nonce_field('upload_avatar', 'avatar_nonce'); ?>
+            <input type="file" name="avatar_file" id="avatar_file" accept="image/*" hidden>
+            <button type="button" class="btn-upload" onclick="document.getElementById('avatar_file').click();">
+                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/upload.svg'); ?>" alt="" class="upload-icon">
+                <?php esc_html_e('Importer une image', 'project-end-of-year'); ?>
+            </button>
+            <div class="avatar-actions">
+                <a class="btn-ghost" href="<?php echo esc_url(home_url()); ?>">
+                    <?php esc_html_e('Passer', 'project-end-of-year'); ?>
+                </a>
+                <button type="submit" name="avatar_submit" class="btn-register-primary">
+                    <?php esc_html_e('Terminer', 'project-end-of-year'); ?>
                 </button>
-
-                <div class="avatar-actions">
-                    <a class="btn-ghost" href="<?php echo esc_url(home_url()); ?>">
-                        <?php esc_html_e('Passer', 'project-end-of-year'); ?>
-                    </a>
-                    <button type="submit" name="avatar_submit" class="btn-register-primary">
-                        <?php esc_html_e('Terminer', 'project-end-of-year'); ?>
-                    </button>
-                </div>
-            </form>
+            </div>
+        </form>
         <?php
         // Fin du formulaire - pas de else/endif
         ?>
