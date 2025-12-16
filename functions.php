@@ -607,44 +607,44 @@ function insert_default_movies() {
         // FILMS - ACTION
         ['title' => 'Inception', 'type' => 'film', 'genre' => 'Action', 'year' => '2010', 'affiche' => 'inception affiche film.jpg'],
         ['title' => 'The Matrix', 'type' => 'film', 'genre' => 'Action', 'year' => '1999', 'affiche' => 'matrix affiche similaire.jpg'],
-        ['title' => 'John Wick', 'type' => 'film', 'genre' => 'Action', 'year' => '2014', 'affiche' => 'Dark city.jpg'],
-        ['title' => 'Mad Max: Fury Road', 'type' => 'film', 'genre' => 'Action', 'year' => '2015', 'affiche' => 'the-prestige-md-web.jpg'],
-        ['title' => 'The Dark Knight', 'type' => 'film', 'genre' => 'Action', 'year' => '2008', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'Tenet', 'type' => 'film', 'genre' => 'Action', 'year' => '2020', 'affiche' => 'Tenet2.jpg'],
+        ['title' => 'Edge of Tomorrow', 'type' => 'film', 'genre' => 'Action', 'year' => '2014', 'affiche' => 'Edge of Tomorrow.jpg'],
+        ['title' => 'Minority Report', 'type' => 'film', 'genre' => 'Action', 'year' => '2002', 'affiche' => 'Minority report.jpg'],
         
         // FILMS - COMÉDIE
         ['title' => 'La La Land', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2016', 'affiche' => 'La La Land.jpg'],
-        ['title' => 'Jumanji', 'type' => 'film', 'genre' => 'Comédie', 'year' => '1995', 'affiche' => 'inception affiche film.jpg'],
-        ['title' => 'Superbad', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2007', 'affiche' => 'shutter island affiche similaire.jpg'],
-        ['title' => 'The Grand Budapest Hotel', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2014', 'affiche' => 'arrival affiche similaire.jpg'],
-        ['title' => 'Amélie', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2001', 'affiche' => 'the-prestige-md-web.jpg'],
+        ['title' => 'Amélie', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2001', 'affiche' => 'Amélie.jpg'],
+        ['title' => 'The Grand Budapest Hotel', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2014', 'affiche' => 'TheGrandBudapestHotel.jpg'],
+        ['title' => 'Superbad', 'type' => 'film', 'genre' => 'Comédie', 'year' => '2007', 'affiche' => 'superbad.jpg'],
+        ['title' => 'Jumanji', 'type' => 'film', 'genre' => 'Comédie', 'year' => '1995', 'affiche' => 'jumanji.jpg'],
         
         // FILMS - DRAME
         ['title' => 'Interstellar', 'type' => 'film', 'genre' => 'Drame', 'year' => '2014', 'affiche' => 'interstellar affiche similaire.jpg'],
-        ['title' => 'The Shawshank Redemption', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'shutter island affiche similaire.jpg'],
-        ['title' => 'Forrest Gump', 'type' => 'film', 'genre' => 'Drame', 'year' => '1994', 'affiche' => 'arrival affiche similaire.jpg'],
-        ['title' => 'The Pursuit of Happyness', 'type' => 'film', 'genre' => 'Drame', 'year' => '2006', 'affiche' => 'matrix affiche similaire.jpg'],
-        ['title' => 'Parasite', 'type' => 'film', 'genre' => 'Drame', 'year' => '2019', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'The Prestige', 'type' => 'film', 'genre' => 'Drame', 'year' => '2006', 'affiche' => 'The Prestige.webp'],
+        ['title' => 'Memento', 'type' => 'film', 'genre' => 'Drame', 'year' => '2000', 'affiche' => 'Momento.jpg'],
+        ['title' => 'Shutter Island', 'type' => 'film', 'genre' => 'Drame', 'year' => '2010', 'affiche' => 'Shutter island.webp'],
+        ['title' => 'Paprika', 'type' => 'film', 'genre' => 'Drame', 'year' => '2006', 'affiche' => 'Paprika.webp'],
         
         // FILMS - SCIENCE-FICTION
-        ['title' => 'Blade Runner 2049', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2017', 'affiche' => 'inception_2010_advance_original_film_art_f4801a23-edb3-4db0-b382-1e2aec1dc927_5000x.jpg'],
-        ['title' => 'Dune', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2021', 'affiche' => 'arrival affiche similaire.jpg'],
-        ['title' => 'Avatar', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2009', 'affiche' => 'interstellar affiche similaire.jpg'],
-        ['title' => 'Tenet', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2020', 'affiche' => 'Tenet.jpg'],
-        ['title' => 'Minority Report', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2002', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'Dark City', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '1998', 'affiche' => 'Dark city.jpg'],
+        ['title' => 'Arrival', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2016', 'affiche' => 'arrival affiche similaire.jpg'],
+        ['title' => 'Ex Machina', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2014', 'affiche' => 'Ex machina.jpg'],
+        ['title' => 'Source Code', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2011', 'affiche' => 'Source code.jpg'],
+        ['title' => 'Coherence', 'type' => 'film', 'genre' => 'Science-Fiction', 'year' => '2013', 'affiche' => 'Coherence.webp'],
         
         // FILMS - HORREUR
-        ['title' => 'The Shining', 'type' => 'film', 'genre' => 'Horreur', 'year' => '1980', 'affiche' => 'shutter island affiche similaire.jpg'],
-        ['title' => 'Hereditary', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'Dark city.jpg'],
-        ['title' => 'The Ring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2002', 'affiche' => 'the-prestige-md-web.jpg'],
-        ['title' => 'A Quiet Place', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'inception affiche film.jpg'],
-        ['title' => 'The Conjuring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2013', 'affiche' => 'matrix affiche similaire.jpg'],
+        ['title' => 'The Shining', 'type' => 'film', 'genre' => 'Horreur', 'year' => '1980', 'affiche' => 'shining.jpg'],
+        ['title' => 'Hereditary', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'hereditary.jpg'],
+        ['title' => 'The Ring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2002', 'affiche' => 'ring.jpg'],
+        ['title' => 'A Quiet Place', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2018', 'affiche' => 'quiet-place.jpg'],
+        ['title' => 'The Conjuring', 'type' => 'film', 'genre' => 'Horreur', 'year' => '2013', 'affiche' => 'conjuring.jpg'],
         
         // FILMS - ROMANCE
-        ['title' => 'The Notebook', 'type' => 'film', 'genre' => 'Romance', 'year' => '2004', 'affiche' => 'La La Land.jpg'],
-        ['title' => 'Titanic', 'type' => 'film', 'genre' => 'Romance', 'year' => '1997', 'affiche' => 'Tenet.jpg'],
-        ['title' => 'Pride and Prejudice', 'type' => 'film', 'genre' => 'Romance', 'year' => '2005', 'affiche' => 'arrival affiche similaire.jpg'],
-        ['title' => 'Crazy Rich Asians', 'type' => 'film', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'interstellar affiche similaire.jpg'],
-        ['title' => 'About Time', 'type' => 'film', 'genre' => 'Romance', 'year' => '2013', 'affiche' => 'inception affiche film.jpg'],
+        ['title' => 'The Notebook', 'type' => 'film', 'genre' => 'Romance', 'year' => '2004', 'affiche' => 'notebook.jpg'],
+        ['title' => 'Titanic', 'type' => 'film', 'genre' => 'Romance', 'year' => '1997', 'affiche' => 'titanic.jpg'],
+        ['title' => 'Pride and Prejudice', 'type' => 'film', 'genre' => 'Romance', 'year' => '2005', 'affiche' => 'pride-prejudice.jpg'],
+        ['title' => 'About Time', 'type' => 'film', 'genre' => 'Romance', 'year' => '2013', 'affiche' => 'about-time.jpg'],
+        ['title' => 'Crazy Rich Asians', 'type' => 'film', 'genre' => 'Romance', 'year' => '2018', 'affiche' => 'crazy-rich.jpg'],
         
         // FILMS ANIMÉS - ACTION
         ['title' => 'Your Name', 'type' => 'film', 'genre' => 'Action', 'year' => '2016', 'affiche' => 'inception affiche film.jpg'],
@@ -1152,4 +1152,20 @@ function get_movies_by_genre() {
 }
 add_action('wp_ajax_get_movies_by_genre', 'get_movies_by_genre');
 add_action('wp_ajax_nopriv_get_movies_by_genre', 'get_movies_by_genre');
+
+// Fonction pour mettre à jour la base de données avec les nouvelles images
+function update_movies_database() {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    // Vider la table
+    $wpdb->query("TRUNCATE TABLE $table_name");
+    
+    // Réinsérer les films avec les nouvelles données
+    insert_default_movies();
+    
+    echo "Base de données mise à jour avec succès !";
+}
+// Décommenter la ligne suivante et visiter n'importe quelle page du site pour mettre à jour la DB
+add_action('wp_head', 'update_movies_database', 1);
 

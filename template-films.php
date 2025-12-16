@@ -14,7 +14,16 @@ get_header();
     <?php
     $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Romance');
     
+    // Récupérer tous les films depuis la base de données
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    $all_movies = $wpdb->get_results("SELECT * FROM $table_name WHERE type = 'film'", ARRAY_A);
+    
     foreach ($genres as $genre) :
+        // Filtrer les films par genre
+        $genre_movies = array_filter($all_movies, function($movie) use ($genre) {
+            return $movie['genre'] === $genre;
+        });
     ?>
         <section class="movies-section mb-5">
             <h2 class="section-title mb-4"><?php echo esc_html($genre); ?></h2>
@@ -24,7 +33,17 @@ get_header();
                 
                 <div class="carousel-viewport">
                     <div class="carousel-track" id="carousel-film-<?php echo strtolower(str_replace('-', '', $genre)); ?>">
-                        <!-- JS insère les films ici -->
+                        <?php foreach ($genre_movies as $movie) : ?>
+                            <div class="carousel-card">
+                                <div class="movie-card">
+                                    <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Films/' . $movie['affiche']); ?>" 
+                                         alt="<?php echo esc_attr($movie['title']); ?>" 
+                                         class="movie-card-img">
+                                    <div class="movie-card-title"><?php echo esc_html($movie['title']); ?></div>
+                                    <div class="movie-card-year"><?php echo esc_html($movie['year']); ?></div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
                     </div>
                 </div>
                 
@@ -34,37 +53,5 @@ get_header();
     <?php endforeach; ?>
 
 </main>
-
-<script>
-    // Charger les films par genre
-    const genres = ['Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Romance'];
-    const moviesImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
-    
-    genres.forEach(genre => {
-        fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>?action=get_movies_by_genre&type=film&genre=' + encodeURIComponent(genre))
-            .then(res => res.json())
-            .then(data => {
-                if (data.movies && data.movies.length > 0) {
-                    const carouselId = 'carousel-film-' + genre.toLowerCase().replace('-', '');
-                    const track = document.getElementById(carouselId);
-                    
-                    if (track) {
-                        data.movies.forEach(movie => {
-                            const card = document.createElement('div');
-                            card.className = 'carousel-card';
-                            card.innerHTML = `
-                                <div class="movie-card">
-                                    <img src="${moviesImagePath}${movie.affiche}" alt="${movie.title}" class="movie-card-img">
-                                    <div class="movie-card-title">${movie.title}</div>
-                                    <div class="movie-card-year">${movie.year}</div>
-                                </div>
-                            `;
-                            track.appendChild(card);
-                        });
-                    }
-                }
-            });
-    });
-</script>
 
 <?php get_footer(); ?>
