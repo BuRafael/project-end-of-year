@@ -1,4 +1,11 @@
 <?php
+// Récupérer les infos du film basé sur le slug
+global $post;
+$page_slug = isset($post->post_name) ? $post->post_name : 'inception';
+add_filter('body_class', function($classes) use ($page_slug) {
+    $classes[] = 'slug-' . $page_slug;
+    return $classes;
+});
 /**
  * Template Name: Fiche Film
  * Template Post Type: page
@@ -10,7 +17,6 @@ get_header();
 // Récupérer les infos du film basé sur le slug
 global $post;
 $page_slug = isset($post->post_name) ? $post->post_name : 'inception';
-$movie = get_movie_data_by_slug($page_slug);
 
 // Infos supplémentaires codées pour chaque film
 $movie_info = array(
@@ -19,45 +25,243 @@ $movie_info = array(
         'rating' => '8,8/10',
         'director' => 'Christopher Nolan',
         'cast' => 'Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy, Dileep Rao, Ken Watanabe',
-        'synopsis' => 'Dom Cobb est un voleur expérimenté dans l\'art périlleux de l\'extraction : sa spécialité consiste à s\'approprier les secrets les plus précieux d\'un individu, enfouis au plus profond de son subconscient, pendant qu\'il rêve et que son esprit est particulièrement vulnérable. Très recherché pour ses talents dans l\'univers trouble de l\'espionnage industriel, Cobb est aussi devenu un fugitif traqué dans le monde entier. Cependant, une ultime mission pourrait lui permettre de retrouver sa vie d\'avant.'
+        'synopsis' => 'Dom Cobb est un voleur expérimenté dans l\'art périlleux de l\'extraction : sa spécialité consiste à s\'approprier les secrets les plus précieux d\'un individu, enfouis au plus profond de son subconscient, pendant qu\'il rêve et que son esprit est particulièrement vulnérable. Très recherché pour ses talents dans l\'univers trouble de l\'espionnage industriel, Cobb est aussi devenu un fugitif traqué dans le monde entier. Cependant, une ultime mission pourrait lui permettre de retrouver sa vie d\'avant.',
+        'genres_display' => 'Action • Science-fiction • Thriller',
+        'affiche' => 'inception affiche film.jpg',
+        'year' => 2010
+    ),
+    'arrival' => array(
+        'duration' => '1h56',
+        'rating' => '7,9/10',
+        'director' => 'Denis Villeneuve',
+        'cast' => 'Amy Adams, Jeremy Renner, Forest Whitaker, Michael Stuhlbarg',
+        'synopsis' => 'Lorsque de mystérieux vaisseaux venus du fond de l\'espace surgissent un peu partout sur Terre, une équipe d\'experts est rassemblée sous la direction de la linguiste Louise Banks afin de tenter de comprendre leurs intentions. Face à l\'énigme que constituent leur présence et leurs messages mystérieux, les réactions dans le monde sont contrastées et l\'humanité se trouve bientôt au bord d\'une guerre absolue.',
+        'genres_display' => 'Science-fiction • Drame • Thriller',
+        'affiche' => 'Arrival.webp',
+        'year' => 2016
+    ),
+    'spirited-away' => array(
+        'duration' => '2h05',
+        'rating' => '8,6/10',
+        'director' => 'Hayao Miyazaki',
+        'cast' => 'Rumi Hiiragi, Miyu Irino, Mari Natsuki, Takashi Naitô',
+        'synopsis' => 'Chihiro, une fillette de 10 ans, découvre un monde magique dominé par des dieux, des sorcières et des esprits, où les humains sont transformés en bêtes. Pour sauver ses parents, elle devra faire preuve de courage et de persévérance.',
+        'genres_display' => 'Animation • Aventure • Fantastique',
+        'affiche' => 'chihiro.jpg',
+        'year' => 2001
+    ),
+    'your-name' => array(
+        'duration' => '1h46',
+        'rating' => '8,4/10',
+        'director' => 'Makoto Shinkai',
+        'cast' => 'Ryûnosuke Kamiki, Mone Kamishiraishi, Ryô Narita, Aoi Yûki',
+        'synopsis' => 'Deux lycéens, Mitsuha et Taki, vivent chacun dans une région différente du Japon et échangent mystérieusement leurs corps. Leur quête pour se retrouver bouleverse le temps et l’espace.',
+        'genres_display' => 'Animation • Drame • Romance',
+        'affiche' => 'your name.jpg',
+        'year' => 2016
     ),
     'la-la-land' => array(
         'duration' => '2h08',
         'rating' => '8,0/10',
         'director' => 'Damien Chazelle',
-        'cast' => 'Ryan Gosling, Emma Stone, John Legend, Rosemarie DeWitt',
-        'synopsis' => 'Mia, une actrice en herbe qui sert les clients d\'un café sur les plateaux de cinéma, rencontre Sebastian, un pianiste de jazz passionné. Tous deux rêvent de réussir dans leurs domaines respectifs. Avec l\'aide l\'un de l\'autre, ils se soutiennent et s\'inspirent mutuellement, naviguant dans l\'industrie du divertissement de Los Angeles tout en approfondissant leur relation amoureuse.',
-        'genres_display' => 'Comédie • Drame • Musical • Romance'
+        'cast' => 'Ryan Gosling, Emma Stone, John Legend, J.K. Simmons',
+        'synopsis' => 'Mia, une actrice en devenir, et Sebastian, un passionné de jazz, tentent de réaliser leurs rêves à Los Angeles. Leur histoire d’amour est mise à l’épreuve par leurs ambitions.',
+        'genres_display' => 'Comédie musicale • Drame • Romance',
+        'affiche' => 'La La Land.jpg',
+        'year' => 2016
     ),
-    'stranger-things' => array(
-        'duration' => '50min/épisode',
-        'rating' => '8,7/10',
-        'director' => 'Matt Duffer, Ross Duffer',
-        'cast' => 'Millie Bobby Brown, Finn Wolfhard, Winona Ryder',
-        'synopsis' => 'Dans les années 80, à Hawkins dans l\'Indiana, un jeune garçon disparaît mystérieusement. Ses amis, sa famille et la police locale se lancent dans une quête extraordinaire pour le retrouver.'
-    )
+    'parasite' => array(
+        'duration' => '2h12',
+        'rating' => '8,6/10',
+        'director' => 'Bong Joon-ho',
+        'cast' => 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik',
+        'synopsis' => 'La famille Kim, au chômage, s’intéresse de près à la richissime famille Park. Un enchaînement d’événements inattendus va lier leur destin.',
+        'genres_display' => 'Thriller • Drame • Comédie noire',
+        'affiche' => 'Parasite.jpg',
+        'year' => 2019
+    ),
+    'interstellar' => array(
+        'duration' => '2h49',
+        'rating' => '8,6/10',
+        'director' => 'Christopher Nolan',
+        'cast' => 'Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine',
+        'synopsis' => 'Dans un futur proche, la Terre se meurt. Un groupe d’explorateurs utilise un trou de ver pour franchir les limites du voyage spatial humain et sauver l’humanité.',
+        'genres_display' => 'Science-fiction • Drame • Aventure',
+        'affiche' => 'Interstellar.jpg',
+        'year' => 2014
+    ),
 );
 
-// Définir les variables
-if ($movie) {
-    $title = $movie->title;
-    $year = $movie->year;
-    $affiche = $movie->affiche;
-    $info = isset($movie_info[$page_slug]) ? $movie_info[$page_slug] : $movie_info['inception'];
-    $genre = isset($info['genres_display']) ? $info['genres_display'] : $movie->genre;
-} else if (isset($movie_info[$page_slug])) {
+// Ajouter les pistes pour chaque film
+$movie_tracks = array(
+            'spirited-away' => array(
+                array('id' => 1, 'title' => 'One Summer’s Day', 'artist' => 'Joe Hisaishi', 'duration' => '2:25', 'cover' => 'spirited away piste.png'),
+                array('id' => 2, 'title' => 'A Road to Somewhere', 'artist' => 'Joe Hisaishi', 'duration' => '3:46', 'cover' => 'spirited away piste.png'),
+                array('id' => 3, 'title' => 'The Empty Restaurant', 'artist' => 'Joe Hisaishi', 'duration' => '3:27', 'cover' => 'spirited away piste.png'),
+                array('id' => 4, 'title' => 'Nighttime Coming', 'artist' => 'Joe Hisaishi', 'duration' => '2:20', 'cover' => 'spirited away piste.png'),
+                array('id' => 5, 'title' => 'Dragon Boy', 'artist' => 'Joe Hisaishi', 'duration' => '1:55', 'cover' => 'spirited away piste.png'),
+                array('id' => 6, 'title' => 'Sootballs', 'artist' => 'Joe Hisaishi', 'duration' => '2:57', 'cover' => 'spirited away piste.png'),
+                array('id' => 7, 'title' => 'Procession of the Gods', 'artist' => 'Joe Hisaishi', 'duration' => '3:00', 'cover' => 'spirited away piste.png'),
+                array('id' => 8, 'title' => 'Yubaba', 'artist' => 'Joe Hisaishi', 'duration' => '2:38', 'cover' => 'spirited away piste.png'),
+                array('id' => 9, 'title' => 'Bathhouse Morning', 'artist' => 'Joe Hisaishi', 'duration' => '2:42', 'cover' => 'spirited away piste.png'),
+                array('id' => 10, 'title' => 'Day of the River', 'artist' => 'Joe Hisaishi', 'duration' => '3:05', 'cover' => 'spirited away piste.png'),
+                array('id' => 11, 'title' => 'It’s Hard Work', 'artist' => 'Joe Hisaishi', 'duration' => '2:30', 'cover' => 'spirited away piste.png'),
+                array('id' => 12, 'title' => 'The Stink Spirit', 'artist' => 'Joe Hisaishi', 'duration' => '3:20', 'cover' => 'spirited away piste.png'),
+                array('id' => 13, 'title' => 'Sen’s Courage', 'artist' => 'Joe Hisaishi', 'duration' => '3:23', 'cover' => 'spirited away piste.png'),
+                array('id' => 14, 'title' => 'The Sixth Station', 'artist' => 'Joe Hisaishi', 'duration' => '3:57', 'cover' => 'spirited away piste.png'),
+                array('id' => 15, 'title' => 'Yubaba’s Panic', 'artist' => 'Joe Hisaishi', 'duration' => '1:48', 'cover' => 'spirited away piste.png'),
+                array('id' => 16, 'title' => 'The House at Swamp Bottom', 'artist' => 'Joe Hisaishi', 'duration' => '2:50', 'cover' => 'spirited away piste.png'),
+                array('id' => 17, 'title' => 'Reprise', 'artist' => 'Joe Hisaishi', 'duration' => '2:35', 'cover' => 'spirited away piste.png'),
+                array('id' => 18, 'title' => 'The Return', 'artist' => 'Joe Hisaishi', 'duration' => '3:30', 'cover' => 'spirited away piste.png'),
+                array('id' => 19, 'title' => 'Always with Me', 'artist' => 'Joe Hisaishi', 'duration' => '3:35', 'cover' => 'spirited away piste.png'),
+            ),
+        'your-name' => array(
+            array('id' => 1, 'title' => 'Dream Lantern', 'artist' => 'RADWIMPS', 'duration' => '2:09', 'cover' => 'your name piste.png'),
+            array('id' => 2, 'title' => 'School Road', 'artist' => 'RADWIMPS', 'duration' => '1:11', 'cover' => 'your name piste.png'),
+            array('id' => 3, 'title' => 'Itomori High School', 'artist' => 'RADWIMPS', 'duration' => '1:37', 'cover' => 'your name piste.png'),
+            array('id' => 4, 'title' => 'First View of Tokyo', 'artist' => 'RADWIMPS', 'duration' => '1:43', 'cover' => 'your name piste.png'),
+            array('id' => 5, 'title' => 'Cafe at Last', 'artist' => 'RADWIMPS', 'duration' => '1:57', 'cover' => 'your name piste.png'),
+            array('id' => 6, 'title' => 'Theme of Mitsuha', 'artist' => 'RADWIMPS', 'duration' => '2:28', 'cover' => 'your name piste.png'),
+            array('id' => 7, 'title' => 'Unusual Changes of Two', 'artist' => 'RADWIMPS', 'duration' => '1:42', 'cover' => 'your name piste.png'),
+            array('id' => 8, 'title' => 'Zenzenzense (movie ver.)', 'artist' => 'RADWIMPS', 'duration' => '4:46', 'cover' => 'your name piste.png'),
+            array('id' => 9, 'title' => 'Goshintai', 'artist' => 'RADWIMPS', 'duration' => '2:01', 'cover' => 'your name piste.png'),
+            array('id' => 10, 'title' => 'Date', 'artist' => 'RADWIMPS', 'duration' => '2:18', 'cover' => 'your name piste.png'),
+            array('id' => 11, 'title' => 'Autumn Festival', 'artist' => 'RADWIMPS', 'duration' => '1:45', 'cover' => 'your name piste.png'),
+            array('id' => 12, 'title' => 'Memories of Time', 'artist' => 'RADWIMPS', 'duration' => '1:47', 'cover' => 'your name piste.png'),
+            array('id' => 13, 'title' => 'Visit to Hida', 'artist' => 'RADWIMPS', 'duration' => '2:11', 'cover' => 'your name piste.png'),
+            array('id' => 14, 'title' => 'Disappeared Town', 'artist' => 'RADWIMPS', 'duration' => '2:50', 'cover' => 'your name piste.png'),
+            array('id' => 15, 'title' => 'Library', 'artist' => 'RADWIMPS', 'duration' => '2:01', 'cover' => 'your name piste.png'),
+            array('id' => 16, 'title' => 'Two People', 'artist' => 'RADWIMPS', 'duration' => '2:17', 'cover' => 'your name piste.png'),
+            array('id' => 17, 'title' => 'Katawaredoki', 'artist' => 'RADWIMPS', 'duration' => '2:47', 'cover' => 'your name piste.png'),
+            array('id' => 18, 'title' => 'Sparkle (movie ver.)', 'artist' => 'RADWIMPS', 'duration' => '8:54', 'cover' => 'your name piste.png'),
+            array('id' => 19, 'title' => 'Date 2', 'artist' => 'RADWIMPS', 'duration' => '2:18', 'cover' => 'your name piste.png'),
+            array('id' => 20, 'title' => 'Nandemonaiya (movie ver.)', 'artist' => 'RADWIMPS', 'duration' => '5:45', 'cover' => 'your name piste.png'),
+            array('id' => 21, 'title' => 'Dreams of Tomorrow', 'artist' => 'RADWIMPS', 'duration' => '1:55', 'cover' => 'your name piste.png'),
+            array('id' => 22, 'title' => 'Reunion', 'artist' => 'RADWIMPS', 'duration' => '1:26', 'cover' => 'your name piste.png'),
+            array('id' => 23, 'title' => 'Epilogue', 'artist' => 'RADWIMPS', 'duration' => '2:21', 'cover' => 'your name piste.png')
+        ),
+    'inception' => array(
+        array('id' => 1, 'title' => 'Half Remembered Dream'),
+        array('id' => 2, 'title' => 'We Built Our Own World'),
+        array('id' => 3, 'title' => 'Dream Is Collapsing'),
+        array('id' => 4, 'title' => 'Radical Notion'),
+        array('id' => 5, 'title' => 'Old Souls'),
+        array('id' => 6, 'title' => '528491'),
+        array('id' => 7, 'title' => 'Mombasa'),
+        array('id' => 8, 'title' => 'One Simple Idea'),
+        array('id' => 9, 'title' => 'Dream Within a Dream'),
+        array('id' => 10, 'title' => 'Waiting for a Train'),
+        array('id' => 11, 'title' => 'Paradox'),
+        array('id' => 12, 'title' => 'Time'),
+    ),
+    'la-la-land' => array(
+        array('id' => 1, 'title' => 'Another Day of Sun'),
+        array('id' => 2, 'title' => 'Someone in the Crowd'),
+        array('id' => 3, 'title' => "Mia & Sebastian's Theme"),
+        array('id' => 4, 'title' => 'A Lovely Night'),
+        array('id' => 5, 'title' => "Herman's Habit"),
+        array('id' => 6, 'title' => 'City of Stars (Pier)'),
+        array('id' => 7, 'title' => 'Planetarium'),
+        array('id' => 8, 'title' => 'Summer Montage / Madeline'),
+        array('id' => 9, 'title' => 'City of Stars (Duet)'),
+        array('id' => 10, 'title' => 'Start a Fire'),
+        array('id' => 11, 'title' => 'Engagement Party'),
+        array('id' => 12, 'title' => 'Audition (The Fools Who Dream)'),
+        array('id' => 13, 'title' => 'Epilogue'),
+        array('id' => 14, 'title' => 'The End'),
+        array('id' => 15, 'title' => 'City of Stars (Humming)'),
+    ),
+    'parasite' => array(
+        array('id' => 1, 'title' => 'Opening'),
+        array('id' => 2, 'title' => 'Conciliation I'),
+        array('id' => 3, 'title' => 'On the Way to Rich House'),
+        array('id' => 4, 'title' => 'Conciliation II'),
+        array('id' => 5, 'title' => 'Plum Juice'),
+        array('id' => 6, 'title' => 'Mr. Yoon and Park'),
+        array('id' => 7, 'title' => 'Conciliation III'),
+        array('id' => 8, 'title' => 'The Belt of Faith'),
+        array('id' => 9, 'title' => 'Moon Gwang Left'),
+        array('id' => 10, 'title' => 'Camping'),
+        array('id' => 11, 'title' => 'The Hellgate'),
+        array('id' => 12, 'title' => 'Heartrending Story of Bubu'),
+        array('id' => 13, 'title' => 'Zappaguri'),
+        array('id' => 14, 'title' => 'Ghost'),
+        array('id' => 15, 'title' => 'The Family Is Busy'),
+        array('id' => 16, 'title' => 'Busy to Survive'),
+        array('id' => 17, 'title' => 'The Frontal Lobe of Ki Taek'),
+        array('id' => 18, 'title' => 'Water, Ocean'),
+        array('id' => 19, 'title' => 'Water, Ocean Again'),
+        array('id' => 20, 'title' => 'It Is Sunday Morning'),
+        array('id' => 21, 'title' => 'Blood and Sword'),
+        array('id' => 22, 'title' => 'Yasan'),
+        array('id' => 23, 'title' => 'Moving'),
+        array('id' => 24, 'title' => 'Ending'),
+        array('id' => 25, 'title' => 'Soju One Glass'),
+        array('id' => 26, 'title' => 'Extraits de Rodelinda'),
+        array('id' => 27, 'title' => 'In ginocchio da te'),
+    ),
+    'interstellar' => array(
+        array('id' => 1, 'title' => 'Dreaming of the Crash'),
+        array('id' => 2, 'title' => 'Cornfield Chase'),
+        array('id' => 3, 'title' => 'Dust'),
+        array('id' => 4, 'title' => 'Day One'),
+        array('id' => 5, 'title' => 'Message from Home'),
+        array('id' => 6, 'title' => 'The Wormhole'),
+        array('id' => 7, 'title' => 'Mountains'),
+        array('id' => 8, 'title' => 'Afraid of Time'),
+        array('id' => 9, 'title' => 'Detach'),
+        array('id' => 10, 'title' => 'Running Out'),
+        array('id' => 11, 'title' => 'Tick-Tock'),
+        array('id' => 12, 'title' => "Where We're Going"),
+        array('id' => 13, 'title' => 'Do Not Go Gentle'),
+        array('id' => 14, 'title' => 'No Time for Caution'),
+        array('id' => 15, 'title' => 'Murph'),
+        array('id' => 16, 'title' => 'Stay')
+    ),
+    'arrival' => array(
+        array('id' => 1, 'title' => 'On the Nature of Daylight'),
+        array('id' => 2, 'title' => 'Arrival'),
+        array('id' => 3, 'title' => 'Heptapod B'),
+        array('id' => 4, 'title' => 'Sapir-Whorf'),
+        array('id' => 5, 'title' => 'Transmutation at a Distance'),
+        array('id' => 6, 'title' => 'Logograms'),
+        array('id' => 7, 'title' => 'Decyphering'),
+        array('id' => 8, 'title' => 'Kangaru'),
+        array('id' => 9, 'title' => 'Hydraulic Lift'),
+        array('id' => 10, 'title' => 'First Encounter'),
+        array('id' => 11, 'title' => 'Strange Atmosphere'),
+        array('id' => 12, 'title' => 'Ultimatum'),
+        array('id' => 13, 'title' => 'Hitting the Egg'),
+        array('id' => 14, 'title' => 'The Casio'),
+        array('id' => 15, 'title' => 'One of Twelve'),
+        array('id' => 16, 'title' => 'Rise'),
+        array('id' => 17, 'title' => 'Extreme Hectopods'),
+        array('id' => 18, 'title' => 'This Is Not a Dream'),
+        array('id' => 19, 'title' => 'War'),
+        array('id' => 20, 'title' => 'Birth')
+    ),
+);
+
+
+if (isset($movie_info[$page_slug])) {
     $info = $movie_info[$page_slug];
     $title = ucwords(str_replace('-', ' ', $page_slug));
-    $genre = 'Romance';
-    $year = 2016;
-    $affiche = $page_slug . ' affiche film.jpg';
-        $genre = isset($info['genres_display']) ? $info['genres_display'] : $genre;
+    $year = $info['year'];
+    $affiche = $info['affiche'];
+    $genre = $info['genres_display'];
 } else {
+    // Fallback sur Inception si le film n'existe pas
     $title = 'Inception';
     $year = 2010;
     $affiche = 'inception affiche film.jpg';
     $genre = 'Action';
     $info = $movie_info['inception'];
+}
+
+// Calculer le nombre de pistes
+$num_tracks = 12; // Default
+if (isset($movie_tracks[$page_slug])) {
+    $num_tracks = count($movie_tracks[$page_slug]);
 }
 
 ?>
@@ -68,20 +272,14 @@ if ($movie) {
     <!-- TITRE + INFOS GENERALES -->
     <section class="movie-header mb-5">
         <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
-        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – 12 pistes</p>
+        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – <?php echo intval($num_tracks); ?> piste<?php echo $num_tracks > 1 ? 's' : ''; ?></p>
 
         <div class="row g-4">
             <!-- POSTER -->
             <div class="col-md-4 col-lg-3">
                 <div class="movie-poster-wrapper text-center text-md-start">
                     <?php 
-                    $poster_path = get_template_directory() . '/assets/image/Fiche films/' . $affiche;
                     $poster_url = get_template_directory_uri() . '/assets/image/Fiche films/' . $affiche;
-                    
-                    // Si l'affiche n'existe pas, utiliser celle d'Inception par défaut
-                    if (!file_exists($poster_path)) {
-                        $poster_url = get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg';
-                    }
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow">
@@ -205,7 +403,7 @@ if ($movie) {
         <h3 class="section-title mb-3">Films similaires</h3>
 
         <div class="d-flex align-items-center">
-            <button class="carousel-arrow d-flex align-items-center justify-content-center">
+            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
                 <i class="bi bi-chevron-left"></i>
             </button>
 
@@ -213,7 +411,7 @@ if ($movie) {
                 <!-- JS insère 4 films -->
             </div>
 
-            <button class="carousel-arrow d-flex align-items-center justify-content-center" type="button">
+            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
                 <i class="bi bi-chevron-right"></i>
             </button>
         </div>
@@ -228,7 +426,7 @@ if ($movie) {
                 l'univers musical de tous vos films et séries favoris !
             </p>
             <?php if (!is_user_logged_in()) : ?>
-                <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="cta-btn">S'inscrire</a>
+                <?php echo cinemusic_signup_button(); ?>
             <?php endif; ?>
         </div>
     </section>
@@ -238,6 +436,7 @@ if ($movie) {
 <script>
     // Chemin des images pour JavaScript
     const themeImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
+    const themeTrackImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Pistes film/';
     window.currentMovieSlug = '<?php echo esc_js($page_slug); ?>';
 </script>
 

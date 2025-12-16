@@ -5,7 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initCarousel();
-    initScrollToTop();
+    if (typeof initScrollToTop === 'function') initScrollToTop();
     initHearts();
     initCtaButton();
 });
@@ -50,26 +50,7 @@ function initCarousel() {
     updateCarousel();
 }
 
-/**
- * ========== SCROLL TO TOP ==========
- * Shows/hides button and scrolls to top smoothly
- */
-function initScrollToTop() {
-    const scrollBtn = document.getElementById('scrollToTop');
-    if (!scrollBtn) return;
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            scrollBtn.style.display = 'flex';
-        } else {
-            scrollBtn.style.display = 'none';
-        }
-    });
-
-    scrollBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
 
 /**
  * ========== HEARTS (Like Buttons) ==========
@@ -101,15 +82,18 @@ function initHearts() {
  * Handle registration button click
  */
 function initCtaButton() {
-    const ctaBtn = document.querySelector('.cta-btn');
+    // Scope to CTA section to avoid hijacking header buttons
+    const ctaSection = document.querySelector('.cta-section');
+    const ctaBtn = ctaSection ? ctaSection.querySelector('.cta-btn') : null;
     if (!ctaBtn) return;
 
     ctaBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        // Redirect to registration page
-        window.location.href = '/register';
+        // Redirect to the actual inscription page
+        window.location.href = '/inscription';
     });
-}// ========== PASSWORD TOGGLE (for login template) ==========
+}
+// ========== PASSWORD TOGGLE (for login template) ==========
 function initTogglePassword() {
     const toggle = document.getElementById('togglePassword');
     const pwd = document.getElementById('passwordField');

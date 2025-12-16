@@ -71,11 +71,7 @@
                 <?php endif; ?>
 
                 <div class="header-actions">
-                    <?php if (!is_user_logged_in()) : ?>
-                        <a class="btn-inscription" href="<?php echo esc_url(home_url('/inscription')); ?>">
-                            <?php esc_html_e("S'inscrire", 'project-end-of-year'); ?>
-                        </a>
-                    <?php endif; ?>
+                    <?php echo cinemusic_signup_button(); ?>
 
                     <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
                     <?php

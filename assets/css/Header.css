@@ -1,3 +1,15 @@
+.text-main { color: #700118 !important; }
+.text-dark { color: #1A1A1A !important; }
+.text-light { color: #F4EFEC !important; }
+.bg-dark { background: #1A1A1A !important; }
+.bg-white { background: #FFFFFF !important; }
+.border-main { border-color: #700118 !important; }
+.border-light { border-color: #F4EFEC !important; }
+.fw-600 { font-weight: 600 !important; }
+.fw-700 { font-weight: 700 !important; }
+.bg-main {
+	background: #F4EFEC !important;
+}
 /* Header */
 .site-header {
 	background-color: #1A1A1A;
@@ -138,24 +150,7 @@
 	display: inline-block;
 }
 
-.btn-inscription {
-	border: 2px solid #F4EFEC;
-	padding: 10px 20px;
-	border-radius: 30px;
-	color: #000000;
-	background-color: #F4EFEC;
-	text-decoration: none;
-	font-size: 16px;
-	font-weight: bold;
-	font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
-	transition: all .2s ease;
-}
-
-.btn-inscription:hover {
-	background-color: #700118;
-	border-color: #700118;
-	color: #F4EFEC;
-}
+/* .btn-inscription removed in favor of global .cta-btn */
 
 .profil-icon {
 	display: inline-flex;
@@ -169,7 +164,7 @@
 
 .profil-icon .profil-svg {
 	width: 65px;
-	height: 72px;
+	height: 65px;            /* Keep same height as container */
 	display: block;
 	color: #F4EFEC;
 	transition: color .15s ease, transform .15s ease;

@@ -3,17 +3,6 @@
    Palette: #700118 (primary), #F4EFEC (white), #1A1A1A (background)
    ================================================== */
 
-:root {
-	--prof-primary: #700118;
-	--prof-white: #F4EFEC;
-	--prof-bg: #1A1A1A;
-	--prof-panel: #1a1a1a;
-	--prof-border: #F4EFEC;
-	--prof-muted: #c7c8cc;
-	--prof-shadow: 0 0 18px 4px rgba(244, 239, 236, 0.45);
-	--prof-gray: #5A5A5A;
-	--prof-dark-hover: #1E1E1E;
-}
 
 * {
 	box-sizing: border-box;

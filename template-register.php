@@ -20,14 +20,12 @@
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?>
+            <strong><?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?></strong>
             <div class="register-hero__logo">
                 <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
             </div>
         </h1>
-    </div>
-
-    <div class="register-card">
+        <div class="register-card">
         <h2><?php esc_html_e('Créez ton profil!', 'project-end-of-year'); ?></h2>
 
         <?php
@@ -89,7 +87,9 @@
             </form>
 
             <p class="auth-link" style="margin-top: 20px; text-align: center; font-size: 0.95rem;">
-                <?php esc_html_e('Vous avez déjà un compte ?', 'project-end-of-year'); ?>
+                <span style="font-weight:400;">
+                    <?php esc_html_e('Vous avez déjà un compte ?', 'project-end-of-year'); ?>
+                </span>
                 <a href="<?php echo esc_url(home_url('/login')); ?>" style="color: var(--reg-primary); text-decoration: none; font-weight: 600;">
                     <?php esc_html_e('Se connecter', 'project-end-of-year'); ?>
                 </a>

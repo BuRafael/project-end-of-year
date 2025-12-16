@@ -1,4 +1,16 @@
+
 <?php
+/**
+ * Helper: render site-wide Sign Up (S'inscrire) button only when logged out
+ */
+function cinemusic_signup_button() {
+    if ( is_user_logged_in() ) {
+        return '';
+    }
+    $url = esc_url( home_url('/inscription') );
+    // Use double quotes in the translation string to avoid escaping the apostrophe
+    return '<a class="cta-btn" href="' . $url . '">' . esc_html__("S'inscrire", 'project-end-of-year') . '</a>';
+}
 /**
  * Theme Functions
  */
@@ -24,173 +36,60 @@ add_action('after_setup_theme', 'theme_setup');
 // Create default pages on theme activation
 function create_theme_pages()
 {
-    // Create Fiche Film Inception page
-    $inception_page = get_page_by_path('inception');
-    if (!$inception_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Inception',
-            'post_name'      => 'inception',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
+    // All pages to create in one array
+    $all_pages = array(
+        // Core pages
+        array('title' => 'Inscription', 'slug' => 'inscription', 'template' => 'template-register.php'),
+        array('title' => 'Inscription - Étape 2', 'slug' => 'signup-step2', 'template' => 'template-register-step2.php'),
+        array('title' => 'Connexion', 'slug' => 'login', 'template' => 'Connexion.php'),
+        array('title' => 'Mon Profil', 'slug' => 'profil', 'template' => 'template-profil.php'),
         
-        // Set the page template
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-fiche-film.php');
-        }
-    } else {
-        // Update template if page exists but template is not set
-        $current_template = get_post_meta($inception_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-fiche-film.php') {
-            update_post_meta($inception_page->ID, '_wp_page_template', 'template-fiche-film.php');
-        }
-    }
+        // Composers
+        array('title' => 'Hans Zimmer', 'slug' => 'hans-zimmer', 'template' => 'template-fiche-compositeur.php'),
+        
+        // Films
+        array('title' => 'Inception', 'slug' => 'inception', 'template' => 'template-fiche-film.php'),
+        array('title' => 'La La Land', 'slug' => 'la-la-land', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Parasite', 'slug' => 'parasite', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Interstellar', 'slug' => 'interstellar', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Arrival', 'slug' => 'arrival', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Wicked', 'slug' => 'wicked', 'template' => 'template-fiche-film.php'),
+        
+        // Series
+        array('title' => 'Stranger Things', 'slug' => 'stranger-things', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Breaking Bad', 'slug' => 'breaking-bad', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Euphoria', 'slug' => 'euphoria', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Wednesday', 'slug' => 'wednesday', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'The Witcher', 'slug' => 'the-witcher', 'template' => 'template-fiche-serie.php'),
+        
+        // Animes
+        array('title' => 'Your Name', 'slug' => 'your-name', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Spirited Away', 'slug' => 'spirited-away', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Attack on Titan', 'slug' => 'attack-on-titan', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Demon Slayer', 'slug' => 'demon-slayer', 'template' => 'template-fiche-serie.php'),
+        array('title' => 'Jujutsu Kaisen', 'slug' => 'jujutsu-kaisen', 'template' => 'template-fiche-serie.php')
+    );
 
-    // Create Signup Step 1 page
-    $signup_page = get_page_by_path('inscription');
-    if (!$signup_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Inscription',
-            'post_name'      => 'inscription',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-register.php');
-        }
-    } else {
-        $current_template = get_post_meta($signup_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-register.php') {
-            update_post_meta($signup_page->ID, '_wp_page_template', 'template-register.php');
-        }
-    }
-
-    // Create Signup Step 2 page
-    $step2_page = get_page_by_path('signup-step2');
-    if (!$step2_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Inscription - Étape 2',
-            'post_name'      => 'signup-step2',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-register-step2.php');
-        }
-    } else {
-        $current_template = get_post_meta($step2_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-register-step2.php') {
-            update_post_meta($step2_page->ID, '_wp_page_template', 'template-register-step2.php');
-        }
-    }
-
-    // Create Login page
-    $login_page = get_page_by_path('login');
-    if (!$login_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Connexion',
-            'post_name'      => 'login',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'Connexion.php');
-        }
-    } else {
-        $current_template = get_post_meta($login_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'Connexion.php') {
-            update_post_meta($login_page->ID, '_wp_page_template', 'Connexion.php');
-        }
-    }
-
-    // Create Profil page
-    $profil_page = get_page_by_path('profil');
-    if (!$profil_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Mon Profil',
-            'post_name'      => 'profil',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-profil.php');
-        }
-    } else {
-        $current_template = get_post_meta($profil_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-profil.php') {
-            update_post_meta($profil_page->ID, '_wp_page_template', 'template-profil.php');
-        }
-    }
-
-    // Create Stranger Things Series page
-    $stranger_things_page = get_page_by_path('stranger-things');
-    if (!$stranger_things_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Stranger Things',
-            'post_name'      => 'stranger-things',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-fiche-serie.php');
-        }
-    } else {
-        $current_template = get_post_meta($stranger_things_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-fiche-serie.php') {
-            update_post_meta($stranger_things_page->ID, '_wp_page_template', 'template-fiche-serie.php');
-        }
-    }
-
-    // Create La La Land Film page
-    $la_la_land_page = get_page_by_path('la-la-land');
-    if (!$la_la_land_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'La La Land',
-            'post_name'      => 'la-la-land',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-fiche-film.php');
-        }
-    } else {
-        $current_template = get_post_meta($la_la_land_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-fiche-film.php') {
-            update_post_meta($la_la_land_page->ID, '_wp_page_template', 'template-fiche-film.php');
-        }
-    }
-
-    // Create Hans Zimmer Composer page
-    $hans_zimmer_page = get_page_by_path('hans-zimmer');
-    if (!$hans_zimmer_page) {
-        $page_id = wp_insert_post([
-            'post_title'     => 'Hans Zimmer',
-            'post_name'      => 'hans-zimmer',
-            'post_status'    => 'publish',
-            'post_type'      => 'page',
-            'post_content'   => ''
-        ]);
-        
-        if ($page_id && !is_wp_error($page_id)) {
-            update_post_meta($page_id, '_wp_page_template', 'template-fiche-compositeur.php');
-        }
-    } else {
-        $current_template = get_post_meta($hans_zimmer_page->ID, '_wp_page_template', true);
-        if ($current_template !== 'template-fiche-compositeur.php') {
-            update_post_meta($hans_zimmer_page->ID, '_wp_page_template', 'template-fiche-compositeur.php');
+    foreach ($all_pages as $page_data) {
+        $existing_page = get_page_by_path($page_data['slug']);
+        if (!$existing_page) {
+            $page_id = wp_insert_post([
+                'post_title'     => $page_data['title'],
+                'post_name'      => $page_data['slug'],
+                'post_status'    => 'publish',
+                'post_type'      => 'page',
+                'post_content'   => ''
+            ]);
+            
+            if ($page_id && !is_wp_error($page_id)) {
+                update_post_meta($page_id, '_wp_page_template', $page_data['template']);
+            }
+        } else {
+            // Update template if page exists
+            $current_template = get_post_meta($existing_page->ID, '_wp_page_template', true);
+            if ($current_template !== $page_data['template']) {
+                update_post_meta($existing_page->ID, '_wp_page_template', $page_data['template']);
+            }
         }
     }
 
@@ -240,8 +139,10 @@ add_action('after_switch_theme', 'create_theme_pages');
 add_action('admin_init', 'create_theme_pages'); // Also run on admin init to ensure page exists
 
 // Enqueue styles and scripts
-function theme_scripts()
-{
+function theme_scripts() {
+    $version = filemtime(get_template_directory() . '/functions.php'); // Use file modification time as cache buster
+    // Bouton scroll-to-top sur toutes les pages
+    wp_enqueue_script('scroll-to-top', get_template_directory_uri() . '/assets/js/scroll-to-top.js', array(), $version, true);
     $version = filemtime(get_template_directory() . '/functions.php'); // Use file modification time as cache buster
     
     // Disable script/style concatenation for Local environment
@@ -254,8 +155,11 @@ function theme_scripts()
     wp_enqueue_style('bootstrap', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css', array(), '5.3.3');
     wp_enqueue_style('bootstrap-icons', 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css', array(), '1.11.1');
     
-    // Bootstrap JS
-    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array(), '5.3.3', true);
+    // jQuery (already in WordPress but ensure it's loaded)
+    wp_enqueue_script('jquery');
+    
+    // Bootstrap JS (depends on jQuery for some components)
+    wp_enqueue_script('bootstrap-js', 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js', array('jquery'), '5.3.3', true);
 
     // Base styles (reset + global)
     wp_enqueue_style('base-style', get_template_directory_uri() . '/assets/css/base.css', array('bootstrap'), $version);
@@ -307,10 +211,13 @@ function theme_scripts()
         wp_enqueue_script('fiche-serie-script', get_template_directory_uri() . '/assets/js/Fiche-serie.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-serie.js'), true);
         
         // Passer les variables AJAX au JS
+        // Récupérer le slug de la page actuelle pour le movie_id (comme pour les films)
+        global $post;
+        $serie_slug = isset($post->post_name) ? $post->post_name : 'stranger-things';
         wp_localize_script('fiche-serie-script', 'movieComments', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('movie_comment_nonce'),
-            'movie_id' => 'stranger-things' // ID de la série actuelle
+            'movie_id' => $serie_slug // ID unique de la série courante
         ));
     }
     
@@ -349,6 +256,7 @@ function theme_scripts()
     if (is_page_template('template-films.php') || is_page_template('template-series.php') || 
         $current_template === 'template-films.php' || $current_template === 'template-series.php') {
         wp_enqueue_style('movies-series-style', get_template_directory_uri() . '/assets/css/movies-series.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/movies-series.css'));
+        wp_enqueue_style('page-media-layout-style', get_template_directory_uri() . '/assets/css/page-media-layout.css', array('movies-series-style'), filemtime(get_template_directory() . '/assets/css/page-media-layout.css'));
         wp_enqueue_script('movies-series-script', get_template_directory_uri() . '/assets/js/movies-series.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/movies-series.js'), true);
     }
     
@@ -572,6 +480,7 @@ function create_movies_table() {
     $table_name = $wpdb->prefix . 'movies';
     $charset_collate = $wpdb->get_charset_collate();
 
+
     $sql = "CREATE TABLE IF NOT EXISTS $table_name (
         id mediumint(9) NOT NULL AUTO_INCREMENT,
         title varchar(255) NOT NULL,
@@ -586,8 +495,11 @@ function create_movies_table() {
         KEY genre (genre)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    if (!function_exists('dbDelta')) {
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+    }
     dbDelta($sql);
+
     
     // Insérer les données si la table est vide
     $count = $wpdb->get_var("SELECT COUNT(*) FROM $table_name");
@@ -720,8 +632,8 @@ function create_movie_comments_table() {
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
+
 }
 add_action('after_switch_theme', 'create_movie_comments_table');
 
@@ -902,8 +814,12 @@ function create_composer_comments_table() {
         PRIMARY KEY  (id)
     ) $charset_collate;";
 
-    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
     dbDelta($sql);
+
+// Mutualisé pour toutes les fonctions qui en ont besoin
+if (!function_exists('dbDelta')) {
+    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+}
 }
 add_action('after_switch_theme', 'create_composer_comments_table');
 
@@ -1099,6 +1015,34 @@ function get_movie_data_by_slug($slug) {
         'your-name' => 'Your Name',
         'demon-slayer-movie' => 'Demon Slayer Movie',
         'jjk-0' => 'Jujutsu Kaisen 0'
+    );
+    
+    $title = isset($slug_mapping[$slug]) ? $slug_mapping[$slug] : null;
+    
+    if (!$title) {
+        return null;
+    }
+    
+    return $wpdb->get_row($wpdb->prepare(
+        "SELECT * FROM $table_name WHERE title = %s",
+        $title
+    ));
+}
+
+// Fonction pour obtenir les infos d'une série par slug
+function get_series_data_by_slug($slug) {
+    global $wpdb;
+    $table_name = $wpdb->prefix . 'movies';
+    
+    // Mapping des slugs vers les titres de séries
+    $slug_mapping = array(
+        'stranger-things' => 'Stranger Things',
+        'the-crown' => 'The Crown',
+        'breaking-bad' => 'Breaking Bad',
+        'game-of-thrones' => 'Game of Thrones',
+        'the-office' => 'The Office',
+        'friends' => 'Friends',
+        'the-last-of-us' => 'The Last of Us'
     );
     
     $title = isset($slug_mapping[$slug]) ? $slug_mapping[$slug] : null;

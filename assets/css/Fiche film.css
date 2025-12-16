@@ -1,3 +1,37 @@
+:root {
+    --main-primary: #700118;
+    --main-white: #F4EFEC;
+    --main-bg: #1A1A1A;
+    --main-panel: #1a1a1a;
+    --main-border: #F4EFEC;
+    --main-muted: #c7c8cc;
+    --main-shadow: 0 0 18px 4px rgba(244, 239, 236, 0.45);
+    --main-gray: #5A5A5A;
+    --main-dark-hover: #1E1E1E;
+}
+.text-main { color: #700118 !important; }
+.text-dark { color: #1A1A1A !important; }
+.text-light { color: #F4EFEC !important; }
+.bg-dark { background: #1A1A1A !important; }
+.bg-white { background: #FFFFFF !important; }
+.border-main { border-color: #700118 !important; }
+.border-light { border-color: #F4EFEC !important; }
+.fw-600 { font-weight: 600 !important; }
+.fw-700 { font-weight: 700 !important; }
+/* Factorisation couleur de fond principale */
+.bg-main {
+    background: #F4EFEC !important;
+}
+/* Factorisation couleur texte commentaire */
+.comment-input,
+.comment-input:focus {
+    color: rgba(244, 239, 236, 1) !important;
+}
+/* Factorisation: alignement vertical pour toutes les cellules de table de pistes */
+.movie-tracks-table td,
+.movie-tracks-table td.col-duration {
+    vertical-align: middle !important;
+}
 /* ==================================================
    Fiche Film Styles
    Styles spécifiques pour la page de détail d'un film
@@ -63,6 +97,9 @@
 .movie-poster-wrapper {
     position: relative;
     animation: scaleIn 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .movie-poster {
@@ -72,11 +109,16 @@
 }
 
 .movie-poster:hover {
-    transform: scale(1.03) translateY(-5px);
+    transform: scale(1.03);
     box-shadow: 0 15px 50px rgba(112, 1, 24, 0.3);
 }
 
+
 .movie-like-btn {
+        border-radius: 50%;
+        background: transparent;
+        color: #700118;
+        border: none;
     border: none;
     background: transparent;
     color: rgba(244, 239, 236, 1);
@@ -88,26 +130,32 @@
     box-shadow: none;
     -webkit-appearance: none;
     appearance: none;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
+    position: static;
+    margin-top: 12px;
+    align-self: center;
+    z-index: 5;
+    width: 48px;
+    height: 48px;
 }
 
 .movie-like-btn:hover {
     color: rgba(112, 1, 24, 1);
-    transform: translateX(-50%) scale(1.08);
+    transform: scale(1.08);
 }
 
+.movie-like-btn.liked {
+    color: #700118;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
 .movie-like-btn:focus-visible {
     outline: 2px solid rgba(112, 1, 24, 1);
     outline-offset: 4px;
-}
-
-.movie-like-btn.liked,
-.movie-like-btn.liked:hover {
-    color: rgba(112, 1, 24, 1);
-    transform: translateX(-50%) scale(1.08);
 }
 
 .movie-like-btn i {
@@ -115,18 +163,14 @@
     transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* positionne le coeur centré en bas de l'affiche */
-.movie-like-btn {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -52px;
-    z-index: 5;
+.movie-like-btn.liked i {
+    color: #700118;
+}
 }
 
 @media (max-width: 767px) {
     .movie-like-btn {
-        bottom: -44px;
+        bottom: 0;
     }
 }
 
@@ -239,9 +283,20 @@
 
 .movie-tracks-table td {
     border: none;
-    vertical-align: middle;
     background: transparent;
     padding: 12px 10px;
+    height: 74px;
+    position: relative;
+}
+
+.movie-tracks-table td.col-duration {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 74px;
+    vertical-align: middle !important;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .col-num {
@@ -256,6 +311,7 @@
 .col-duration {
     width: 90px;
     text-align: center;
+    white-space: nowrap;
 }
 
 .col-like {
@@ -274,10 +330,23 @@
 .movie-tracks-table thead .col-duration { text-align: center; }
 .movie-tracks-table thead .col-like { text-align: right; }
 
+/* Align duration cells consistently in body */
+.movie-tracks-table td.col-duration {
+    text-align: center;
+    padding-left: 0;
+    padding-right: 0;
+    vertical-align: middle !important;
+}
+
 .movie-track-info {
     display: flex;
     align-items: center;
     gap: 12px;
+}
+
+/* Correction : aligner toutes les cellules sur la même ligne */
+.movie-tracks-table td {
+    vertical-align: middle !important;
 }
 
 .movie-track-cover {
@@ -424,7 +493,6 @@ a.movie-track-artist:hover {
     border-radius: 25px;
     border: 2px solid #2a2a2a;
     font-size: 0.9rem;
-    color: rgba(244, 239, 236, 1) !important;
     padding: 12px 18px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -433,7 +501,6 @@ a.movie-track-artist:hover {
     border-color: rgba(112, 1, 24, 1);
     box-shadow: 0 0 20px rgba(112, 1, 24, 0.2);
     background: #1a1a1a;
-    color: rgba(244, 239, 236, 1) !important;
 }
 
 .comment-input::placeholder {
@@ -645,6 +712,11 @@ a.movie-track-artist:hover {
     color: #000;
     font-weight: 700;
     line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.4em;
 }
 
 /* ===== NEWSLETTER / CALL TO ACTION ===== */
