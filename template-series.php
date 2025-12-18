@@ -29,48 +29,16 @@ get_header();
                 </div>
                 
                 <button class="carousel-arrow right" aria-label="Suivant">❯</button>
-            </div>
-        </section>
-    <?php endforeach; ?>
-
-</main>
-
-<script>
-    // Charger les séries par genre
-    const genres = ['Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Romance'];
-    const seriesImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche séries/';
-    
-    genres.forEach(genre => {
-        fetch('<?php echo esc_url(admin_url('admin-ajax.php')); ?>?action=get_movies_by_genre&type=serie&genre=' + encodeURIComponent(genre))
-            .then(res => res.json())
-            .then(data => {
-                if (data.movies && data.movies.length > 0) {
-                    const carouselId = 'carousel-serie-' + genre.toLowerCase().replace('-', '');
-                    const track = document.getElementById(carouselId);
-                    
-                    if (track) {
-                        data.movies.forEach(movie => {
-                            const card = document.createElement('div');
-                            card.className = 'carousel-card';
-                            card.innerHTML = `
-
-                                <?php
-                                /**
-                                 * Template Name: Séries
-                                 * Template Post Type: page
-                                 * Description: Page listant toutes les séries par genre
-                                 */
-                                get_header();
-                                ?>
-                                <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/page-media-layout.css">
-                                <div class="site-container">
-                                <main>
-                                    <!-- À la une -->
-                                    <section class="featured-media">
-                                        <div class="featured-banner-bg">
-                                            <img src="<?php echo get_template_directory_uri(); ?>/assets/image/Fiche série/stranger-things-banner.jpg" alt="Bannière Stranger Things" class="banner-img">
-                                        </div>
-                                        <div class="featured-media-inner">
+            <?php
+            /**
+             * Template Name: Séries
+             * Template Post Type: page
+             * Description: Page listant toutes les séries par genre
+             */
+            get_header();
+            $media_type = 'serie';
+            include(locate_template('template-media-layout.php'));
+            get_footer();
                                             <div class="featured-a-la-une-text">À la une</div>
                                             <div class="featured-main-row">
                                                 <div class="featured-affiche-col">
