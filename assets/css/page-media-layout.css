@@ -1,3 +1,163 @@
+/* Carrousel horizontal pour les genres sur la page Films */
+.carousel-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #a0022c #232323;
+  padding-bottom: 8px;
+}
+.carousel-horizontal::-webkit-scrollbar {
+  height: 8px;
+}
+.carousel-horizontal::-webkit-scrollbar-thumb {
+  background: #a0022c;
+  border-radius: 4px;
+}
+.carousel-horizontal::-webkit-scrollbar-track {
+  background: #232323;
+  border-radius: 4px;
+}
+html, body, * {
+  font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+}
+body, .section-title, .featured-a-la-une-text, .featured-title, .trend-card h4, .new-card h4 {
+  font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+}
+/* Harmonisation largeur et marges de toutes les sections principales */
+.featured-media,
+.trending-media,
+.new-media {
+  max-width: 1100px;
+  margin: 38px auto 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* Suppression de la bordure basse sur tous les titres section-title */
+.section-title {
+  border-bottom: none !important;
+}
+
+/* Suppression forcée de la ligne décorative sous Nouveautés */
+.new-media h2.section-title.mb-4::after {
+  display: none !important;
+  border: none !important;
+  background: none !important;
+  content: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+.new-media .section-title::after, .new-media h2.section-title::after, .new-media h2.mb-4.section-title::after, .new-media h2.section-title.mb-4::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+.new-media .section-title.mb-4::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+.new-media h2.section-title::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+/* Suppression ligne rouge sous Nouveautés */
+.new-media .section-title::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+body {
+  /* Contour blanc supprimé */
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+.trending-media .section-title,
+.trending-media .section-title::after,
+.trending-media .section-title::before {
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  display: block;
+  height: auto;
+}
+.trending-media .section-title::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+.trending-media .section-title::after {
+}
+.trending-media .section-title {
+  position: relative;
+  margin-bottom: 18px;
+}
+.trending-media .section-title::after {
+}
+/* --- SECTION TENDANCE DU MOMENT --- */
+.trending-media {
+  margin: 38px auto 0 auto;
+  max-width: 1100px;
+}
+.trend-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 24px;
+}
+.trend-card {
+  background: #191919;
+  border-radius: 10px;
+  padding: 12px 12px 8px 12px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(112,1,24,0.08);
+}
+.trend-card:hover {
+  /* Effet hover désactivé */
+  transform: none;
+  box-shadow: none;
+}
+.trend-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 3px solid #fff;
+  box-sizing: border-box;
+}
+.trend-card h4 {
+  color: #F4EFEC;
+  font-size: 1.05rem;
+  margin: 0;
+}
+body {
+  background: #1A1A1A !important;
+}
 .featured-infos-col {
   align-items: flex-start;
   gap: 16px;
@@ -5,7 +165,7 @@
 .btn-main.fiche-a-la-une {
   background: #F4EFEC;
   color: #a0022c;
-  border: 2px solid #a0022c;
+  border: none;
   border-radius: 8px;
   padding: 7px 22px;
   font-weight: 700;
@@ -24,12 +184,14 @@
 .featured-media {
   position: relative;
   max-width: 1100px;
-  margin: 0 auto 38px auto;
-  padding: 0 0 0 0;
+  margin: 38px auto 0 auto;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
   border-radius: 22px;
   overflow: hidden;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.16);
-  background: #18171a;
+  box-shadow: none;
+  background: none;
 }
 .featured-banner-bg {
   position: absolute;
@@ -50,7 +212,7 @@
   max-height: 100%;
   object-fit: cover;
   object-position: center center;
-  filter: brightness(0.45) blur(1.2px) saturate(1.08);
+  filter: brightness(0.45) saturate(1.08);
   pointer-events: none;
   user-select: none;
   display: block;
@@ -58,20 +220,21 @@
 .featured-media-inner {
   position: relative;
   z-index: 2;
-  padding: 0 40px 40px 40px;
+  padding: 0 0 40px 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 180px;
+  margin-top: 0;
+  width: 100%;
 }
 .featured-a-la-une-text {
-  font-size: 2.1rem;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow: 0 4px 24px #000a;
-  margin-bottom: 18px;
-  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #F4EFEC;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+  margin-bottom: 16px;
+  text-transform: none;
   z-index: 5;
   text-align: left;
   width: 100%;
@@ -101,7 +264,7 @@
   object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 4px 24px #000a, 0 2px 12px rgba(0,0,0,0.18);
-  border: 3px solid #F4EFEC;
+  border: none;
 }
 .badge-featured.badge-a-la-une {
   position: absolute;
@@ -133,7 +296,7 @@
   justify-content: center;
 }
 .featured-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
   margin-bottom: 14px;
   color: #F4EFEC;
   font-weight: 800;
@@ -148,7 +311,8 @@
   align-items: center;
   font-weight: 500;
 }
-.improved-meta .meta-dot {
+  padding: 32px 0 32px 0;
+  width: 100%;
   font-size: 1.3em;
   color: #700118;
   margin: 0 2px;
@@ -307,7 +471,7 @@
 .see-all {
   font-size: 1rem;
   color: #fff;
-  background: #700118;
+  font-weight: 800;
   border-radius: 4px;
   padding: 4px 14px;
   margin-left: 12px;

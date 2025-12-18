@@ -583,18 +583,18 @@ function getSimilarMovies(slug) {
 // Initialiser le carrousel une fois le DOM chargé
 const slug = window.currentMovieSlug || 'inception';
 const allSimilarMovies = getSimilarMovies(slug);
-initGenericCarousel({
-    containerId: 'similarMovies',
-    items: allSimilarMovies,
-    getCardHtml: (m) => `
-        <div class="col-6 col-md-3">
-            <div class="similar-card">
-                <img src="${m.img}" alt="${m.title}">
-                <div class="similar-card-title">${m.title}</div>
+    initGenericCarousel({
+        containerId: 'similarMovies',
+        items: allSimilarMovies,
+        getCardHtml: (m) => `
+            <div class="col-6 col-md-3">
+                <div class="similar-card">
+                    <img src="${m.img}" alt="${m.title}">
+                    <div class="similar-card-title">${m.title}</div>
+                </div>
             </div>
-        </div>
-    `
-});
+        `
+    });
 
 // ===== BOUTON LIKE AFFICHE =====
 const likeBtn = document.getElementById('movieLikeBtn');
