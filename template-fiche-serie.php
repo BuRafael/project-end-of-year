@@ -170,8 +170,12 @@ if (isset($series_info[$page_slug])) {
                     $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/' . $poster;
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
-                         class="movie-poster img-fluid shadow">
-                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button">
+                         class="movie-poster img-fluid shadow" id="moviePosterImg">
+                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button"
+                            data-serie-image="<?php echo esc_url($poster_url); ?>"
+                            data-serie-title="<?php echo esc_attr($title); ?>"
+                            data-serie-year="<?php echo esc_attr($aired); ?>"
+                            data-serie-slug="<?php echo esc_attr($page_slug); ?>">
                         <i class="bi bi-heart" aria-hidden="true"></i>
                     </button>
                 </div>

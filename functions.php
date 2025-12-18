@@ -43,6 +43,7 @@ function create_theme_pages()
         array('title' => 'Inscription - Étape 2', 'slug' => 'signup-step2', 'template' => 'template-register-step2.php'),
         array('title' => 'Connexion', 'slug' => 'login', 'template' => 'Connexion.php'),
         array('title' => 'Mon Profil', 'slug' => 'profil', 'template' => 'template-profil.php'),
+        array('title' => 'Favoris', 'slug' => 'favoris', 'template' => 'Favoris.php'),
         
         // Composers
         array('title' => 'Hans Zimmer', 'slug' => 'hans-zimmer', 'template' => 'template-fiche-compositeur.php'),
@@ -258,6 +259,12 @@ function theme_scripts() {
         wp_enqueue_style('movies-series-style', get_template_directory_uri() . '/assets/css/movies-series.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/movies-series.css'));
         wp_enqueue_style('page-media-layout-style', get_template_directory_uri() . '/assets/css/page-media-layout.css', array('movies-series-style'), filemtime(get_template_directory() . '/assets/css/page-media-layout.css'));
         wp_enqueue_script('movies-series-script', get_template_directory_uri() . '/assets/js/movies-series.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/movies-series.js'), true);
+    }
+    
+    // Favoris page styles and scripts
+    if (is_page_template('Favoris.php') || $current_template === 'Favoris.php' || is_page('favoris')) {
+        wp_enqueue_style('favoris-style', get_template_directory_uri() . '/assets/css/favoris.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/favoris.css'));
+        wp_enqueue_script('favoris-script', get_template_directory_uri() . '/assets/js/favoris.js', array(), filemtime(get_template_directory() . '/assets/js/favoris.js'), true);
     }
     
     // Global script (smooth scroll)

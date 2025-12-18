@@ -107,7 +107,7 @@ get_header();
                         <a href="<?php echo esc_url($inception_url); ?>" class="top-title-link">Inception</a>
                         <a href="<?php echo esc_url($inception_url); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/La La Land.jpg' ); ?>" alt="La La Land">
@@ -115,7 +115,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/la-la-land')); ?>" class="top-title-link">La La Land</a>
                         <a href="<?php echo esc_url(home_url('/la-la-land')); ?>" class="top-composer-link">Damien Chazelle</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/La La Land.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Parasite.jpg' ); ?>" alt="Parasite">
@@ -123,7 +123,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/parasite')); ?>" class="top-title-link">Parasite</a>
                         <a href="<?php echo esc_url(home_url('/parasite')); ?>" class="top-composer-link">Bong Joon-ho</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/Parasite.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Interstellar.jpg' ); ?>" alt="Interstellar">
@@ -131,7 +131,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/interstellar')); ?>" class="top-title-link">Interstellar</a>
                         <a href="<?php echo esc_url(home_url('/interstellar')); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/Interstellar.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Arrival.webp' ); ?>" alt="Arrival">
@@ -139,7 +139,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-title-link">Arrival</a>
                         <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-composer-link">Denis Villeneuve</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/Arrival.webp' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
             </ul>
         </div>
@@ -154,7 +154,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="top-title-link">Stranger Things</a>
                         <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="top-composer-link">The Duffer Brothers</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/Stranger Things2.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/breaking bad.webp' ); ?>" alt="Breaking Bad">
@@ -162,7 +162,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/breaking-bad')); ?>" class="top-title-link">Breaking Bad</a>
                         <a href="<?php echo esc_url(home_url('/breaking-bad')); ?>" class="top-composer-link">Vince Gilligan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/breaking bad.webp' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/euphoria.jpg' ); ?>" alt="Euphoria">
@@ -170,7 +170,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/euphoria')); ?>" class="top-title-link">Euphoria</a>
                         <a href="<?php echo esc_url(home_url('/euphoria')); ?>" class="top-composer-link">Sam Levinson</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/euphoria.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/wednesday.jpg' ); ?>" alt="Wednesday">
@@ -178,7 +178,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/wednesday')); ?>" class="top-title-link">Wednesday</a>
                         <a href="<?php echo esc_url(home_url('/wednesday')); ?>" class="top-composer-link">Tim Burton</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/wednesday.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/the witcher.webp' ); ?>" alt="The Witcher">
@@ -186,7 +186,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/the-witcher')); ?>" class="top-title-link">The Witcher</a>
                         <a href="<?php echo esc_url(home_url('/the-witcher')); ?>" class="top-composer-link">Lauren Schmidt Hissrich</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/the witcher.webp' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
             </ul>
         </div>
@@ -201,7 +201,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="top-title-link">Your Name</a>
                         <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="top-composer-link">Makoto Shinkai</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/your name.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
@@ -209,7 +209,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="top-title-link">Spirited Away</a>
                         <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="top-composer-link">Hayao Miyazaki</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/chihiro.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="Attack on Titan">
@@ -217,7 +217,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="top-title-link">Attack on Titan</a>
                         <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="top-composer-link">Hajime Isayama</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/attack on titan.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/demon slayer.jpg' ); ?>" alt="Demon Slayer">
@@ -225,7 +225,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/demon-slayer')); ?>" class="top-title-link">Demon Slayer</a>
                         <a href="<?php echo esc_url(home_url('/demon-slayer')); ?>" class="top-composer-link">Koyoharu Gotouge</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/demon slayer.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/jujutsu kaisen.jpg' ); ?>" alt="Jujutsu Kaisen">
@@ -233,7 +233,7 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/jujutsu-kaisen')); ?>" class="top-title-link">Jujutsu Kaisen</a>
                         <a href="<?php echo esc_url(home_url('/jujutsu-kaisen')); ?>" class="top-composer-link">Gege Akutami</a>
                     </div>
-                    <button class="like-btn" data-liked="false" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/jujutsu kaisen.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
             </ul>
         </div>

@@ -200,13 +200,48 @@ function updateTracksMoreBtn(totalTracks) {
 // Like/unlike tracks (event delegation so it works for appended rows too)
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('track-like')) {
+        const row = e.target.closest('tr');
+        const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
+        const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
+        const trackDuration = row.querySelector('.col-duration')?.textContent || '';
+        const trackCover = row.querySelector('.movie-track-cover')?.src || '';
+        const trackNumber = row.querySelector('td:first-child')?.textContent || '';
+        
         e.target.classList.toggle('liked');
-        if (e.target.classList.contains('liked')) {
+        const liked = e.target.classList.contains('liked');
+        
+        if (liked) {
             e.target.classList.remove('bi-heart');
             e.target.classList.add('bi-heart-fill');
         } else {
             e.target.classList.remove('bi-heart-fill');
             e.target.classList.add('bi-heart');
+        }
+        
+        // Gérer les favoris de pistes
+        let favoriteTracks = JSON.parse(localStorage.getItem('favoriteTracks') || '[]');
+        const trackId = `${window.currentMovieSlug}-${trackNumber}`;
+        
+        if (liked) {
+            // Ajouter aux favoris
+            const trackData = {
+                id: trackId,
+                title: trackTitle,
+                artist: trackArtist,
+                duration: trackDuration,
+                cover: trackCover,
+                source: document.querySelector('.movie-header h1')?.textContent || ''
+            };
+            
+            // Vérifier si pas déjà présent
+            if (!favoriteTracks.some(track => track.id === trackId)) {
+                favoriteTracks.push(trackData);
+                localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
+            }
+        } else {
+            // Retirer des favoris
+            favoriteTracks = favoriteTracks.filter(track => track.id !== trackId);
+            localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
         }
     }
 });
@@ -584,17 +619,62 @@ initGenericCarousel({
 // === LIKE BUTTON (SERIE) ===
 const movieLikeBtn = document.getElementById('movieLikeBtn');
 if (movieLikeBtn) {
+    // Récupérer les infos de la série depuis les attributs data
+    const serieTitle = movieLikeBtn.dataset.serieTitle || document.querySelector('.movie-header h1')?.textContent || '';
+    const serieYear = movieLikeBtn.dataset.serieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
+    const seriePoster = movieLikeBtn.dataset.serieImage || document.getElementById('moviePosterImg')?.src || '';
+    const serieSlug = movieLikeBtn.dataset.serieSlug || window.currentMovieSlug || '';
+    
+    // Vérifier si déjà en favoris
+    const favoriteSeries = JSON.parse(localStorage.getItem('favoriteSeries') || '[]');
+    const isAlreadyFavorite = favoriteSeries.some(serie => serie.id === serieSlug);
+    
+    if (isAlreadyFavorite) {
+        movieLikeBtn.classList.add('liked');
+        const icon = movieLikeBtn.querySelector('i');
+        if (icon) {
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
+        }
+    }
+    
     movieLikeBtn.addEventListener('click', function() {
         this.classList.toggle('liked');
         const icon = this.querySelector('i');
-        if (this.classList.contains('liked')) {
+        const liked = this.classList.contains('liked');
+        
+        if (liked) {
             icon.classList.remove('bi-heart');
             icon.classList.add('bi-heart-fill');
         } else {
             icon.classList.remove('bi-heart-fill');
             icon.classList.add('bi-heart');
         }
-        this.setAttribute('aria-pressed', this.classList.contains('liked'));
+        this.setAttribute('aria-pressed', liked);
+        
+        // Gérer les favoris
+        let favoriteSeries = JSON.parse(localStorage.getItem('favoriteSeries') || '[]');
+        
+        if (liked) {
+            // Ajouter aux favoris
+            const serieData = {
+                id: serieSlug,
+                title: serieTitle,
+                year: serieYear,
+                image: seriePoster,
+                url: window.location.href
+            };
+            
+            // Vérifier si pas déjà présent
+            if (!favoriteSeries.some(serie => serie.id === serieSlug)) {
+                favoriteSeries.push(serieData);
+                localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
+            }
+        } else {
+            // Retirer des favoris
+            favoriteSeries = favoriteSeries.filter(serie => serie.id !== serieSlug);
+            localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
+        }
     });
 }
 
