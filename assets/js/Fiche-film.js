@@ -241,10 +241,44 @@ if (tracksTable) {
     tracksTable.addEventListener('click', function (e) {
         const target = e.target;
         if (!target.classList.contains('track-like')) return;
+        
+        const row = target.closest('tr');
+        const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
+        const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
+        const trackDuration = row.querySelector('.col-duration')?.textContent || '';
+        const trackCover = row.querySelector('.movie-track-cover')?.src || '';
+        const trackNumber = row.querySelector('td:first-child')?.textContent || '';
+        
         const liked = target.classList.toggle('liked');
         target.classList.toggle('bi-heart', !liked);
         target.classList.toggle('bi-heart-fill', liked);
         target.setAttribute('aria-pressed', liked ? 'true' : 'false');
+        
+        // Gérer les favoris de pistes
+        let favoriteTracks = JSON.parse(localStorage.getItem('favoriteTracks') || '[]');
+        const trackId = `${currentMovieSlug}-${trackNumber}`;
+        
+        if (liked) {
+            // Ajouter aux favoris
+            const trackData = {
+                id: trackId,
+                title: trackTitle,
+                artist: trackArtist,
+                duration: trackDuration,
+                cover: trackCover,
+                source: document.querySelector('.movie-header h1')?.textContent || ''
+            };
+            
+            // Vérifier si pas déjà présent
+            if (!favoriteTracks.some(track => track.id === trackId)) {
+                favoriteTracks.push(trackData);
+                localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
+            }
+        } else {
+            // Retirer des favoris
+            favoriteTracks = favoriteTracks.filter(track => track.id !== trackId);
+            localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
+        }
     });
 }
 
@@ -599,13 +633,57 @@ const allSimilarMovies = getSimilarMovies(slug);
 // ===== BOUTON LIKE AFFICHE =====
 const likeBtn = document.getElementById('movieLikeBtn');
 if (likeBtn) {
+    // Récupérer les infos du film depuis les attributs data
+    const movieTitle = likeBtn.dataset.movieTitle || document.querySelector('.movie-header h1')?.textContent || '';
+    const movieYear = likeBtn.dataset.movieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
+    const moviePoster = likeBtn.dataset.movieImage || document.getElementById('moviePosterImg')?.src || '';
+    const movieSlug = likeBtn.dataset.movieSlug || window.currentMovieSlug || '';
+    
+    // Vérifier si déjà en favoris
+    const favoriteFilms = JSON.parse(localStorage.getItem('favoriteFilms') || '[]');
+    const isAlreadyFavorite = favoriteFilms.some(film => film.id === movieSlug);
+    
+    if (isAlreadyFavorite) {
+        likeBtn.classList.add('liked');
+        const icon = likeBtn.querySelector('i');
+        if (icon) {
+            icon.classList.remove('bi-heart');
+            icon.classList.add('bi-heart-fill');
+        }
+    }
+    
     likeBtn.addEventListener('click', function (e) {
         const icon = this.querySelector('i');
         const liked = this.classList.toggle('liked');
         this.setAttribute('aria-pressed', liked ? 'true' : 'false');
+        
         if (icon) {
             icon.classList.toggle('bi-heart', !liked);
             icon.classList.toggle('bi-heart-fill', liked);
+        }
+        
+        // Gérer les favoris
+        let favoriteFilms = JSON.parse(localStorage.getItem('favoriteFilms') || '[]');
+        
+        if (liked) {
+            // Ajouter aux favoris
+            const filmData = {
+                id: movieSlug,
+                title: movieTitle,
+                year: movieYear,
+                image: moviePoster,
+                url: window.location.href
+            };
+            
+            // Vérifier si pas déjà présent
+            if (!favoriteFilms.some(film => film.id === movieSlug)) {
+                favoriteFilms.push(filmData);
+                localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
+            }
+        } else {
+            // Retirer des favoris
+            favoriteFilms = favoriteFilms.filter(film => film.id !== movieSlug);
+            localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
         }
     });
 }

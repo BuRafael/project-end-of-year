@@ -1,0 +1,329 @@
+/* ===================================
+   FAVORIS PAGE STYLES
+   =================================== */
+
+:root {
+    --favoris-primary: #700118;
+    --favoris-bg: #1A1A1A;
+    --favoris-white: #F4EFEC;
+    --favoris-border: #F4EFEC;
+    --favoris-gray: #5A5A5A;
+    --favoris-card-bg: #2A2A2A;
+}
+
+/* Page Container */
+.favoris-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px 20px 80px;
+    min-height: 70vh;
+}
+
+/* Header */
+.favoris-header {
+    text-align: left;
+    margin-bottom: 2rem;
+}
+
+.favoris-title {
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--favoris-white);
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+}
+
+.favoris-subtitle {
+    font-size: 1.1rem;
+    color: var(--favoris-gray);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Tabs Navigation */
+.favoris-tabs {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.favoris-tab {
+    background: transparent;
+    border: 2px solid var(--favoris-white);
+    color: var(--favoris-white);
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 20px;
+}
+
+.favoris-tab:hover {
+    background: var(--favoris-primary);
+    border-color: var(--favoris-primary);
+    color: var(--favoris-white);
+}
+
+.favoris-tab.active {
+    background: var(--favoris-primary);
+    border-color: var(--favoris-primary);
+    color: var(--favoris-white);
+}
+
+/* Divider Line */
+.favoris-divider {
+    width: 100%;
+    height: 1px;
+    background: var(--favoris-white);
+    margin-bottom: 3rem;
+}
+
+/* Content Areas */
+.favoris-content {
+    display: none;
+}
+
+.favoris-content.active {
+    display: block;
+}
+
+/* Empty State */
+.favoris-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    text-align: center;
+}
+
+.empty-message {
+    font-size: 1.25rem;
+    color: var(--favoris-gray);
+    margin: 0;
+}
+
+/* Grid Layout */
+.favoris-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .favoris-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+/* Favoris Card */
+.favoris-card {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--favoris-card-bg);
+    transition: all 0.3s ease;
+}
+
+.favoris-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(112, 1, 24, 0.3);
+}
+
+.favoris-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.favoris-card-image {
+    width: 100%;
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    position: relative;
+}
+
+.favoris-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.favoris-card:hover .favoris-card-image img {
+    transform: scale(1.05);
+}
+
+.favoris-card-content {
+    padding: 0.75rem;
+}
+
+.favoris-card-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--favoris-white);
+    margin: 0 0 0.25rem 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+}
+
+.favoris-card-meta {
+    font-size: 0.8rem;
+    color: var(--favoris-gray);
+    margin: 0;
+}
+
+/* Remove Button */
+.favoris-remove {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: var(--favoris-white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.favoris-card:hover .favoris-remove {
+    opacity: 1;
+}
+
+.favoris-remove:hover {
+    background: var(--favoris-primary);
+    transform: scale(1.1);
+}
+
+.favoris-remove i {
+    font-size: 0.8rem;
+}
+
+/* Tracks List */
+.favoris-tracks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.favoris-track {
+    display: grid;
+    grid-template-columns: 40px 1fr auto auto 50px;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: var(--favoris-card-bg);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.favoris-track:hover {
+    background: #333;
+    transform: translateX(4px);
+}
+
+.favoris-track-number {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--favoris-gray);
+    text-align: center;
+}
+
+.favoris-track-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.favoris-track-cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.favoris-track-title {
+    font-weight: 600;
+    color: var(--favoris-white);
+    margin-bottom: 0.25rem;
+}
+
+.favoris-track-artist {
+    font-size: 0.85rem;
+    color: var(--favoris-gray);
+}
+
+.favoris-track-source {
+    font-size: 0.9rem;
+    color: var(--favoris-gray);
+}
+
+.favoris-track-duration {
+    font-size: 0.9rem;
+    color: var(--favoris-gray);
+    font-weight: 500;
+}
+
+.favoris-remove-track {
+    background: transparent;
+    border: none;
+    color: var(--favoris-primary);
+    cursor: pointer;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+}
+
+.favoris-remove-track:hover {
+    color: #fff;
+    transform: scale(1.15);
+}
+
+@media (max-width: 768px) {
+    .favoris-track {
+        grid-template-columns: 30px 1fr 40px;
+        gap: 0.75rem;
+    }
+    
+    .favoris-track-source,
+    .favoris-track-duration {
+        display: none;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .favoris-page {
+        padding: 40px 15px 60px;
+    }
+    
+    .favoris-title {
+        font-size: 2.5rem;
+    }
+    
+    .favoris-subtitle {
+        font-size: 1rem;
+    }
+    
+    .favoris-tabs {
+        gap: 1.5rem;
+    }
+    
+    .favoris-tab {
+        font-size: 1rem;
+    }
+}

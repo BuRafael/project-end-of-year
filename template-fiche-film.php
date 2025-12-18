@@ -282,8 +282,12 @@ if (isset($movie_tracks[$page_slug])) {
                     $poster_url = get_template_directory_uri() . '/assets/image/Fiche films/' . $affiche;
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
-                         class="movie-poster img-fluid shadow">
-                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button">
+                         class="movie-poster img-fluid shadow" id="moviePosterImg">
+                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button" 
+                            data-movie-image="<?php echo esc_url($poster_url); ?>"
+                            data-movie-title="<?php echo esc_attr($title); ?>"
+                            data-movie-year="<?php echo esc_attr($year); ?>"
+                            data-movie-slug="<?php echo esc_attr($page_slug); ?>">
                         <i class="bi bi-heart" aria-hidden="true"></i>
                     </button>
                 </div>

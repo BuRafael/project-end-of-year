@@ -60,6 +60,27 @@ function initHearts() {
     const likeButtons = document.querySelectorAll('.like-btn');
 
     likeButtons.forEach(button => {
+        // Récupérer l'ID du média (film/série)
+        const mediaCard = button.closest('.media-card, .film-card, .serie-card, li');
+        const mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
+        const mediaLink = mediaCard?.querySelector('a')?.href || '';
+        const mediaId = mediaLink.split('/').filter(Boolean).pop() || '';
+        const mediaType = button.dataset.type || 'film'; // 'film' ou 'serie'
+        
+        // Utiliser data-poster si disponible (grandes affiches), sinon fallback sur l'image affichée
+        const mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
+        
+        // Vérifier si déjà en favoris
+        const storageKey = mediaType === 'serie' ? 'favoriteSeries' : 'favoriteFilms';
+        const favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        const isAlreadyFavorite = favorites.some(item => item.id === mediaId);
+        
+        if (isAlreadyFavorite) {
+            button.setAttribute('data-liked', 'true');
+            button.textContent = '♥';
+            button.style.color = '#700118';
+        }
+        
         button.addEventListener('click', function(e) {
             e.preventDefault();
             const isLiked = this.getAttribute('data-liked') === 'true';
@@ -68,10 +89,30 @@ function initHearts() {
                 this.setAttribute('data-liked', 'false');
                 this.textContent = '♡'; // empty heart
                 this.style.color = '#ffffff';
+                
+                // Retirer des favoris
+                let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                favorites = favorites.filter(item => item.id !== mediaId);
+                localStorage.setItem(storageKey, JSON.stringify(favorites));
             } else {
                 this.setAttribute('data-liked', 'true');
                 this.textContent = '♥'; // filled heart
                 this.style.color = '#700118'; // red color
+                
+                // Ajouter aux favoris
+                let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
+                const mediaData = {
+                    id: mediaId,
+                    title: mediaTitle,
+                    image: mediaImage,
+                    url: mediaLink,
+                    year: new Date().getFullYear().toString() // À améliorer si l'année est disponible
+                };
+                
+                if (!favorites.some(item => item.id === mediaId)) {
+                    favorites.push(mediaData);
+                    localStorage.setItem(storageKey, JSON.stringify(favorites));
+                }
             }
         });
     });
