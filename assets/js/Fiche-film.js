@@ -144,19 +144,20 @@ function getTracks(slug) {
         ];
     }
     // Default Inception tracks (12 pistes officielles OST)
+    const inceptionCover = "Inception piste.png";
     return [
-        { id: 1, title: "Half Remembered Dream", artist: "Hans Zimmer", duration: "1:12", cover: "inception affiche film.jpg" },
-        { id: 2, title: "We Built Our Own World", artist: "Hans Zimmer", duration: "1:56", cover: "inception affiche film.jpg" },
-        { id: 3, title: "Dream Is Collapsing", artist: "Hans Zimmer", duration: "2:28", cover: "inception affiche film.jpg" },
-        { id: 4, title: "Radical Notion", artist: "Hans Zimmer", duration: "3:43", cover: "inception affiche film.jpg" },
-        { id: 5, title: "Old Souls", artist: "Hans Zimmer", duration: "7:44", cover: "inception affiche film.jpg" },
-        { id: 6, title: "528491", artist: "Hans Zimmer", duration: "2:23", cover: "inception affiche film.jpg" },
-        { id: 7, title: "Mombasa", artist: "Hans Zimmer", duration: "4:54", cover: "inception affiche film.jpg" },
-        { id: 8, title: "One Simple Idea", artist: "Hans Zimmer", duration: "2:28", cover: "inception affiche film.jpg" },
-        { id: 9, title: "Dream Within a Dream", artist: "Hans Zimmer", duration: "5:04", cover: "inception affiche film.jpg" },
-        { id: 10, title: "Waiting for a Train", artist: "Hans Zimmer", duration: "9:30", cover: "inception affiche film.jpg" },
-        { id: 11, title: "Paradox", artist: "Hans Zimmer", duration: "3:25", cover: "inception affiche film.jpg" },
-        { id: 12, title: "Time", artist: "Hans Zimmer", duration: "4:36", cover: "inception affiche film.jpg" }
+        { id: 1, title: "Half Remembered Dream", artist: "Hans Zimmer", duration: "1:12", cover: inceptionCover },
+        { id: 2, title: "We Built Our Own World", artist: "Hans Zimmer", duration: "1:56", cover: inceptionCover },
+        { id: 3, title: "Dream Is Collapsing", artist: "Hans Zimmer", duration: "2:28", cover: inceptionCover },
+        { id: 4, title: "Radical Notion", artist: "Hans Zimmer", duration: "3:43", cover: inceptionCover },
+        { id: 5, title: "Old Souls", artist: "Hans Zimmer", duration: "7:44", cover: inceptionCover },
+        { id: 6, title: "528491", artist: "Hans Zimmer", duration: "2:23", cover: inceptionCover },
+        { id: 7, title: "Mombasa", artist: "Hans Zimmer", duration: "4:54", cover: inceptionCover },
+        { id: 8, title: "One Simple Idea", artist: "Hans Zimmer", duration: "2:28", cover: inceptionCover },
+        { id: 9, title: "Dream Within a Dream", artist: "Hans Zimmer", duration: "5:04", cover: inceptionCover },
+        { id: 10, title: "Waiting for a Train", artist: "Hans Zimmer", duration: "9:30", cover: inceptionCover },
+        { id: 11, title: "Paradox", artist: "Hans Zimmer", duration: "3:25", cover: inceptionCover },
+        { id: 12, title: "Time", artist: "Hans Zimmer", duration: "4:36", cover: inceptionCover }
     ];
 }
 
@@ -179,11 +180,11 @@ function renderTracks(limit = tracksLimit) {
             : `<div class="movie-track-artist">${t.artist}</div>`;
 
         // Déterminer le chemin correct selon si c'est une image de piste ou d'affiche
-        let coverPath = imagePath;
-        if (t.cover && t.cover.includes('piste')) {
-            coverPath = trackImagePath;
+        let coverPath = trackImagePath; // Par défaut, utiliser le dossier des pistes
+        if (t.cover && !t.cover.toLowerCase().includes('piste')) {
+            coverPath = imagePath; // Si ce n'est pas une piste, utiliser le dossier des affiches
         }
-        const coverSrc = coverPath + (t.cover || 'inception affiche film.jpg');
+        const coverSrc = coverPath + (t.cover || 'Inception piste.png');
         
         tracksTable.innerHTML += `
             <tr>
@@ -475,7 +476,7 @@ function deleteComment(commentId, element) {
 loadComments();
 
 // === CARROUSEL : FILMS SIMILAIRES DYNAMIQUE ===
-const defaultCover = imagePath + 'inception affiche film.jpg';
+const defaultCover = imagePath + 'Interstellar.jpg';
 
 function getSimilarMovies(slug) {
     if (slug === 'spirited-away') {
@@ -488,7 +489,7 @@ function getSimilarMovies(slug) {
             { title: "Castle in the Sky", img: imagePath + "castle in the sky.jpg" },
             { title: "The Tale of the Princess Kaguya", img: imagePath + "the tale of the princess kaguya.avif" },
             { title: "When Marnie Was There", img: imagePath + "when marnie was there.webp" },
-            { title: "Paprika", img: imagePath + "Paprika.webp" },
+            { title: "Wolf Children", img: imagePath + "wolf children.jpg" },
             { title: "The Boy and the Beast", img: imagePath + "the boy and the beast.jpg" }
         ];
     }
@@ -508,7 +509,7 @@ function getSimilarMovies(slug) {
     }
     if (slug === 'interstellar') {
         return [
-            { title: "Inception", img: imagePath + "inception affiche film.jpg" },
+            { title: "Parasite", img: imagePath + "Parasite.jpg" },
             { title: "Gravity", img: imagePath + "gravity.jpg" },
             { title: "Arrival", img: imagePath + "Arrival.webp" },
             { title: "2001: A Space Odyssey", img: imagePath + "2001 a space odyssey.jpg" },
@@ -525,8 +526,11 @@ function getSimilarMovies(slug) {
             { title: "The Day the Earth Stood Still", img: imagePath + "the day the earth stood still.jpg" },
             { title: "Under the Skin", img: imagePath + "under the skin.jpg" },
             { title: "District 9", img: imagePath + "district 9.jpg" },
-            { title: "Ex Machina", img: imagePath + "Ex machina.jpg" },
-            { title: "2001: A Space Odyssey", img: imagePath + "2001 a space odyssey.jpg" }
+            { title: "Interstellar", img: imagePath + "Interstellar.jpg" },
+            { title: "2001: A Space Odyssey", img: imagePath + "2001 a space odyssey.jpg" },
+            { title: "Contact", img: imagePath + "contact.webp" },
+            { title: "Ad Astra", img: imagePath + "ad astra.jpg" },
+            { title: "Gravity", img: imagePath + "gravity.jpg" }
         ];
     }
     if (slug === 'la-la-land') {
@@ -558,20 +562,20 @@ function getSimilarMovies(slug) {
             { title: "The Platform", img: imagePath + "the platform.jpg" }
         ];
     }
-    // Fallback générique
+    // Fallback générique (Inception)
     return [
-        { title: "Interstellar", img: imagePath + "interstellar affiche similaire.jpg" },
-        { title: "Tenet", img: imagePath + "tenet2.jpg" },
-        { title: "The Prestige", img: imagePath + "The Prestige.webp" },
-        { title: "Memento", img: imagePath + "momento.jpg" },
+        { title: "Interstellar", img: imagePath + "Interstellar.jpg" },
+        { title: "Arrival", img: imagePath + "Arrival.webp" },
         { title: "Shutter Island", img: imagePath + "shutter island affiche similaire.jpg" },
-        { title: "Paprika", img: imagePath + "paprika.webp" },
-        { title: "Coherence", img: imagePath + "coherence.webp" },
-        { title: "Dark City", img: imagePath + "Dark city.jpg" },
-        { title: "Source Code", img: imagePath + "Source code.jpg" },
-        { title: "Ex Machina", img: imagePath + "Ex machina.jpg" },
-        { title: "Edge of Tomorrow", img: imagePath + "Edge of Tomorrow.jpg" },
-        { title: "Minority Report", img: imagePath + "Minority report.jpg" }
+        { title: "Parasite", img: imagePath + "Parasite.jpg" },
+        { title: "Gravity", img: imagePath + "gravity.jpg" },
+        { title: "The Martian", img: imagePath + "the martian.jpg" },
+        { title: "Get Out", img: imagePath + "get out.jpg" },
+        { title: "Annihilation", img: imagePath + "annihilation.jpg" },
+        { title: "2001: A Space Odyssey", img: imagePath + "2001 a space odyssey.jpg" },
+        { title: "Contact", img: imagePath + "contact.webp" },
+        { title: "Ad Astra", img: imagePath + "ad astra.jpg" },
+        { title: "District 9", img: imagePath + "district 9.jpg" }
     ];
 }
 
