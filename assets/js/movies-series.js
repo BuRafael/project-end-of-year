@@ -6,23 +6,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
     // Indicateur visuel/debug pour vérifier l'exécution du JS sur la page Films
-    if (document.body && document.body.classList.contains('page-template-template-films')) {
-        console.log('[DEBUG] JS carrousel chargé sur la page Films');
-        const debugBanner = document.createElement('div');
-        debugBanner.textContent = 'JS carrousel actif (page Films)';
-        debugBanner.style.position = 'fixed';
-        debugBanner.style.top = '0';
-        debugBanner.style.left = '0';
-        debugBanner.style.zIndex = '9999';
-        debugBanner.style.background = '#a0022c';
-        debugBanner.style.color = '#fff';
-        debugBanner.style.fontWeight = 'bold';
-        debugBanner.style.padding = '6px 18px';
-        debugBanner.style.fontSize = '1.1rem';
-        debugBanner.style.boxShadow = '0 2px 8px #0008';
-        document.body.appendChild(debugBanner);
-        setTimeout(() => debugBanner.remove(), 4000);
-    }
 
 // === CARROUSELS PAR GENRE (nouvelle version harmonisée) ===
 const genreList = ['Action', 'Comédie', 'Horreur', 'Romance', 'Science-Fiction'];
@@ -66,26 +49,8 @@ const genreMovies = {
     ]
 };
 
-genreList.forEach(genre => {
-    const containerId = `carousel-${mediaType}-${genre.toLowerCase().replace(/-/g, '')}`;
-    const items = genreMovies[genre] || [];
-    if (!document.getElementById(containerId)) return;
-    initGenericCarousel({
-        containerId,
-        items,
-        getCardHtml: (item) => `
-            <div class="col-6 col-md-3">
-                <div class="similar-card">
-                    <img src="${item.img}" alt="${item.title}" />
-                    <div class="similar-card-title">${item.title}</div>
-                </div>
-            </div>
-        `,
-        itemsPerPage: 4,
-        leftArrowSelector: `#${containerId}`.replace('carousel-', '.movie-section .carousel-arrow.left'),
-        rightArrowSelector: `#${containerId}`.replace('carousel-', '.movie-section .carousel-arrow.right')
-    });
-});
+
+// Carrousel Action : la version PHP dynamique gère l'affichage, pas de JS ici !
 
 // === RECHERCHE AUTOCOMPLETE ===
 const searchInput = document.querySelector('.header-search input');

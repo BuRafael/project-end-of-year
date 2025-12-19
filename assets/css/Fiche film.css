@@ -207,23 +207,7 @@
     font-weight: 700;
     color: rgba(112, 1, 24, 1);
     text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-}
-
-.movie-meta-value {
-    font-size: 0.95rem;
-    color: rgba(244, 239, 236, 1);
-    margin-top: 0;
-    line-height: 1.4;
-}
-
-/* ===== SECTIONS ===== */
-.movie-section {
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: none;
+     /* Removed .carousel-arrow styles */
     animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
@@ -293,14 +277,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 74px;
-    vertical-align: middle !important;
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.col-num {
-    width: 40px;
+    /* Removed .carousel-arrow styles */
+    /* Removed hover and active states */
 }
 
 .col-links {
@@ -641,31 +619,7 @@ a.movie-track-artist:hover {
 }
 
 /* ===== FILMS SIMILAIRES ===== */
-.carousel-arrow {
-    width: 44px;
-    height: 80px;
-    border-radius: 4px;
-    border: 2px solid rgba(244, 239, 236, 1);
-    background: rgba(0, 0, 0, 0.3);
-    color: rgba(244, 239, 236, 1);
-    padding: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.2rem;
-}
 
-.carousel-arrow:hover {
-    background: rgba(0, 0, 0, 0.5);
-    color: rgba(112, 1, 24, 1);
-    border-color: rgba(244, 239, 236, 1);
-    transform: scale(1.08);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-arrow:active {
-    transform: scale(0.96);
-}
 
 #similarMovies {
     transition: opacity 0.2s ease;

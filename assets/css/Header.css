@@ -92,7 +92,7 @@
 	transform: translateX(-50%);
 	width: 35px;
 	height: 2px;
-	background-color: #700118;
+	background-color: transparent !important;
 }
 
 .header-right {

@@ -1115,7 +1115,6 @@ function update_movies_database() {
     // Réinsérer les films avec les nouvelles données
     insert_default_movies();
     
-    echo "Base de données mise à jour avec succès !";
 }
 // Décommenter la ligne suivante et visiter n'importe quelle page du site pour mettre à jour la DB
 add_action('wp_head', 'update_movies_database', 1);

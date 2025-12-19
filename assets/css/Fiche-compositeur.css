@@ -502,51 +502,8 @@
 }
 
 /* ===== COMPOSITEURS SIMILAIRES (même style que films similaires) ===== */
-.carousel-arrow {
-    width: 44px;
-    height: 80px;
-    border-radius: 4px;
-    border: 2px solid rgba(244, 239, 236, 1);
-    background: rgba(0, 0, 0, 0.3);
-    color: rgba(244, 239, 236, 1);
-    padding: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.2rem;
-}
 
-.carousel-arrow:hover {
-    background: rgba(0, 0, 0, 0.5);
-    color: rgba(112, 1, 24, 1);
-    border-color: rgba(244, 239, 236, 1);
-    transform: scale(1.08);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
 
-.carousel-arrow:active {
-    transform: scale(0.96);
-}
-
-/* Cartes compositeurs similaires */
-.similar-composer-card {
-    background: rgba(244, 239, 236, 1);
-    border-radius: 8px;
-    padding: 10px 10px 12px;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
-}
-
-.similar-composer-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(112, 1, 24, 0.25);
-}
-
-.similar-composer-card img {
-    display: block;
-    width: 100%;
-    height: 220px;
     object-fit: cover;
     border-radius: 6px;
     border: 3px solid rgba(0, 0, 0, 0.5);
