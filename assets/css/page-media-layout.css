@@ -1,3 +1,16 @@
+/* Suppression de l'effet ripple sur les flèches du carrousel */
+.carousel-arrow::before,
+.carousel-arrow:active::before {
+  display: none !important;
+  content: none !important;
+}
+/* Suppression de l'effet focus/active sur les flèches du carrousel */
+.carousel-arrow:focus,
+.carousel-arrow:active {
+  outline: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
 .carousel-arrow {
   background: none !important;
   box-shadow: none !important;
@@ -12,9 +25,9 @@
 }
 /* Carousel arrows match front page style */
 .carousel-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  position: static;
+  top: auto;
+  transform: none;
   width: auto;
   height: auto;
   border: none;
@@ -30,13 +43,52 @@
 }
 .carousel-arrow:hover {
   color: #700118;
-  transform: translateY(-50%) scale(1.15);
+  transform: none;
 }
 .carousel-arrow.left { left: 16px; }
 .carousel-arrow.right { right: 16px; }
 .movies-section .row.flex-grow-1 {
-  margin: 0 56px;
+  margin: 0;
   width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.movies-section .row.flex-grow-1::-webkit-scrollbar {
+  display: none;
+}
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+  gap: 24px;
+}
+/* Limiter la largeur de la ligne du carrousel pour n'afficher que 4 films à la fois */
+.movies-section .row.flex-grow-1 > .col-6,
+.movies-section .row.flex-grow-1 > .col-md-3 {
+  flex: 0 0 calc(25% - 18px);
+  max-width: calc(25% - 18px);
+  min-width: 220px;
+}
+@media (max-width: 1200px) {
+  .movies-section .row.flex-grow-1 > .col-6,
+  .movies-section .row.flex-grow-1 > .col-md-3 {
+    flex: 0 0 calc(33.333% - 14px);
+    max-width: calc(33.333% - 14px);
+  }
+}
+@media (max-width: 768px) {
+  .movies-section .row.flex-grow-1 > .col-6,
+  .movies-section .row.flex-grow-1 > .col-md-3 {
+    flex: 0 0 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+  }
+}
+@media (max-width: 480px) {
+  .movies-section .row.flex-grow-1 > .col-6,
+  .movies-section .row.flex-grow-1 > .col-md-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
 }
 /* Carrousel Action : flèches centrées verticalement et en dehors du contenu */
 /* Carrousel Action : flèches centrées horizontalement dans le flux */
@@ -178,21 +230,11 @@
   flex-direction: row;
   gap: 24px;
   overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #a0022c #232323;
+    scrollbar-width: auto;
+    scrollbar-color: auto;
   padding-bottom: 8px;
 }
-.carousel-horizontal::-webkit-scrollbar {
-  height: 8px;
-}
-.carousel-horizontal::-webkit-scrollbar-thumb {
-  background: #a0022c;
-  border-radius: 4px;
-}
-.carousel-horizontal::-webkit-scrollbar-track {
-  background: #232323;
-  border-radius: 4px;
-}
+/* Suppression du style personnalisé de la scrollbar pour les carrousels */
 
 /* Harmonisation largeur et marges de toutes les sections principales */
 .featured-media,

@@ -1,3 +1,22 @@
+/* Désactive tout effet hover, focus, active et translation sur le nom du film/série dans les carrousels de fiche série */
+#series-section .similar-card-title {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
+}
+#series-section .similar-card-title:hover,
+#series-section .similar-card-title:focus,
+#series-section .similar-card-title:active {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    filter: none !important;
+    outline: none !important;
+    transform: none !important;
+}
 .carousel-arrow {
     color: #F4EFEC !important;
 }

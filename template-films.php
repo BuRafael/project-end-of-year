@@ -102,217 +102,234 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 			</div>
 		</section>
 
-		<!-- 4. Carrousels par genre (Action, Comédie, Horreur, Romance, Science-Fiction) -->
-		<!-- Carrousel Action (structure movies-series.css) -->
-		<section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
+        <!-- 4. Carrousels par genre (Action, Comédie, Horreur, Romance, Science-Fiction) -->
+        <!-- Carrousel Action (structure movies-series.css) -->
+        <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
              <h3 class="section-title mb-3">Action</h3>
              <div class="movies-carousel d-flex align-items-center">
             <div style="display: flex; align-items: center; width: 100%;">
                 <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
                 <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-action">
-				<?php
-				global $wpdb;
-				$table_name = $wpdb->prefix . 'movies';
-				$action_movies = $wpdb->get_results(
-					$wpdb->prepare(
-						"SELECT * FROM $table_name WHERE genre LIKE %s AND type = %s",
-						'%Action%', 'film'
-					)
-				);
-				if (empty($action_movies)) {
-					echo '<div style="color:#a0022c;font-size:14px;">DEBUG : Aucun film d\'action trouvé dans la base (table wp_movies, genre=Action, type=film)</div>';
-				}
-				   $max_display = 4;
-				   $i = 0;
-				   foreach ($action_movies as $movie) :
-					   if ($i >= $max_display) break;
-					   $img_path_films = get_template_directory_uri() . '/assets/image/Films/' . esc_attr($movie->affiche);
-					   $img_path_fiche = get_template_directory_uri() . '/assets/image/Fiche films/' . esc_attr($movie->affiche);
-					   $file_path_films = get_template_directory() . '/assets/image/Films/' . $movie->affiche;
-					   $file_path_fiche = get_template_directory() . '/assets/image/Fiche films/' . $movie->affiche;
-					   if (file_exists($file_path_films)) {
-						   $img_path = $img_path_films;
-					   } elseif (file_exists($file_path_fiche)) {
-						   $img_path = $img_path_fiche;
-					   } else {
-						   $img_path = get_template_directory_uri() . '/assets/image/Fiche films/placeholder.jpg';
-					   }
-				?>
-					<div class="col-6 col-md-3">
-						<div class="similar-card">
-							<img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($movie->title); ?>">
-							<div class="similar-card-title"><?php echo esc_html($movie->title); ?></div>
-						</div>
-					</div>
-				<?php $i++; endforeach; ?>
-				</div>
+			<?php
+			global $wpdb;
+			$table_name = $wpdb->prefix . 'movies';
+			$action_movies = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM $table_name WHERE genre LIKE %s AND type = %s",
+					'%Action%', 'film'
+				)
+			);
+			if (empty($action_movies)) {
+				echo '<div style="color:#a0022c;font-size:14px;">DEBUG : Aucun film d\'action trouvé dans la base (table wp_movies, genre=Action, type=film)</div>';
+			}
+            $max_display = 10;
+            $fiche_dir = get_template_directory() . '/assets/image/Fiche films/';
+            $fiche_uri = get_template_directory_uri() . '/assets/image/Fiche films/';
+            $action_list = array(
+                'district 9.jpg',
+                'mission impossible the final reckoning.webp',
+                'ne zha 2.jpg',
+                'princess mononoke.jpg',
+                'snowpiercer.jpg',
+                'the martian.jpg'
+            );
+            $i = 0;
+            foreach ($action_list as $file) {
+                $img_path = $fiche_uri . rawurlencode($file);
+                $title = preg_replace('/\.[^.]+$/', '', $file);
+                $title = ucwords(str_replace(array('-', '_'), ' ', $title));
+                if (file_exists($fiche_dir . $file)) {
+            ?>
+                <div class="col-6 col-md-3">
+                    <div class="similar-card">
+                        <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($title); ?>">
+                        <div class="similar-card-title"><?php echo esc_html($title); ?></div>
+                    </div>
+                </div>
+            <?php $i++; }}
+            for (; $i < $max_display; $i++): ?>
+                <div class="col-6 col-md-3">
+                    <div class="similar-card" style="background:#2a2a2a;opacity:0.5;min-height:220px;display:flex;align-items:center;justify-content:center;">
+                        <span style="color:#888;font-size:1.1rem;">(vide)</span>
+                    </div>
+                </div>
+            <?php endfor; ?>
+                </div>
                 <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
-		</section>
-		<!-- Carrousel Comédie -->
+        </section>
+        <!-- Carrousel Comédie -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-               <h3 class="section-title mb-3">Comédie</h3>
-               <div class="movies-carousel d-flex align-items-center">
-                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-comedie">
+            <h3 class="section-title mb-3">Comédie</h3>
+            <div class="movies-carousel d-flex align-items-center" style="display: flex; align-items: center; width: 100%;">
+                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-comedie">
                 <?php
-                $max_display = 4;
-                $i = 0;
-                $comedie_movies = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM $table_name WHERE genre LIKE %s AND type = %s",
-                        '%Comédie%', 'film'
-                    )
+                $max_display = 10;
+                $fiche_dir = get_template_directory() . '/assets/image/Fiche films/';
+                $fiche_uri = get_template_directory_uri() . '/assets/image/Fiche films/';
+                $comedie_list = array(
+                    'the naked gun.webp',
+                    'lilo & stitch (2025).jpeg',
+                    'my neighbor totoro.jpeg',
+                    'ponyo.webp',
+                    'singin in the rain.jpg'
                 );
-                foreach ($comedie_movies as $movie) :
-                    if ($i >= $max_display) break;
-                    $img_path_films = get_template_directory_uri() . '/assets/image/Films/' . esc_attr($movie->affiche);
-                    $img_path_fiche = get_template_directory_uri() . '/assets/image/Fiche films/' . esc_attr($movie->affiche);
-                    $file_path_films = get_template_directory() . '/assets/image/Films/' . $movie->affiche;
-                    $file_path_fiche = get_template_directory() . '/assets/image/Fiche films/' . $movie->affiche;
-                    if (file_exists($file_path_films)) {
-                        $img_path = $img_path_films;
-                    } elseif (file_exists($file_path_fiche)) {
-                        $img_path = $img_path_fiche;
-                    } else {
-                        $img_path = get_template_directory_uri() . '/assets/image/Fiche films/placeholder.jpg';
-                    }
+                $i = 0;
+                foreach ($comedie_list as $file) {
+                    $img_path = $fiche_uri . rawurlencode($file);
+                    $title = preg_replace('/\.[^.]+$/', '', $file);
+                    $title = ucwords(str_replace(array('-', '_'), ' ', $title));
+                    if (file_exists($fiche_dir . $file)) {
                 ?>
                     <div class="col-6 col-md-3">
                         <div class="similar-card">
-                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($movie->title); ?>">
-                            <div class="similar-card-title"><?php echo esc_html($movie->title); ?></div>
+                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($title); ?>">
+                            <div class="similar-card-title"><?php echo esc_html($title); ?></div>
                         </div>
                     </div>
-                <?php $i++; endforeach; ?>
+                <?php $i++; }}
+                for (; $i < $max_display; $i++): ?>
+                    <div class="col-6 col-md-3">
+                        <div class="similar-card" style="background:#2a2a2a;opacity:0.5;min-height:220px;display:flex;align-items:center;justify-content:center;">
+                            <span style="color:#888;font-size:1.1rem;">(vide)</span>
+                        </div>
+                    </div>
+                <?php endfor; ?>
                 </div>
                 <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
         <!-- Carrousel Horreur -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-               <h3 class="section-title mb-3">Horreur</h3>
-               <div class="movies-carousel d-flex align-items-center">
-                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-horreur">
+            <h3 class="section-title mb-3">Horreur</h3>
+            <div class="movies-carousel d-flex align-items-center" style="display: flex; align-items: center; width: 100%;">
+                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-horreur">
                 <?php
-                $max_display = 4;
-                $i = 0;
-                $horreur_movies = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM $table_name WHERE genre LIKE %s AND type = %s",
-                        '%Horreur%', 'film'
-                    )
+                $max_display = 10;
+                $fiche_dir = get_template_directory() . '/assets/image/Fiche films/';
+                $fiche_uri = get_template_directory_uri() . '/assets/image/Fiche films/';
+                $horreur_list = array(
+                    'annihilation.jpg',
+                    'get out.jpg',
+                    'mother.webp',
+                    'under the skin.jpg'
                 );
-                foreach ($horreur_movies as $movie) :
-                    if ($i >= $max_display) break;
-                    $img_path_films = get_template_directory_uri() . '/assets/image/Films/' . esc_attr($movie->affiche);
-                    $img_path_fiche = get_template_directory_uri() . '/assets/image/Fiche films/' . esc_attr($movie->affiche);
-                    $file_path_films = get_template_directory() . '/assets/image/Films/' . $movie->affiche;
-                    $file_path_fiche = get_template_directory() . '/assets/image/Fiche films/' . $movie->affiche;
-                    if (file_exists($file_path_films)) {
-                        $img_path = $img_path_films;
-                    } elseif (file_exists($file_path_fiche)) {
-                        $img_path = $img_path_fiche;
-                    } else {
-                        $img_path = get_template_directory_uri() . '/assets/image/Fiche films/placeholder.jpg';
-                    }
+                $i = 0;
+                foreach ($horreur_list as $file) {
+                    $img_path = $fiche_uri . rawurlencode($file);
+                    $title = preg_replace('/\.[^.]+$/', '', $file);
+                    $title = ucwords(str_replace(array('-', '_'), ' ', $title));
+                    if (file_exists($fiche_dir . $file)) {
                 ?>
                     <div class="col-6 col-md-3">
                         <div class="similar-card">
-                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($movie->title); ?>">
-                            <div class="similar-card-title"><?php echo esc_html($movie->title); ?></div>
+                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($title); ?>">
+                            <div class="similar-card-title"><?php echo esc_html($title); ?></div>
                         </div>
                     </div>
-                <?php $i++; endforeach; ?>
+                <?php $i++; }}
+                for (; $i < $max_display; $i++): ?>
+                    <div class="col-6 col-md-3">
+                        <div class="similar-card" style="background:#2a2a2a;opacity:0.5;min-height:220px;display:flex;align-items:center;justify-content:center;">
+                            <span style="color:#888;font-size:1.1rem;">(vide)</span>
+                        </div>
+                    </div>
+                <?php endfor; ?>
                 </div>
                 <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
         <!-- Carrousel Romance -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-               <h3 class="section-title mb-3">Romance</h3>
-               <div class="movies-carousel d-flex align-items-center">
-                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-romance">
+            <h3 class="section-title mb-3">Romance</h3>
+            <div class="movies-carousel d-flex align-items-center" style="display: flex; align-items: center; width: 100%;">
+                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-romance">
                 <?php
-                $max_display = 4;
-                $i = 0;
-                $romance_movies = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM $table_name WHERE genre LIKE %s AND type = %s",
-                        '%Romance%', 'film'
-                    )
+                $max_display = 10;
+                $fiche_dir = get_template_directory() . '/assets/image/Fiche films/';
+                $fiche_uri = get_template_directory_uri() . '/assets/image/Fiche films/';
+                $romance_list = array(
+                    'a star is born.jpg',
+                    'begin again.jpg',
+                    'la la land.jpg',
+                    'moulin rouge.jpg',
+                    'once.jpg',
+                    'sing street.jpg',
+                    'the umbrellas of cherbourg.jpg',
+                    'weathering with you.webp',
+                    'your name.jpg'
                 );
-                foreach ($romance_movies as $movie) :
-                    if ($i >= $max_display) break;
-                    $img_path_films = get_template_directory_uri() . '/assets/image/Films/' . esc_attr($movie->affiche);
-                    $img_path_fiche = get_template_directory_uri() . '/assets/image/Fiche films/' . esc_attr($movie->affiche);
-                    $file_path_films = get_template_directory() . '/assets/image/Films/' . $movie->affiche;
-                    $file_path_fiche = get_template_directory() . '/assets/image/Fiche films/' . $movie->affiche;
-                    if (file_exists($file_path_films)) {
-                        $img_path = $img_path_films;
-                    } elseif (file_exists($file_path_fiche)) {
-                        $img_path = $img_path_fiche;
-                    } else {
-                        $img_path = get_template_directory_uri() . '/assets/image/Fiche films/placeholder.jpg';
-                    }
+                $i = 0;
+                foreach ($romance_list as $file) {
+                    $img_path = $fiche_uri . rawurlencode($file);
+                    $title = preg_replace('/\.[^.]+$/', '', $file);
+                    $title = ucwords(str_replace(array('-', '_'), ' ', $title));
+                    if (file_exists($fiche_dir . $file)) {
                 ?>
                     <div class="col-6 col-md-3">
                         <div class="similar-card">
-                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($movie->title); ?>">
-                            <div class="similar-card-title"><?php echo esc_html($movie->title); ?></div>
+                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($title); ?>">
+                            <div class="similar-card-title"><?php echo esc_html($title); ?></div>
                         </div>
                     </div>
-                <?php $i++; endforeach; ?>
+                <?php $i++; }}
+                for (; $i < $max_display; $i++): ?>
+                    <div class="col-6 col-md-3">
+                        <div class="similar-card" style="background:#2a2a2a;opacity:0.5;min-height:220px;display:flex;align-items:center;justify-content:center;">
+                            <span style="color:#888;font-size:1.1rem;">(vide)</span>
+                        </div>
+                    </div>
+                <?php endfor; ?>
                 </div>
                 <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
         <!-- Carrousel Science-Fiction -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-               <h3 class="section-title mb-3">Science-Fiction</h3>
-               <div class="movies-carousel d-flex align-items-center">
-                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                <div style="display: flex; align-items: center; width: 100%;">
-                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-scifi">
+            <h3 class="section-title mb-3">Science-Fiction</h3>
+            <div class="movies-carousel d-flex align-items-center" style="display: flex; align-items: center; width: 100%;">
+                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-scifi">
                 <?php
-                $max_display = 4;
-                $i = 0;
-                $scifi_movies = $wpdb->get_results(
-                    $wpdb->prepare(
-                        "SELECT * FROM $table_name WHERE genre LIKE %s AND type = %s",
-                        '%Science-Fiction%', 'film'
-                    )
+                $max_display = 10;
+                $fiche_dir = get_template_directory() . '/assets/image/Fiche films/';
+                $fiche_uri = get_template_directory_uri() . '/assets/image/Fiche films/';
+                $scifi_list = array(
+                    '2001 a space odyssey.jpg',
+                    'ad astra.jpg',
+                    'arrival.webp',
+                    'close encounters of the third kind.jpg',
+                    'contact.webp',
+                    'gravity.jpg',
+                    'interstellar.jpg',
+                    'inception affiche film.jpg',
+                    'solaris.jpg',
+                    'sunshine.jpg'
                 );
-                foreach ($scifi_movies as $movie) :
-                    if ($i >= $max_display) break;
-                    $img_path_films = get_template_directory_uri() . '/assets/image/Films/' . esc_attr($movie->affiche);
-                    $img_path_fiche = get_template_directory_uri() . '/assets/image/Fiche films/' . esc_attr($movie->affiche);
-                    $file_path_films = get_template_directory() . '/assets/image/Films/' . $movie->affiche;
-                    $file_path_fiche = get_template_directory() . '/assets/image/Fiche films/' . $movie->affiche;
-                    if (file_exists($file_path_films)) {
-                        $img_path = $img_path_films;
-                    } elseif (file_exists($file_path_fiche)) {
-                        $img_path = $img_path_fiche;
-                    } else {
-                        $img_path = get_template_directory_uri() . '/assets/image/Fiche films/placeholder.jpg';
-                    }
+                $i = 0;
+                foreach ($scifi_list as $file) {
+                    $img_path = $fiche_uri . rawurlencode($file);
+                    $title = preg_replace('/\.[^.]+$/', '', $file);
+                    $title = ucwords(str_replace(array('-', '_'), ' ', $title));
+                    if (file_exists($fiche_dir . $file)) {
                 ?>
                     <div class="col-6 col-md-3">
                         <div class="similar-card">
-                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($movie->title); ?>">
-                            <div class="similar-card-title"><?php echo esc_html($movie->title); ?></div>
+                            <img src="<?php echo $img_path; ?>" alt="<?php echo esc_attr($title); ?>">
+                            <div class="similar-card-title"><?php echo esc_html($title); ?></div>
                         </div>
                     </div>
-                <?php $i++; endforeach; ?>
+                <?php $i++; }}
+                for (; $i < $max_display; $i++): ?>
+                    <div class="col-6 col-md-3">
+                        <div class="similar-card" style="background:#2a2a2a;opacity:0.5;min-height:220px;display:flex;align-items:center;justify-content:center;">
+                            <span style="color:#888;font-size:1.1rem;">(vide)</span>
+                        </div>
+                    </div>
+                <?php endfor; ?>
                 </div>
                 <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>

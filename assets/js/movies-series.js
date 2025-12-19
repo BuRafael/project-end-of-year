@@ -4,6 +4,24 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // === SCROLL CARROUSEL PAR FLÈCHES ===
+    document.querySelectorAll('.movies-carousel').forEach(function(carousel) {
+        const leftArrow = carousel.querySelector('.carousel-arrow.left');
+        const rightArrow = carousel.querySelector('.carousel-arrow.right');
+        const row = carousel.querySelector('.row');
+        if (!leftArrow || !rightArrow || !row) return;
+        // Largeur d'une carte + gap (ajuster si besoin)
+        let card = row.querySelector('.col-6, .col-md-3, .col-12');
+        let cardWidth = card ? card.offsetWidth : 250;
+        let gap = 24; // même valeur que dans le CSS
+        let scrollAmount = cardWidth + gap;
+        leftArrow.addEventListener('click', function() {
+            row.scrollBy({ left: -(scrollAmount), behavior: 'smooth' });
+        });
+        rightArrow.addEventListener('click', function() {
+            row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    });
 
     // Indicateur visuel/debug pour vérifier l'exécution du JS sur la page Films
 

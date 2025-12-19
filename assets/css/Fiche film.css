@@ -679,15 +679,42 @@ a.movie-track-artist:hover {
 }
 
 .similar-card-title {
-    font-size: 0.85rem;
-    color: #000;
-    font-weight: 700;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    min-height: 2.4em;
+        font-size: 0.85rem;
+        color: #000;
+        font-weight: 700;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        min-height: 2.4em;
+}
+
+/* Désactive tout effet hover sur .similar-card-title partout sauf front-page */
+.movies-section .similar-card-title,
+#series-section .similar-card-title {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+.movies-section .similar-card-title:hover,
+.movies-section .similar-card-title:focus,
+.movies-section .similar-card-title:active,
+#series-section .similar-card-title:hover,
+#series-section .similar-card-title:focus,
+#series-section .similar-card-title:active {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    filter: none !important;
+    outline: none !important;
+    transform: none !important;
+    animation: none !important;
+}
 }
 
 /* ===== NEWSLETTER / CALL TO ACTION ===== */

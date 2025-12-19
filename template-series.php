@@ -105,11 +105,10 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 		$table_name = $wpdb->prefix . 'series';
 		foreach ($genres as $genre): ?>
 		<section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-			<h3 class="section-title mb-3"><?php echo esc_html($genre); ?></h3>
-			<div class="movies-carousel d-flex align-items-center">
-			<div style="display: flex; align-items: center; width: 100%;">
-				<button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-				<div class="row flex-grow-1 mx-3 g-3" id="carousel-serie-<?php echo strtolower(str_replace(' ', '-', $genre)); ?>">
+			   <h3 class="section-title mb-3"><?php echo esc_html($genre); ?></h3>
+			   <div class="movies-carousel d-flex align-items-center" style="display: flex; align-items: center; width: 100%;">
+				   <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+				   <div class="row flex-grow-1 mx-3 g-3" id="carousel-serie-<?php echo strtolower(str_replace(' ', '-', $genre)); ?>">
 				<?php
 				$max_display = 4;
 				$i = 0;
