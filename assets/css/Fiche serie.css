@@ -1,3 +1,20 @@
+.carousel-arrow {
+    color: #F4EFEC !important;
+}
+.carousel-arrow:hover {
+    color: #700118 !important;
+}
+.carousel-arrow {
+    font-size: 48px !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+/* Force large carousel arrows for fiche série */
+.carousel-arrow {
+    font-size: 80px !important;
+}
 /* Correction : propriétés globales supprimées, à placer dans un sélecteur si besoin */
 /* Les propriétés display, flex-direction et align-items ont été supprimées car elles sont orphelines. */
 .movie-like-btn {

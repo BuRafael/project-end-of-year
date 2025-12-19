@@ -408,7 +408,7 @@ if (isset($movie_tracks[$page_slug])) {
 
         <div class="d-flex align-items-center">
             <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                <i class="bi bi-chevron-left"></i>
+                ❮
             </button>
 
             <div class="row flex-grow-1 mx-3 g-3" id="similarMovies">
@@ -416,7 +416,7 @@ if (isset($movie_tracks[$page_slug])) {
             </div>
 
             <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                <i class="bi bi-chevron-right"></i>
+                ❯
             </button>
         </div>
     </section>

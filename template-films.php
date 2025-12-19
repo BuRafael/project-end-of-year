@@ -105,12 +105,11 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 		<!-- 4. Carrousels par genre (Action, Comédie, Horreur, Romance, Science-Fiction) -->
 		<!-- Carrousel Action (structure movies-series.css) -->
 		<section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-			<h3 class="section-title mb-3">Action</h3>
-			<div class="d-flex align-items-center">
-				<button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-					<i class="bi bi-chevron-left"></i>
-				</button>
-				<div class="row flex-grow-1 mx-3 g-3" id="carousel-film-action">
+             <h3 class="section-title mb-3">Action</h3>
+             <div class="movies-carousel d-flex align-items-center">
+            <div style="display: flex; align-items: center; width: 100%;">
+                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-action">
 				<?php
 				global $wpdb;
 				$table_name = $wpdb->prefix . 'movies';
@@ -147,19 +146,17 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 					</div>
 				<?php $i++; endforeach; ?>
 				</div>
-				<button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-					<i class="bi bi-chevron-right"></i>
-				</button>
-			</div>
+                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
+            </div>
 		</section>
 		<!-- Carrousel Comédie -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-            <h3 class="section-title mb-3">Comédie</h3>
-            <div class="d-flex align-items-center">
-                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-comedie">
+               <h3 class="section-title mb-3">Comédie</h3>
+               <div class="movies-carousel d-flex align-items-center">
+                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-comedie">
                 <?php
                 $max_display = 4;
                 $i = 0;
@@ -191,19 +188,17 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
                     </div>
                 <?php $i++; endforeach; ?>
                 </div>
-                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
+                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
         <!-- Carrousel Horreur -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-            <h3 class="section-title mb-3">Horreur</h3>
-            <div class="d-flex align-items-center">
-                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-horreur">
+               <h3 class="section-title mb-3">Horreur</h3>
+               <div class="movies-carousel d-flex align-items-center">
+                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-horreur">
                 <?php
                 $max_display = 4;
                 $i = 0;
@@ -235,19 +230,17 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
                     </div>
                 <?php $i++; endforeach; ?>
                 </div>
-                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
+                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
         <!-- Carrousel Romance -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-            <h3 class="section-title mb-3">Romance</h3>
-            <div class="d-flex align-items-center">
-                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-romance">
+               <h3 class="section-title mb-3">Romance</h3>
+               <div class="movies-carousel d-flex align-items-center">
+                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-romance">
                 <?php
                 $max_display = 4;
                 $i = 0;
@@ -279,19 +272,17 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
                     </div>
                 <?php $i++; endforeach; ?>
                 </div>
-                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
+                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
         <!-- Carrousel Science-Fiction -->
         <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-            <h3 class="section-title mb-3">Science-Fiction</h3>
-            <div class="d-flex align-items-center">
-                <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-left"></i>
-                </button>
-                <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-scifi">
+               <h3 class="section-title mb-3">Science-Fiction</h3>
+               <div class="movies-carousel d-flex align-items-center">
+                       <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                <div style="display: flex; align-items: center; width: 100%;">
+                    <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
+                    <div class="row flex-grow-1 mx-3 g-3" id="carousel-film-scifi">
                 <?php
                 $max_display = 4;
                 $i = 0;
@@ -323,9 +314,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
                     </div>
                 <?php $i++; endforeach; ?>
                 </div>
-                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                    <i class="bi bi-chevron-right"></i>
-                </button>
+                <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
             </div>
         </section>
 	</main>

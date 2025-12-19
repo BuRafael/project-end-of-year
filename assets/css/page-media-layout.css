@@ -1,32 +1,39 @@
-.carousel-arrow.left {
-  left: 0;
-  right: auto;
+.carousel-arrow {
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  border-radius: 0 !important;
 }
-.carousel-arrow.right {
-  right: 0;
-  left: auto;
+/* Force remove background and border-radius for carousel arrows */
+.carousel-arrow {
+  background: none !important;
+  border-radius: 0 !important;
+  border: none !important;
 }
-/* === RESTAURATION : ANCIEN STYLE GLOBAL DES FLÈCHES CARROUSEL === */
-.d-flex.align-items-center > .carousel-arrow {
-  width: 44px;
-  height: 80px;
-  border-radius: 4px;
-  border: 2px solid #F4EFEC;
-  background: transparent;
-  color: #F4EFEC;
-  padding: 0;
-  transition: border 0.2s, color 0.2s;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 1.2rem;
+/* Carousel arrows match front page style */
+.carousel-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 2;
+  width: auto;
+  height: auto;
+  border: none;
+  background: none;
+  color: #1A1A1A;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
+  font-size: 80px;
+  transition: all 0.3s ease;
 }
+.carousel-arrow:hover {
+  color: #700118;
+  transform: translateY(-50%) scale(1.15);
+}
+.carousel-arrow.left { left: 16px; }
+.carousel-arrow.right { right: 16px; }
 .movies-section .row.flex-grow-1 {
   margin: 0 56px;
   width: 100%;
@@ -593,7 +600,7 @@ body {
   z-index: auto;
   background: #700118;
   color: #fff;
-  border-radius: 50%;
+  /* border-radius removed to avoid white background */
   width: 32px;
   height: 32px;
   display: flex;

@@ -1,3 +1,20 @@
+.carousel-arrow {
+    color: #F4EFEC !important;
+}
+.carousel-arrow:hover {
+    color: #700118 !important;
+}
+.carousel-arrow {
+    font-size: 48px !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+/* Force large carousel arrows for fiche film */
+.carousel-arrow {
+    font-size: 80px !important;
+}
 :root {
     --main-primary: #700118;
     --main-white: #F4EFEC;
