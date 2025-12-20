@@ -389,14 +389,14 @@ body {
   transform: scale(1.04);
 }
 /* --- SECTION À LA UNE MODERNE --- */
-.featured-media {
-  position: relative;
+.featured-media,
+.trending-media,
+.new-media {
   max-width: 1100px;
   margin: 38px auto 0 auto;
-  padding: 0;
   width: 100%;
   box-sizing: border-box;
-  border-radius: 22px;
+}
   overflow: hidden;
   box-shadow: none;
   background: none;

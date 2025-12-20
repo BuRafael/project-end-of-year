@@ -1,3 +1,14 @@
+.header-nav .header-menu li a.active::after {
+	content: '';
+	position: absolute;
+	bottom: -5px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 35px;
+	height: 2px;
+	background-color: #700118 !important;
+	border-radius: 2px;
+}
 .text-main { color: #700118 !important; }
 .text-dark { color: #1A1A1A !important; }
 .text-light { color: #F4EFEC !important; }
@@ -33,6 +44,7 @@
 	flex-shrink: 0;
 	display: flex;
 	align-items: center;
+	gap: 12px;
 }
 
 .header-logo a {
@@ -48,14 +60,42 @@
 }
 
 .header-logo .brand-logo {
-    height: 90px;
+    height: 60px !important;
     width: auto;
-	display: inline-block;
-		  filter: brightness(0) invert(1); /* Force white rendering for dark header */
+    transition: filter 0.2s, opacity 0.2s;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.header-logo .brand-text {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 2rem;
+    font-family: "futura-pt", "Futura", Arial, sans-serif;
+    font-weight: 700;
+    color: #F4EFEC;
+    letter-spacing: 1px;
 }
 
 .header-logo a:hover {
 	color: #700118;
+}
+
+.header-logo a:hover .brand-logo {
+    filter: none !important;
+}
+
+.header-logo a:hover .brand-logo svg path {
+    fill: #700118 !important;
+    stroke: #700118 !important;
+}
+
+.header-logo a:hover .brand-logo svg * {
+    fill: #700118 !important;
+    stroke: #700118 !important;
+}
+.header-logo a:hover .brand-text {
+    color: #700118 !important;
 }
 
 .header-nav {
@@ -75,13 +115,35 @@
 .header-nav .header-menu li a {
 	color: #F4EFEC;
 	text-decoration: none;
-	font-size: 20px;
-	transition: all .2s ease;
+	font-size: 20px !important;
+	font-weight: 700 !important;
 	position: relative;
+	font-family: "futura-pt", "Futura", Arial, sans-serif !important;
+	transition: all .2s ease;
 }
 
 .header-nav .header-menu li a:hover {
 	color: #700118;
+	}
+
+	/* Soulignement uniquement au hover pour Films, Séries, Favoris */
+	.header-nav .header-menu li a[href*="/films"]:hover::after,
+	.header-nav .header-menu li a[href*="/series"]:hover::after,
+	.header-nav .header-menu li a[href*="/favoris"]:hover::after {
+		content: '';
+		position: absolute;
+		bottom: -5px;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 35px;
+		height: 2px;
+		background-color: #700118 !important;
+		border-radius: 2px;
+	}
+
+	/* Désactive le soulignement générique */
+	.header-nav .header-menu li a:hover::after {
+		background-color: transparent !important;
 }
 
 .header-nav .header-menu li a:hover::after {

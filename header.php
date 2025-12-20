@@ -4,6 +4,7 @@
 <head>
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://use.typekit.net/isz1tod.css">
     <?php wp_head(); ?>
 </head>
 
@@ -50,9 +51,9 @@
                     'fallback_cb'    => function () {
                         ?>
                         <ul class="header-menu">
-                            <li><a href="<?php echo esc_url(home_url('/films')); ?>">Films</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/series')); ?>">Séries</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/favoris')); ?>">Favoris</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/films')); ?>" class="<?php echo (is_page('films') || is_singular('film') || is_post_type_archive('films')) ? 'active' : ''; ?>">Films</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/series')); ?>" class="<?php echo (is_page('series') || is_singular('serie') || is_post_type_archive('series')) ? 'active' : ''; ?>">Séries</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/favoris')); ?>" class="<?php echo (is_page('favoris')) ? 'active' : ''; ?>">Favoris</a></li>
                         </ul>
                         <?php
                     },

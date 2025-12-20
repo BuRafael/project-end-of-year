@@ -11,7 +11,12 @@ get_header();
         <div class="search-bar">
             <input type="text" placeholder="Rechercher…">
             <button class="search-btn" type="button">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon" aria-hidden="true" style="display: flex; align-items: center;">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
+                        <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
             </button>
         </div>
     </section>
@@ -27,28 +32,28 @@ get_header();
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
                         <div class="slide-content">
                             <span class="slide-title">Your Name</span>
-                            <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-film/your-name')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Stranger Things">
                         <div class="slide-content">
                             <span class="slide-title">Stranger Things</span>
-                            <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-serie/stranger-things')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Spirited away bannière.jpg' ); ?>" alt="Spirited Away">
                         <div class="slide-content">
                             <span class="slide-title">Spirited Away</span>
-                            <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-film/spirited-away')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Wicked.jpg' ); ?>" alt="Wicked">
                         <div class="slide-content">
                             <span class="slide-title">Wicked</span>
-                            <a href="<?php echo esc_url(home_url('/wicked')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-film/wicked')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
