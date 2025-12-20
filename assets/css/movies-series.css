@@ -1,3 +1,31 @@
+/* Règle universelle : espace toutes les sections du site (pages films/séries) */
+body main > section,
+body .movie-page > section,
+body .movies-page > section,
+body .home-container > section,
+body .container > section,
+body section {
+    margin-top: 120px !important;
+    margin-bottom: 120px !important;
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+}
+body main > section:first-child,
+body .movie-page > section:first-child,
+body .movies-page > section:first-child,
+body .home-container > section:first-child,
+body .container > section:first-child,
+body section:first-child {
+    margin-top: 0 !important;
+}
+body main > section:last-child,
+body .movie-page > section:last-child,
+body .movies-page > section:last-child,
+body .home-container > section:last-child,
+body .container > section:last-child,
+body section:last-child {
+    margin-bottom: 0 !important;
+}
 /* Uniformise la largeur de la section À la une sur films et séries */
 .featured-media {
     /* margin supprimée pour laisser la règle commune de page-media-layout.css s'appliquer */

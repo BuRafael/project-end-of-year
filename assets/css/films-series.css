@@ -1,3 +1,116 @@
+/* Règle ultra-forcée pour espacer toutes les sections du site, même si d'autres marges sont présentes */
+body main > section,
+body .movie-page > section,
+body .movies-page > section,
+body .home-container > section,
+body .container > section,
+body section {
+    margin-top: 120px !important;
+    margin-bottom: 120px !important;
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+}
+body main > section:first-child,
+body .movie-page > section:first-child,
+body .movies-page > section:first-child,
+body .home-container > section:first-child,
+body .container > section:first-child,
+body section:first-child {
+    margin-top: 0 !important;
+}
+body main > section:last-child,
+body .movie-page > section:last-child,
+body .movies-page > section:last-child,
+body .home-container > section:last-child,
+body .container > section:last-child,
+body section:last-child {
+    margin-bottom: 0 !important;
+}
+/* Règle universelle : espace toutes les sections du site */
+main > section, .movie-page > section, .movies-page > section, .home-container > section, .container > section, section {
+    margin-top: 120px !important;
+    margin-bottom: 120px !important;
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+}
+main > section:first-child, .movie-page > section:first-child, .movies-page > section:first-child, .home-container > section:first-child, .container > section:first-child, section:first-child {
+    margin-top: 0 !important;
+}
+main > section:last-child, .movie-page > section:last-child, .movies-page > section:last-child, .home-container > section:last-child, .container > section:last-child, section:last-child {
+    margin-bottom: 0 !important;
+}
+/* Marge très aérée entre toutes les sections principales des pages films et séries */
+.movies-page > section {
+    margin-top: 120px !important;
+    margin-bottom: 120px !important;
+}
+.movies-page > section:first-child {
+    margin-top: 0 !important;
+}
+.movies-page > section:last-child {
+    margin-bottom: 0 !important;
+}
+/* Désactive les marges Bootstrap sur les sections principales */
+.movies-page > section[class*="mb-"],
+.movies-page > section[class*="mt-"] {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+/* Marge très aérée entre toutes les sections principales des fiches film/série */
+main.movie-page > section,
+.movie-page > section,
+.movie-page section {
+    margin-top: 180px !important;
+    margin-bottom: 180px !important;
+    padding-top: 48px !important;
+    padding-bottom: 48px !important;
+}
+main.movie-page > section:first-child,
+.movie-page > section:first-child,
+.movie-page section:first-child {
+    margin-top: 0 !important;
+}
+main.movie-page > section:last-child,
+.movie-page > section:last-child,
+.movie-page section:last-child {
+    margin-bottom: 0 !important;
+}
+/* Désactive les marges Bootstrap sur les sections principales */
+.movie-page > section[class*="mb-"],
+.movie-page > section[class*="mt-"] {
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+/* Marge uniforme entre toutes les sections principales des fiches film/série */
+.movie-page > section {
+    margin-bottom: 120px !important;
+}
+.movie-page > section:last-child {
+    margin-bottom: 0 !important;
+}
+/* Espacement uniforme entre les sections principales des fiches film/série */
+.movie-header,
+.movie-section,
+.comments-section,
+.similar-section {
+    margin-bottom: 48px !important;
+}
+/* Pour la dernière section, pas de marge supplémentaire */
+.similar-section:last-child {
+    margin-bottom: 0 !important;
+}
+/* Harmonisation des tailles pour fiches film/série */
+.movie-header h1 { font-size: 36px !important; }
+.movie-sub { font-size: 14px !important; }
+.movie-meta-label { font-size: 20px !important; }
+.movie-meta-value { font-size: 16px !important; }
+th.col-title, th.col-links, th.col-num, td.col-duration { font-size: 20px !important; }
+.movie-tracks-table td.col-title { font-size: 16px !important; }
+.movie-tracks-table td.col-composer { font-size: 12px !important; }
+.section-title { font-size: 24px !important; font-weight: bold !important; }
+.movie-tracks-table th.col-title { font-size: 20px !important; }
+.movie-tracks-table th.col-links { font-size: 20px !important; }
+.movie-tracks-table th.col-num { font-size: 20px !important; }
 /* Top 5 section horizontal layout and sizing */
 .top-cards-row {
     display: flex;
@@ -80,6 +193,10 @@
     max-width: 100%;
     margin: 0;
         padding: 40px 80px 80px 80px; /* Harmonised padding */
+.movie-page {
+  max-width: 100%;
+  margin: 40px 0 40px 0;
+  padding: 0 80px;
 }
 .movie-header { padding-top: 16px; animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both; }
 .movie-header h1 { font-size: 2.5rem; color: rgba(244, 239, 236, 1); margin-top: 10px; margin-bottom: 4px; animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) both; }

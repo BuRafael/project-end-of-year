@@ -158,7 +158,7 @@ if (isset($series_info[$page_slug])) {
     <!-- Inject current series slug for JS -->
     <script>window.currentSerieSlug = '<?php echo esc_js($page_slug); ?>';</script>
     <!-- TITRE + INFOS GENERALES -->
-    <section class="movie-header mb-5">
+    <section class="movie-header">
         <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
         <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($aired); ?> – <?php echo esc_html($info['total_tracks']); ?> pistes</p>
 
@@ -218,7 +218,7 @@ if (isset($series_info[$page_slug])) {
     </section>
 
     <!-- ===== PISTES ===== -->
-    <section class="movie-section mt-5">
+    <section class="movie-section">
             <!-- SELECTS SAISON / EPISODE (déplacés ici) -->
             <div class="series-selects mb-4" style="justify-content: flex-start;">
                 <select id="seasonSelect" class="form-select form-select-sm" aria-label="Choisir une saison">
@@ -251,7 +251,7 @@ if (isset($series_info[$page_slug])) {
     </section>
 
     <!-- ===== COMMENTAIRES ===== -->
-    <section class="movie-section mt-5">
+    <section class="movie-section">
         <h3 class="section-title mb-3">Commentaires</h3>
 
         <?php if ( is_user_logged_in() ) : 
@@ -299,7 +299,7 @@ if (isset($series_info[$page_slug])) {
     </section>
 
     <!-- ===== SERIES SIMILAIRES ===== -->
-    <section class="movie-section mt-5 mb-4">
+    <section class="movie-section">
         <h3 class="section-title mb-3">Séries similaires</h3>
 
         <div class="d-flex align-items-center">

@@ -270,7 +270,7 @@ if (isset($movie_tracks[$page_slug])) {
 <main class="movie-page container py-5">
 
     <!-- TITRE + INFOS GENERALES -->
-    <section class="movie-header mb-5">
+    <section class="movie-header">
         <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
         <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – <?php echo intval($num_tracks); ?> piste<?php echo $num_tracks > 1 ? 's' : ''; ?></p>
 
@@ -331,7 +331,7 @@ if (isset($movie_tracks[$page_slug])) {
     </section>
 
     <!-- ===== PISTES ===== -->
-    <section class="movie-section mt-5">
+    <section class="movie-section">
         <div class="table-responsive">
             <table class="table movie-tracks-table align-middle mb-3">
                 <thead>
@@ -355,7 +355,7 @@ if (isset($movie_tracks[$page_slug])) {
     </section>
 
     <!-- ===== COMMENTAIRES ===== -->
-    <section class="movie-section mt-5">
+    <section class="movie-section">
         <h3 class="section-title mb-3">Commentaires</h3>
 
         <?php if ( is_user_logged_in() ) : 
@@ -403,7 +403,7 @@ if (isset($movie_tracks[$page_slug])) {
     </section>
 
     <!-- ===== FILMS SIMILAIRES ===== -->
-    <section class="movie-section mt-5 mb-4">
+    <section class="movie-section">
         <h3 class="section-title mb-3">Films similaires</h3>
 
         <div class="d-flex align-items-center">

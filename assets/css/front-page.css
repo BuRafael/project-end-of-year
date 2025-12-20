@@ -1,3 +1,23 @@
+/* Règle universelle : espace toutes les sections du site */
+main > section, .movie-page > section, .movies-page > section, .home-container > section, .container > section, section {
+  margin-top: 120px !important;
+  margin-bottom: 120px !important;
+  padding-top: 48px !important;
+  padding-bottom: 48px !important;
+}
+main > section:first-child, .movie-page > section:first-child, .movies-page > section:first-child, .home-container > section:first-child, .container > section:first-child, section:first-child {
+  margin-top: 0 !important;
+}
+main > section:last-child, .movie-page > section:last-child, .movies-page > section:last-child, .home-container > section:last-child, .container > section:last-child, section:last-child {
+  margin-bottom: 0 !important;
+}
+/* Marge uniforme entre toutes les sections principales de la front page */
+main.home-container > section {
+  margin-bottom: 80px !important;
+}
+main.home-container > section:last-child {
+  margin-bottom: 0 !important;
+}
 .text-main { color: #700118 !important; }
 .text-dark { color: #1A1A1A !important; }
 .text-light { color: #F4EFEC !important; }
@@ -21,8 +41,8 @@
 }
 .home-container {
   max-width: 100%;
-  margin: 0;
-  padding: 40px 80px 80px 80px;
+  margin: 40px 0 40px 0;
+  padding: 0 80px;
 }
 
 /* ==================================================
