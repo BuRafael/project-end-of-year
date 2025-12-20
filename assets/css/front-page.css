@@ -1,9 +1,108 @@
+/* ===== STATISTIQUES ===== */
+
+.front-stats {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  gap: 32px;
+  margin: 40px 0 40px 0;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 1100px;
+  box-sizing: border-box;
+}
+.front-stats__item {
+  flex: 1 1 0;
+  text-align: center;
+  background: linear-gradient(135deg, #f4efec 80%, #fff 100%);
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(112,1,24,0.10), 0 1.5px 6px 0 rgba(112,1,24,0.04);
+  padding: 32px 0 28px 0;
+  min-width: 0;
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #f4efec;
+  transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 170px;
+  max-width: 340px;
+}
+.front-stats__item:not(:last-child) {
+  margin-right: 0;
+}
+.front-stats__item:hover {
+  transform: translateY(-8px) scale(1.04);
+  box-shadow: 0 16px 40px rgba(112,1,24,0.18), 0 1.5px 6px 0 rgba(112,1,24,0.08);
+  border-color: #70011833;
+}
+.front-stats__icon {
+  font-size: 2.2rem;
+  color: #700118;
+  margin-bottom: 10px;
+  display: block;
+  filter: drop-shadow(0 2px 8px #70011822);
+}
+.front-stats__number {
+  font-size: 2.7rem;
+  font-weight: bold;
+  color: #700118;
+  display: block;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+  font-family: 'Futura', 'Arial', sans-serif;
+  transition: color 0.3s;
+}
+.front-stats__label {
+  font-size: 1.13rem;
+  color: #1a1a1a;
+  opacity: 0.85;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+@media (max-width: 900px) {
+  .front-stats {
+    gap: 18px;
+  }
+  .front-stats__item {
+    padding: 22px 0 18px 0;
+    max-width: 100%;
+    min-height: 140px;
+  }
+}
+@media (max-width: 700px) {
+  .front-stats {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+  .front-stats__item {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 16px 0 14px 0;
+  }
+}
+
+/* ===== ANIMATION AU SCROLL ===== */
+.section-animated {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(.4,0,.2,1), transform 0.7s cubic-bezier(.4,0,.2,1);
+}
+.section-animated.visible {
+  opacity: 1;
+  transform: none;
+}
 /* Règle universelle : espace toutes les sections du site */
 main > section, .movie-page > section, .movies-page > section, .home-container > section, .container > section, section {
-  margin-top: 120px !important;
-  margin-bottom: 120px !important;
-  padding-top: 48px !important;
-  padding-bottom: 48px !important;
+  margin-top: 48px !important;
+  margin-bottom: 48px !important;
+  padding-top: 32px !important;
+  padding-bottom: 32px !important;
 }
 main > section:first-child, .movie-page > section:first-child, .movies-page > section:first-child, .home-container > section:first-child, .container > section:first-child, section:first-child {
   margin-top: 0 !important;
@@ -13,7 +112,7 @@ main > section:last-child, .movie-page > section:last-child, .movies-page > sect
 }
 /* Marge uniforme entre toutes les sections principales de la front page */
 main.home-container > section {
-  margin-bottom: 80px !important;
+  margin-bottom: 40px !important;
 }
 main.home-container > section:last-child {
   margin-bottom: 0 !important;
@@ -40,9 +139,9 @@ main.home-container > section:last-child {
   font-family: "futura-pt", "Futura", Arial, sans-serif !important;
 }
 .home-container {
-  max-width: 100%;
-  margin: 40px 0 40px 0;
-  padding: 0 80px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px 60px 24px;
 }
 
 /* ==================================================

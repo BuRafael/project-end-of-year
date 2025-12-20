@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Vérifier la taille du fichier (max 5MB)
                 const maxSize = 5 * 1024 * 1024; // 5MB
                 if (this.files[0].size > maxSize) {
-                    alert('Le fichier est trop volumineux. Taille maximale: 5MB');
+                    console.warn('Le fichier est trop volumineux. Taille maximale: 5MB');
                     this.value = '';
                     return;
                 }

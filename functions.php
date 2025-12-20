@@ -1,5 +1,21 @@
-
 <?php
+// === SYSTÈME DE LIKE SUR COMMENTAIRES ===
+add_action('wp_ajax_like_comment', 'theme_like_comment');
+function theme_like_comment() {
+    if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    $comment_id = intval($_POST['comment_id']);
+    $user_id = get_current_user_id();
+    $likes = get_comment_meta($comment_id, 'comment_likes', true);
+    if (!is_array($likes)) $likes = [];
+    if (in_array($user_id, $likes)) {
+        wp_send_json_error(['message' => 'Déjà liké.']);
+    }
+    $likes[] = $user_id;
+    update_comment_meta($comment_id, 'comment_likes', $likes);
+    wp_send_json_success(['like_count' => count($likes)]);
+}
 /**
  * Helper: render site-wide Sign Up (S'inscrire) button only when logged out
  */
@@ -226,12 +242,14 @@ function theme_scripts() {
     if (is_page_template('template-fiche-compositeur.php') || $current_template === 'template-fiche-compositeur.php') {
         wp_enqueue_style('fiche-compositeur-style', get_template_directory_uri() . '/assets/css/Fiche-compositeur.css', array('header-style', 'footer-style', 'bootstrap'), time());
         wp_enqueue_script('fiche-compositeur-script', get_template_directory_uri() . '/assets/js/fiche-compositeur.js', array('bootstrap-js'), time(), true);
-        
+
         // Passer les variables AJAX au JS (pour les commentaires)
+        global $post;
+        $composer_slug = isset($post->post_name) ? $post->post_name : '';
         wp_localize_script('fiche-compositeur-script', 'composerComments', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('composer_comment_nonce'),
-            'composer_id' => 'hans-zimmer' // ID du compositeur actuel
+            'composer_id' => $composer_slug // ID dynamique du compositeur actuel
         ));
     }
     

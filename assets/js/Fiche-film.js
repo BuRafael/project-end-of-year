@@ -310,6 +310,8 @@ function loadComments() {
         const moreBtnWrapper = document.getElementById('commentsMoreBtnWrapper');
         if (moreBtnWrapper) moreBtnWrapper.style.display = 'none';
         if (data.success && Array.isArray(data.data.comments) && data.data.comments.length > 0) {
+            // Trier les commentaires par nombre de likes décroissant
+            data.data.comments.sort((a, b) => (b.like_count || 0) - (a.like_count || 0));
             data.data.comments.forEach(c => {
                 renderComment(c);
             });
@@ -356,8 +358,7 @@ function renderComment(commentData) {
         else if (diffMins < 60) timeAgo = `il y a ${diffMins} min`;
         else if (diffHours < 24) timeAgo = `il y a ${diffHours}h`;
         else if (diffDays < 7) timeAgo = `il y a ${diffDays}j`;
-        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-        
+        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
     
@@ -370,6 +371,12 @@ function renderComment(commentData) {
             </div>
             ${dateHtml}
             <div class="comment-text">${commentData.comment_text}</div>
+            <div class="comment-like-row">
+                <button class="comment-like-btn" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
+                    <span class="like-icon">👍</span>
+                    <span class="like-count">${commentData.like_count || 0}</span>
+                </button>
+            </div>
         </div>
     `;
     

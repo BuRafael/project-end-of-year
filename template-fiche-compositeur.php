@@ -20,8 +20,8 @@ get_header();
             <!-- PHOTO -->
             <div class="col-md-4 col-lg-3">
                 <div class="composer-poster-wrapper text-center text-md-start">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche Compositeur/hans Zimmer photo correct.png' ); ?>" alt="Photo Hans Zimmer"
-                         class="composer-poster img-fluid shadow">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche Compositeur/Hans Zimmer.jpg' ); ?>" alt="Photo Hans Zimmer"
+                        class="composer-poster img-fluid shadow">
                 </div>
             </div>
 
@@ -143,19 +143,12 @@ get_header();
     <!-- ===== COMPOSITEURS SIMILAIRES ===== -->
     <section class="composer-section mt-5 mb-4">
         <h3 class="section-title mb-3">Compositeurs similaires</h3>
-
-        <div class="d-flex align-items-center">
-            <button class="carousel-arrow d-flex align-items-center justify-content-center">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-
+        <div class="d-flex align-items-center movies-carousel composer-carousel">
+            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
             <div class="row flex-grow-1 mx-3 g-3" id="similarComposers">
-                <!-- JS insère 4 compositeurs -->
-            </div>
 
-            <button class="carousel-arrow d-flex align-items-center justify-content-center" type="button">
-                <i class="bi bi-chevron-right"></i>
-            </button>
+            </div>
+            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
         </div>
     </section>
 

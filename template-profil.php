@@ -1,64 +1,89 @@
-if (!function_exists('wp_upload_bits')) {
-    require_once(ABSPATH . 'wp-admin/includes/file.php');
-}
 <?php
-/**
- * Template Name: Profil Utilisateur
- */
-
-// Rediriger vers la page d'inscription si pas connecté
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Démarrer la session uniquement si besoin, après l'ouverture PHP
+}
+// Rediriger si non connecté
 if (!is_user_logged_in()) {
     wp_redirect(home_url('/inscription'));
     exit;
 }
 
-// Traiter la mise à jour du profil
+// Gestion avatar
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['profil_nonce']) && wp_verify_nonce($_POST['profil_nonce'], 'update_profil')) {
     $user_id = get_current_user_id();
-    
-    // Traiter l'upload de l'avatar si un fichier est présent
     if (!empty($_FILES['avatar_file']) && $_FILES['avatar_file']['error'] === UPLOAD_ERR_OK) {
         $file = $_FILES['avatar_file'];
-        
-        // Vérifier le type de fichier
         $allowed_types = array('image/jpeg', 'image/png', 'image/gif', 'image/webp');
         if (in_array($file['type'], $allowed_types)) {
-            // Upload le fichier dans WordPress
             $upload = wp_upload_bits($file['name'], null, file_get_contents($file['tmp_name']));
-            
             if (!$upload['error']) {
-                // Enregistrer l'URL dans user meta
                 update_user_meta($user_id, 'avatar_url', $upload['url']);
             }
         }
     }
+    $_SESSION['profil_updated'] = true;
+    wp_redirect(home_url('/profil'));
+    exit;
+}
+
+// Modification pseudo
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST'
+    && isset($_POST['action'])
+    && $_POST['action'] === 'update_pseudo'
+    && isset($_POST['pseudo_nonce'])
+    && wp_verify_nonce($_POST['pseudo_nonce'], 'update_pseudo')
+) {
     $user_id = get_current_user_id();
-    
-    // Mettre à jour le pseudo
-    if (!empty($_POST['user_login'])) {
-        $new_login = sanitize_user($_POST['user_login']);
-        // Vérifier que le pseudo est unique (sauf si c'est le même)
-        if ($new_login !== get_userdata($user_id)->user_login && username_exists($new_login)) {
-            wp_die('Ce pseudo est déjà utilisé.');
+    $new_pseudo = sanitize_user($_POST['new_pseudo']);
+    if ($new_pseudo && $new_pseudo !== '') {
+        if (mb_strlen($new_pseudo) > 20) {
+            echo '<div class="profil-error-message">Le pseudo ne doit pas dépasser 20 caractères.</div>';
+        } else {
+            // Vérifier si le pseudo existe déjà pour un autre utilisateur
+            $existing = get_user_by('slug', $new_pseudo);
+            if ($existing && $existing->ID != $user_id) {
+                echo '<div class="profil-error-message">Ce pseudo est déjà utilisé par un autre utilisateur.</div>';
+            } else {
+                wp_update_user([
+                    'ID' => $user_id,
+                    'display_name' => $new_pseudo,
+                    'user_nicename' => $new_pseudo,
+                ]);
+                // Redirection pour PRG
+                $_SESSION['profil_updated'] = true;
+                wp_redirect(home_url('/profil'));
+                exit;
+            }
         }
-        wp_update_user([
-            'ID' => $user_id,
-            'user_login' => $new_login,
-            'user_nicename' => $new_login,
-        ]);
     }
-    
-    // Mettre à jour le nom
-    if (isset($_POST['first_name'])) {
-        update_user_meta($user_id, 'first_name', sanitize_text_field($_POST['first_name']));
+}
+
+
+// Modification mot de passe
+
+if (
+    $_SERVER['REQUEST_METHOD'] === 'POST' &&
+    isset($_POST['action']) &&
+    $_POST['action'] === 'update_password' &&
+    isset($_POST['password_nonce']) &&
+    wp_verify_nonce($_POST['password_nonce'], 'update_password')
+) {
+    $user_id = get_current_user_id();
+    $user = get_user_by('ID', $user_id);
+    $current_password = isset($_POST['current_password']) ? $_POST['current_password'] : '';
+    $new_password = isset($_POST['new_password']) ? $_POST['new_password'] : '';
+    if (empty($current_password) || empty($new_password)) {
+        $_SESSION['profil_error'] = 'Veuillez remplir tous les champs.';
+    } elseif (!wp_check_password($current_password, $user->user_pass, $user_id)) {
+        $_SESSION['profil_error'] = "L'ancien mot de passe est incorrect.";
+    } elseif (strlen($new_password) < 6) {
+        $_SESSION['profil_error'] = 'Le nouveau mot de passe doit contenir au moins 6 caractères.';
+    } else {
+        wp_set_password($new_password, $user_id);
+        $_SESSION['profil_updated'] = true;
     }
-    
-    // Mettre à jour le prénom
-    if (isset($_POST['last_name'])) {
-        update_user_meta($user_id, 'last_name', sanitize_text_field($_POST['last_name']));
-    }
-    
-    wp_redirect(home_url('/profil?updated=1'));
+    wp_redirect(home_url('/profil'));
     exit;
 }
 
@@ -67,98 +92,87 @@ get_header();
 $user_id = get_current_user_id();
 $user = get_user_by('ID', $user_id);
 $avatar_url = get_user_meta($user_id, 'avatar_url', true);
-$updated = isset($_GET['updated']) && $_GET['updated'] === '1';
+// Gestion des messages de succès et d'erreur (PRG)
+$updated = false;
+if (!empty($_SESSION['profil_updated'])) {
+    $updated = true;
+    unset($_SESSION['profil_updated']);
+}
+$profil_error = '';
+if (!empty($_SESSION['profil_error'])) {
+    $profil_error = $_SESSION['profil_error'];
+    unset($_SESSION['profil_error']);
+}
+// Compter les commentaires approuvés par email (plus fiable)
+$comment_count = get_comments([
+    'author_email' => $user->user_email,
+    'status' => 'approve',
+    'count' => true,
+]);
+
+// Affichage des messages d'erreur et de succès
+if (!empty($profil_error)) {
+    echo '<div class="profil-error-message">' . esc_html($profil_error) . '</div>';
+}
 ?>
-
-<main class="profil-container">
+<main class="profil-container profil-simple">
     <section class="profil-hero">
-        <div class="profil-header">
-            <h1><?php esc_html_e('Information du profil', 'project-end-of-year'); ?></h1>
-            <?php if ($updated) : ?>
-                <div class="profil-success-message">
-                    <?php esc_html_e('Vos modifications ont été enregistrées avec succès !', 'project-end-of-year'); ?>
+        <h1 class="profil-title">Mon profil</h1>
+        <?php if ($updated) : ?>
+            <div class="profil-success-message">Modifications enregistrées !</div>
+        <?php endif; ?>
+        <div class="profil-vertical">
+            <div class="profil-avatar-block">
+                <div class="profil-avatar-img-block">
+                    <img src="<?php echo esc_url($avatar_url ?: get_avatar_url($user_id)); ?>" alt="Photo de profil" class="profil-avatar-img" id="avatarPreview">
+                    <button type="button" class="profil-avatar-edit-btn-simple" onclick="document.getElementById('avatarInput').click();" title="Modifier la photo de profil"></button>
                 </div>
-            <?php endif; ?>
-        </div>
-
-        <div class="profil-content">
-            <!-- Avatar Section -->
-            <div class="profil-avatar-section">
-                <div class="profil-avatar-wrapper">
-                    <?php
-                    if (!empty($avatar_url)) {
-                        echo '<img src="' . esc_url($avatar_url) . '" alt="" class="profil-avatar-img" id="avatarPreview">';
-                    } else {
-                        ?>
-                        <svg class="profil-avatar-default" id="avatarDefault" width="120" height="120" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="currentColor"/>
-                            <path d="M32.5002 44.8718C21.9793 44.8718 13.0152 51.7433 9.60059 61.3703C10.4324 62.2827 11.3087 63.1457 12.2255 63.955C14.7682 55.1164 22.7448 48.4616 32.5002 48.4616C42.2555 48.4616 50.2321 55.1164 52.7748 63.955C53.6916 63.1457 54.5679 62.2827 55.3997 61.3704C51.9851 51.7433 43.021 44.8718 32.5002 44.8718Z" fill="currentColor"/>
-                        </svg>
-                        <img src="" alt="" class="profil-avatar-img" id="avatarPreview" style="display: none;">
-                        <?php
-                    }
-                    ?>
-                </div>
-                
-                <button type="button" class="btn-change-avatar" id="changeAvatarBtn">
-                    <i class="bi bi-cloud-arrow-up"></i>
-                    <?php esc_html_e('Changer la photo', 'project-end-of-year'); ?>
-                </button>
-            </div>
-
-            <!-- Formulaire d'édition -->
-            <form method="POST" class="profil-form" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" class="profil-avatar-form">
                     <?php wp_nonce_field('update_profil', 'profil_nonce'); ?>
-                    
-                    <!-- Input file caché pour l'avatar -->
                     <input type="file" id="avatarInput" name="avatar_file" accept="image/*" style="display: none;">
-
-                    <!-- Pseudo -->
-                    <div class="form-group">
-                        <label for="user_login"><?php esc_html_e('Pseudo', 'project-end-of-year'); ?></label>
-                        <input 
-                            type="text" 
-                            id="user_login" 
-                            name="user_login" 
-                            value="<?php echo esc_attr($user->user_login); ?>"
-                            class="form-control"
-                            required
-                        >
-                        <small class="form-text"><?php esc_html_e("C'est ainsi que vous apparaîtrez aux autres utilisateurs. Maximum 8 caractères.", 'project-end-of-year'); ?></small>
-                    </div>
-
-                    <!-- Email (non modifiable) -->
-                    <div class="form-group">
-                        <label for="user_email"><?php esc_html_e('Email', 'project-end-of-year'); ?></label>
-                        <input 
-                            type="email" 
-                            id="user_email" 
-                            value="<?php echo esc_attr($user->user_email); ?>"
-                            class="form-control"
-                            disabled
-                        >
-                        <small class="form-text"><?php esc_html_e('E-mail ne peut pas être changé', 'project-end-of-year'); ?></small>
-                    </div>
-
-                    <!-- Membre depuis -->
-                    <div class="form-group">
-                        <label><?php esc_html_e('Membre depuis', 'project-end-of-year'); ?></label>
-                        <p class="form-control-static"><?php echo esc_html(date_i18n('d F Y', strtotime($user->user_registered))); ?></p>
-                    </div>
-
-                    <!-- Boutons d'action -->
-                    <div class="profil-actions">
-                        <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn-logout">
-                            <?php esc_html_e('Se déconnecter', 'project-end-of-year'); ?>
-                        </a>
-                        <button type="submit" class="btn-save">
-                            <?php esc_html_e('Enregistrer les modifications', 'project-end-of-year'); ?>
-                        </button>
-                    </div>
+                    <button type="submit" id="avatarSubmit" style="display:none;"></button>
                 </form>
+                <button type="button" class="btn-profil-simple" onclick="document.getElementById('avatarInput').click();">Changer la photo</button>
+            </div>
+            <div class="profil-infos-block">
+                <form method="POST" class="profil-form-simple">
+                    <?php wp_nonce_field('update_pseudo', 'pseudo_nonce'); ?>
+                    <input type="hidden" name="action" value="update_pseudo">
+                    <label for="new_pseudo">Pseudo</label>
+                    <input type="text" id="new_pseudo" name="new_pseudo" value="<?php echo esc_attr($user->display_name); ?>" maxlength="20" class="form-control-simple">
+                    <button type="submit" class="btn-profil-simple">Modifier le pseudo</button>
+                </form>
+                <form method="POST" class="profil-form-simple">
+                    <?php wp_nonce_field('update_password', 'password_nonce'); ?>
+                    <input type="hidden" name="action" value="update_password">
+                    <label for="current_password">Ancien mot de passe</label>
+                    <input type="password" id="current_password" name="current_password" class="form-control-simple" placeholder="Ancien mot de passe" required>
+                    <label for="new_password">Nouveau mot de passe</label>
+                    <input type="password" id="new_password" name="new_password" minlength="6" class="form-control-simple" placeholder="Nouveau mot de passe" required>
+                    <button type="submit" class="btn-profil-simple">Changer le mot de passe</button>
+                </form>
+                <div class="profil-infos-list">
+                    <div><span>Email :</span> <?php echo esc_html($user->user_email); ?></div>
+                    <div><span>Membre depuis :</span> <?php echo date_i18n('d/m/Y', strtotime($user->user_registered)); ?></div>
+                    <div><span>Commentaires :</span> <?php echo $comment_count; ?></div>
+                </div>
+                <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn-profil-simple btn-logout-simple">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="currentColor" d="M16.5 12a1 1 0 0 1 1-1H20a1 1 0 1 1 0 2h-2.5a1 1 0 0 1-1-1Zm-2.21-4.79a1 1 0 0 1 1.42 1.42L13.41 11H20a1 1 0 1 1 0 2h-6.59l2.3 2.29a1 1 0 1 1-1.42 1.42l-4-4a1 1 0 0 1 0-1.42l4-4Z"/></svg>
+                    Déconnexion
+                </a>
+            </div>
         </div>
     </section>
 </main>
+<script>
+// Soumission auto du formulaire d'avatar
+document.getElementById('avatarInput')?.addEventListener('change', function() {
+    document.getElementById('avatarSubmit').click();
+});
+
+</script>
 
 <?php get_footer(); ?>
+
+
 

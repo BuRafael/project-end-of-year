@@ -95,6 +95,25 @@ get_header();
         </div>
     </section>
 
+    <!-- STATISTIQUES Section (mise en avant) -->
+    <section class="front-stats section-animated">
+      <div class="front-stats__item">
+        <span class="front-stats__icon"><i class="bi bi-music-note-beamed"></i></span>
+        <span class="front-stats__number" data-animate-number="1200">+1200</span>
+        <span class="front-stats__label">Bandes originales référencées</span>
+      </div>
+      <div class="front-stats__item">
+        <span class="front-stats__icon"><i class="bi bi-person-video3"></i></span>
+        <span class="front-stats__number" data-animate-number="350">+350</span>
+        <span class="front-stats__label">Compositeurs</span>
+      </div>
+      <div class="front-stats__item">
+        <span class="front-stats__icon"><i class="bi bi-people"></i></span>
+        <span class="front-stats__number" data-animate-number="5000">+5000</span>
+        <span class="front-stats__label">Utilisateurs</span>
+      </div>
+    </section>
+
     <!-- TOP 5 Section -->
     <section class="tops-section">
         <!-- TOP 5 FILMS -->
@@ -244,8 +263,10 @@ get_header();
         </div>
     </section>
 
+
+
     <!-- CTA Section (Call To Action) -->
-    <section class="cta-section">
+    <section class="cta-section section-animated">
         <div class="cta-text">
             <p>
                 Ne ratez plus jamais vos bandes originales préférées.<br>
@@ -258,8 +279,26 @@ get_header();
         </div>
     </section>
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-to-top" id="scrollToTop" aria-label="Revenir en haut" type="button" style="display: none;">↑</button>
+
+        <!-- Scroll to Top Button -->
+        <button class="scroll-to-top" id="scrollToTop" aria-label="Revenir en haut" type="button" style="display: none;">↑</button>
+
+        <script>
+        // Animation au scroll pour .section-animated
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedSections = document.querySelectorAll('.section-animated');
+            function revealSections() {
+                animatedSections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if(rect.top < window.innerHeight - 100) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+            window.addEventListener('scroll', revealSections);
+            revealSections();
+        });
+        </script>
 
 </main>
 
