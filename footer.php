@@ -65,7 +65,11 @@
             <?php esc_html_e('et', 'project-end-of-year'); ?>
             <a href="<?php echo esc_url(home_url('/politique-de-confidentialite')); ?>"><?php esc_html_e('politique de confidentialité', 'project-end-of-year'); ?></a>.
         </div>
+
+
     </footer>
+
+
 
     <!-- Scroll to Top Button -->
     <?php 

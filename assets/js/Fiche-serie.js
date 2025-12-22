@@ -347,7 +347,9 @@ function renderComment(commentData) {
         <div class="comment-card">
             ${menuHtml}
             <div class="comment-user">
-                ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                <span class="comment-user-avatar-wrapper">
+                    ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                </span>
                 <span class="comment-user-name">${commentData.user_name}</span>
             </div>
             ${dateHtml}

@@ -124,7 +124,6 @@ body section:last-child {
 }
 
 .movies-page h1 {
-    font-size: 2.5rem;
     font-weight: 700;
     color: #F4EFEC;
     margin-bottom: 60px;
@@ -135,19 +134,7 @@ body section:last-child {
     margin-bottom: 80px;
 }
 
-.section-title {
-    font-size: 1.8rem;
-/* Removed .carousel-arrow styles to avoid conflicts */
-    height: 44px;
-    border-radius: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 1.2rem;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-}
+
 
     pointer-events: none;
 }

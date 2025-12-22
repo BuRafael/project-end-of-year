@@ -282,6 +282,20 @@ if (tracksTable) {
     });
 }
 
+// Gestion du like du film (coeur sous l'affiche)
+const movieLikeBtn = document.getElementById('movieLikeBtn');
+if (movieLikeBtn) {
+    movieLikeBtn.addEventListener('click', function () {
+        const icon = this.querySelector('.bi-heart, .bi-heart-fill');
+        const liked = this.classList.toggle('liked');
+        if (icon) {
+            icon.classList.toggle('bi-heart', !liked);
+            icon.classList.toggle('bi-heart-fill', liked);
+        }
+        this.setAttribute('aria-pressed', liked ? 'true' : 'false');
+    });
+}
+
 // === COMMENTAIRES ===
 const commentsZone = document.getElementById("commentsZone");
 const commentInput = document.querySelector('.comment-input');
@@ -352,34 +366,51 @@ function renderComment(commentData) {
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
-        
         let timeAgo;
-        if (diffMins < 1) timeAgo = 'à l\'instant';
+        if (diffMins < 1) timeAgo = "à l'instant";
         else if (diffMins < 60) timeAgo = `il y a ${diffMins} min`;
         else if (diffHours < 24) timeAgo = `il y a ${diffHours}h`;
         else if (diffDays < 7) timeAgo = `il y a ${diffDays}j`;
         else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
-    
-    col.innerHTML = `
-        <div class="comment-card">
-            ${menuHtml}
-            <div class="comment-user">
-                ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
-                <span class="comment-user-name">${commentData.user_name}</span>
+    // Always show 0 if like_count is falsy
+    const initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
+        col.innerHTML = `
+            <div class="comment-card">
+                ${menuHtml}
+                <div class="comment-user">
+                    <span class="comment-user-avatar-wrapper">
+                        ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                    </span>
+                    <span class="comment-user-name">${commentData.user_name || ''}</span>
+                    ${dateHtml}
+                </div>
+                <div class="comment-text">${commentData.comment_text}</div>
+                <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
+                    <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
+                        <svg viewBox="0 0 24 24"><path d="M2 21h4V9H2v12zm19.83-9.24c-.13-.32-.37-.59-.67-.77-.3-.18-.65-.28-1-.28h-6V5.5c0-.41-.17-.8-.44-1.09-.28-.29-.66-.41-1.05-.41-.55 0-1.05.3-1.3.78l-5.34 9.59c-.13.23-.2.49-.2.75V19c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.13-.32.12-.68-.06-.97z"/></svg>
+                    </button>
+                    <span class="like-count" style="color:#000 !important; font-weight:500;">${initialLikeCount}</span>
+                </div>
             </div>
-            ${dateHtml}
-            <div class="comment-text">${commentData.comment_text}</div>
-            <div class="comment-like-row">
-                <button class="comment-like-btn" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
-                    <span class="like-icon">👍</span>
-                    <span class="like-count">${commentData.like_count || 0}</span>
-                </button>
-            </div>
-        </div>
-    `;
-    
+        `;
+        // Like button logic: toggle .liked and update like count visually, always show 0 if not liked
+        const likeBtn = col.querySelector('.comment-like-btn');
+        const likeCountSpan = col.querySelector('.like-count');
+        if (likeBtn && likeCountSpan) {
+            likeBtn.addEventListener('click', function () {
+                let count = parseInt(likeCountSpan.textContent, 10);
+                if (isNaN(count)) count = 0;
+                const isLiked = likeBtn.classList.toggle('liked');
+                if (isLiked) {
+                    count = 1;
+                } else {
+                    count = 0;
+                }
+                likeCountSpan.textContent = count;
+            });
+        }
     commentsZone.insertBefore(col, commentsZone.firstChild);
     
     // Gestion du menu
@@ -640,40 +671,36 @@ const allSimilarMovies = getSimilarMovies(slug);
 // ===== BOUTON LIKE AFFICHE =====
 const likeBtn = document.getElementById('movieLikeBtn');
 if (likeBtn) {
-    // Récupérer les infos du film depuis les attributs data
     const movieTitle = likeBtn.dataset.movieTitle || document.querySelector('.movie-header h1')?.textContent || '';
     const movieYear = likeBtn.dataset.movieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
     const moviePoster = likeBtn.dataset.movieImage || document.getElementById('moviePosterImg')?.src || '';
     const movieSlug = likeBtn.dataset.movieSlug || window.currentMovieSlug || '';
-    
-    // Vérifier si déjà en favoris
     const favoriteFilms = JSON.parse(localStorage.getItem('favoriteFilms') || '[]');
     const isAlreadyFavorite = favoriteFilms.some(film => film.id === movieSlug);
-    
     if (isAlreadyFavorite) {
         likeBtn.classList.add('liked');
         const icon = likeBtn.querySelector('i');
         if (icon) {
             icon.classList.remove('bi-heart');
             icon.classList.add('bi-heart-fill');
+            icon.style.color = '#700118';
         }
     }
-    
     likeBtn.addEventListener('click', function (e) {
         const icon = this.querySelector('i');
         const liked = this.classList.toggle('liked');
         this.setAttribute('aria-pressed', liked ? 'true' : 'false');
-        
         if (icon) {
             icon.classList.toggle('bi-heart', !liked);
             icon.classList.toggle('bi-heart-fill', liked);
+            if (liked) {
+                icon.style.color = '#700118';
+            } else {
+                icon.style.color = '#1A1A1A';
+            }
         }
-        
-        // Gérer les favoris
         let favoriteFilms = JSON.parse(localStorage.getItem('favoriteFilms') || '[]');
-        
         if (liked) {
-            // Ajouter aux favoris
             const filmData = {
                 id: movieSlug,
                 title: movieTitle,
@@ -681,14 +708,11 @@ if (likeBtn) {
                 image: moviePoster,
                 url: window.location.href
             };
-            
-            // Vérifier si pas déjà présent
             if (!favoriteFilms.some(film => film.id === movieSlug)) {
                 favoriteFilms.push(filmData);
                 localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
             }
         } else {
-            // Retirer des favoris
             favoriteFilms = favoriteFilms.filter(film => film.id !== movieSlug);
             localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
         }

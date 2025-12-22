@@ -121,7 +121,7 @@ if (!empty($profil_error)) {
 <main class="home-container profil-simple">
     <section class="hero" style="margin-bottom:48px;">
         <div style="max-width:520px;margin:0 auto;">
-            <h1 class="profil-title" style="text-align:left;margin-bottom:10px;letter-spacing:1px;font-size:2.3rem;">Mon profil</h1>
+            <h1 class="section-title">Mon profil</h1>
         </div>
     </section>
     <section class="profil-section" style="max-width:520px;margin:0 auto 48px auto;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;background:none;box-shadow:none;">
@@ -171,13 +171,6 @@ if (!empty($profil_error)) {
     </section>
 </main>
 <style>
-    .profil-title-align {
-        text-align: left;
-        margin-bottom: 10px;
-        letter-spacing: 1px;
-        font-size: 2.3rem;
-        padding-left: 24px;
-    }
     .btn-logout-profil {
         display: inline-block;
         background: #700118;
@@ -250,10 +243,8 @@ document.getElementById('avatarInput')?.addEventListener('change', function() {
         document.getElementById('avatarSubmit').click();
 });
 </script>
-<?php get_footer(); ?>
-    </section>
 
-</main>
+<?php get_footer(); ?>
 
 <script>
 

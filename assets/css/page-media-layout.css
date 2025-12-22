@@ -1,3 +1,58 @@
+/* Centered horizontal line for CTA section */
+.cta-section .cta-hr {
+  width: 120px;
+  height: 3px;
+  background: #F4EFEC;
+  border: none;
+  border-radius: 2px;
+  margin: 24px auto 32px auto;
+  display: block;
+}
+/* Center CTA text block and improve readability */
+/* Center CTA text block and improve readability */
+.cta-section .cta-text {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Center and align CTA section with main content */
+/* Center and align CTA section with main content */
+.cta-section.section-animated {
+  max-width: 1100px;
+  margin: 60px auto 0 auto;
+  padding: 40px 24px;
+  box-sizing: border-box;
+  background: #1A1A1A;
+  border-radius: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Genre carousel titles (Action, Comédie, Romance, Horreur, Science-Fiction) */
+h3.section-title.mb-3 {
+  color: #700118 !important;
+  font-size: 20px !important;
+}
+.section-title, #genres-populaires-title.section-title {
+  font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0.5px !important;
+  margin-left: 24px !important;
+  text-align: left !important;
+  border-bottom: none !important;
+  text-transform: uppercase !important;
+}
+.movies-section {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
 /* Suppression de l'effet ripple sur les flèches du carrousel */
 .carousel-arrow::before,
 .carousel-arrow:active::before {
@@ -124,12 +179,6 @@
     height: 200px !important;
     width: 100% !important;
   }
-  .featured-title,
-  .trending-media .section-title,
-  .new-media .section-title {
-    font-size: 1.2rem !important;
-    margin-bottom: 0.7rem;
-  }
 }
 /* Harmonisation boutons principaux carrousels et site */
 .btn-main {
@@ -157,18 +206,6 @@
   border-radius: 18px !important;
 }
 /* Titres principaux harmonisés : Futura 100, gras, 24px, majuscules, rouge site */
-.featured-title,
-  .trending-media .section-title,
-  .new-media .section-title {
-  font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
-  font-weight: bold !important;
-  font-size: 24px !important;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  color: #F4EFEC;
-  margin-bottom: 1.2rem;
-  text-align: left !important;
-}
 /* Import Futura 100 si disponible en webfont locale ou via @font-face */
 @font-face {
   font-family: 'Futura 100';
@@ -179,7 +216,7 @@
 
 /* Applique Futura 100 sur les titres principaux */
 /* Sous-titres et titres secondaires : Futura 100, normal, 1.1rem, couleur claire */
-.section-title,
+/* Secondary titles (cards, featured text) */
 .trend-card h4,
 .new-card h4,
 .featured-a-la-une-text {
@@ -241,14 +278,29 @@
 .trending-media,
 .new-media {
   max-width: 1100px;
-  margin: 38px auto 0 auto;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: auto;
+  margin-right: auto;
   width: 100%;
   box-sizing: border-box;
 }
 /* Suppression de la bordure basse sur tous les titres section-title */
-.section-title {
-  border-bottom: none !important;
+/* border-bottom already handled above */
+
+/* Main section titles left-aligned */
+/* margin-left and text-align handled in unified rule above */
+
+
+/* Carousel genre titles centered */
+.movies-section h3.section-title {
+  margin-left: 0 !important;
+  text-align: center !important;
+  width: 100%;
+  display: block;
 }
+
+/* Forcer l'alignement à gauche du titre GENRES POPULAIRES même si parent flex ou centré */
 
 /* Suppression forcée de la ligne décorative sous Nouveautés */
 .new-media h2.section-title.mb-4::after {
@@ -341,7 +393,7 @@ body {
   text-align: center;
   position: relative;
   transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(112,1,24,0.08);
+  box-shadow: none !important;
 }
 .trend-card:hover {
   /* Effet hover désactivé */
@@ -371,8 +423,8 @@ body {
     justify-content: flex-start;
 }
 .btn-main.fiche-a-la-une {
-  background: #F4EFEC;
-  color: #a0022c;
+  background: #F4EFEC !important;
+  color: #700118 !important;
   border: none;
   border-radius: 8px;
   padding: 7px 22px;
@@ -383,8 +435,8 @@ body {
   margin-top: auto;
 }
 .btn-main.fiche-a-la-une:hover {
-  background: #a0022c;
-  color: #fff;
+  background: #700118 !important;
+  color: #F4EFEC !important;
   box-shadow: 0 4px 18px #70011855;
   transform: scale(1.04);
 }
@@ -450,7 +502,7 @@ body {
 .featured-card {
   display: flex;
   gap: 38px;
-  align-items: flex-start;
+  align-items: center;
   background: rgba(35,35,35,0.98);
   border-radius: 18px;
   box-shadow: 0 2px 18px rgba(0,0,0,0.22);
@@ -680,7 +732,7 @@ body {
 }
 .new-card:hover {
   transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 4px 18px rgba(112,1,24,0.13);
+  box-shadow: none !important;
 }
 .new-card img {
   width: 100%;

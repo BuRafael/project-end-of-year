@@ -1,3 +1,54 @@
+.trend-card,
+.trend-card:hover,
+.trend-card img,
+.new-card,
+.new-card:hover,
+.new-card img {
+    box-shadow: none !important;
+}
+.featured-card {
+    padding-bottom: 0 !important;
+}
+.trending-media .trend-list {
+    /* margin-top: 0 !important; */
+}
+.featured-media-inner {
+    padding-bottom: 0 !important;
+}
+.trending-media .section-title {
+    padding-top: 0 !important;
+    margin-top: 0 !important;
+}
+.featured-media {
+    padding-bottom: 0 !important;
+}
+.trending-media {
+    padding-top: 0 !important;
+}
+/* Supprime toute marge entre la section À la une et Tendance du moment */
+main > section.featured-media + section.trending-media {
+    /* margin-top: 0 !important; */
+    /* padding-top: 0 !important; */
+}
+/* Supprime la marge entre la section À la une et Tendance du moment */
+.featured-media + .trending-media {
+    /* margin-top: 0 !important; */
+}
+/* Ajout d'une marge supérieure personnalisée pour équilibrer la carte À la une */
+.featured-media {
+    margin-top: 180px !important;
+    margin-bottom: 0 !important;
+}
+.trending-media {
+    margin-top: 0 !important;
+}
+main > section.featured-media + section.trending-media {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.trending-media {
+    margin-top: 0 !important;
+}
 /* Règle ultra-forcée pour espacer toutes les sections du site, même si d'autres marges sont présentes */
 body main > section,
 body .movie-page > section,
@@ -5,10 +56,10 @@ body .movies-page > section,
 body .home-container > section,
 body .container > section,
 body section {
-    margin-top: 120px !important;
-    margin-bottom: 120px !important;
-    padding-top: 48px !important;
-    padding-bottom: 48px !important;
+    margin-top: 48px !important;
+    margin-bottom: 48px !important;
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
 }
 body main > section:first-child,
 body .movie-page > section:first-child,
@@ -28,10 +79,10 @@ body section:last-child {
 }
 /* Règle universelle : espace toutes les sections du site */
 main > section, .movie-page > section, .movies-page > section, .home-container > section, .container > section, section {
-    margin-top: 120px !important;
-    margin-bottom: 120px !important;
-    padding-top: 48px !important;
-    padding-bottom: 48px !important;
+    margin-top: 48px !important;
+    margin-bottom: 48px !important;
+    padding-top: 32px !important;
+    padding-bottom: 32px !important;
 }
 main > section:first-child, .movie-page > section:first-child, .movies-page > section:first-child, .home-container > section:first-child, .container > section:first-child, section:first-child {
     margin-top: 0 !important;
@@ -41,8 +92,8 @@ main > section:last-child, .movie-page > section:last-child, .movies-page > sect
 }
 /* Marge très aérée entre toutes les sections principales des pages films et séries */
 .movies-page > section {
-    margin-top: 120px !important;
-    margin-bottom: 120px !important;
+    margin-top: 48px !important;
+    margin-bottom: 48px !important;
 }
 .movies-page > section:first-child {
     margin-top: 0 !important;
@@ -60,10 +111,10 @@ main > section:last-child, .movie-page > section:last-child, .movies-page > sect
 main.movie-page > section,
 .movie-page > section,
 .movie-page section {
-    margin-top: 180px !important;
-    margin-bottom: 180px !important;
-    padding-top: 48px !important;
-    padding-bottom: 48px !important;
+    margin-top: 32px !important;
+    margin-bottom: 32px !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
 }
 main.movie-page > section:first-child,
 .movie-page > section:first-child,
@@ -83,7 +134,7 @@ main.movie-page > section:last-child,
 }
 /* Marge uniforme entre toutes les sections principales des fiches film/série */
 .movie-page > section {
-    margin-bottom: 120px !important;
+    margin-bottom: 32px !important;
 }
 .movie-page > section:last-child {
     margin-bottom: 0 !important;
@@ -107,7 +158,7 @@ main.movie-page > section:last-child,
 th.col-title, th.col-links, th.col-num, td.col-duration { font-size: 20px !important; }
 .movie-tracks-table td.col-title { font-size: 16px !important; }
 .movie-tracks-table td.col-composer { font-size: 12px !important; }
-.section-title { font-size: 24px !important; font-weight: bold !important; }
+.section-title { font-size: 32px !important; font-weight: bold !important; }
 .movie-tracks-table th.col-title { font-size: 20px !important; }
 .movie-tracks-table th.col-links { font-size: 20px !important; }
 .movie-tracks-table th.col-num { font-size: 20px !important; }
@@ -247,9 +298,37 @@ th.col-title, th.col-links, th.col-num, td.col-duration { font-size: 20px !impor
 .movies-carousel .row { margin: 0 48px; width: 100%; flex-grow: 1; }
 @media (max-width: 600px) { .movies-section .similar-card img, .trend-card img, .new-card img, .featured-img-wrap img { height: 140px !important; width: 100% !important; border-radius: 14px !important; } .featured-img-wrap img { height: 200px !important; width: 100% !important; } .featured-title, .trending-media .section-title, .new-media .section-title { font-size: 1.2rem !important; margin-bottom: 0.7rem; } }
 .btn-main { background: #F4EFEC; color: #a0022c; border: none; border-radius: 8px; padding: 7px 22px; border-radius: 18px !important; }
-.featured-title, .trending-media .section-title, .new-media .section-title { font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important; font-weight: bold !important; font-size: 24px !important; letter-spacing: 0.5px; text-transform: uppercase; color: #F4EFEC; margin-bottom: 1.2rem; text-align: left !important; }
+.featured-a-la-une-text.section-title {
+    font-size: 32px !important;
+    text-align: left !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+    color: #F4EFEC;
+    margin-bottom: 1.2rem;
+    margin-left: 0;
+}
 @font-face { font-family: 'Futura 100'; src: local('Futura 100'), local('Futura Light'), url('/assets/fonts/Futura100.woff2') format('woff2'), url('/assets/fonts/Futura100.woff') format('woff'); font-weight: 100; font-style: normal; }
-.section-title, .trend-card h4, .new-card h4, .featured-a-la-une-text { font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important; font-weight: 400; font-size: 1.1rem; color: #F4EFEC; letter-spacing: 0.5px; }
+.section-title {
+    font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: bold !important;
+    font-size: 32px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+    color: #F4EFEC;
+    margin-bottom: 1.2rem;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    margin-left: 0 !important;
+}
+.trend-card h4, .new-card h4 {
+    font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: 400;
+    font-size: 1.1rem;
+    color: #F4EFEC;
+    letter-spacing: 0.5px;
+}
 .movies-section .carousel-viewport { overflow: hidden; }
 .movies-section .carousel-track { min-width: 0; }
 .movies-section .similar-card img { width: 100%; height: 220px; object-fit: cover; object-position: 50% 18%; background: #0c0c0c; border-radius: 6px; border: 3px solid rgba(0,0,0,0.5); margin-bottom: 10px; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
@@ -268,46 +347,67 @@ body { box-sizing: border-box; min-height: 100vh; background: #1A1A1A !important
 .trending-media .section-title { position: relative; margin-bottom: 18px; }
 .trending-media { margin: 38px auto 0 auto; max-width: 1100px; }
 .trend-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
-.trend-card { background: #191919; border-radius: 10px; padding: 12px 12px 8px 12px; text-align: center; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 2px 8px rgba(112,1,24,0.08); }
-.trend-card:hover { transform: none; box-shadow: none; }
+.trend-card { background: #191919; border-radius: 10px; padding: 12px 12px 8px 12px; text-align: center; position: relative; transition: transform 0.2s, box-shadow 0.2s; box-shadow: none !important; }
+.trend-card:hover { transform: none; box-shadow: none !important; }
 .trend-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; border: 3px solid #fff; box-sizing: border-box; }
 .trend-card h4 { color: #F4EFEC; font-size: 1.05rem; margin: 0; }
-.featured-infos-col { align-items: flex-start; gap: 16px; justify-content: flex-start; flex: 1 1 0%; min-width: 0; background: none !important; border-radius: 0 !important; padding: 0 0 0 18px !important; height: 100%; box-shadow: none !important; margin-left: 0; display: flex; flex-direction: column; justify-content: space-between; word-break: break-word; min-height: 320px; }
-.featured-title { font-size: 2rem; margin-bottom: 14px; color: #F4EFEC; font-weight: 800; letter-spacing: 0.5px; }
-.featured-meta { color: #e0e0e0; font-size: 1.13rem; margin-bottom: 18px; display: flex; gap: 10px; align-items: center; font-weight: 500; background: none !important; border: none !important; padding: 0 !important; border-radius: 0 !important; margin-bottom: 18px; color: #f4efec; font-weight: 500; font-size: 1.13rem; box-shadow: none !important; }
+.featured-infos-col {
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex: 1 1 0%;
+    min-width: 0;
+    background: none !important;
+    border-radius: 0 !important;
+    padding: 32px 24px !important;
+    height: 100%;
+    box-shadow: none !important;
+    margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    word-break: break-word;
+    min-height: 320px;
+    text-align: center;
+    align-self: center;
+}
+.featured-meta {
+    color: #f4efec;
+    font-size: 1.13rem;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    font-weight: 500;
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
 .meta-dot { font-size: 1.2em; color: #700118; }
-.featured-synopsis p { color: #f4efec; font-size: 1.08rem; margin: 0; line-height: 1.6; }
+.featured-synopsis p {
+    color: #f4efec;
+    font-size: 1.13rem;
+    margin: 0;
+    line-height: 1.7;
+    text-align: center;
+}
 @media (max-width: 900px) { .featured-media-inner { padding: 0 10px 32px 10px; margin-top: 120px; } .featured-card { flex-direction: column; gap: 18px; padding: 18px 10px 18px 10px; } .featured-img-wrap img { width: 220px; height: 320px; object-fit: cover; box-shadow: 0 4px 24px #000a, 0 2px 12px rgba(0,0,0,0.18); border: none; border-radius: 18px !important; } }
 .top-media h2 { font-size: 2rem; margin-bottom: 16px; color: #fff; background: #232323; border-radius: 14px; transition: box-shadow 0.25s, transform 0.22s; cursor: pointer; }
 .top-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
 .top-card { background: #191919; border-radius: 10px; padding: 12px 12px 8px 12px; text-align: center; position: relative; transition: transform 0.2s; }
 .top-card:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 4px 18px rgba(112,1,24,0.13); }
 .top-card img { width: 100%; }
-.new-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
-.new-card { background: #191919; border-radius: 10px; padding: 12px 12px 8px 12px; text-align: center; transition: transform 0.2s; }
-.new-card:hover { transform: translateY(-6px) scale(1.04); box-shadow: 0 4px 18px rgba(112,1,24,0.13); }
-.new-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
-.new-card h4 { color: #F4EFEC; font-size: 1.05rem; margin: 0; }
-.genre-media { margin: 32px auto 0 auto; max-width: 1100px; }
-.genre-media h2 { font-size: 1.6rem; margin-bottom: 10px; color: #fff; display: flex; align-items: center; justify-content: space-between; }
-.see-all { font-size: 1rem; color: #fff; font-weight: 800; border-radius: 4px; padding: 4px 14px; margin-left: 12px; text-decoration: none; transition: background 0.2s; }
-.see-all:hover { background: #a0022c; }
-.genre-carousel { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
-
-/* --- movies-series.css --- */
-.slide-left { animation: slideLeft 0.4s cubic-bezier(0.4,0,0.2,1); }
-.slide-right { animation: slideRight 0.4s cubic-bezier(0.4,0,0.2,1); }
-@keyframes slideLeft { 0% { transform: translateX(0); opacity: 1; } 40% { transform: translateX(-40px); opacity: 0.7; } 100% { transform: translateX(0); opacity: 1; } }
-@keyframes slideRight { 0% { transform: translateX(0); opacity: 1; } 40% { transform: translateX(40px); opacity: 0.7; } 100% { transform: translateX(0); opacity: 1; } }
-.movies-page { padding: 60px 20px; }
-.movies-page h1 { font-size: 2.5rem; font-weight: 700; color: #F4EFEC; margin-bottom: 60px; }
-.movies-section { margin-bottom: 80px; }
-.section-title { font-size: 1.8rem; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; transition: all 0.3s ease; flex-shrink: 0; pointer-events: none; }
-/* Afficher les flèches dans les carrousels */
-.movies-section .carousel-arrow,
-.genre-media .carousel-arrow {
-    display: flex !important;
-}
+.featured-a-la-une-text.section-title {
+    font-size: 32px !important;
+    text-align: left !important;
+    font-weight: bold !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+    color: #F4EFEC;
+    margin-bottom: 1.2rem;
+    margin-left: 0;
 .carousel-card { flex: 0 0 calc(25% - 12px); min-width: 200px; }
 @media (max-width: 1200px) { .carousel-card { flex: 0 0 calc(33.333% - 10px); } }
 @media (max-width: 768px) { .carousel-card { flex: 0 0 calc(50% - 8px); } }

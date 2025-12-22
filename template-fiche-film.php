@@ -288,7 +288,9 @@ if (isset($movie_tracks[$page_slug])) {
                             data-movie-title="<?php echo esc_attr($title); ?>"
                             data-movie-year="<?php echo esc_attr($year); ?>"
                             data-movie-slug="<?php echo esc_attr($page_slug); ?>">
-                        <i class="bi bi-heart" aria-hidden="true"></i>
+                                                <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
+                                                    <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" stroke="#fff" stroke-width="2.2" fill="none"/>
+                                                </svg>
                     </button>
                 </div>
             </div>
@@ -422,18 +424,7 @@ if (isset($movie_tracks[$page_slug])) {
     </section>
 
     <!-- ===== CTA SECTION ===== -->
-    <section class="cta-section">
-        <div class="cta-text">
-            <p>
-                Ne ratez plus jamais vos bandes originales préférées.<br>
-                Rejoignez notre communauté et plongez dans<br>
-                l'univers musical de tous vos films et séries favoris !
-            </p>
-            <?php if (!is_user_logged_in()) : ?>
-                <?php echo cinemusic_signup_button(); ?>
-            <?php endif; ?>
-        </div>
-    </section>
+
 
 </main>
 
@@ -444,6 +435,5 @@ if (isset($movie_tracks[$page_slug])) {
     window.currentMovieSlug = '<?php echo esc_js($page_slug); ?>';
 </script>
 
-<?php
-get_footer();
-?>
+
+<?php get_footer(); ?>

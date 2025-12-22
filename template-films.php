@@ -21,9 +21,9 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 <div class="site-container">
 	<main>
 		<!-- 1. Section À la une -->
-		<section class="featured-media">
+        <section class="featured-media" style="padding-bottom:0 !important;">
 			<div class="featured-media-inner">
-				<div class="featured-a-la-une-text">À la une</div>
+                <h2 class="section-title">À LA UNE</h2>
 				<div class="featured-card">
 					<div class="featured-img-wrap">
 						<img src="<?php echo get_template_directory_uri(); ?>/assets/image/Fiche films/wicked.jpg" alt="Wicked" class="featured-affiche-img" style="border-radius:18px;">
@@ -39,9 +39,11 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 							<span class="meta-dot">•</span>
 							<span class="meta-genres">Comédie musicale, Fantastique</span>
 						</div>
-						<div class="featured-synopsis">
-							<p>Découvrez l'histoire inédite des sorcières d'Oz, bien avant l'arrivée de Dorothy. Un film musical spectaculaire, adaptation du célèbre show de Broadway, avec Cynthia Erivo et Ariana Grande.</p>
-						</div>
+                        <div class="featured-synopsis">
+                            <p>
+                                Avant Dorothy, Oz cachait déjà bien des secrets... "Wicked" raconte l'histoire inattendue d'Elphaba et Glinda, deux sorcières que tout oppose, dans une amitié bouleversée par le destin. Adapté du succès de Broadway, ce film musical spectaculaire, avec Cynthia Erivo et Ariana Grande, vous invite à redécouvrir Oz sous un nouveau jour, entre magie, rivalités et chansons inoubliables.
+                            </p>
+                        </div>
 						<a href="/wicked" class="btn-main fiche-a-la-une">Découvrir</a>
 					</div>
 				</div>
@@ -49,7 +51,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 		</section>
 
 		<!-- 2. Section Tendance du moment (5 éléments) -->
-		<section class="trending-media mb-5">
+        <section class="trending-media">
 			<h2 class="section-title mb-4">Tendance du moment</h2>
 			<div class="trend-list">
 				<div class="trend-card">
@@ -76,8 +78,8 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 		</section>
 
 		<!-- 3. Section Nouveautés (5 éléments) -->
-		<section class="new-media mb-5">
-			<h2 class="section-title mb-4">Nouveautés</h2>
+        <section class="new-media">
+            <h2 class="section-title mb-4" style="text-align:left !important;justify-content:flex-start !important;">Nouveautés</h2>
 			<div class="trend-list">
 				<div class="trend-card">
 					<img src="<?php echo get_template_directory_uri(); ?>/assets/image/Fiche films/the ice tower.jpg" alt="The Ice Tower">
@@ -102,10 +104,10 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 			</div>
 		</section>
 
-        <!-- 4. Carrousels par genre (Action, Comédie, Horreur, Romance, Science-Fiction) -->
-        <!-- Carrousel Action (structure movies-series.css) -->
-        <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
-             <h3 class="section-title mb-3">Action</h3>
+           <!-- 4. GENRES POPULAIRES section title + Carrousels par genre (Action, Comédie, Horreur, Romance, Science-Fiction) -->
+           <section class="movies-section mt-5 mb-4 genres-populaires-block" style="max-width:1100px;width:100%;box-sizing:border-box;">
+               <h2 id="genres-populaires-title" class="section-title">GENRES POPULAIRES</h2>
+               <h3 class="section-title mb-3">Action</h3>
              <div class="movies-carousel d-flex align-items-center">
             <div style="display: flex; align-items: center; width: 100%;">
                 <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
@@ -159,7 +161,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
             </div>
         </section>
         <!-- Carrousel Comédie -->
-        <section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">
+        <section class="movies-section mt-5 mb-4" style="max-width:1100px;width:100%;box-sizing:border-box;">
             <h3 class="section-title mb-3">Comédie</h3>
             <div class="movies-carousel d-flex align-items-center" style="display: flex; align-items: center; width: 100%;">
                 <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
@@ -342,4 +344,24 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 	const mediaType = '<?php echo esc_js($media_type); ?>';
 	// ... JS pour charger les films/séries dynamiquement ...
 </script>
+
+
+
+
+    <!-- CTA Section (Call To Action) -->
+
+    <section class="cta-section section-animated">
+        <hr class="cta-hr">
+        <div class="cta-text">
+            <p>
+                Ne ratez plus jamais vos bandes originales préférées.<br>
+                Rejoignez notre communauté et plongez dans<br>
+                l'univers musical de tous vos films et séries favoris !
+            </p>
+            <?php if (!is_user_logged_in()) : ?>
+                <?php echo cinemusic_signup_button(); ?>
+            <?php endif; ?>
+        </div>
+    </section>
+
 <?php get_footer(); ?>

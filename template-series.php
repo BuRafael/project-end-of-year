@@ -152,5 +152,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 	const mediaType = '<?php echo esc_js($media_type); ?>';
 	// ... JS pour charger les films/séries dynamiquement ...
 </script>
+
+
 <?php get_footer(); ?>
 

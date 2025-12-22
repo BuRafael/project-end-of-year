@@ -153,7 +153,18 @@ get_header();
     </section>
 
     <!-- ===== CTA SECTION ===== -->
-    <section class="cta-section">
+
+
+</main>
+
+<script>
+    // Chemin des images pour JavaScript
+    const composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
+</script>
+
+<?php
+    <!-- CTA Section (Call To Action) -->
+    <section class="cta-section section-animated">
         <div class="cta-text">
             <p>
                 Ne ratez plus jamais vos bandes originales préférées.<br>
@@ -166,13 +177,5 @@ get_header();
         </div>
     </section>
 
-</main>
-
-<script>
-    // Chemin des images pour JavaScript
-    const composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
-</script>
-
-<?php
 get_footer();
 ?>

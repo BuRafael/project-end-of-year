@@ -176,7 +176,9 @@ if (isset($series_info[$page_slug])) {
                             data-serie-title="<?php echo esc_attr($title); ?>"
                             data-serie-year="<?php echo esc_attr($aired); ?>"
                             data-serie-slug="<?php echo esc_attr($page_slug); ?>">
-                        <i class="bi bi-heart" aria-hidden="true"></i>
+                                                <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
+                                                    <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                                                </svg>
                     </button>
                 </div>
             </div>
@@ -519,6 +521,8 @@ $tracks_js = isset($all_tracks_data[$page_slug]) ? json_encode($all_tracks_data[
     window.allTracks = <?php echo $tracks_js ? $tracks_js : '{}'; ?>;
 </script>
 
+
 <?php
+// get_footer() should be called outside of any HTML comment or stray markup
 get_footer();
 ?>
