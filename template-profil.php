@@ -115,64 +115,145 @@ if (!empty($profil_error)) {
     echo '<div class="profil-error-message">' . esc_html($profil_error) . '</div>';
 }
 ?>
-<main class="profil-container profil-simple">
-    <section class="profil-hero">
-        <h1 class="profil-title">Mon profil</h1>
-        <?php if ($updated) : ?>
-            <div class="profil-success-message">Modifications enregistrées !</div>
-        <?php endif; ?>
-        <div class="profil-vertical">
-            <div class="profil-avatar-block">
-                <div class="profil-avatar-img-block">
-                    <img src="<?php echo esc_url($avatar_url ?: get_avatar_url($user_id)); ?>" alt="Photo de profil" class="profil-avatar-img" id="avatarPreview">
-                    <button type="button" class="profil-avatar-edit-btn-simple" onclick="document.getElementById('avatarInput').click();" title="Modifier la photo de profil"></button>
-                </div>
-                <form method="POST" enctype="multipart/form-data" class="profil-avatar-form">
-                    <?php wp_nonce_field('update_profil', 'profil_nonce'); ?>
-                    <input type="file" id="avatarInput" name="avatar_file" accept="image/*" style="display: none;">
-                    <button type="submit" id="avatarSubmit" style="display:none;"></button>
-                </form>
-                <button type="button" class="btn-profil-simple" onclick="document.getElementById('avatarInput').click();">Changer la photo</button>
-            </div>
-            <div class="profil-infos-block">
-                <form method="POST" class="profil-form-simple">
-                    <?php wp_nonce_field('update_pseudo', 'pseudo_nonce'); ?>
-                    <input type="hidden" name="action" value="update_pseudo">
-                    <label for="new_pseudo">Pseudo</label>
-                    <input type="text" id="new_pseudo" name="new_pseudo" value="<?php echo esc_attr($user->display_name); ?>" maxlength="20" class="form-control-simple">
-                    <button type="submit" class="btn-profil-simple">Modifier le pseudo</button>
-                </form>
-                <form method="POST" class="profil-form-simple">
-                    <?php wp_nonce_field('update_password', 'password_nonce'); ?>
-                    <input type="hidden" name="action" value="update_password">
-                    <label for="current_password">Ancien mot de passe</label>
-                    <input type="password" id="current_password" name="current_password" class="form-control-simple" placeholder="Ancien mot de passe" required>
-                    <label for="new_password">Nouveau mot de passe</label>
-                    <input type="password" id="new_password" name="new_password" minlength="6" class="form-control-simple" placeholder="Nouveau mot de passe" required>
-                    <button type="submit" class="btn-profil-simple">Changer le mot de passe</button>
-                </form>
-                <div class="profil-infos-list">
-                    <div><span>Email :</span> <?php echo esc_html($user->user_email); ?></div>
-                    <div><span>Membre depuis :</span> <?php echo date_i18n('d/m/Y', strtotime($user->user_registered)); ?></div>
-                    <div><span>Commentaires :</span> <?php echo $comment_count; ?></div>
-                </div>
-                <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn-profil-simple btn-logout-simple">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" style="vertical-align:middle;margin-right:8px;"><path fill="currentColor" d="M16.5 12a1 1 0 0 1 1-1H20a1 1 0 1 1 0 2h-2.5a1 1 0 0 1-1-1Zm-2.21-4.79a1 1 0 0 1 1.42 1.42L13.41 11H20a1 1 0 1 1 0 2h-6.59l2.3 2.29a1 1 0 1 1-1.42 1.42l-4-4a1 1 0 0 1 0-1.42l4-4Z"/></svg>
-                    Déconnexion
-                </a>
-            </div>
+
+
+
+<main class="home-container profil-simple">
+    <section class="hero" style="margin-bottom:48px;">
+        <div style="max-width:520px;margin:0 auto;">
+            <h1 class="profil-title" style="text-align:left;margin-bottom:10px;letter-spacing:1px;font-size:2.3rem;">Mon profil</h1>
         </div>
     </section>
+    <section class="profil-section" style="max-width:520px;margin:0 auto 48px auto;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;background:none;box-shadow:none;">
+        <form method="POST" enctype="multipart/form-data" style="display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin-bottom:0;width:100%;">
+            <?php wp_nonce_field('update_profil', 'profil_nonce'); ?>
+            <div style="position:relative;width:110px;height:110px;margin-bottom:10px;">
+                <img src="<?php echo esc_url($avatar_url ?: get_avatar_url($user_id)); ?>" alt="Photo de profil" style="width:110px;height:110px;object-fit:cover;border-radius:50%;border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,0.10);">
+                <button type="button" onclick="document.getElementById('avatarInput').click();" title="Modifier la photo" style="position:absolute;top:8px;right:-8px;background:rgba(255,255,255,0.98);border:none;border-radius:50%;padding:7px;cursor:pointer;color:#700118;font-size:1.1rem;box-shadow:0 4px 16px rgba(0,0,0,0.22);transition:background 0.2s;display:flex;align-items:center;justify-content:center;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path fill="#700118" d="M16.862 5.487a2.1 2.1 0 0 1 2.97 2.97l-8.8 8.8a1.5 1.5 0 0 1-.53.35l-3.13 1.13a.5.5 0 0 1-.64-.64l1.13-3.13a1.5 1.5 0 0 1 .35-.53l8.8-8.8Zm2.263-1.263a3.1 3.1 0 0 0-4.384 0l-8.8 8.8a2.5 2.5 0 0 0-.58.92l-1.13 3.13a1.5 1.5 0 0 0 1.92 1.92l3.13-1.13a2.5 2.5 0 0 0 .92-.58l8.8-8.8a3.1 3.1 0 0 0 0-4.384Z"/></svg>
+                </button>
+                <input type="file" id="avatarInput" name="avatar_file" accept="image/*" style="display:none;">
+                <button type="submit" id="avatarSubmit" style="display:none;"></button>
+            </div>
+        </form>
+        <div style="width:100%;text-align:left;">
+            <div style="font-size:1.25rem;font-weight:700;color:#F4EFEC;margin-bottom:2px;word-break:break-all;"> <?php echo esc_html($user->display_name); ?> </div>
+        </div>
+        <?php if ($updated) : ?>
+            <div class="profil-success-message" style="margin:0 0 0 0;">Modifications enregistrées !</div>
+        <?php endif; ?>
+        <?php if (!empty($profil_error)) : ?>
+            <div class="profil-error-message" style="margin:0 0 0 0;"> <?php echo esc_html($profil_error); ?> </div>
+        <?php endif; ?>
+        <form method="POST" style="display:flex;flex-direction:column;gap:18px;margin-bottom:0;align-items:flex-start;width:100%;padding-top:0;">
+            <?php wp_nonce_field('update_pseudo', 'pseudo_nonce'); ?>
+            <input type="hidden" name="action" value="update_pseudo">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <label for="new_pseudo" style="font-size:1.05rem;color:#F4EFEC;font-weight:500;margin-bottom:2px;">Changer de pseudo</label>
+                <input type="text" id="new_pseudo" name="new_pseudo" value="<?php echo esc_attr($user->display_name); ?>" maxlength="20" style="font-size:1.13rem;padding:12px 18px;border-radius:9px;border:1.5px solid #e5e5e5;width:100%;background:rgba(255,255,255,0.13);color:#fff;">
+            </div>
+            <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;">Modifier le pseudo</button>
+        </form>
+        <form method="POST" style="display:flex;flex-direction:column;gap:18px;margin-bottom:0;align-items:flex-start;width:100%;padding-top:0;">
+            <?php wp_nonce_field('update_password', 'password_nonce'); ?>
+            <input type="hidden" name="action" value="update_password">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <label for="current_password" style="font-size:1.05rem;color:#F4EFEC;font-weight:500;margin-bottom:2px;">Ancien mot de passe</label>
+                <input type="password" id="current_password" name="current_password" placeholder="Ancien mot de passe" required style="font-size:1.13rem;padding:12px 18px;border-radius:9px;border:1.5px solid #e5e5e5;width:100%;background:rgba(255,255,255,0.13);color:#fff;">
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+                <label for="new_password" style="font-size:1.05rem;color:#F4EFEC;font-weight:500;margin-bottom:2px;">Nouveau mot de passe</label>
+                <input type="password" id="new_password" name="new_password" minlength="6" placeholder="Nouveau mot de passe" required style="font-size:1.13rem;padding:12px 18px;border-radius:9px;border:1.5px solid #e5e5e5;width:100%;background:rgba(255,255,255,0.13);color:#fff;">
+            </div>
+            <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;">Changer le mot de passe</button>
+        </form>
+        <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn-logout-profil">Déconnexion</a>
+    </section>
 </main>
+<style>
+    .profil-title-align {
+        text-align: left;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+        font-size: 2.3rem;
+        padding-left: 24px;
+    }
+    .btn-logout-profil {
+        display: inline-block;
+        background: #700118;
+        color: #fff;
+        border: 2px solid #700118;
+        border-radius: 9px;
+        padding: 10px 24px;
+        font-weight: 600;
+        text-decoration: none;
+        font-size: 1.02rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        margin-left: 0;
+        transition: background 0.2s, color 0.2s, border 0.2s;
+        cursor: pointer;
+    }
+    .btn-logout-profil:hover {
+        background: #232323;
+        color: #fff;
+        border: 2px solid #232323;
+    }
+    .btn-profil-action {
+        background: #fff;
+        color: #700118;
+        border: 1.5px solid #700118;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        font-size: 0.98rem;
+        box-shadow: none;
+        transition: background 0.2s, color 0.2s, border 0.2s;
+        cursor: pointer;
+    }
+    .btn-profil-action:hover, .btn-profil-action:focus {
+        background: #700118;
+        color: #fff;
+        border: 1.5px solid #700118;
+    }
+    .btn-profil-action {
+        background: #fff;
+        color: #700118;
+        border: 1.5px solid #700118;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        font-size: 0.98rem;
+        box-shadow: none;
+        transition: background 0.2s, color 0.2s, border 0.2s;
+    }
+    .btn-profil-action:hover {
+        background: #700118;
+        color: #fff;
+        border: 1.5px solid #700118;
+    }
+    .profil-section input[type="text"],
+    .profil-section input[type="password"] {
+        border: 1.5px solid #fff !important;
+        outline: none !important;
+        transition: border 0.2s;
+        color: #fff;
+        background: rgba(255,255,255,0.13);
+    }
+    .profil-section input[type="text"]:focus,
+    .profil-section input[type="password"]:focus {
+        border: 1.5px solid #700118 !important;
+        outline: none !important;
+    }
+</style>
 <script>
-// Soumission auto du formulaire d'avatar
 document.getElementById('avatarInput')?.addEventListener('change', function() {
-    document.getElementById('avatarSubmit').click();
+        document.getElementById('avatarSubmit').click();
 });
-
 </script>
-
 <?php get_footer(); ?>
+    </section>
 
+</main>
 
+<script>
 
