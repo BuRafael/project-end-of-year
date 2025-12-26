@@ -60,5 +60,4 @@ get_header();
     </div>
 </main>
 
-get_footer();
-?>
+<?php get_footer(); ?>

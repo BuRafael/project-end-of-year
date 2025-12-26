@@ -12,7 +12,7 @@
                         ?>
                         <ul class="footer-menu">
                             <li><a href="<?php echo esc_url(home_url('/films')); ?>">Films</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/musique')); ?>">Musique</a></li>
+                            <li><a href="<?php echo esc_url(home_url('/series')); ?>">Séries</a></li>
                             <li><a href="<?php echo esc_url(home_url('/favoris')); ?>">Favoris</a></li>
                         </ul>
                         <?php

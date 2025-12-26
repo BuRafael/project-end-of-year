@@ -275,7 +275,8 @@ function theme_scripts() {
     // Fiche film template styles and scripts
     if (is_page_template('template-fiche-film.php') || $current_template === 'template-fiche-film.php') {
         wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/Fiche film.css'));
-        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-film.js'), true);
+        // Make fiche-film.js depend on main.js (theme-script) so carrousel is always available (casse corrigée)
+        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('theme-script','bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-film.js'), true);
         
         // Récupérer le slug de la page actuelle pour le movie_id
         global $post;
