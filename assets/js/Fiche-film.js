@@ -282,18 +282,111 @@ if (tracksTable) {
     });
 }
 
-// Gestion du like du film (coeur sous l'affiche)
+// Gestion du like du film (coeur sous l'affiche) - version synchronisée avec le compte utilisateur
 const movieLikeBtn = document.getElementById('movieLikeBtn');
 if (movieLikeBtn) {
-    movieLikeBtn.addEventListener('click', function () {
-        const icon = this.querySelector('.bi-heart, .bi-heart-fill');
-        const liked = this.classList.toggle('liked');
+    // Vérifier l'état de connexion utilisateur
+    let isUserLoggedIn = false;
+    try {
+        isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+    } catch (e) {}
+
+    // Désactiver le bouton si déconnecté
+    if (!isUserLoggedIn) {
+        movieLikeBtn.classList.remove('liked');
+        movieLikeBtn.setAttribute('aria-pressed', 'false');
+        const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
         if (icon) {
-            icon.classList.toggle('bi-heart', !liked);
-            icon.classList.toggle('bi-heart-fill', liked);
+            icon.classList.add('bi-heart');
+            icon.classList.remove('bi-heart-fill');
+            icon.style.color = '#1A1A1A';
         }
-        this.setAttribute('aria-pressed', liked ? 'true' : 'false');
-    });
+        // Optionnel : afficher un tooltip ou désactiver le bouton
+        movieLikeBtn.disabled = true;
+    } else {
+        // Charger l'état du like depuis la base (favoris utilisateur)
+        fetch(window.ajaxurl || window.wp_data.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' })
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.films)) {
+                const movieSlug = movieLikeBtn.dataset.movieSlug || window.currentMovieSlug || '';
+                const isFavorite = data.data.films.some(film => film.id === movieSlug);
+                if (isFavorite) {
+                    movieLikeBtn.classList.add('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'true');
+                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+                    if (icon) {
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                        icon.style.color = '#700118';
+                    }
+                } else {
+                    movieLikeBtn.classList.remove('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'false');
+                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+                    if (icon) {
+                        icon.classList.add('bi-heart');
+                        icon.classList.remove('bi-heart-fill');
+                        icon.style.color = '#1A1A1A';
+                    }
+                }
+            }
+        });
+
+        // Gestion du clic
+        movieLikeBtn.addEventListener('click', function () {
+            const icon = this.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+            const liked = this.classList.toggle('liked');
+            this.setAttribute('aria-pressed', liked ? 'true' : 'false');
+            if (icon) {
+                icon.classList.toggle('bi-heart', !liked);
+                icon.classList.toggle('bi-heart-fill', liked);
+                icon.style.color = liked ? '#700118' : '#1A1A1A';
+            }
+            // Ajouter ou retirer des favoris via AJAX
+            const movieSlug = this.dataset.movieSlug || window.currentMovieSlug || '';
+            const movieTitle = this.dataset.movieTitle || document.querySelector('.movie-header h1')?.textContent || '';
+            const movieYear = this.dataset.movieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
+            const moviePoster = this.dataset.movieImage || document.getElementById('moviePosterImg')?.src || '';
+            if (liked) {
+                // Ajouter aux favoris
+                const filmData = {
+                    id: movieSlug,
+                    title: movieTitle,
+                    year: movieYear,
+                    image: moviePoster,
+                    url: window.location.href
+                };
+                const form = new URLSearchParams();
+                form.append('action', 'add_user_favorite');
+                form.append('type', 'films');
+                form.append('item', JSON.stringify(filmData));
+                fetch(window.ajaxurl || window.wp_data.ajax_url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                });
+            } else {
+                // Retirer des favoris
+                const form = new URLSearchParams();
+                form.append('action', 'remove_user_favorite');
+                form.append('type', 'films');
+                form.append('id', movieSlug);
+                fetch(window.ajaxurl || window.wp_data.ajax_url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                });
+            }
+        });
+    }
 }
 
 // === COMMENTAIRES ===
@@ -400,6 +493,15 @@ function renderComment(commentData) {
         const likeCountSpan = col.querySelector('.like-count');
         if (likeBtn && likeCountSpan) {
             likeBtn.addEventListener('click', function () {
+                // Vérifier connexion utilisateur
+                var isUserLoggedIn = false;
+                try {
+                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+                } catch (e) {}
+                if (!isUserLoggedIn) {
+                    window.location.href = '/inscription';
+                    return;
+                }
                 let count = parseInt(likeCountSpan.textContent, 10);
                 if (isNaN(count)) count = 0;
                 const isLiked = likeBtn.classList.toggle('liked');

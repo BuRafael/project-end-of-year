@@ -3,7 +3,23 @@
  * Gère l'affichage et les interactions de la page favoris
  */
 
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Contrôle PHP pour savoir si l'utilisateur est connecté
+    var isUserLoggedIn = false;
+    try {
+        isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+    } catch (e) {}
+    // Si l'utilisateur n'est pas connecté, ne rien afficher côté JS
+    if (!isUserLoggedIn) {
+        // Optionnel : vider les grilles si jamais du JS s'exécute
+        var grids = ['filmsGrid', 'seriesGrid', 'musiquesList'];
+        grids.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = '';
+        });
+        return;
+    }
 
     // Récupération des éléments
     const tabs = document.querySelectorAll('.favoris-tab');
@@ -32,15 +48,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Charger les favoris depuis localStorage
-    function loadFavorites() {
-        const favorites = {
-            films: JSON.parse(localStorage.getItem('favoriteFilms') || '[]'),
-            series: JSON.parse(localStorage.getItem('favoriteSeries') || '[]'),
-            musiques: JSON.parse(localStorage.getItem('favoriteTracks') || '[]')
-        };
 
-        return favorites;
+    // Charger les favoris depuis la base de données WordPress (AJAX)
+    function loadFavorites(callback) {
+        fetch(ajaxurl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=get_user_favorites'
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data) {
+                callback(data.data);
+            } else {
+                callback({ films: [], series: [], musiques: [] });
+            }
+        })
+        .catch(() => callback({ films: [], series: [], musiques: [] }));
     }
 
     // Afficher les films favoris
@@ -159,33 +184,54 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Supprimer un favori
+
     function removeFavorite(type, id) {
-        let storageKey = '';
-        
-        if (type === 'film') {
-            storageKey = 'favoriteFilms';
-        } else if (type === 'serie') {
-            storageKey = 'favoriteSeries';
-        } else if (type === 'musique') {
-            storageKey = 'favoriteTracks';
-        }
-        
-        if (!storageKey) return;
-        
-        const favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        const updated = favorites.filter(item => item.id !== id);
-        localStorage.setItem(storageKey, JSON.stringify(updated));
-        
-        // Recharger l'affichage
-        init();
+        let wpType = '';
+        if (type === 'film') wpType = 'films';
+        else if (type === 'serie') wpType = 'series';
+        else if (type === 'musique') wpType = 'musiques';
+        if (!wpType) return;
+        const form = new URLSearchParams();
+        form.append('action', 'remove_user_favorite');
+        form.append('type', wpType);
+        form.append('id', id);
+        fetch(ajaxurl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString()
+        })
+        .then(() => init());
+    }
+
+
+    // Ajouter un favori (à appeler dans ton code d'ajout)
+    window.addFavorite = function(type, item) {
+        let wpType = '';
+        if (type === 'film') wpType = 'films';
+        else if (type === 'serie') wpType = 'series';
+        else if (type === 'musique') wpType = 'musiques';
+        if (!wpType) return;
+        const form = new URLSearchParams();
+        form.append('action', 'add_user_favorite');
+        form.append('type', wpType);
+        form.append('item', JSON.stringify(item));
+        fetch(ajaxurl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString()
+        })
+        .then(() => init());
     }
 
     // Initialiser l'affichage
     function init() {
-        const favorites = loadFavorites();
-        renderFilms(favorites.films);
-        renderSeries(favorites.series);
-        renderMusiques(favorites.musiques);
+        loadFavorites(function(favorites) {
+            renderFilms(favorites.films);
+            renderSeries(favorites.series);
+            renderMusiques(favorites.musiques);
+        });
     }
 
     // Lancer l'initialisation

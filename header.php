@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 
@@ -8,9 +9,9 @@
     <?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class(); ?> data-user-logged-in="<?php echo is_user_logged_in() ? 'true' : 'false'; ?>">
     <?php wp_body_open(); ?>
-    
+
     <?php
     // Vérifier si l'utilisateur vient de terminer son inscription
     if (!is_user_logged_in() && isset($_COOKIE['cinemusic_just_registered'])) {

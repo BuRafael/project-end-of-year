@@ -1,4 +1,72 @@
 <?php
+// === FAVORIS UTILISATEUR : API AJAX ===
+add_action('wp_ajax_get_user_favorites', 'cinemusic_get_user_favorites');
+add_action('wp_ajax_add_user_favorite', 'cinemusic_add_user_favorite');
+add_action('wp_ajax_remove_user_favorite', 'cinemusic_remove_user_favorite');
+
+function cinemusic_get_user_favorites() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Non connecté.']);
+    }
+    $user_id = get_current_user_id();
+    $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
+    if (!is_array($favorites)) {
+        $favorites = [
+            'films' => [],
+            'series' => [],
+            'musiques' => []
+        ];
+    }
+    wp_send_json_success($favorites);
+}
+
+function cinemusic_add_user_favorite() {
+    if (!is_user_logged_in() || !isset($_POST['type']) || !isset($_POST['item'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    $user_id = get_current_user_id();
+    $type = sanitize_text_field($_POST['type']);
+    $item = json_decode(stripslashes($_POST['item']), true);
+    $allowed = ['films', 'series', 'musiques'];
+    if (!in_array($type, $allowed) || !is_array($item) || !isset($item['id'])) {
+        wp_send_json_error(['message' => 'Type ou item invalide.']);
+    }
+    $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
+    if (!is_array($favorites)) {
+        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
+    }
+    // Éviter les doublons
+    foreach ($favorites[$type] as $fav) {
+        if ($fav['id'] == $item['id']) {
+            wp_send_json_success($favorites);
+        }
+    }
+    $favorites[$type][] = $item;
+    update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+    wp_send_json_success($favorites);
+}
+
+function cinemusic_remove_user_favorite() {
+    if (!is_user_logged_in() || !isset($_POST['type']) || !isset($_POST['id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    $user_id = get_current_user_id();
+    $type = sanitize_text_field($_POST['type']);
+    $id = sanitize_text_field($_POST['id']);
+    $allowed = ['films', 'series', 'musiques'];
+    if (!in_array($type, $allowed)) {
+        wp_send_json_error(['message' => 'Type invalide.']);
+    }
+    $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
+    if (!is_array($favorites)) {
+        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
+    }
+    $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
+        return $fav['id'] != $id;
+    }));
+    update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+    wp_send_json_success($favorites);
+}
 // === SYSTÈME DE LIKE SUR COMMENTAIRES ===
 add_action('wp_ajax_like_comment', 'theme_like_comment');
 function theme_like_comment() {

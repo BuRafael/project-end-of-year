@@ -268,7 +268,6 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 
 <!-- CTA Section (Call To Action) -->
 
-
 <section class="cta-section section-animated">
 	<hr class="cta-hr">
 	<div class="cta-text">
@@ -284,6 +283,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 		<?php endif; ?>
 	</div>
 </section>
+
 
 <?php get_footer(); ?>
 

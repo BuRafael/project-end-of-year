@@ -411,20 +411,5 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 
 
 
-    <!-- CTA Section (Call To Action) -->
-
-    <section class="cta-section section-animated">
-        <hr class="cta-hr">
-        <div class="cta-text">
-            <p>
-                Ne ratez plus jamais vos bandes originales préférées.<br>
-                Rejoignez notre communauté et plongez dans<br>
-                l'univers musical de tous vos films et séries favoris !
-            </p>
-            <?php if (!is_user_logged_in()) : ?>
-                <?php echo cinemusic_signup_button(); ?>
-            <?php endif; ?>
-        </div>
-    </section>
 
 <?php get_footer(); ?>
