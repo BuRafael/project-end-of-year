@@ -423,8 +423,22 @@ if (isset($movie_tracks[$page_slug])) {
         </div>
     </section>
 
-    <!-- ===== CTA SECTION ===== -->
 
+    <!-- ===== CTA SECTION ===== -->
+    <section class="cta-section section-animated">
+        <div class="cta-text">
+            <p>
+                Ne ratez plus jamais vos bandes originales préférées.<br>
+                Rejoignez notre communauté et plongez dans<br>
+                l'univers musical de tous vos films et séries favoris !
+            </p>
+            <?php if (!is_user_logged_in()) : ?>
+                <div style="width:100%;display:flex;justify-content:center;margin-top:18px;">
+                    <?php echo cinemusic_signup_button(); ?>
+                </div>
+            <?php endif; ?>
+        </div>
+    </section>
 
 </main>
 
