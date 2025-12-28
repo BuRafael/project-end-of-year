@@ -20,7 +20,7 @@
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <span style="display:block;">CINEMUSIC</span>
+            <span style="display:block; margin-top: 12px;">CINEMUSIC</span>
         </h1>
         <div class="register-hero__logo">
             <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
@@ -28,7 +28,7 @@
     </div>
 
     <div class="register-card">
-        <h2><?php esc_html_e('Se connecter', 'project-end-of-year'); ?></h2>
+        <h2 class="login-title-custom"><?php esc_html_e('Se connecter', 'project-end-of-year'); ?></h2>
 
         <?php
         if (isset($_GET['login']) && $_GET['login'] == 'failed') {
@@ -59,13 +59,13 @@
                 </div>
 
                 <button type="submit" name="login_submit" class="btn-register-primary">
-                    <?php esc_html_e('Suivant', 'project-end-of-year'); ?>
+                    <span style="font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif; font-weight: 600; font-size: 14px;"><?php esc_html_e('Suivant', 'project-end-of-year'); ?></span>
                 </button>
             </form>
 
-            <p class="auth-link" style="margin-top: 20px; text-align: center; font-size: 0.95rem;">
-                <?php esc_html_e('Pas de compte ?', 'project-end-of-year'); ?>
-                <a href="<?php echo esc_url(home_url('/inscription')); ?>" style="color: var(--reg-primary); text-decoration: none; font-weight: 600;">
+            <p class="auth-link login-link-custom" style="margin-top: 20px;">
+                <span class="no-account-text"><?php esc_html_e('Pas de compte ?', 'project-end-of-year'); ?></span>
+                <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="signup-link-custom">
                     <?php esc_html_e("S'inscrire", 'project-end-of-year'); ?>
                 </a>
             </p>
