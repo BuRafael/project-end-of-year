@@ -20,11 +20,11 @@
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <strong><?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?></strong>
-            <div class="register-hero__logo">
-                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
-            </div>
+            <span style="display:block;">CINEMUSIC</span>
         </h1>
+        <div class="register-hero__logo">
+            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
+        </div>
         <div class="register-card">
         <h2><?php esc_html_e('Créez ton profil!', 'project-end-of-year'); ?></h2>
 
@@ -60,11 +60,7 @@
 
                 <div class="field field--password">
                     <input type="password" name="user_pass" id="user_pass" placeholder="Mot de passe" required>
-                    <button type="button" class="password-toggle" data-toggle-password="user_pass" aria-label="<?php esc_attr_e('Afficher / masquer le mot de passe', 'project-end-of-year'); ?>">
-                        <span class="toggle-icon" aria-hidden="true">
-                            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/eye.svg'); ?>" alt="Afficher le mot de passe" style="width:22px;height:22px;vertical-align:middle;filter:invert(0);">
-                        </span>
-                    </button>
+                    <!-- Icône d'œil retirée -->
                     <?php
                     if (isset($_GET['registration']) && $_GET['registration'] == 'error') {
                         echo '<div class="error-message">Les mots de passe ne correspondent pas. Réessaie.</div>';
@@ -74,11 +70,7 @@
 
                 <div class="field field--password">
                     <input type="password" name="user_pass_confirm" id="user_pass_confirm" placeholder="Confirme ton mot de passe" required>
-                    <button type="button" class="password-toggle" data-toggle-password="user_pass_confirm" aria-label="<?php esc_attr_e('Afficher / masquer le mot de passe', 'project-end-of-year'); ?>">
-                        <span class="toggle-icon" aria-hidden="true">
-                            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/eye.svg'); ?>" alt="Afficher le mot de passe" style="width:22px;height:22px;vertical-align:middle;filter:invert(0);">
-                        </span>
-                    </button>
+                    <!-- Icône d'œil retirée -->
                 </div>
 
                 <button type="submit" name="register_submit" class="btn-register-primary">
@@ -87,10 +79,10 @@
             </form>
 
             <p class="auth-link" style="margin-top: 20px; text-align: center; font-size: 0.95rem;">
-                <span style="font-weight:400;">
+                <span style="font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif; font-weight: 400; font-size: 16px;">
                     <?php esc_html_e('Vous avez déjà un compte ?', 'project-end-of-year'); ?>
                 </span>
-                <a href="<?php echo esc_url(home_url('/login')); ?>" style="color: var(--reg-primary); text-decoration: none; font-weight: 600;">
+                <a href="<?php echo esc_url(home_url('/login')); ?>" style="color: var(--reg-primary); text-decoration: none; font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif; font-weight: 700; font-size: 16px;">
                     <?php esc_html_e('Se connecter', 'project-end-of-year'); ?>
                 </a>
             </p>

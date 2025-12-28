@@ -15,7 +15,7 @@
 }
 
 body {
-	background: var(--reg-bg);
+	background: #1a1a1a;
 	color: var(--reg-white);
 	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
 	font-weight: 100;
@@ -89,11 +89,11 @@ body {
 .register-card {
 	width: 455px;
 	max-width: 100%;
-	background: var(--reg-panel);
-	border: 3px solid var(--reg-border);
+	background: #1a1a1a;
+	border: 3px solid var(--reg-white);
 	border-radius: 16px;
 	padding: 40px 35px 45px;
-	box-shadow: var(--reg-shadow);
+	box-shadow: none;
 	display: flex;
 	flex-direction: column;
 	align-items: center;

@@ -20,11 +20,11 @@
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?>
-            <div class="register-hero__logo">
-                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
-            </div>
+            <span style="display:block;">CINEMUSIC</span>
         </h1>
+        <div class="register-hero__logo">
+            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
+        </div>
     </div>
 
     <div class="register-card">
