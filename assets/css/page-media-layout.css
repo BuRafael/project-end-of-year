@@ -406,7 +406,7 @@ body {
   object-fit: cover;
   border-radius: 8px;
   margin-bottom: 8px;
-  border: 3px solid #fff;
+  border: 3px solid #F4EFEC;
   box-sizing: border-box;
 }
 .trend-card h4 {
@@ -647,7 +647,7 @@ body {
 .top-media h2 {
   font-size: 2rem;
   margin-bottom: 16px;
-  color: #fff;
+  color: #F4EFEC;
   background: #232323;
   border-radius: 14px;
   transition: box-shadow 0.25s, transform 0.22s;

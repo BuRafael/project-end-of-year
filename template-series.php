@@ -266,23 +266,25 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 		}
 ?>
 
-<!-- CTA Section (Call To Action) -->
 
-<section class="cta-section section-animated">
-	<hr class="cta-hr">
-	<div class="cta-text">
-		<p>
-			Ne ratez plus jamais vos bandes originales préférées.<br>
-			Rejoignez notre communauté et plongez dans<br>
-			l'univers musical de tous vos films et séries favoris !
-		</p>
-		<?php if (!is_user_logged_in()) : ?>
-			<div style="width:100%;display:flex;justify-content:center;margin-top:18px;">
-				<?php echo cinemusic_signup_button(); ?>
-			</div>
-		<?php endif; ?>
-	</div>
-</section>
+		<!-- Scroll to Top Button styled like front-page -->
+		<link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/front-page.css">
+		<button class="scroll-to-top" id="scrollToTop" aria-label="Remonter en haut" type="button" style="display: none;">
+			<svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<polyline class="scroll-arrow" points="7,17 14,10 21,17" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+			</svg>
+		</button>
+		<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const btn = document.getElementById('scrollToTop');
+			window.addEventListener('scroll', function() {
+				btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+			});
+			btn.addEventListener('click', function() {
+				window.scrollTo({ top: 0, behavior: 'smooth' });
+			});
+		});
+		</script>
 
 
 <?php get_footer(); ?>

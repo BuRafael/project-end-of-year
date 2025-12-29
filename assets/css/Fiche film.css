@@ -5,7 +5,7 @@
     height: 38px;
     border-radius: 50%;
     overflow: hidden;
-    background: #fff;
+    background: #F4EFEC;
     vertical-align: middle;
     margin-right: 8px;
 }
@@ -24,7 +24,7 @@
     height: 38px;
 }
 #movieLikeBtn .svg-heart-shape {
-    stroke: #fff;
+    stroke: #F4EFEC;
     stroke-width: 2.2;
     fill: none;
     transition: fill 0.2s, stroke 0.2s;
@@ -266,7 +266,7 @@ body .movie-page > section:last-child {
 .text-dark { color: #1A1A1A !important; }
 .text-light { color: #F4EFEC !important; }
 .bg-dark { background: #1A1A1A !important; }
-.bg-white { background: #FFFFFF !important; }
+.bg-white { background: #F4EFEC !important; }
 .border-main { border-color: #700118 !important; }
 .border-light { border-color: #F4EFEC !important; }
 .fw-600 { font-weight: 600 !important; }

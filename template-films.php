@@ -412,4 +412,25 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 
 
 
+
+
+        <!-- Scroll to Top Button styled like front-page -->
+        <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/front-page.css">
+        <button class="scroll-to-top" id="scrollToTop" aria-label="Remonter en haut" type="button" style="display: none;">
+            <svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polyline class="scroll-arrow" points="7,17 14,10 21,17" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </button>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('scrollToTop');
+            window.addEventListener('scroll', function() {
+                btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+            });
+            btn.addEventListener('click', function() {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+        </script>
+
 <?php get_footer(); ?>

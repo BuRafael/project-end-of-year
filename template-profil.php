@@ -244,6 +244,9 @@ document.getElementById('avatarInput')?.addEventListener('change', function() {
 });
 </script>
 
+<style>
+    .scroll-to-top { display: none !important; }
+</style>
 <?php get_footer(); ?>
 
 <script>

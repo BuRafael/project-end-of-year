@@ -52,7 +52,7 @@
 	height: 140px;
 	border-radius: 50%;
 	overflow: hidden;
-	border: 2.5px solid #fff;
+	border: 2.5px solid #F4EFEC;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -105,12 +105,12 @@
 
 .btn-profil-simple:hover {
     background: #a31c3a;
-    color: #fff;
+	color: #F4EFEC;
     border-color: #a31c3a;
 }
 
 .btn-profil-simple.btn-logout-simple {
-	background: #fff;
+	background: #F4EFEC;
 	color: #a31c3a;
 	margin-top: 18px;
 	font-weight: 700;
