@@ -62,7 +62,7 @@ if (isset($_POST['avatar_submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/base.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-step.css'); ?>">
+    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-step2.css'); ?>">
 </head>
 <body <?php body_class('page-register-avatar'); ?>>
 
@@ -70,11 +70,11 @@ if (isset($_POST['avatar_submit'])) {
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <strong><?php esc_html_e('CINEMUSIC!', 'project-end-of-year'); ?></strong>
-            <div class="register-hero__logo">
-                <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
-            </div>
+            <span style="display:block;">CINEMUSIC</span>
         </h1>
+        <div class="register-hero__logo">
+            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
+        </div>
     </div>
 
     <div class="register-card register-card--avatar">
@@ -104,11 +104,13 @@ if (isset($_POST['avatar_submit'])) {
                 <?php esc_html_e('Importer une image', 'project-end-of-year'); ?>
             </button>
             <div class="avatar-actions">
-                <a class="btn-ghost" href="<?php echo esc_url(home_url()); ?>">
+                <a class="btn-skip" href="<?php echo esc_url(home_url()); ?>" style="border: 1.5px solid #F4EFEC !important; border-radius: 24px !important; background: var(--reg-panel) !important; color: #F4EFEC !important; width: 140px !important; height: 40px !important; padding: 0 18px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; text-align: center !important; font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important; font-weight: 600 !important; font-size: 14px !important; letter-spacing: 0.4px !important; box-sizing: border-box !important;">
                     <?php esc_html_e('Passer', 'project-end-of-year'); ?>
                 </a>
                 <button type="submit" name="avatar_submit" class="btn-register-primary">
-                    <?php esc_html_e('Terminer', 'project-end-of-year'); ?>
+                    <span style="font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif; font-weight: 600; font-size: 14px;">
+                        <?php esc_html_e('Terminer', 'project-end-of-year'); ?>
+                    </span>
                 </button>
             </div>
         </form>

@@ -11,7 +11,7 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/base.css'); ?>?v=<?php echo filemtime(get_template_directory() . '/functions.php'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-step.css'); ?>?v=<?php echo filemtime(get_template_directory() . '/functions.php'); ?>">
+    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-main.css'); ?>?v=<?php echo filemtime(get_template_directory() . '/functions.php'); ?>">
     <?php wp_head(); ?>
 </head>
 <body <?php body_class('page-register'); ?>>
