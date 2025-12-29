@@ -356,6 +356,7 @@ function theme_scripts() {
     if (is_page_template('Favoris.php') || $current_template === 'Favoris.php' || is_page('favoris')) {
         wp_enqueue_style('favoris-style', get_template_directory_uri() . '/assets/css/favoris.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/favoris.css'));
         wp_enqueue_script('favoris-script', get_template_directory_uri() . '/assets/js/favoris.js', array(), filemtime(get_template_directory() . '/assets/js/favoris.js'), true);
+        wp_localize_script('favoris-script', 'ajaxurl', array('url' => admin_url('admin-ajax.php')));
     }
     
     // Global script (smooth scroll)

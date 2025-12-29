@@ -813,6 +813,9 @@ if (likeBtn) {
             if (!favoriteFilms.some(film => film.id === movieSlug)) {
                 favoriteFilms.push(filmData);
                 localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
+                if (typeof window.addFavorite === 'function') {
+                    window.addFavorite('film', filmData);
+                }
             }
         } else {
             favoriteFilms = favoriteFilms.filter(film => film.id !== movieSlug);

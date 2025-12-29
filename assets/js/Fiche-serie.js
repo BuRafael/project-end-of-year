@@ -212,19 +212,22 @@ document.addEventListener('click', function(e) {
         
         if (liked) {
             e.target.classList.remove('bi-heart');
-            e.target.classList.add('bi-heart-fill');
-        } else {
-            e.target.classList.remove('bi-heart-fill');
-            e.target.classList.add('bi-heart');
-        }
-        
-        // Gérer les favoris de pistes
-        let favoriteTracks = JSON.parse(localStorage.getItem('favoriteTracks') || '[]');
-        const trackId = `${window.currentMovieSlug}-${trackNumber}`;
-        
-        if (liked) {
             // Ajouter aux favoris
-            const trackData = {
+            const serieData = {
+                id: serieSlug,
+                title: serieTitle,
+                year: serieYear,
+                image: seriePoster,
+                url: window.location.href
+            };
+            // Vérifier si pas déjà présent
+            if (!favoriteSeries.some(serie => serie.id === serieSlug)) {
+                favoriteSeries.push(serieData);
+                localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
+                if (typeof window.addFavorite === 'function') {
+                    window.addFavorite('serie', serieData);
+                }
+            }
                 id: trackId,
                 title: trackTitle,
                 artist: trackArtist,
