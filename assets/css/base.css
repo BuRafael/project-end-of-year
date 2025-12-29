@@ -1,3 +1,16 @@
+/* Titre principal harmonisé Futura 100 Typekit */
+.movie-header h1,
+.movie-header .featured-a-la-une-text {
+  font-family: 'futura-pt', 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+  font-weight: 100 !important;
+  font-size: 24px !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0 !important;
+}
+/* Typo globale Typekit pour tout le site */
+body, body * {
+  font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+}
 /* ==================================================
    Base CSS - Reset + Global Styles
    ================================================== */

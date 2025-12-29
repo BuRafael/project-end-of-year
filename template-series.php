@@ -50,7 +50,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 
 		<!-- 2. Section Tendance du moment (5 éléments) -->
 		<section class="trending-media mb-5">
-			<h2 class="section-title mb-4">Tendance du moment</h2>
+			<h2 class="section-title mb-4">Tendances du moment</h2>
 			<div class="trend-list">
 				<div class="trend-card">
 					<img src="<?php echo get_template_directory_uri(); ?>/assets/image/Fiche série/squid game saison 3.jpg" alt="Squid Game Saison 3">

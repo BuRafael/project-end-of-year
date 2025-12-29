@@ -1,3 +1,54 @@
+/* Harmonisation du titre principal fiche film et fiche série via CSS global */
+.movie-header h1.fw-bold {
+  font-size: 24px !important;
+  font-family: 'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight: 600 !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+/* Harmonisation du titre principal fiche film et fiche série */
+.movie-header h1.fw-bold {
+  font-size: 24px !important;
+  font-family: 'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight: 600 !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+.movies-section .similar-card-title {
+  font-size:16px !important;
+  font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight:600 !important;
+  color:#700118 !important;
+}
+.similar-card-title {
+  font-size:16px !important;
+  font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight:600 !important;
+  color:#700118 !important;
+}
+.movies-section .similar-card .card-title,
+.movies-section .trend-card .card-title,
+.movies-section .new-card .card-title,
+.carousel-card .card-title,
+.carousel-card-title {
+  font-size:16px !important;
+  font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight:600 !important;
+  color:#700118 !important;
+}
+.movies-section .similar-card,
+.movies-section .trend-card,
+.movies-section .new-card {
+  background: #F4EFEC !important;
+  border: none !important;
+}
+.carousel-arrow,
+.carousel-arrow:hover {
+  transform: none !important;
+  transition: none !important;
+}
 .featured-card:hover {
   box-shadow: none !important;
   transform: none !important;
@@ -132,10 +183,8 @@ h3.section-title.mb-3 {
 /* --- CAROUSEL ARROWS FIX --- */
 .carousel-arrow {
   position: absolute !important;
-  top: 50% !important;
   left: auto;
   right: auto;
-  transform: translateY(-50%) !important;
   z-index: 2 !important;
   width: 48px !important;
   height: 48px !important;
@@ -150,12 +199,9 @@ h3.section-title.mb-3 {
   align-items: center !important;
   justify-content: center !important;
   font-size: 80px !important;
-  transition: color 0.2s !important;
 }
 .carousel-arrow:hover {
   color: #700118 !important;
-  transform: translateY(-50%) !important;
-  top: 50% !important;
 }
 .carousel-arrow.left {
   left: -40px !important;
@@ -269,12 +315,6 @@ h3.section-title.mb-3 {
 }
 /* Titres principaux harmonisés : Futura 100, gras, 24px, majuscules, rouge site */
 /* Import Futura 100 si disponible en webfont locale ou via @font-face */
-@font-face {
-  font-family: 'Futura 100';
-  src: local('Futura 100'), local('Futura Light'), url('/assets/fonts/Futura100.woff2') format('woff2'), url('/assets/fonts/Futura100.woff') format('woff');
-  font-weight: 100;
-  font-style: normal;
-}
 
 /* Applique Futura 100 sur les titres principaux */
 /* Sous-titres et titres secondaires : Futura 100, normal, 1.1rem, couleur claire */
@@ -477,8 +517,6 @@ body {
   margin: 0;
 .carousel-arrow {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
   z-index: 2;
   width: 48px;
   height: 48px;

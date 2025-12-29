@@ -159,8 +159,12 @@ if (isset($series_info[$page_slug])) {
     <script>window.currentSerieSlug = '<?php echo esc_js($page_slug); ?>';</script>
     <!-- TITRE + INFOS GENERALES -->
     <section class="movie-header">
-        <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
-        <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($aired); ?> – <?php echo esc_html($info['total_tracks']); ?> pistes</p>
+        <h1 class="fw-bold mb-1">
+            <?php echo esc_html($title); ?>
+        </h1>
+        <p class="movie-sub mb-4" style="font-size:18px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:400;color:#F4EFEC;">
+            <?php echo esc_html($aired); ?> • <?php echo esc_html($info['creators']); ?> • <?php echo esc_html($info['seasons']); ?> saison • <?php echo esc_html($info['genres']); ?>
+        </p>
 
         <div class="row g-4">
             <!-- POSTER -->

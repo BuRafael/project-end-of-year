@@ -271,7 +271,9 @@ if (isset($movie_tracks[$page_slug])) {
 
     <!-- TITRE + INFOS GENERALES -->
     <section class="movie-header">
-        <h1 class="fw-bold mb-1"><?php echo esc_html($title); ?></h1>
+        <h1 class="fw-bold mb-1">
+            <?php echo esc_html($title); ?>
+        </h1>
         <p class="movie-sub small text-secondary mb-4"><?php echo esc_html($year); ?> – <?php echo intval($num_tracks); ?> piste<?php echo $num_tracks > 1 ? 's' : ''; ?></p>
 
         <div class="row g-4">

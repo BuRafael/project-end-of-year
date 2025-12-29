@@ -308,7 +308,6 @@ th.col-title, th.col-links, th.col-num, td.col-duration { font-size: 20px !impor
     margin-bottom: 1.2rem;
     margin-left: 0;
 }
-@font-face { font-family: 'Futura 100'; src: local('Futura 100'), local('Futura Light'), url('/assets/fonts/Futura100.woff2') format('woff2'), url('/assets/fonts/Futura100.woff') format('woff'); font-weight: 100; font-style: normal; }
 .section-title {
     font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
     font-weight: bold !important;
