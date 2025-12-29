@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (typeof initScrollToTop === 'function') initScrollToTop();
     initHearts();
     initCtaButton();
+    animateCountersOnScroll();
 });
 
 /**
@@ -146,3 +147,49 @@ function initTogglePassword() {
         toggle.textContent = type === 'password' ? '👁️' : '🙈';
     });
 }
+
+// ========== COMPTEUR ANIMÉ AU SCROLL ========== 
+function animateCountersOnScroll() {
+  const counters = document.querySelectorAll('.front-stats__number');
+
+  function animateCounter(counter) {
+    const target = +counter.getAttribute('data-animate-number');
+    const duration = 1200;
+    const start = 0;
+    let startTimestamp = null;
+
+    function step(timestamp) {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      counter.textContent = '+' + Math.floor(progress * (target - start) + start);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        counter.textContent = '+' + target;
+      }
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  function onScroll() {
+    const statsSection = document.querySelector('.front-stats');
+    if (!statsSection) return;
+    const rect = statsSection.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      counters.forEach(counter => {
+        animateCounter(counter);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  // Relance aussi à chaque focus de la fenêtre
+  window.addEventListener('focus', onScroll);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initCarousel();
+  if (typeof initScrollToTop === 'function') initScrollToTop();
+  initHearts();
+  initCtaButton();
+  animateCountersOnScroll();
+});

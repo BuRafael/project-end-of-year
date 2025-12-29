@@ -95,24 +95,6 @@ get_header();
         </div>
     </section>
 
-    <!-- STATISTIQUES Section (mise en avant) -->
-    <section class="front-stats section-animated">
-      <div class="front-stats__item">
-        <span class="front-stats__icon"><i class="bi bi-music-note-beamed"></i></span>
-        <span class="front-stats__number" data-animate-number="1200">+1200</span>
-        <span class="front-stats__label">Bandes originales référencées</span>
-      </div>
-      <div class="front-stats__item">
-        <span class="front-stats__icon"><i class="bi bi-person-video3"></i></span>
-        <span class="front-stats__number" data-animate-number="350">+350</span>
-        <span class="front-stats__label">Compositeurs</span>
-      </div>
-      <div class="front-stats__item">
-        <span class="front-stats__icon"><i class="bi bi-people"></i></span>
-        <span class="front-stats__number" data-animate-number="5000">+5000</span>
-        <span class="front-stats__label">Utilisateurs</span>
-      </div>
-    </section>
 
     <!-- TOP 5 Section -->
     <section class="tops-section">
