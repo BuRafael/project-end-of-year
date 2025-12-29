@@ -52,7 +52,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 
 		<!-- 2. Section Tendance du moment (5 éléments) -->
         <section class="trending-media">
-			<h2 class="section-title mb-4">Tendance du moment</h2>
+            <h2 class="section-title mb-4">Tendances du moment</h2>
 			<div class="trend-list">
 				<div class="trend-card">
 					<img src="<?php echo get_template_directory_uri(); ?>/assets/image/Fiche films/ne zha 2.jpg" alt="Ne Zha 2">
@@ -106,7 +106,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Science-Fiction', 'Horreur', 'Ro
 
            <!-- 4. GENRES POPULAIRES section title + Carrousels par genre (Action, Comédie, Horreur, Romance, Science-Fiction) -->
            <section class="movies-section mt-5 mb-4 genres-populaires-block" style="max-width:1100px;width:100%;box-sizing:border-box;">
-               <h2 id="genres-populaires-title" class="section-title">GENRES POPULAIRES</h2>
+               <h2 id="genres-populaires-title" class="section-title">Genres populaires</h2>
                <h3 class="section-title mb-3">Action</h3>
              <div class="movies-carousel d-flex align-items-center">
             <div style="display: flex; align-items: center; width: 100%;">

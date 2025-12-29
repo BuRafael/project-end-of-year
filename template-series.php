@@ -38,9 +38,11 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 							<span class="meta-genres">Drame, Post-apocalyptique</span>
 						</div>
 						<div class="featured-synopsis">
-							<p>Dans un monde ravagé par une pandémie fongique, Joel doit escorter Ellie, une adolescente immunisée, à travers les États-Unis. Adaptation du célèbre jeu vidéo.</p>
+							<p>
+								Dans un monde ravagé par une pandémie fongique, la société s'est effondrée et l'humanité lutte pour sa survie. Joel, un survivant marqué par la perte, accepte une mission périlleuse : escorter Ellie, une adolescente mystérieusement immunisée contre l'infection, à travers les États-Unis dévastés. Leur périple les confronte à des hordes d'infectés, des groupes hostiles et des choix moraux déchirants. Adaptation du jeu vidéo culte, "The Last of Us" explore la force des liens humains, l'espoir et la résilience face à l'effondrement du monde, dans une aventure bouleversante portée par Pedro Pascal et Bella Ramsey.
+							</p>
 						</div>
-						<a href="#" class="btn-main fiche-a-la-une">Découvrir</a>
+						<a href="/the-last-of-us" class="btn-main fiche-a-la-une">Découvrir</a>
 					</div>
 				</div>
 			</div>
@@ -224,7 +226,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 				// Pour le premier carrousel (Action), on met le titre dans la même section
 				if ($first) {
 					echo '<section class="movies-section mt-5 mb-4 genres-populaires-block" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">';
-					echo '<h2 id="genres-populaires-title" class="section-title">GENRES POPULAIRES</h2>';
+					echo '<h2 id="genres-populaires-title" class="section-title">Genres populaires</h2>';
 					$first = false;
 				} else {
 					echo '<section class="movies-section mt-5 mb-4" style="max-width:1100px;margin:38px auto 0 auto;width:100%;box-sizing:border-box;">';
