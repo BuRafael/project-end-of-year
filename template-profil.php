@@ -118,13 +118,13 @@ if (!empty($profil_error)) {
 
 
 
-<main class="home-container profil-simple">
+<main class="home-container profil-simple" style="max-width:1100px;margin:0 auto;padding-left:24px;padding-right:24px;">
     <section class="hero" style="margin-bottom:48px;">
-        <div style="max-width:520px;margin:0 auto;">
-            <h1 class="section-title">Mon profil</h1>
+        <div style="max-width:100%;margin:0 auto;">
+            <h1 class="section-title" style="font-size:48px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:bold;color:#F4EFEC;letter-spacing:0.5px;margin-bottom:24px;">Mon profil</h1>
         </div>
     </section>
-    <section class="profil-section" style="max-width:520px;margin:0 auto 48px auto;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;background:none;box-shadow:none;">
+    <section class="profil-section" style="max-width:100%;margin:0 auto 48px auto;padding:0;display:flex;flex-direction:column;align-items:flex-start;gap:32px;background:none;box-shadow:none;">
         <form method="POST" enctype="multipart/form-data" style="display:flex;flex-direction:column;align-items:flex-start;gap:18px;margin-bottom:0;width:100%;">
             <?php wp_nonce_field('update_profil', 'profil_nonce'); ?>
             <div style="position:relative;width:110px;height:110px;margin-bottom:10px;">
@@ -149,25 +149,36 @@ if (!empty($profil_error)) {
             <?php wp_nonce_field('update_pseudo', 'pseudo_nonce'); ?>
             <input type="hidden" name="action" value="update_pseudo">
             <div style="display:flex;flex-direction:column;gap:8px;">
-                <label for="new_pseudo" style="font-size:1.05rem;color:#F4EFEC;font-weight:500;margin-bottom:2px;">Changer de pseudo</label>
-                <input type="text" id="new_pseudo" name="new_pseudo" value="<?php echo esc_attr($user->display_name); ?>" maxlength="20" style="font-size:1.13rem;padding:12px 18px;border-radius:9px;border:1.5px solid #e5e5e5;width:100%;background:rgba(255,255,255,0.13);color:#fff;">
+                <label for="new_pseudo" style="font-size:24px;font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif;font-weight:600;color:#F4EFEC;margin-bottom:2px;">Pseudo</label>
+                    <input type="text" id="new_pseudo" name="new_pseudo" class="form-control" value="<?php echo esc_attr($user->display_name); ?>" maxlength="20" style="font-size:14px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:400;padding:4px 32px;border-radius:9px;border:1.5px solid #fff;width:100%;max-width:80vw;min-width:400px;margin:0 auto;display:block;background:rgba(255,255,255,0.13);color:#fff;transition:border-color 0.2s;">
             </div>
-            <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;">Modifier le pseudo</button>
+            <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;font-size:14px;font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif;font-weight:600;">Modifier le pseudo</button>
         </form>
+            <!-- Section Email -->
+            <form method="POST" style="display:flex;flex-direction:column;gap:18px;margin-bottom:0;align-items:flex-start;width:100%;padding-top:0;">
+                <?php wp_nonce_field('update_email', 'email_nonce'); ?>
+                <input type="hidden" name="action" value="update_email">
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                    <label for="new_email" style="font-size:24px;font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif;font-weight:600;color:#F4EFEC;margin-bottom:2px;">Email</label>
+                    <input type="email" id="new_email" name="new_email" class="form-control" value="<?php echo esc_attr($user->user_email); ?>" maxlength="100" style="font-size:14px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:400;padding:4px 32px;border-radius:9px;border:1.5px solid #fff;width:100%;max-width:80vw;min-width:400px;margin:0 auto;display:block;background:rgba(255,255,255,0.13);color:#fff;transition:border-color 0.2s;">
+                </div>
+                <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;font-size:14px;font-family:'Futura Demi','Futura PT Demi','Futura',Arial,sans-serif;font-weight:600;">Modifier l'email</button>
+            </form>
         <form method="POST" style="display:flex;flex-direction:column;gap:18px;margin-bottom:0;align-items:flex-start;width:100%;padding-top:0;">
             <?php wp_nonce_field('update_password', 'password_nonce'); ?>
+            <div style="font-size:24px;font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif;font-weight:600;color:#F4EFEC;margin-bottom:2px;">Mot de passe</div>
             <input type="hidden" name="action" value="update_password">
             <div style="display:flex;flex-direction:column;gap:8px;">
                 <label for="current_password" style="font-size:1.05rem;color:#F4EFEC;font-weight:500;margin-bottom:2px;">Ancien mot de passe</label>
-                <input type="password" id="current_password" name="current_password" placeholder="Ancien mot de passe" required style="font-size:1.13rem;padding:12px 18px;border-radius:9px;border:1.5px solid #e5e5e5;width:100%;background:rgba(255,255,255,0.13);color:#fff;">
+                <input type="password" id="current_password" name="current_password" class="form-control" required style="font-size:14px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:400;padding:4px 32px;border-radius:9px;border:1.5px solid #fff;width:100%;max-width:80vw;min-width:400px;margin:0 auto;display:block;background:rgba(255,255,255,0.13);color:#fff;transition:border-color 0.2s;">
             </div>
             <div style="display:flex;flex-direction:column;gap:8px;">
                 <label for="new_password" style="font-size:1.05rem;color:#F4EFEC;font-weight:500;margin-bottom:2px;">Nouveau mot de passe</label>
-                <input type="password" id="new_password" name="new_password" minlength="6" placeholder="Nouveau mot de passe" required style="font-size:1.13rem;padding:12px 18px;border-radius:9px;border:1.5px solid #e5e5e5;width:100%;background:rgba(255,255,255,0.13);color:#fff;">
+                <input type="password" id="new_password" name="new_password" class="form-control" minlength="6" required style="font-size:14px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:400;padding:4px 32px;border-radius:9px;border:1.5px solid #fff;width:100%;max-width:80vw;min-width:400px;margin:0 auto;display:block;background:rgba(255,255,255,0.13);color:#fff;transition:border-color 0.2s;">
             </div>
-            <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;">Changer le mot de passe</button>
+            <button type="submit" class="btn-profil-action" style="margin-top:8px;align-self:flex-end;font-size:14px;font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif;font-weight:600;">Changer le mot de passe</button>
         </form>
-        <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn-logout-profil">Déconnexion</a>
+            <a href="<?php echo esc_url(wp_logout_url(home_url())); ?>" class="btn-logout-profil" style="font-size:14px;font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif;font-weight:600;">Déconnexion</a>
     </section>
 </main>
 <style>
