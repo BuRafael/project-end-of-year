@@ -57,66 +57,90 @@ function initCarousel() {
  * ========== HEARTS (Like Buttons) ==========
  * Toggle heart icons for films/series/anime
  */
-function initHearts() {
-    const likeButtons = document.querySelectorAll('.like-btn');
+function getUserFavorites(type, callback) {
+  fetch(window.cinemusicAjax.ajaxurl, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'action=get_user_favorites'
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.data && data.data[type]) {
+        callback(data.data[type]);
+      } else {
+        callback([]);
+      }
+    });
+}
 
-    likeButtons.forEach(button => {
-        // Récupérer l'ID du média (film/série)
+function updateFavorite(action, type, item, callback) {
+  const form = new FormData();
+  form.append('action', action);
+  form.append('type', type);
+  if (action === 'add_user_favorite') {
+    form.append('item', JSON.stringify(item));
+  } else {
+    form.append('id', item.id);
+  }
+  fetch(window.cinemusicAjax.ajaxurl, {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: form
+  })
+    .then(r => r.json())
+    .then(data => callback(data));
+}
+
+function normalizeType(type) {
+  if (type === 'film') return 'films';
+  if (type === 'serie') return 'series';
+  return type;
+}
+
+function initHearts() {
+  const likeButtons = document.querySelectorAll('.like-btn');
+  // On charge les favoris de l'utilisateur connecté
+  getUserFavorites('films', favFilms => {
+    getUserFavorites('series', favSeries => {
+      likeButtons.forEach(button => {
         const mediaCard = button.closest('.media-card, .film-card, .serie-card, li');
         const mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
         const mediaLink = mediaCard?.querySelector('a')?.href || '';
         const mediaId = mediaLink.split('/').filter(Boolean).pop() || '';
-        const mediaType = button.dataset.type || 'film'; // 'film' ou 'serie'
-        
-        // Utiliser data-poster si disponible (grandes affiches), sinon fallback sur l'image affichée
+        const mediaType = normalizeType(button.dataset.type || 'films');
         const mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
-        
-        // Vérifier si déjà en favoris
-        const storageKey = mediaType === 'serie' ? 'favoriteSeries' : 'favoriteFilms';
-        const favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        const isAlreadyFavorite = favorites.some(item => item.id === mediaId);
-        
-        if (isAlreadyFavorite) {
-            button.setAttribute('data-liked', 'true');
-            button.textContent = '♥';
-            button.style.color = '#700118';
+        const isFav = (mediaType === 'films' ? favFilms : favSeries).some(item => item.id === mediaId);
+        if (isFav) {
+          button.setAttribute('data-liked', 'true');
+          button.textContent = '♥';
+          button.style.color = '#700118';
+        } else {
+          button.setAttribute('data-liked', 'false');
+          button.textContent = '♡';
+          button.style.color = '#ffffff';
         }
-        
         button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const isLiked = this.getAttribute('data-liked') === 'true';
-            
-            if (isLiked) {
-                this.setAttribute('data-liked', 'false');
-                this.textContent = '♡'; // empty heart
-                this.style.color = '#ffffff';
-                
-                // Retirer des favoris
-                let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                favorites = favorites.filter(item => item.id !== mediaId);
-                localStorage.setItem(storageKey, JSON.stringify(favorites));
-            } else {
-                this.setAttribute('data-liked', 'true');
-                this.textContent = '♥'; // filled heart
-                this.style.color = '#700118'; // red color
-                
-                // Ajouter aux favoris
-                let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                const mediaData = {
-                    id: mediaId,
-                    title: mediaTitle,
-                    image: mediaImage,
-                    url: mediaLink,
-                    year: new Date().getFullYear().toString() // À améliorer si l'année est disponible
-                };
-                
-                if (!favorites.some(item => item.id === mediaId)) {
-                    favorites.push(mediaData);
-                    localStorage.setItem(storageKey, JSON.stringify(favorites));
-                }
-            }
+          e.preventDefault();
+          const isLiked = this.getAttribute('data-liked') === 'true';
+          const item = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
+          if (isLiked) {
+            updateFavorite('remove_user_favorite', mediaType, item, () => {
+              this.setAttribute('data-liked', 'false');
+              this.textContent = '♡';
+              this.style.color = '#ffffff';
+            });
+          } else {
+            updateFavorite('add_user_favorite', mediaType, item, () => {
+              this.setAttribute('data-liked', 'true');
+              this.textContent = '♥';
+              this.style.color = '#700118';
+            });
+          }
         });
+      });
     });
+  });
 }
 
 /**

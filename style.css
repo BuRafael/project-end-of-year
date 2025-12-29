@@ -1,3 +1,54 @@
+.scroll-to-top svg {
+	display: block !important;
+	width: 28px !important;
+	height: 28px !important;
+	pointer-events: none;
+}
+.scroll-arrow {
+	stroke: #F4EFEC !important;
+	stroke-width: 3.5 !important;
+	fill: none !important;
+	display: block !important;
+}
+.scroll-to-top {
+	z-index: 9999 !important;
+}
+.scroll-arrow {
+	stroke: #F4EFEC;
+}
+.scroll-to-top:hover .scroll-arrow {
+	stroke: #700118 !important;
+}
+/* Scroll to top: simple, blanc cassé, sans hover */
+.scroll-to-top {
+	position: fixed;
+	right: 40px;
+	bottom: 40px;
+	width: 56px;
+	height: 56px;
+	border-radius: 50%;
+	background: transparent;
+	border: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: none;
+	cursor: pointer;
+	z-index: 99;
+	padding: 0;
+	transition: none;
+}
+.scroll-to-top svg {
+	display: block;
+}
+.scroll-to-top:focus,
+.scroll-to-top:active,
+.scroll-to-top:hover {
+	background: transparent;
+	box-shadow: none;
+	outline: none;
+}
+
 /*
 Theme Name: Project End of Year
 Theme URI: https://github.com/BuRafael/project-end-of-year

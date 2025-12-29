@@ -1,3 +1,51 @@
+/* Scroll to top button style (état validé) */
+.scroll-to-top {
+  position: fixed;
+  right: 36px;
+  bottom: 36px;
+  width: 72px;
+  height: 72px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 0;
+  cursor: pointer;
+}
+.scroll-to-top svg {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+.scroll-arrow {
+  stroke: #F4EFEC;
+  stroke-width: 3.5;
+  fill: none;
+  display: block;
+  transition: stroke 0.2s;
+}
+.scroll-to-top:hover .scroll-arrow {
+  stroke: #700118;
+}
+/* Scroll to top button minimal visible style */
+.scroll-to-top {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 0;
+  cursor: pointer;
+}
+
 /* ===== STATISTIQUES ===== */
 
 .front-stats {
@@ -562,7 +610,7 @@ main.home-container > section:last-child {
 }
 
 .top-list li:hover {
-  background: rgba(244,239,236,0.13);
+  background: rgba(244,239,236,0.025);
   box-shadow: 0 4px 24px rgba(112,1,24,0.10);
   border-radius: 12px;
   transition: background 0.2s, box-shadow 0.2s;
@@ -725,33 +773,11 @@ main.home-container > section:last-child {
 /* ==================================================
    Scroll to Top Button
    ================================================== */
-.scroll-to-top {
-  position: fixed;
-  right: 40px;
-  bottom: 40px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  background: #700118;
-  color: #F4EFEC;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  font-size: 32px;
-  transition: all 0.3s ease;
-  z-index: 99;
-  font-weight: bold;
-  line-height: 1;
-}
 
-.scroll-to-top:hover {
-  background: #700118;
-  transform: translateY(-5px) scale(1.08);
-  box-shadow: none;
-}
+
+
+
+
 
 /* ==================================================
    RESPONSIVE Design

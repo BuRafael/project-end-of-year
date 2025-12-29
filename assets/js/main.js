@@ -1,3 +1,32 @@
+// Fonction pour initialiser le bouton scroll-to-top sur toutes les pages longues
+function initScrollToTop() {
+    if (document.getElementById('scrollToTop')) return;
+    const btn = document.createElement('button');
+    btn.className = 'scroll-to-top';
+    btn.id = 'scrollToTop';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Remonter en haut');
+    btn.style.display = 'none';
+    btn.innerHTML = `
+        <svg width="40" height="40" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polyline class="scroll-arrow" points="7,17 14,10 21,17" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        </svg>
+    `;
+    document.body.appendChild(btn);
+    function checkScroll() {
+        if (window.innerHeight + 100 < document.body.scrollHeight) {
+            btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+        } else {
+            btn.style.display = 'none';
+        }
+    }
+    window.addEventListener('scroll', checkScroll);
+    window.addEventListener('resize', checkScroll);
+    checkScroll();
+    btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
 /**
  * ========== GENERIC CAROUSEL ========== 
  * Reusable carousel logic for similar items (movies/series)
@@ -52,29 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-
     // Scroll to top button
     initScrollToTop();
 });
 
-/**
- * ========== SCROLL TO TOP ==========
- * Shows/hides button and scrolls to top smoothly
- */
-function initScrollToTop() {
-    const scrollBtn = document.getElementById('scrollToTop');
-    if (!scrollBtn) return;
 
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 300) {
-            scrollBtn.style.display = 'flex';
-        } else {
-            scrollBtn.style.display = 'none';
-        }
-    });
-
-    scrollBtn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-}
 

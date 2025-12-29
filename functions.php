@@ -264,6 +264,10 @@ function theme_scripts() {
     if (is_front_page()) {
         wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('header-style', 'footer-style'), $version);
         wp_enqueue_script('front-page-script', get_template_directory_uri() . '/assets/js/front-page.js', array(), $version, true);
+        // Passer l'URL AJAX à front-page.js
+        wp_localize_script('front-page-script', 'cinemusicAjax', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+        ));
     }
     
     // Get current page template (handle both is_page_template() and fallback method)

@@ -58,30 +58,6 @@ a {
 /* ==================================================
    Scroll to Top Button
    ================================================== */
-.scroll-to-top {
-  position: fixed;
-  right: 40px;
-  bottom: 40px;
-  width: 58px;
-  height: 58px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  background: #700118;
-  color: #F4EFEC;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  font-size: 32px;
-  transition: all 0.3s ease;
-  z-index: 99;
-  font-weight: bold;
-  line-height: 1;
-}
 
-.scroll-to-top:hover {
-  background: #700118;
-  transform: translateY(-5px) scale(1.08);
-  box-shadow: none;
-}
+
+

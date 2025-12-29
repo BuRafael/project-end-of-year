@@ -1,3 +1,20 @@
+/* Synchronise le hover logo/texte CINEMUSIC */
+.header-logo a:hover .brand-logo,
+.header-logo a:hover .brand-text,
+.header-logo a:focus .brand-logo,
+.header-logo a:focus .brand-text,
+.header-logo a:active .brand-logo,
+.header-logo a:active .brand-text,
+.header-logo a:focus-visible .brand-logo,
+.header-logo a:focus-visible .brand-text {
+	color: #700118 !important;
+}
+.header-logo a:hover .brand-text,
+.header-logo a:focus .brand-text,
+.header-logo a:active .brand-text,
+.header-logo a:focus-visible .brand-text {
+	color: #700118 !important;
+}
 .header-nav .header-menu li a.active::after {
 	content: '';
 	position: absolute;
@@ -85,15 +102,6 @@
     filter: none !important;
 }
 
-.header-logo a:hover .brand-logo svg path {
-    fill: #700118 !important;
-    stroke: #700118 !important;
-}
-
-.header-logo a:hover .brand-logo svg * {
-    fill: #700118 !important;
-    stroke: #700118 !important;
-}
 .header-logo a:hover .brand-text {
     color: #700118 !important;
 }
@@ -222,6 +230,7 @@
 	position: relative;
 	width: 65px;
 	height: 65px;
+	margin-bottom: 10px;
 }
 
 .profil-icon .profil-svg {
