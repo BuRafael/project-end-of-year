@@ -1,3 +1,7 @@
+.featured-card:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
 .page-template-template-series .section-title.mb-4,
 .page-template-template-series #genres-populaires-title.section-title,
 .page-template-template-series h2.section-title,
