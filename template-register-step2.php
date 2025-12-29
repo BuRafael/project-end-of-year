@@ -62,7 +62,7 @@ if (isset($_POST['avatar_submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php wp_head(); ?>
     <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/base.css'); ?>">
-    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-step2.css'); ?>">
+    <link rel="stylesheet" href="<?php echo esc_url(get_template_directory_uri() . '/assets/css/register-step.css'); ?>">
 </head>
 <body <?php body_class('page-register-avatar'); ?>>
 
