@@ -1,3 +1,35 @@
+/* Hover gris transparent pour les cartes pistes (div.movie-track-info) */
+.movie-track-info:hover {
+    background: rgba(0,0,0,0.04) !important;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1.5px 6px 0 rgba(0,0,0,0.04) !important;
+    border-radius: 12px !important;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+/* Harmonisation hover lignes pistes avec top 5 front page */
+.movie-tracks-table tbody tr:hover {
+    background: rgba(0,0,0,0.04);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1.5px 6px 0 rgba(0,0,0,0.04);
+    border-radius: 12px;
+    transition: background 0.2s, box-shadow 0.2s;
+}
+/* Nom du compositeur sous chaque piste : gris, 12px, Futura Regular */
+.movie-track-artist {
+    color: #B0B0B0 !important;
+    font-size: 12px !important;
+    font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: 400 !important;
+    margin-top: 2px;
+}
+/* Forcer la couleur sur les liens compositeur */
+a.movie-track-artist, .movie-track-artist a {
+    color: #B0B0B0 !important;
+    font-size: 12px !important;
+    font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: 400 !important;
+    margin-top: 2px;
+    text-decoration: none !important;
+    cursor: pointer;
+}
 /* Harmonisation du titre principal fiche série avec fiche film */
 .movie-header h1.fw-bold {
     font-size: 24px !important;

@@ -81,8 +81,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    // Scroll to top button
-    initScrollToTop();
+    // Scroll to top button (disable on fiche film page)
+    if (!document.body.classList.contains('page-template-template-fiche-film')) {
+        initScrollToTop();
+    }
 });
 
 

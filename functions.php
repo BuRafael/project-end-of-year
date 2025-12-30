@@ -1,4 +1,23 @@
 <?php
+// Création de la table de likes pour les commentaires de films
+if (!function_exists('create_movie_comment_likes_table')) {
+    function create_movie_comment_likes_table() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'movie_comment_likes';
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            comment_id BIGINT UNSIGNED NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY unique_like (comment_id, user_id)
+        ) $charset_collate;";
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
+    add_action('after_switch_theme', 'create_movie_comment_likes_table');
+}
 // === FAVORIS UTILISATEUR : API AJAX ===
 add_action('wp_ajax_get_user_favorites', 'cinemusic_get_user_favorites');
 add_action('wp_ajax_add_user_favorite', 'cinemusic_add_user_favorite');
@@ -69,20 +88,72 @@ function cinemusic_remove_user_favorite() {
 }
 // === SYSTÈME DE LIKE SUR COMMENTAIRES ===
 add_action('wp_ajax_like_comment', 'theme_like_comment');
+add_action('wp_ajax_unlike_comment', 'theme_unlike_comment');
+add_action('wp_ajax_get_liked_comments', 'theme_get_liked_comments');
 function theme_like_comment() {
     if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
         wp_send_json_error(['message' => 'Non autorisé.']);
     }
+    global $wpdb;
     $comment_id = intval($_POST['comment_id']);
     $user_id = get_current_user_id();
-    $likes = get_comment_meta($comment_id, 'comment_likes', true);
-    if (!is_array($likes)) $likes = [];
-    if (in_array($user_id, $likes)) {
+    $table = $wpdb->prefix . 'movie_comment_likes';
+    // Vérifier si déjà liké
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d AND user_id = %d", $comment_id, $user_id));
+    if ($exists) {
         wp_send_json_error(['message' => 'Déjà liké.']);
     }
-    $likes[] = $user_id;
-    update_comment_meta($comment_id, 'comment_likes', $likes);
-    wp_send_json_success(['like_count' => count($likes)]);
+    $wpdb->insert($table, [
+        'comment_id' => $comment_id,
+        'user_id' => $user_id
+    ]);
+    // Compter les likes
+    $like_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d", $comment_id));
+    wp_send_json_success(['like_count' => intval($like_count)]);
+}
+
+// Nouvelle fonction : unlike un commentaire
+function theme_unlike_comment() {
+    if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    global $wpdb;
+    $comment_id = intval($_POST['comment_id']);
+    $user_id = get_current_user_id();
+    $table = $wpdb->prefix . 'movie_comment_likes';
+    $wpdb->delete($table, [
+        'comment_id' => $comment_id,
+        'user_id' => $user_id
+    ]);
+    // Compter les likes
+    $like_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d", $comment_id));
+    wp_send_json_success(['like_count' => intval($like_count)]);
+}
+
+// Nouvelle fonction : récupérer les IDs des commentaires likés par l'utilisateur pour un film
+function theme_get_liked_comments() {
+    if (!is_user_logged_in() || !isset($_POST['movie_id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    global $wpdb;
+    $user_id = get_current_user_id();
+    $movie_id = sanitize_text_field($_POST['movie_id']);
+    $comments_table = $wpdb->prefix . 'movie_comments';
+    $likes_table = $wpdb->prefix . 'movie_comment_likes';
+    // Récupérer tous les commentaires de ce film
+    $comments = $wpdb->get_results($wpdb->prepare("SELECT id FROM $comments_table WHERE movie_id = %s", $movie_id));
+    $comment_ids = array_map(function($c){return $c->id;}, $comments);
+    $liked_comment_ids = [];
+    if (!empty($comment_ids)) {
+        $placeholders = implode(',', array_fill(0, count($comment_ids), '%d'));
+        $query = $wpdb->prepare(
+            "SELECT comment_id FROM $likes_table WHERE user_id = %d AND comment_id IN ($placeholders)",
+            array_merge([$user_id], $comment_ids)
+        );
+        $results = $wpdb->get_col($query);
+        $liked_comment_ids = array_map('intval', $results);
+    }
+    wp_send_json_success(['liked_comment_ids' => $liked_comment_ids]);
 }
 /**
  * Helper: render site-wide Sign Up (S'inscrire) button only when logged out
@@ -791,6 +862,7 @@ function add_movie_comment() {
     }
 }
 add_action('wp_ajax_add_movie_comment', 'add_movie_comment');
+add_action('wp_ajax_nopriv_add_movie_comment', 'add_movie_comment');
 
 // Modifier un commentaire
 function edit_movie_comment() {
@@ -877,20 +949,27 @@ function get_movie_comments() {
     ));
     
     $comments_data = [];
+    $likes_table = $wpdb->prefix . 'movie_comment_likes';
     foreach ($comments as $comment) {
         $user = get_userdata($comment->user_id);
         $avatar = get_user_meta($comment->user_id, 'avatar_url', true);
-        
+        // Récupérer le nombre de likes pour ce commentaire
+        $like_count = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $likes_table WHERE comment_id = %d", $comment->id));
+        $liked_by_user = false;
+        if ($current_user_id) {
+            $liked_by_user = (bool) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $likes_table WHERE comment_id = %d AND user_id = %d", $comment->id, $current_user_id));
+        }
         $comments_data[] = [
             'id' => $comment->id,
             'user_name' => $user->display_name,
             'avatar' => $avatar,
             'comment_text' => $comment->comment_text,
             'is_author' => ($comment->user_id == $current_user_id),
-            'created_at' => $comment->created_at
+            'created_at' => $comment->created_at,
+            'like_count' => $like_count,
+            'liked_by_user' => $liked_by_user
         ];
     }
-    
     wp_send_json_success(['comments' => $comments_data]);
 }
 add_action('wp_ajax_get_movie_comments', 'get_movie_comments');

@@ -305,13 +305,22 @@ if (movieLikeBtn) {
         movieLikeBtn.disabled = true;
     } else {
         // Charger l'état du like depuis la base (favoris utilisateur)
-        fetch(window.ajaxurl || window.wp_data.ajax_url, {
+        var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+        fetch(ajaxUrl, {
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: new URLSearchParams({ action: 'get_user_favorites' })
         })
-        .then(r => r.json())
+        .then(async r => {
+            const text = await r.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Réponse AJAX non JSON:', text);
+                throw e;
+            }
+        })
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.films)) {
                 const movieSlug = movieLikeBtn.dataset.movieSlug || window.currentMovieSlug || '';
@@ -336,17 +345,24 @@ if (movieLikeBtn) {
                     }
                 }
             }
+        })
+        .catch(e => {
+            console.error('Erreur AJAX favoris:', e);
         });
 
         // Gestion du clic
         movieLikeBtn.addEventListener('click', function () {
-            const icon = this.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+            const icon = this.querySelector('.svg-heart-shape');
             const liked = this.classList.toggle('liked');
             this.setAttribute('aria-pressed', liked ? 'true' : 'false');
             if (icon) {
-                icon.classList.toggle('bi-heart', !liked);
-                icon.classList.toggle('bi-heart-fill', liked);
-                icon.style.color = liked ? '#700118' : '#1A1A1A';
+                if (liked) {
+                    icon.setAttribute('fill', '#700118');
+                    icon.setAttribute('stroke', '#700118');
+                } else {
+                    icon.setAttribute('fill', 'none');
+                    icon.setAttribute('stroke', '#888888');
+                }
             }
             // Ajouter ou retirer des favoris via AJAX
             const movieSlug = this.dataset.movieSlug || window.currentMovieSlug || '';
@@ -366,7 +382,8 @@ if (movieLikeBtn) {
                 form.append('action', 'add_user_favorite');
                 form.append('type', 'films');
                 form.append('item', JSON.stringify(filmData));
-                fetch(window.ajaxurl || window.wp_data.ajax_url, {
+                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+                fetch(ajaxUrl, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -378,7 +395,8 @@ if (movieLikeBtn) {
                 form.append('action', 'remove_user_favorite');
                 form.append('type', 'films');
                 form.append('id', movieSlug);
-                fetch(window.ajaxurl || window.wp_data.ajax_url, {
+                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+                fetch(ajaxUrl, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -467,8 +485,11 @@ function renderComment(commentData) {
         else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
-    // Always show 0 if like_count is falsy
-    const initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
+    // Affiche 0 si non liké par l'utilisateur, sinon la vraie valeur
+    let initialLikeCount = 0;
+    if (commentData.liked_by_user) {
+        initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 1;
+    }
         col.innerHTML = `
             <div class="comment-card">
                 ${menuHtml}
@@ -482,13 +503,21 @@ function renderComment(commentData) {
                 <div class="comment-text">${commentData.comment_text}</div>
                 <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
                     <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
-                        <svg viewBox="0 0 24 24"><path d="M2 21h4V9H2v12zm19.83-9.24c-.13-.32-.37-.59-.67-.77-.3-.18-.65-.28-1-.28h-6V5.5c0-.41-.17-.8-.44-1.09-.28-.29-.66-.41-1.05-.41-.55 0-1.05.3-1.3.78l-5.34 9.59c-.13.23-.2.49-.2.75V19c0 1.1.9 2 2 2h9c.83 0 1.54-.5 1.84-1.22l3.02-7.05c.13-.32.12-.68-.06-.97z"/></svg>
-                    </button>
+                        <svg class="svg-thumb-up" viewBox="0 -0.5 21 21" width="22" height="22" style="display:inline-block;vertical-align:middle;">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="Dribbble-Light-Preview" transform="translate(-219.000000, -760.000000)" fill="#000000">
+                                    <g id="icons" transform="translate(56.000000, 160.000000)">
+                                        <path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                                        </button>
                     <span class="like-count" style="color:#000 !important; font-weight:500;">${initialLikeCount}</span>
                 </div>
             </div>
         `;
-        // Like button logic: toggle .liked and update like count visually, always show 0 if not liked
+        // Like button logic: toggle .liked and update like count visually, toujours 0 si pas liké
         const likeBtn = col.querySelector('.comment-like-btn');
         const likeCountSpan = col.querySelector('.like-count');
         if (likeBtn && likeCountSpan) {
@@ -502,15 +531,35 @@ function renderComment(commentData) {
                     window.location.href = '/inscription';
                     return;
                 }
+                const isLiked = likeBtn.classList.toggle('liked');
                 let count = parseInt(likeCountSpan.textContent, 10);
                 if (isNaN(count)) count = 0;
-                const isLiked = likeBtn.classList.toggle('liked');
-                if (isLiked) {
-                    count = 1;
-                } else {
-                    count = 0;
-                }
-                likeCountSpan.textContent = count;
+                // AJAX pour enregistrer le like/dislike
+                fetch(window.ajaxurl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: isLiked ? 'like_comment' : 'unlike_comment',
+                        comment_id: commentData.id
+                    })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        likeCountSpan.textContent = data.data.like_count;
+                    } else {
+                        // rollback UI si erreur
+                        likeBtn.classList.toggle('liked');
+                        likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
+                        alert('Erreur lors de la mise à jour du like.');
+                    }
+                })
+                .catch(() => {
+                    likeBtn.classList.toggle('liked');
+                    likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
+                    alert('Erreur réseau lors du like.');
+                });
             });
         }
     commentsZone.insertBefore(col, commentsZone.firstChild);

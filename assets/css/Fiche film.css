@@ -1,11 +1,32 @@
-/* Harmonisation du titre principal fiche film avec fiche série */
+/* Pouce like commentaire : noir par défaut, rouge si liké */
+.comment-like-btn .svg-thumb-up {
+    color: #1A1A1A !important;
+    fill: #1A1A1A !important;
+    transition: color 0.2s, fill 0.2s;
+}
+.comment-like-btn.liked .svg-thumb-up {
+    color: #700118 !important;
+    fill: #700118 !important;
+}
+.comment-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+.movie-section-label {
+    text-transform: uppercase !important;
+}
+/* TITRE FICHE FILM : 48px Futura Demi (Adobe Futura 100) */
+.movie-header h1,
 .movie-header h1.fw-bold {
-    font-size: 24px !important;
-    font-family: 'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+    font-size: 48px !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
     font-weight: 600 !important;
     color: #F4EFEC !important;
+    line-height: 1.1 !important;
     letter-spacing: 0 !important;
     margin-bottom: 0.5rem !important;
+    background: none !important;
+    border: none !important;
 }
 /* Style du titre "À la une" */
 .featured-a-la-une-text {
@@ -42,14 +63,14 @@
     height: 38px;
 }
 #movieLikeBtn .svg-heart-shape {
-    stroke: #F4EFEC;
+    stroke: #888888;
     stroke-width: 2.2;
     fill: none;
     transition: fill 0.2s, stroke 0.2s;
 }
 #movieLikeBtn.liked .svg-heart-shape {
-    fill: #700118;
     stroke: #700118;
+    fill: #700118;
 }
 /* Only show fallback SVG if Bootstrap icon font is not loaded */
 #movieLikeBtn .svg-heart-fallback {
@@ -122,11 +143,20 @@
     background: #1A1A1A !important;
     color: #F4EFEC !important;
     border: none !important;
-    font-weight: bold;
+    font-size: 14px !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1px;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
 }
 #commentsMoreBtn:hover, #tracksMoreBtn:hover {
     background: #700118 !important;
     color: #F4EFEC !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
 }
 
 /* Coeur de like film/piste rouge quand liké */
@@ -143,11 +173,11 @@
     width: 22px;
     height: 22px;
     display: block;
-    fill: none;
-    stroke: #1A1A1A;
-    stroke-width: 2.2;
-    transition: fill 0.2s, stroke 0.2s;
-    transform: rotate(0deg);
+        fill: #1A1A1A !important;
+        stroke: none !important;
+        stroke-width: 0 !important;
+        transition: fill 0.2s;
+    }
 }
 /* Pouce rouge quand liké */
 .movie-page .comment-like-btn.liked svg, .movie-page .movie-comment-like-btn.liked svg {
@@ -234,6 +264,10 @@
 .movie-section .subtitle,
 .movie-section .section-label {
     color: #700118 !important;
+    font-size: 18px !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
 }
 /* Force tout le texte en blanc du site sur la fiche film */
 .movie-page, .movie-page * {
@@ -525,7 +559,7 @@ body .movie-page > section:last-child {
 }
 
 .movie-tracks-table tbody tr:hover {
-    background: rgba(112, 1, 24, 0.1);
+    background: rgba(26, 26, 26, 0.42) !important; /* gris foncé, opacité très forte, forcée */
     transform: translateX(4px);
 }
 
@@ -764,10 +798,7 @@ a.movie-track-artist:hover {
     position: relative;
 }
 
-.comment-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(112, 1, 24, 0.2);
-}
+
 
 .comment-card .comment-user {
     font-weight: 700;

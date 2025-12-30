@@ -6,7 +6,9 @@
     <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.typekit.net/isz1tod.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <?php wp_head(); ?>
+    <script>window.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';</script>
 </head>
 
 <body <?php body_class(); ?> data-user-logged-in="<?php echo is_user_logged_in() ? 'true' : 'false'; ?>">
