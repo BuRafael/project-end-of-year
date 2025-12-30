@@ -162,8 +162,8 @@ if (isset($series_info[$page_slug])) {
         <h1 class="fw-bold mb-1">
             <?php echo esc_html($title); ?>
         </h1>
-        <p class="movie-sub mb-4" style="font-size:18px;font-family:'Futura','Futura Std','FuturaPT',Arial,sans-serif;font-weight:400;color:#F4EFEC;">
-            <?php echo esc_html($aired); ?> • <?php echo esc_html($info['creators']); ?> • <?php echo esc_html($info['seasons']); ?> saison • <?php echo esc_html($info['genres']); ?>
+        <p class="movie-sub small text-secondary mb-4" style="font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif; font-size: 1.1rem; color: #c7c8cc; font-weight: 400; letter-spacing: 0.2px;">
+            <?php echo esc_html($aired); ?> – <?php echo esc_html($info['total_tracks']); ?> pistes
         </p>
 
         <div class="row g-4">
@@ -180,41 +180,47 @@ if (isset($series_info[$page_slug])) {
                             data-serie-title="<?php echo esc_attr($title); ?>"
                             data-serie-year="<?php echo esc_attr($aired); ?>"
                             data-serie-slug="<?php echo esc_attr($page_slug); ?>">
-                                                <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
-                                                    <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                                                </svg>
+                        <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
+                            <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
                     </button>
                 </div>
             </div>
 
             <!-- SYNOPSIS + META -->
             <div class="col-md-8 col-lg-9">
-                <h5 class="mb-2" style="color: rgba(112, 1, 24, 1);">Synopsis</h5>
-                <p class="movie-synopsis small text-light mb-4">
+                <h5 class="mb-2 movie-section-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1.15rem; letter-spacing: 0.2px; font-weight: 700; text-transform: uppercase;">SYNOPSIS</h5>
+                <p class="movie-synopsis small text-light mb-4" style="font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif; font-size: 1.01rem; color: #F4EFEC; font-weight: 400;">
                     <?php echo esc_html($info['synopsis']); ?>
                 </p>
                 <div class="row movie-meta small">
                     <div class="col-6 col-sm-3 mb-3">
-                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Saisons</div>
-                        <div class="movie-meta-value"><?php echo esc_html($info['seasons']); ?></div>
+                        <div class="movie-meta-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1rem; font-weight: 600;">Saisons</div>
+                        <div class="movie-meta-value" style="font-family: 'Futura', 'Futura Std', Arial, sans-serif; font-size: 1rem; color: #F4EFEC; font-weight: 400; letter-spacing: 0.1px;">
+                            <?php echo esc_html($info['seasons']); ?>
+                        </div>
                     </div>
                     <div class="col-6 col-sm-3 mb-3">
-                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Note</div>
-                        <div class="movie-meta-value"><?php echo esc_html($info['rating']); ?></div>
+                        <div class="movie-meta-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1rem; font-weight: 600;">Note</div>
+                        <div class="movie-meta-value" style="font-family: 'Futura', 'Futura Std', Arial, sans-serif; font-size: 1rem; color: #F4EFEC; font-weight: 400; letter-spacing: 0.1px;">
+                            <?php echo esc_html($info['rating']); ?>
+                        </div>
                     </div>
                     <div class="col-12 mb-2">
-                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Réalisateur</div>
-                        <div class="movie-meta-value text-white"><?php echo esc_html($info['director']); ?></div>
+                        <div class="movie-meta-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1rem; font-weight: 600;">Réalisateur</div>
+                        <div class="movie-meta-value text-white" style="font-family: 'Futura', 'Futura Std', Arial, sans-serif; font-size: 1rem; color: #F4EFEC; font-weight: 400; letter-spacing: 0.1px;">
+                            <?php echo esc_html($info['director']); ?>
+                        </div>
                     </div>
                     <div class="col-12 mb-2">
-                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Acteurs</div>
-                        <div class="movie-meta-value text-white">
+                        <div class="movie-meta-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1rem; font-weight: 600;">Acteurs</div>
+                        <div class="movie-meta-value text-white" style="font-family: 'Futura', 'Futura Std', Arial, sans-serif; font-size: 1rem; color: #F4EFEC; font-weight: 400; letter-spacing: 0.1px;">
                             <?php echo esc_html($info['cast']); ?>
                         </div>
                     </div>
                     <div class="col-12">
-                        <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Genre</div>
-                        <div class="movie-meta-value text-white">
+                        <div class="movie-meta-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1rem; font-weight: 600;">Genre</div>
+                        <div class="movie-meta-value text-white" style="font-family: 'Futura', 'Futura Std', Arial, sans-serif; font-size: 1rem; color: #F4EFEC; font-weight: 400; letter-spacing: 0.1px;">
                             <?php echo esc_html($genre); ?>
                         </div>
                     </div>
@@ -225,15 +231,14 @@ if (isset($series_info[$page_slug])) {
 
     <!-- ===== PISTES ===== -->
     <section class="movie-section">
-            <!-- SELECTS SAISON / EPISODE (déplacés ici) -->
-            <div class="series-selects mb-4" style="justify-content: flex-start;">
-                <select id="seasonSelect" class="form-select form-select-sm" aria-label="Choisir une saison">
-                    <option value="" disabled selected hidden>Saison</option>
-                </select>
-                <select id="episodeSelect" class="form-select form-select-sm" aria-label="Choisir un épisode">
-                    <option value="" disabled selected hidden>Épisode</option>
-                </select>
-            </div>
+        <div class="series-selects mb-4" style="justify-content: flex-start;">
+            <select id="seasonSelect" class="form-select form-select-sm" aria-label="Choisir une saison">
+                <option value="" disabled selected hidden>Saison</option>
+            </select>
+            <select id="episodeSelect" class="form-select form-select-sm" aria-label="Choisir un épisode">
+                <option value="" disabled selected hidden>Épisode</option>
+            </select>
+        </div>
         <div class="table-responsive">
             <table class="table movie-tracks-table align-middle mb-3">
                 <thead>

@@ -172,31 +172,7 @@ body {
 	transform: translateY(-2px);
 }
 
-.field--password .password-toggle {
-	position: absolute;
-	top: 50%;
-	right: 10px;
-	transform: translateY(-50%);
-	border: none;
-	background: transparent;
-	color: var(--reg-white);
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0;
-	font-size: 0.95rem;
-}
 
-.password-toggle .toggle-icon {
-	pointer-events: none;
-}
-
-	.password-toggle .toggle-icon img {
-		width: 26px;
-		height: 26px;
-		filter: drop-shadow(0 0 2px #700118);
-	}
 
 /* Nettoyage : suppression des styles orphelins/dupliqués */
 

@@ -54,11 +54,6 @@
 
                 <div class="field field--password">
                     <input type="password" name="pwd" id="user_pass" placeholder="Mot de passe" required>
-                    <button type="button" class="password-toggle" data-toggle-password="user_pass" aria-label="<?php esc_attr_e('Afficher / masquer le mot de passe', 'project-end-of-year'); ?>">
-                        <span class="toggle-icon" aria-hidden="true">
-                            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/eye.svg'); ?>" alt="Afficher le mot de passe" style="width:22px;height:22px;vertical-align:middle;filter:invert(0);">
-                        </span>
-                    </button>
                 </div>
 
                 <button type="submit" name="login_submit" class="btn-register-primary">
