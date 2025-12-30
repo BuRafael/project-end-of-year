@@ -1,5 +1,4 @@
 
-}); // Fin DOMContentLoaded
 
 // Fonction pour afficher une piste dans le tableau
 function appendTrack(track) {
@@ -58,6 +57,34 @@ const imagePath = typeof composerImagePath !== 'undefined' ? composerImagePath :
 const filmImagePath = imagePath.replace('Fiche Compositeur', 'Fiche films');
 
 if (tracksTable) {
+    // Charger les favoris utilisateur et mettre à jour les coeurs
+    fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.data && Array.isArray(data.data.musiques)) {
+            const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+            tracksTable.querySelectorAll('tr').forEach(row => {
+                let trackId = row.querySelector('td:first-child')?.textContent?.trim();
+                if (favoriteTrackIds.includes(String(trackId))) {
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    }
+                }
+            });
+
+        }
+
+    });
+}
+    // ...existing code...
     // Afficher les 5 premières pistes
     const initialTracks = tracks.slice(0, 5);
     initialTracks.forEach(t => {
@@ -81,7 +108,6 @@ if (tracksTable) {
             } // <-- FIN du else (bouton pistes)
         }); // <-- FIN eventListener bouton pistes
     }
-}
 
 // === CARROUSEL : COMPOSITEURS SIMILAIRES (STRICTEMENT IDENTIQUE À FILMS SIMILAIRES) ===
 const allComposers = [
@@ -159,8 +185,10 @@ function loadComments() {
             }
         } else {
             commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
+
         }
     });
+}
 }
 
 // Afficher un commentaire
@@ -302,12 +330,7 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
             });
         }
     });
-} else {
-        commentInput: !!commentInput,
-        disabled: commentInput?.disabled,
-        composerComments: typeof composerComments
-    });
-}
+
 
 // Modifier un commentaire
 function editComment(commentId, newText, textElement) {
@@ -359,5 +382,3 @@ loadComments();
 // ...existing code...
 
 
-
-}); // Fin DOMContentLoaded

@@ -14,6 +14,32 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // --- PERSISTENCE DES LIKES DE PISTES (TRACKS) ---
+    if (tracksTable) {
+        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.musiques)) {
+                const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+                tracksTable.querySelectorAll('tr').forEach(row => {
+                    let trackId = row.querySelector('td:first-child')?.textContent?.trim();
+                    if (favoriteTrackIds.includes(String(trackId))) {
+                        const heart = row.querySelector('.track-like');
+                        if (heart) {
+                            heart.classList.add('liked');
+                            heart.classList.remove('bi-heart');
+                            heart.classList.add('bi-heart-fill');
+                        }
+                    }
+                });
+            }
+        });
+    }
 
 // === PISTES PAR SAISON ET ÉPISODE ===
 const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
@@ -167,17 +193,20 @@ function updateTracksMoreBtn(totalTracks) {
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('track-like')) {
         const row = e.target.closest('tr');
+        // Récupérer l'ID de la piste (depuis la première colonne ou data-id)
+        let trackId = row?.querySelector('td:first-child')?.textContent?.trim();
+        if (!trackId && e.target.dataset.id) trackId = e.target.dataset.id;
         const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
         const trackNumber = row.querySelector('td:first-child')?.textContent || '';
-        
+
         e.target.classList.toggle('liked');
         const liked = e.target.classList.contains('liked');
-        
         if (liked) {
             e.target.classList.remove('bi-heart');
+            e.target.classList.add('bi-heart-fill');
             // Ajouter la piste aux favoris serveur (catégorie musiques)
             const trackData = {
                 id: trackId,
@@ -199,6 +228,8 @@ document.addEventListener('click', function(e) {
                 body: form.toString()
             });
         } else {
+            e.target.classList.remove('bi-heart-fill');
+            e.target.classList.add('bi-heart');
             // Retirer la piste des favoris serveur
             const form = new URLSearchParams();
             form.append('action', 'remove_user_favorite');

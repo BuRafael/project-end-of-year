@@ -13,8 +13,7 @@ get_header();
 
     <!-- TITRE + INFOS GENERALES -->
     <section class="composer-header mb-5">
-        <h1 class="fw-bold mb-1">Hans Zimmer</h1>
-        <p class="composer-sub small text-secondary mb-4">Compositeur de musiques de films</p>
+        <h1 class="mb-1">Hans Zimmer</h1>
 
         <div class="row g-4">
             <!-- PHOTO -->
@@ -162,10 +161,4 @@ get_header();
     const composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
 </script>
 
-<?php
-    <!-- CTA Section (Call To Action) -->
-?>
-
-
 <?php get_footer(); ?>
-?>
