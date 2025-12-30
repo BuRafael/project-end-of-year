@@ -1,3 +1,217 @@
+// Afficher un commentaire (doit être défini avant loadComments)
+function renderComment(commentData) {
+    const col = document.createElement('div');
+    col.className = 'col-12 col-md-3';
+    col.dataset.commentId = commentData.id;
+    const menuHtml = `
+        <div class="comment-menu">
+            <button class="comment-menu-btn" aria-label="Options">
+                <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <div class="comment-menu-dropdown">
+                <button class="comment-edit-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Modifier</button>
+                <button class="comment-delete-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Supprimer</button>
+            </div>
+        </div>`;
+    // Formater la date
+    let dateHtml = '';
+    if (commentData.created_at) {
+        const date = new Date(commentData.created_at);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+        let timeAgo;
+        if (diffMins < 1) timeAgo = "à l'instant";
+        else if (diffMins < 60) timeAgo = `il y a ${diffMins} min`;
+        else if (diffHours < 24) timeAgo = `il y a ${diffHours}h`;
+        else if (diffDays < 7) timeAgo = `il y a ${diffDays}j`;
+        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+        dateHtml = `<div class="comment-date">${timeAgo}</div>`;
+    }
+    // Affiche le vrai nombre de likes
+    let initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
+    col.innerHTML = `
+        <div class="comment-card">
+            ${menuHtml}
+            <div class="comment-user">
+                <span class="comment-user-avatar-wrapper">
+                    ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                </span>
+                <span class="comment-user-name">${commentData.user_name}</span>
+            </div>
+            ${dateHtml}
+            <div class="comment-text">${commentData.comment_text}</div>
+            <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
+                <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
+                    <svg class="svg-thumb-up" viewBox="0 -0.5 21 21" width="22" height="22" style="display:inline-block;vertical-align:middle;">
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Dribbble-Light-Preview" transform="translate(-219.000000, -760.000000)" fill="#000000">
+                                <g id="icons" transform="translate(56.000000, 160.000000)">
+                                    <path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+                <span class="like-count" style="color:#000 !important; font-weight:500;">${initialLikeCount}</span>
+            </div>
+        </div>
+    `;
+    // Like button logic: toggle .liked and update like count visually
+    const likeBtn = col.querySelector('.comment-like-btn');
+    const likeCountSpan = col.querySelector('.like-count');
+    // Force couleur du pouce dès l'affichage si déjà liké
+    if (likeBtn && commentData.liked_by_user) {
+        const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+        if (thumbSvg) {
+            const thumbPath = thumbSvg.querySelector('path');
+            thumbSvg.style.fill = '#700118';
+            thumbSvg.style.color = '#700118';
+            if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+        }
+    }
+    if (likeBtn && likeCountSpan) {
+        likeBtn.addEventListener('click', function () {
+            // Vérifier connexion utilisateur
+            var isUserLoggedIn = false;
+            try {
+                isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+            } catch (e) {}
+            if (!isUserLoggedIn) {
+                window.location.href = '/inscription';
+                return;
+            }
+            const isLiked = this.classList.contains('liked');
+            let count = parseInt(likeCountSpan.textContent, 10) || 0;
+            // Optimistic UI
+            this.classList.toggle('liked');
+            if (isLiked) {
+                count = Math.max(0, count-1);
+                this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
+                this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
+                this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
+            } else {
+                count++;
+                this.querySelector('.svg-thumb-up').style.fill = '#700118';
+                this.querySelector('.svg-thumb-up').style.color = '#700118';
+                this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
+            }
+            likeCountSpan.textContent = count;
+            // AJAX
+            fetch(movieComments.ajax_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: isLiked ? 'remove_comment_like' : 'add_comment_like',
+                    nonce: movieComments.nonce,
+                    comment_id: commentData.id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    // Rollback UI
+                    this.classList.toggle('liked');
+                    if (isLiked) {
+                        likeCountSpan.textContent = count+1;
+                        this.querySelector('.svg-thumb-up').style.fill = '#700118';
+                        this.querySelector('.svg-thumb-up').style.color = '#700118';
+                        this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
+                    } else {
+                        likeCountSpan.textContent = Math.max(0, count-1);
+                        this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
+                        this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
+                        this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
+                    }
+                    alert('Erreur lors du like.');
+                }
+            })
+            .catch((err) => {
+                // Rollback UI
+                this.classList.toggle('liked');
+                if (isLiked) {
+                    likeCountSpan.textContent = count+1;
+                    this.querySelector('.svg-thumb-up').style.fill = '#700118';
+                    this.querySelector('.svg-thumb-up').style.color = '#700118';
+                    this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
+                } else {
+                    likeCountSpan.textContent = Math.max(0, count-1);
+                    this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
+                    this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
+                    this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
+                }
+                alert('Erreur réseau lors du like.');
+            });
+        });
+    }
+    commentsZone.insertBefore(col, commentsZone.firstChild);
+    // Gestion du menu
+    if (commentData.is_author) {
+        const menuBtn = col.querySelector('.comment-menu-btn');
+        const menuDropdown = col.querySelector('.comment-menu-dropdown');
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menuDropdown.classList.toggle('show');
+        });
+        // Modifier
+        col.querySelector('.comment-edit-btn').addEventListener('click', () => {
+            const textEl = col.querySelector('.comment-text');
+            const currentText = textEl.textContent;
+            textEl.innerHTML = `<input type="text" class="comment-edit-input" value="${currentText}">`;
+            const input = textEl.querySelector('.comment-edit-input');
+            input.focus();
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    editComment(commentData.id, input.value, textEl);
+                }
+            });
+            menuDropdown.classList.remove('show');
+        });
+        // Supprimer
+        col.querySelector('.comment-delete-btn').addEventListener('click', () => {
+            if (confirm('Supprimer ce commentaire ?')) {
+                deleteComment(commentData.id, col);
+            }
+        });
+    }
+    // Fermer le menu si on clique ailleurs
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.comment-menu-dropdown.show').forEach(d => d.classList.remove('show'));
+    });
+}
+
+// Charger les commentaires depuis l'API
+function loadComments() {
+    if (!commentsZone || typeof movieComments === 'undefined') return;
+    fetch(movieComments.ajax_url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            action: 'get_movie_comments',
+            movie_id: movieComments.movie_id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Nettoyer le wrapper
+        commentsZone.innerHTML = '';
+        const moreBtnWrapper = document.getElementById('commentsMoreBtnWrapper');
+        if (moreBtnWrapper) moreBtnWrapper.style.display = 'none';
+        if (data.success && Array.isArray(data.data.comments) && data.data.comments.length > 0) {
+            data.data.comments.forEach(c => {
+                renderComment(c);
+            });
+            // Afficher le bouton "Afficher plus" si plus de 8 commentaires
+            if (moreBtnWrapper && data.data.comments.length > 8) {
+                moreBtnWrapper.style.display = 'block';
+            }
+        } else {
+            commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
+        }
+    });
+}
 /**
  * Fiche Film JavaScript
  * Gère les pistes, commentaires, films similaires et interactions
@@ -9,6 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Fiche films/';
 const trackImagePath = typeof themeTrackImagePath !== 'undefined' ? themeTrackImagePath : 'assets/image/Pistes film/';
 const currentMovieSlug = window.currentMovieSlug || 'inception';
+
 
 function getTracks(slug) {
             if (slug === 'parasite') {
@@ -304,13 +519,11 @@ if (movieLikeBtn) {
     if (!isUserLoggedIn) {
         movieLikeBtn.classList.remove('liked');
         movieLikeBtn.setAttribute('aria-pressed', 'false');
-        const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+        const icon = movieLikeBtn.querySelector('.svg-heart-shape');
         if (icon) {
-            icon.classList.add('bi-heart');
-            icon.classList.remove('bi-heart-fill');
-            icon.style.color = '#1A1A1A';
+            icon.setAttribute('fill', 'none');
+            icon.setAttribute('stroke', '#888888');
         }
-        // Optionnel : afficher un tooltip ou désactiver le bouton
         movieLikeBtn.disabled = true;
     } else {
         // Charger l'état du like depuis la base (favoris utilisateur)
@@ -332,25 +545,23 @@ if (movieLikeBtn) {
         })
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.films)) {
-                const movieSlug = movieLikeBtn.dataset.movieSlug || window.currentMovieSlug || '';
-                const isFavorite = data.data.films.some(film => film.id === movieSlug);
+                const movieId = movieLikeBtn.dataset.movieId || '';
+                // Les IDs dans la DB sont numériques, donc on force la comparaison en string
+                const isFavorite = data.data.films.some(film => String(film.id) === String(movieId));
+                const path = movieLikeBtn.querySelector('path.svg-heart-shape');
                 if (isFavorite) {
                     movieLikeBtn.classList.add('liked');
                     movieLikeBtn.setAttribute('aria-pressed', 'true');
-                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
-                    if (icon) {
-                        icon.classList.remove('bi-heart');
-                        icon.classList.add('bi-heart-fill');
-                        icon.style.color = '#700118';
+                    if (path) {
+                        path.setAttribute('fill', '#700118');
+                        path.setAttribute('stroke', '#700118');
                     }
                 } else {
                     movieLikeBtn.classList.remove('liked');
                     movieLikeBtn.setAttribute('aria-pressed', 'false');
-                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
-                    if (icon) {
-                        icon.classList.add('bi-heart');
-                        icon.classList.remove('bi-heart-fill');
-                        icon.style.color = '#1A1A1A';
+                    if (path) {
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('stroke', '#888888');
                     }
                 }
             }
@@ -361,27 +572,28 @@ if (movieLikeBtn) {
 
         // Gestion du clic
         movieLikeBtn.addEventListener('click', function () {
-            const icon = this.querySelector('.svg-heart-shape');
+            const path = this.querySelector('path.svg-heart-shape');
             const liked = this.classList.toggle('liked');
             this.setAttribute('aria-pressed', liked ? 'true' : 'false');
-            if (icon) {
+            if (path) {
                 if (liked) {
-                    icon.setAttribute('fill', '#700118');
-                    icon.setAttribute('stroke', '#700118');
+                    path.setAttribute('fill', '#700118');
+                    path.setAttribute('stroke', '#700118');
                 } else {
-                    icon.setAttribute('fill', 'none');
-                    icon.setAttribute('stroke', '#888888');
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('stroke', '#888888');
                 }
             }
             // Ajouter ou retirer des favoris via AJAX
-            const movieSlug = this.dataset.movieSlug || window.currentMovieSlug || '';
+            const movieId = this.dataset.movieId || '';
             const movieTitle = this.dataset.movieTitle || document.querySelector('.movie-header h1')?.textContent || '';
             const movieYear = this.dataset.movieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
             const moviePoster = this.dataset.movieImage || document.getElementById('moviePosterImg')?.src || '';
+            let ajaxPromise;
             if (liked) {
                 // Ajouter aux favoris
                 const filmData = {
-                    id: movieSlug,
+                    id: movieId,
                     title: movieTitle,
                     year: movieYear,
                     image: moviePoster,
@@ -391,8 +603,7 @@ if (movieLikeBtn) {
                 form.append('action', 'add_user_favorite');
                 form.append('type', 'films');
                 form.append('item', JSON.stringify(filmData));
-                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
-                fetch(ajaxUrl, {
+                ajaxPromise = fetch(ajaxUrl, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -403,30 +614,53 @@ if (movieLikeBtn) {
                 const form = new URLSearchParams();
                 form.append('action', 'remove_user_favorite');
                 form.append('type', 'films');
-                form.append('id', movieSlug);
-                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
-                fetch(ajaxUrl, {
+                form.append('id', movieId);
+                ajaxPromise = fetch(ajaxUrl, {
                     method: 'POST',
                     credentials: 'same-origin',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: form.toString()
                 });
             }
+            // Après l'AJAX, rafraîchir l'état du bouton depuis la base
+            ajaxPromise.then(() => {
+                fetch(ajaxUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ action: 'get_user_favorites' })
+                })
+                .then(async r => {
+                    const text = await r.text();
+                    try {
+                        return JSON.parse(text);
+                    } catch (e) {
+                        throw e;
+                    }
+                })
+                .then(data => {
+                    if (data.success && data.data && Array.isArray(data.data.films)) {
+                        const isFavorite = data.data.films.some(film => String(film.id) === String(movieId));
+                        if (isFavorite) {
+                            movieLikeBtn.classList.add('liked');
+                            movieLikeBtn.setAttribute('aria-pressed', 'true');
+                            if (path) {
+                                path.setAttribute('fill', '#700118');
+                                path.setAttribute('stroke', '#700118');
+                            }
+                        } else {
+                            movieLikeBtn.classList.remove('liked');
+                            movieLikeBtn.setAttribute('aria-pressed', 'false');
+                            if (path) {
+                                path.setAttribute('fill', 'none');
+                                path.setAttribute('stroke', '#888888');
+                            }
+                        }
+                    }
+                });
+            });
         });
     }
-}
-
-// === COMMENTAIRES ===
-const commentsZone = document.getElementById("commentsZone");
-const commentInput = document.querySelector('.comment-input');
-
-// Vérifier que movieComments est défini
-if (typeof movieComments === 'undefined') {
-    console.error('movieComments n\'est pas défini');
-}
-
-// Charger les commentaires existants
-function loadComments() {
     if (!commentsZone || typeof movieComments === 'undefined') return;
     
     fetch(movieComments.ajax_url, {
@@ -681,6 +915,7 @@ function renderComment(commentData) {
 }
 
 // Publier un commentaire
+const commentInput = document.querySelector('.comment-input');
 if (commentInput && !commentInput.disabled && typeof movieComments !== 'undefined') {
     commentInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && this.value.trim()) {
@@ -894,59 +1129,6 @@ const allSimilarMovies = getSimilarMovies(slug);
         `
     });
 
-// ===== BOUTON LIKE AFFICHE =====
-const likeBtn = document.getElementById('movieLikeBtn');
-if (likeBtn) {
-    const movieTitle = likeBtn.dataset.movieTitle || document.querySelector('.movie-header h1')?.textContent || '';
-    const movieYear = likeBtn.dataset.movieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
-    const moviePoster = likeBtn.dataset.movieImage || document.getElementById('moviePosterImg')?.src || '';
-    const movieSlug = likeBtn.dataset.movieSlug || window.currentMovieSlug || '';
-    const favoriteFilms = JSON.parse(localStorage.getItem('favoriteFilms') || '[]');
-    const isAlreadyFavorite = favoriteFilms.some(film => film.id === movieSlug);
-    if (isAlreadyFavorite) {
-        likeBtn.classList.add('liked');
-        const icon = likeBtn.querySelector('i');
-        if (icon) {
-            icon.classList.remove('bi-heart');
-            icon.classList.add('bi-heart-fill');
-            icon.style.color = '#700118';
-        }
-    }
-    likeBtn.addEventListener('click', function (e) {
-        const icon = this.querySelector('i');
-        const liked = this.classList.toggle('liked');
-        this.setAttribute('aria-pressed', liked ? 'true' : 'false');
-        if (icon) {
-            icon.classList.toggle('bi-heart', !liked);
-            icon.classList.toggle('bi-heart-fill', liked);
-            if (liked) {
-                icon.style.color = '#700118';
-            } else {
-                icon.style.color = '#1A1A1A';
-            }
-        }
-        let favoriteFilms = JSON.parse(localStorage.getItem('favoriteFilms') || '[]');
-        if (liked) {
-            const filmData = {
-                id: movieSlug,
-                title: movieTitle,
-                year: movieYear,
-                image: moviePoster,
-                url: window.location.href
-            };
-            if (!favoriteFilms.some(film => film.id === movieSlug)) {
-                favoriteFilms.push(filmData);
-                localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
-                if (typeof window.addFavorite === 'function') {
-                    window.addFavorite('film', filmData);
-                }
-            }
-        } else {
-            favoriteFilms = favoriteFilms.filter(film => film.id !== movieSlug);
-            localStorage.setItem('favoriteFilms', JSON.stringify(favoriteFilms));
-        }
-    });
-}
 
 // === AFFICHER PLUS : COMMENTAIRES ===
 const commentsMoreBtn = document.getElementById('commentsMoreBtn');
@@ -988,6 +1170,8 @@ if (commentsMoreBtn) {
 // Charger les commentaires au démarrage
 
 // Toujours tenter de charger les commentaires au démarrage
+
 loadComments();
 
-}); // Fin DOMContentLoaded
+// Fin DOMContentLoaded
+});

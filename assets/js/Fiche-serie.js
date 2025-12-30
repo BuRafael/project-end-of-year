@@ -1,3 +1,11 @@
+// ...existing code...
+
+
+// ...existing code...
+
+
+// ...existing code...
+
 
 
 /**
@@ -95,61 +103,6 @@ function renderSeasonEpisodeSelects() {
 
 if (seasonSelect && episodeSelect && tracksTable) {
     renderSeasonEpisodeSelects();
-    seasonSelect.addEventListener('change', function() {
-        episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
-        const serieSlug = window.currentSerieSlug || '';
-        if (serieSlug === 'euphoria') {
-            for (let e = 1; e <= 8; e++) {
-                const opt = document.createElement('option');
-                opt.value = e;
-                opt.textContent = 'Épisode ' + e;
-                episodeSelect.appendChild(opt);
-            }
-            episodeSelect.value = 1;
-            displayTracks(parseInt(this.value), 1);
-        } else if (serieSlug === 'wednesday') {
-            for (let e = 1; e <= 8; e++) {
-                const opt = document.createElement('option');
-                opt.value = e;
-                opt.textContent = 'Épisode ' + e;
-                episodeSelect.appendChild(opt);
-            }
-            episodeSelect.value = 1;
-            displayTracks(1, 1);
-        } else {
-            const season = this.value;
-            if (allTracks[season]) {
-                const episodeNums = Object.keys(allTracks[season]);
-                episodeNums.forEach(epNum => {
-                    const opt = document.createElement('option');
-                    opt.value = epNum;
-                    opt.textContent = 'Épisode ' + epNum;
-                    episodeSelect.appendChild(opt);
-                });
-                const firstEp = episodeNums[0];
-                episodeSelect.value = firstEp;
-                displayTracks(parseInt(season), parseInt(firstEp));
-            } else {
-                episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
-                tracksTable.innerHTML = `<tr><td colspan=\"5\" style=\"text-align:center; color: #888; font-style: italic;\">Rien à écouter pour le moment...</td></tr>`;
-                updateTracksMoreBtn(0);
-            }
-        }
-    });
-    episodeSelect.addEventListener('change', function() {
-        displayTracks(parseInt(seasonSelect.value), parseInt(this.value));
-    });
-}
-
-
-// Fonction pour afficher les pistes
-function displayTracks(season, episode) {
-    if (!tracksTable) return;
-    const tracks = (allTracks[season] && allTracks[season][episode]) ? allTracks[season][episode] : [];
-    currentTracks = tracks;
-    tracksPage = 1;
-    renderTracksPage();
-    updateTracksMoreBtn(tracks.length);
 }
 
 function renderTracksPage() {
@@ -326,17 +279,16 @@ function renderComment(commentData) {
     col.className = 'col-12 col-md-3';
     col.dataset.commentId = commentData.id;
     
-    const menuHtml = commentData.is_author ? `
+    const menuHtml = `
         <div class="comment-menu">
             <button class="comment-menu-btn" aria-label="Options">
                 <i class="bi bi-three-dots-vertical"></i>
             </button>
             <div class="comment-menu-dropdown">
-                <button class="comment-edit-btn">Modifier</button>
-                <button class="comment-delete-btn">Supprimer</button>
+                <button class="comment-edit-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Modifier</button>
+                <button class="comment-delete-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Supprimer</button>
             </div>
-        </div>
-    ` : '';
+        </div>`;
     
     // Formater la date
     let dateHtml = '';
@@ -750,66 +702,128 @@ initGenericCarousel({
     `
 });
 
-// === LIKE BUTTON (SERIE) ===
+// === LIKE BUTTON (SERIE) synchronisé avec le compte utilisateur ===
 const movieLikeBtn = document.getElementById('movieLikeBtn');
 if (movieLikeBtn) {
-    // Récupérer les infos de la série depuis les attributs data
-    const serieTitle = movieLikeBtn.dataset.serieTitle || document.querySelector('.movie-header h1')?.textContent || '';
-    const serieYear = movieLikeBtn.dataset.serieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
-    const seriePoster = movieLikeBtn.dataset.serieImage || document.getElementById('moviePosterImg')?.src || '';
-    const serieSlug = movieLikeBtn.dataset.serieSlug || window.currentMovieSlug || '';
-    
-    // Vérifier si déjà en favoris
-    const favoriteSeries = JSON.parse(localStorage.getItem('favoriteSeries') || '[]');
-    const isAlreadyFavorite = favoriteSeries.some(serie => serie.id === serieSlug);
-    
-    if (isAlreadyFavorite) {
-        movieLikeBtn.classList.add('liked');
-        const icon = movieLikeBtn.querySelector('i');
+    // Vérifier l'état de connexion utilisateur
+    let isUserLoggedIn = false;
+    try {
+        isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+    } catch (e) {}
+
+    // Désactiver le bouton si déconnecté
+    if (!isUserLoggedIn) {
+        movieLikeBtn.classList.remove('liked');
+        movieLikeBtn.setAttribute('aria-pressed', 'false');
+        const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
         if (icon) {
-            icon.classList.remove('bi-heart');
-            icon.classList.add('bi-heart-fill');
-        }
-    }
-    
-    movieLikeBtn.addEventListener('click', function() {
-        this.classList.toggle('liked');
-        const icon = this.querySelector('i');
-        const liked = this.classList.contains('liked');
-        
-        if (liked) {
-            icon.classList.remove('bi-heart');
-            icon.classList.add('bi-heart-fill');
-        } else {
-            icon.classList.remove('bi-heart-fill');
             icon.classList.add('bi-heart');
+            icon.classList.remove('bi-heart-fill');
+            icon.style.color = '#1A1A1A';
         }
-        this.setAttribute('aria-pressed', liked);
-        
-        // Gérer les favoris
-        let favoriteSeries = JSON.parse(localStorage.getItem('favoriteSeries') || '[]');
-        
-        if (liked) {
-            // Ajouter aux favoris
-            const serieData = {
-                id: serieSlug,
-                title: serieTitle,
-                year: serieYear,
-                image: seriePoster,
-                url: window.location.href
-            };
-            
-            // Vérifier si pas déjà présent
-            if (!favoriteSeries.some(serie => serie.id === serieSlug)) {
-                favoriteSeries.push(serieData);
-                localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
+        movieLikeBtn.disabled = true;
+    } else {
+        // Charger l'état du like depuis la base (favoris utilisateur)
+        var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+        fetch(ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' })
+        })
+        .then(async r => {
+            const text = await r.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Réponse AJAX non JSON:', text);
+                throw e;
             }
-        } else {
-            // Retirer des favoris
-            favoriteSeries = favoriteSeries.filter(serie => serie.id !== serieSlug);
-            localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
-        }
-    });
+        })
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.series)) {
+                const serieId = movieLikeBtn.dataset.serieId || '';
+                const isFavorite = data.data.series.some(serie => String(serie.id) === String(serieId));
+                if (isFavorite) {
+                    movieLikeBtn.classList.add('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'true');
+                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+                    if (icon) {
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                        icon.style.color = '#700118';
+                    }
+                } else {
+                    movieLikeBtn.classList.remove('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'false');
+                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+                    if (icon) {
+                        icon.classList.add('bi-heart');
+                        icon.classList.remove('bi-heart-fill');
+                        icon.style.color = '#1A1A1A';
+                    }
+                }
+            }
+        })
+        .catch(e => {
+            console.error('Erreur AJAX favoris:', e);
+        });
+
+        // Gestion du clic
+        movieLikeBtn.addEventListener('click', function () {
+            const icon = this.querySelector('.svg-heart-shape');
+            const liked = this.classList.toggle('liked');
+            this.setAttribute('aria-pressed', liked ? 'true' : 'false');
+            if (icon) {
+                if (liked) {
+                    icon.setAttribute('fill', '#700118');
+                    icon.setAttribute('stroke', '#700118');
+                } else {
+                    icon.setAttribute('fill', 'none');
+                    icon.setAttribute('stroke', '#888888');
+                }
+            }
+            // Ajouter ou retirer des favoris via AJAX
+            const serieId = this.dataset.serieId || '';
+            const serieTitle = this.dataset.serieTitle || document.querySelector('.movie-header h1')?.textContent || '';
+            const serieYear = this.dataset.serieYear || document.querySelector('.movie-sub')?.textContent || '';
+            const seriePoster = this.dataset.serieImage || document.getElementById('moviePosterImg')?.src || '';
+            if (liked) {
+                // Ajouter aux favoris
+                const serieData = {
+                    id: serieId,
+                    title: serieTitle,
+                    year: serieYear,
+                    image: seriePoster,
+                    url: window.location.href
+                };
+                const form = new URLSearchParams();
+                form.append('action', 'add_user_favorite');
+                form.append('type', 'series');
+                form.append('item', JSON.stringify(serieData));
+                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+                fetch(ajaxUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                });
+            } else {
+                // Retirer des favoris
+                const form = new URLSearchParams();
+                form.append('action', 'remove_user_favorite');
+                form.append('type', 'series');
+                form.append('id', serieId);
+                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+                fetch(ajaxUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                });
+            }
+        });
+    }
 }
 
 // === PASSWORD TOGGLE ===
@@ -822,5 +836,19 @@ document.querySelectorAll('.password-toggle').forEach(btn => {
         }
     });
 });
+
+// Fallback pour éviter ReferenceError si displayTracks n'est pas défini ailleurs
+function displayTracks(season, episode) {
+    if (!allTracks || !allTracks[season] || !allTracks[season][episode]) {
+        currentTracks = [];
+        renderTracksPage();
+        updateTracksMoreBtn(0);
+        return;
+    }
+    currentTracks = allTracks[season][episode];
+    tracksPage = 1;
+    renderTracksPage();
+    updateTracksMoreBtn(currentTracks.length);
+}
 
 });

@@ -1,3 +1,21 @@
+.comment-menu-btn {
+    color: #700118 !important;
+    background: transparent !important;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.3rem;
+    box-shadow: none;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comment-menu-btn i {
+    color: #700118 !important;
+}
+.comment-menu-dropdown button {
+    color: #111 !important;
+}
 /* Harmonisation carrousel compositeur avec films/séries */
 .carousel-card {
     flex: 0 0 calc(25% - 12px);
