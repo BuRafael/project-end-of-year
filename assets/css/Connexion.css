@@ -228,7 +228,8 @@ body {
 .btn-register-primary:hover {
 	background: var(--reg-primary);
 	color: var(--reg-white);
-	box-shadow: 0 6px 18px rgba(112, 1, 24, 0.18);
+	box-shadow: none;
+	/* filter: blur(0.5px); */
 }
 .btn-register-primary:active {
 	transform: none;
