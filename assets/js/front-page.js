@@ -119,17 +119,17 @@ function initHearts() {
           mediaLink = button.dataset.trackUrl || mediaCard?.dataset.trackUrl || '';
           item = { id: mediaId, title: mediaTitle, artist, duration, cover: mediaImage, source, url: mediaLink };
         } else {
-          // Cas film/série
+          // Cas film/série : utiliser l'ID WordPress si présent
+          mediaId = button.dataset.id || '';
           mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
           mediaLink = mediaCard?.querySelector('a')?.href || '';
-          mediaId = mediaLink.split('/').filter(Boolean).pop() || '';
           mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
           item = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
         }
         // Vérifier si déjà favori
         let isFav = false;
-        if (mediaType === 'films') isFav = favFilms.some(f => f.id === mediaId);
-        else if (mediaType === 'series') isFav = favSeries.some(s => s.id === mediaId);
+        if (mediaType === 'films') isFav = favFilms.some(f => String(f.id) === String(mediaId));
+        else if (mediaType === 'series') isFav = favSeries.some(s => String(s.id) === String(mediaId));
         // TODO: charger favMusiques si besoin
         if (isFav) {
           button.setAttribute('data-liked', 'true');

@@ -177,6 +177,7 @@ if (isset($series_info[$page_slug])) {
                          class="movie-poster img-fluid shadow" id="moviePosterImg">
                     <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button"
                             data-serie-image="<?php echo esc_url($poster_url); ?>"
+                            data-serie-id="<?php echo esc_attr($post->ID); ?>"
                             data-serie-title="<?php echo esc_attr($title); ?>"
                             data-serie-year="<?php echo esc_attr($aired); ?>"
                             data-serie-slug="<?php echo esc_attr($page_slug); ?>">

@@ -401,7 +401,7 @@ body .movie-page > section:last-child {
         font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
         font-weight: 400 !important;
         margin-top: 2px;
-        text-decoration: underline !important;
+        text-decoration: none !important;
         cursor: pointer;
         transition: color 0.2s ease;
     }

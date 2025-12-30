@@ -131,7 +131,7 @@ get_header();
                         <a href="<?php echo esc_url($inception_url); ?>" class="top-title-link">Inception</a>
                         <a href="<?php echo esc_url($inception_url); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg' ); ?>" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" data-id="<?php echo esc_attr($inception_page ? $inception_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/La La Land.jpg' ); ?>" alt="La La Land">
@@ -178,7 +178,8 @@ get_header();
                         <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="top-title-link">Stranger Things</a>
                         <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="top-composer-link">The Duffer Brothers</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/Stranger Things2.jpg' ); ?>" type="button" aria-label="Like">♡</button>
+                    <?php $stranger_page = get_page_by_path('stranger-things'); ?>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-id="<?php echo esc_attr($stranger_page ? $stranger_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/Stranger Things2.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/breaking bad.webp' ); ?>" alt="Breaking Bad">

@@ -85,13 +85,21 @@ function cinemusic_add_user_favorite() {
     if (!is_array($favorites)) {
         $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
     }
-    // Éviter les doublons
-    foreach ($favorites[$type] as $fav) {
-        if ($fav['id'] == $item['id']) {
-            wp_send_json_success($favorites);
+    // Nettoyage : convertir tous les favoris films/séries en liste d'IDs si besoin
+    foreach (['films', 'series'] as $cat) {
+        if (isset($favorites[$cat]) && is_array($favorites[$cat])) {
+            $favorites[$cat] = array_map(function($f) {
+                if (is_array($f) && isset($f['id'])) return $f['id'];
+                return $f;
+            }, $favorites[$cat]);
         }
     }
-    $favorites[$type][] = $item;
+    // Éviter les doublons
+    if (in_array($item['id'], $favorites[$type])) {
+        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+        wp_send_json_success($favorites);
+    }
+    $favorites[$type][] = $item['id'];
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
     wp_send_json_success($favorites);
 }

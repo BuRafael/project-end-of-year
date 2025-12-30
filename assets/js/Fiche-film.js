@@ -544,8 +544,11 @@ if (movieLikeBtn) {
             }
         })
         .then(data => {
+            // DEBUG: Afficher la réponse AJAX et l'ID comparé
+            const movieId = movieLikeBtn.dataset.movieId || '';
+            console.log('[DEBUG] Favoris films AJAX:', data);
+            console.log('[DEBUG] movieId bouton:', movieId);
             if (data.success && data.data && Array.isArray(data.data.films)) {
-                const movieId = movieLikeBtn.dataset.movieId || '';
                 // Les IDs dans la DB sont numériques, donc on force la comparaison en string
                 const isFavorite = data.data.films.some(film => String(film.id) === String(movieId));
                 const path = movieLikeBtn.querySelector('path.svg-heart-shape');
