@@ -120,51 +120,28 @@ get_header();
         <div class="top-card">
             <div class="top-header">Top 5 films</div>
             <ul class="top-list">
-                <li>
-                    <?php 
-                    // Lien vers la page fiche film Inception
-                    $inception_page = get_page_by_path('inception');
-                    $inception_url = $inception_page ? get_permalink($inception_page->ID) : home_url('/inception/');
-                    ?>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url($inception_url); ?>" class="top-title-link">Inception</a>
-                        <a href="<?php echo esc_url($inception_url); ?>" class="top-composer-link">Christopher Nolan</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-id="<?php echo esc_attr($inception_page ? $inception_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/inception affiche film.jpg' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/La La Land.jpg' ); ?>" alt="La La Land">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/la-la-land')); ?>" class="top-title-link">La La Land</a>
-                        <a href="<?php echo esc_url(home_url('/la-la-land')); ?>" class="top-composer-link">Damien Chazelle</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/La La Land.jpg' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Parasite.jpg' ); ?>" alt="Parasite">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/parasite')); ?>" class="top-title-link">Parasite</a>
-                        <a href="<?php echo esc_url(home_url('/parasite')); ?>" class="top-composer-link">Bong Joon-ho</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/Parasite.jpg' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Interstellar.jpg' ); ?>" alt="Interstellar">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/interstellar')); ?>" class="top-title-link">Interstellar</a>
-                        <a href="<?php echo esc_url(home_url('/interstellar')); ?>" class="top-composer-link">Christopher Nolan</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/Interstellar.jpg' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Arrival.webp' ); ?>" alt="Arrival">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-title-link">Arrival</a>
-                        <a href="<?php echo esc_url(home_url('/arrival')); ?>" class="top-composer-link">Denis Villeneuve</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/Arrival.webp' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
+                <?php
+                $films = [
+                  ['slug' => 'inception', 'img' => 'Inception.jpg', 'poster' => 'inception affiche film.jpg', 'composer' => 'Christopher Nolan'],
+                  ['slug' => 'la-la-land', 'img' => 'La La Land.jpg', 'poster' => 'La La Land.jpg', 'composer' => 'Damien Chazelle'],
+                  ['slug' => 'parasite', 'img' => 'Parasite.jpg', 'poster' => 'Parasite.jpg', 'composer' => 'Bong Joon-ho'],
+                  ['slug' => 'interstellar', 'img' => 'Interstellar.jpg', 'poster' => 'Interstellar.jpg', 'composer' => 'Christopher Nolan'],
+                  ['slug' => 'arrival', 'img' => 'Arrival.webp', 'poster' => 'Arrival.webp', 'composer' => 'Denis Villeneuve'],
+                ];
+                foreach ($films as $film) {
+                  $page = get_page_by_path($film['slug']);
+                  $url = $page ? get_permalink($page->ID) : home_url('/' . $film['slug'] . '/');
+                  $id = $page ? $page->ID : '';
+                  echo '<li>';
+                  echo '<img src="' . esc_url(get_template_directory_uri() . '/assets/image/Front Page/' . $film['img']) . '" alt="' . esc_attr(ucwords(str_replace('-', ' ', $film['slug']))) . '">';
+                  echo '<div class="top-info">';
+                  echo '<a href="' . esc_url($url) . '" class="top-title-link">' . esc_html(ucwords(str_replace('-', ' ', $film['slug']))) . '</a>';
+                  echo '<a href="' . esc_url($url) . '" class="top-composer-link">' . esc_html($film['composer']) . '</a>';
+                  echo '</div>';
+                  echo '<button class="like-btn" data-liked="false" data-type="film" data-id="' . esc_attr($id) . '" data-poster="' . esc_url(get_template_directory_uri() . '/assets/image/Fiche films/' . $film['poster']) . '" type="button" aria-label="Like">♡</button>';
+                  echo '</li>';
+                }
+                ?>
             </ul>
         </div>
 
@@ -220,24 +197,28 @@ get_header();
         <div class="top-card">
             <div class="top-header">Top 5 animés</div>
             <ul class="top-list">
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="top-title-link">Your Name</a>
-                        <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="top-composer-link">Makoto Shinkai</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/your name.jpg' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
-                    <div class="top-info">
-                        <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="top-title-link">Spirited Away</a>
-                        <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="top-composer-link">Hayao Miyazaki</a>
-                    </div>
-                    <button class="like-btn" data-liked="false" data-type="film" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/chihiro.jpg' ); ?>" type="button" aria-label="Like">♡</button>
-                </li>
-                <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="Attack on Titan">
+                <?php
+                $animes = [
+                  ['slug' => 'your-name', 'img' => 'your name.jpg', 'poster' => 'your name.jpg', 'composer' => 'Makoto Shinkai', 'type' => 'film'],
+                  ['slug' => 'spirited-away', 'img' => 'chihiro.jpg', 'poster' => 'chihiro.jpg', 'composer' => 'Hayao Miyazaki', 'type' => 'film'],
+                  ['slug' => 'attack-on-titan', 'img' => 'attack on titan.jpg', 'poster' => 'attack on titan.jpg', 'composer' => 'Hajime Isayama', 'type' => 'serie'],
+                  ['slug' => 'demon-slayer', 'img' => 'demon slayer.jpg', 'poster' => 'demon slayer.jpg', 'composer' => 'Koyoharu Gotouge', 'type' => 'film'],
+                  ['slug' => 'jujutsu-kaisen', 'img' => 'jujutsu kaisen.jpg', 'poster' => 'jujutsu kaisen.jpg', 'composer' => 'Gege Akutami', 'type' => 'film'],
+                ];
+                foreach ($animes as $anime) {
+                  $page = get_page_by_path($anime['slug']);
+                  $url = $page ? get_permalink($page->ID) : home_url('/' . $anime['slug'] . '/');
+                  $id = $page ? $page->ID : '';
+                  echo '<li>';
+                  echo '<img src="' . esc_url(get_template_directory_uri() . '/assets/image/Front Page/' . $anime['img']) . '" alt="' . esc_attr(ucwords(str_replace('-', ' ', $anime['slug']))) . '">';
+                  echo '<div class="top-info">';
+                  echo '<a href="' . esc_url($url) . '" class="top-title-link">' . esc_html(ucwords(str_replace('-', ' ', $anime['slug']))) . '</a>';
+                  echo '<a href="' . esc_url($url) . '" class="top-composer-link">' . esc_html($anime['composer']) . '</a>';
+                  echo '</div>';
+                  echo '<button class="like-btn" data-liked="false" data-type="' . esc_attr($anime['type']) . '" data-id="' . esc_attr($id) . '" data-poster="' . esc_url(get_template_directory_uri() . '/assets/image/Fiche films/' . $anime['poster']) . '" type="button" aria-label="Like">♡</button>';
+                  echo '</li>';
+                }
+                ?>
                     <div class="top-info">
                         <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="top-title-link">Attack on Titan</a>
                         <a href="<?php echo esc_url(home_url('/attack-on-titan')); ?>" class="top-composer-link">Hajime Isayama</a>

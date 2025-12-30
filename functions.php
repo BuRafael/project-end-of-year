@@ -120,7 +120,7 @@ function cinemusic_remove_user_favorite() {
         $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
     }
     $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
-        return $fav['id'] != $id;
+        return (string)$fav !== (string)$id;
     }));
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
     wp_send_json_success($favorites);
