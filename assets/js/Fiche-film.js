@@ -485,11 +485,8 @@ function renderComment(commentData) {
         else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
-    // Affiche 0 si non liké par l'utilisateur, sinon la vraie valeur
-    let initialLikeCount = 0;
-    if (commentData.liked_by_user) {
-        initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 1;
-    }
+    // Affiche le vrai nombre de likes
+    let initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
         col.innerHTML = `
             <div class="comment-card">
                 ${menuHtml}
@@ -522,19 +519,46 @@ function renderComment(commentData) {
         const likeCountSpan = col.querySelector('.like-count');
         if (likeBtn && likeCountSpan) {
             likeBtn.addEventListener('click', function () {
+                console.log('[DEBUG] Like button clicked for comment', commentData.id);
                 // Vérifier connexion utilisateur
                 var isUserLoggedIn = false;
                 try {
                     isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
-                } catch (e) {}
+                } catch (e) { console.warn('[DEBUG] Error parsing user login state', e); }
                 if (!isUserLoggedIn) {
+                    console.log('[DEBUG] User not logged in, redirecting');
                     window.location.href = '/inscription';
                     return;
                 }
                 const isLiked = likeBtn.classList.toggle('liked');
                 let count = parseInt(likeCountSpan.textContent, 10);
                 if (isNaN(count)) count = 0;
+                // Update counter immediately for instant feedback
+                if (isLiked) {
+                    likeCountSpan.textContent = count + 1;
+                } else {
+                    likeCountSpan.textContent = Math.max(0, count - 1);
+                }
+                // Force SVG thumb color for reliability
+                const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+                if (thumbSvg) {
+                    // Also update the <path> fill directly
+                    const thumbPath = thumbSvg.querySelector('path');
+                    if (isLiked) {
+                        thumbSvg.style.fill = '#700118';
+                        thumbSvg.style.color = '#700118';
+                        if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                    } else {
+                        thumbSvg.style.fill = '#1A1A1A';
+                        thumbSvg.style.color = '#1A1A1A';
+                        if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                    }
+                }
+                console.log('[DEBUG] isLiked:', isLiked, 'Current count:', count);
                 // AJAX pour enregistrer le like/dislike
+                if (!window.ajaxurl) {
+                    console.error('[DEBUG] window.ajaxurl is not defined!');
+                }
                 fetch(window.ajaxurl, {
                     method: 'POST',
                     credentials: 'same-origin',
@@ -544,19 +568,51 @@ function renderComment(commentData) {
                         comment_id: commentData.id
                     })
                 })
-                .then(r => r.json())
+                .then(r => {
+                    console.log('[DEBUG] AJAX response for like:', r);
+                    return r.json();
+                })
                 .then(data => {
+                    console.log('[DEBUG] AJAX JSON data:', data);
                     if (data.success) {
+                        console.log('[DEBUG] Backend like_count:', data.data.like_count);
                         likeCountSpan.textContent = data.data.like_count;
                     } else {
                         // rollback UI si erreur
                         likeBtn.classList.toggle('liked');
+                        if (thumbSvg) {
+                            const thumbPath = thumbSvg.querySelector('path');
+                            // Rollback thumb color
+                            if (isLiked) {
+                                thumbSvg.style.fill = '#1A1A1A';
+                                thumbSvg.style.color = '#1A1A1A';
+                                if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                            } else {
+                                thumbSvg.style.fill = '#700118';
+                                thumbSvg.style.color = '#700118';
+                                if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                            }
+                        }
                         likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
                         alert('Erreur lors de la mise à jour du like.');
                     }
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.error('[DEBUG] AJAX error:', err);
                     likeBtn.classList.toggle('liked');
+                    if (thumbSvg) {
+                        const thumbPath = thumbSvg.querySelector('path');
+                        // Rollback thumb color
+                        if (isLiked) {
+                            thumbSvg.style.fill = '#1A1A1A';
+                            thumbSvg.style.color = '#1A1A1A';
+                            if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                        } else {
+                            thumbSvg.style.fill = '#700118';
+                            thumbSvg.style.color = '#700118';
+                            if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                        }
+                    }
                     likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
                     alert('Erreur réseau lors du like.');
                 });

@@ -103,10 +103,14 @@ function theme_like_comment() {
     if ($exists) {
         wp_send_json_error(['message' => 'Déjà liké.']);
     }
-    $wpdb->insert($table, [
+    $result = $wpdb->insert($table, [
         'comment_id' => $comment_id,
         'user_id' => $user_id
     ]);
+    if ($result === false) {
+        error_log('theme_like_comment SQL error: ' . $wpdb->last_error);
+        wp_send_json_error(['message' => 'Erreur SQL lors de l\'ajout du like', 'sql_error' => $wpdb->last_error]);
+    }
     // Compter les likes
     $like_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d", $comment_id));
     wp_send_json_success(['like_count' => intval($like_count)]);
