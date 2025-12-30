@@ -612,7 +612,7 @@ main.home-container > section:last-child {
 
 .top-list li:hover {
   background: rgba(244,239,236,0.025);
-  box-shadow: 0 4px 24px rgba(112,1,24,0.10);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13); /* Gris neutre, pas de rouge */
   border-radius: 12px;
   transition: background 0.2s, box-shadow 0.2s;
 }

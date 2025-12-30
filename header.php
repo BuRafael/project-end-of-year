@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.typekit.net/isz1tod.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>html,body{background:#1A1A1A!important;}</style>
     <?php wp_head(); ?>
     <script>window.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';</script>
 </head>
