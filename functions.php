@@ -103,6 +103,20 @@ function theme_like_comment() {
     if ($exists) {
         wp_send_json_error(['message' => 'Déjà liké.']);
     }
+    // Si la table n'existe pas, on la crée automatiquement
+    if($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            comment_id BIGINT UNSIGNED NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY unique_like (comment_id, user_id)
+        ) $charset_collate;";
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
     $result = $wpdb->insert($table, [
         'comment_id' => $comment_id,
         'user_id' => $user_id

@@ -517,6 +517,16 @@ function renderComment(commentData) {
         // Like button logic: toggle .liked and update like count visually, toujours 0 si pas liké
         const likeBtn = col.querySelector('.comment-like-btn');
         const likeCountSpan = col.querySelector('.like-count');
+        // Force couleur du pouce dès l'affichage si déjà liké
+        if (likeBtn && commentData.liked_by_user) {
+            const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+            if (thumbSvg) {
+                const thumbPath = thumbSvg.querySelector('path');
+                thumbSvg.style.fill = '#700118';
+                thumbSvg.style.color = '#700118';
+                if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+            }
+        }
         if (likeBtn && likeCountSpan) {
             likeBtn.addEventListener('click', function () {
                 console.log('[DEBUG] Like button clicked for comment', commentData.id);
