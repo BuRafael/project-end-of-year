@@ -104,13 +104,33 @@ function initHearts() {
   getUserFavorites('films', favFilms => {
     getUserFavorites('series', favSeries => {
       likeButtons.forEach(button => {
-        const mediaCard = button.closest('.media-card, .film-card, .serie-card, li');
-        const mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
-        const mediaLink = mediaCard?.querySelector('a')?.href || '';
-        const mediaId = mediaLink.split('/').filter(Boolean).pop() || '';
-        const mediaType = normalizeType(button.dataset.type || 'films');
-        const mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
-        const isFav = (mediaType === 'films' ? favFilms : favSeries).some(item => item.id === mediaId);
+        const mediaCard = button.closest('.media-card, .film-card, .serie-card, li, .track-row');
+        const mediaTypeRaw = button.dataset.type || 'films';
+        const mediaType = normalizeType(mediaTypeRaw);
+        let mediaId = '', mediaTitle = '', mediaImage = '', mediaLink = '', item = {};
+        if (mediaType === 'musiques') {
+          // Cas piste/musique (ex: top 5 musiques)
+          mediaId = button.dataset.trackId || mediaCard?.dataset.trackId || '';
+          mediaTitle = button.dataset.trackTitle || mediaCard?.dataset.trackTitle || '';
+          mediaImage = button.dataset.trackCover || mediaCard?.dataset.trackCover || '';
+          const artist = button.dataset.trackArtist || mediaCard?.dataset.trackArtist || '';
+          const duration = button.dataset.trackDuration || mediaCard?.dataset.trackDuration || '';
+          const source = button.dataset.trackSource || mediaCard?.dataset.trackSource || '';
+          mediaLink = button.dataset.trackUrl || mediaCard?.dataset.trackUrl || '';
+          item = { id: mediaId, title: mediaTitle, artist, duration, cover: mediaImage, source, url: mediaLink };
+        } else {
+          // Cas film/série
+          mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
+          mediaLink = mediaCard?.querySelector('a')?.href || '';
+          mediaId = mediaLink.split('/').filter(Boolean).pop() || '';
+          mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
+          item = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
+        }
+        // Vérifier si déjà favori
+        let isFav = false;
+        if (mediaType === 'films') isFav = favFilms.some(f => f.id === mediaId);
+        else if (mediaType === 'series') isFav = favSeries.some(s => s.id === mediaId);
+        // TODO: charger favMusiques si besoin
         if (isFav) {
           button.setAttribute('data-liked', 'true');
           button.textContent = '♥';
@@ -123,7 +143,6 @@ function initHearts() {
         button.addEventListener('click', function(e) {
           e.preventDefault();
           const isLiked = this.getAttribute('data-liked') === 'true';
-          const item = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
           if (isLiked) {
             updateFavorite('remove_user_favorite', mediaType, item, () => {
               this.setAttribute('data-liked', 'false');

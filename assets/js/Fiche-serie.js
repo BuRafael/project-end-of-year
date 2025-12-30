@@ -225,41 +225,38 @@ document.addEventListener('click', function(e) {
         
         if (liked) {
             e.target.classList.remove('bi-heart');
-            // Ajouter aux favoris
-            const serieData = {
-                id: serieSlug,
-                title: serieTitle,
-                year: serieYear,
-                image: seriePoster,
-                url: window.location.href
-            };
-            // Vérifier si pas déjà présent
-            if (!favoriteSeries.some(serie => serie.id === serieSlug)) {
-                favoriteSeries.push(serieData);
-                localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
-                if (typeof window.addFavorite === 'function') {
-                    window.addFavorite('serie', serieData);
-                }
-            }
-            // Ajouter la piste aux favoris
+            // Ajouter la piste aux favoris serveur (catégorie musiques)
             const trackData = {
                 id: trackId,
                 title: trackTitle,
                 artist: trackArtist,
                 duration: trackDuration,
                 cover: trackCover,
-                source: document.querySelector('.movie-header h1')?.textContent || ''
+                source: document.querySelector('.movie-header h1')?.textContent || '',
+                url: window.location.href
             };
-            
-            // Vérifier si pas déjà présent
-            if (!favoriteTracks.some(track => track.id === trackId)) {
-                favoriteTracks.push(trackData);
-                localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
-            }
+            const form = new URLSearchParams();
+            form.append('action', 'add_user_favorite');
+            form.append('type', 'musiques');
+            form.append('item', JSON.stringify(trackData));
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form.toString()
+            });
         } else {
-            // Retirer des favoris
-            favoriteTracks = favoriteTracks.filter(track => track.id !== trackId);
-            localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
+            // Retirer la piste des favoris serveur
+            const form = new URLSearchParams();
+            form.append('action', 'remove_user_favorite');
+            form.append('type', 'musiques');
+            form.append('id', trackId);
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form.toString()
+            });
         }
     }
 });
