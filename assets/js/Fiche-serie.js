@@ -7,7 +7,6 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
-
 // === PISTES PAR SAISON ET ÉPISODE ===
 const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
 const allTracks = window.allTracks || {};
@@ -17,6 +16,20 @@ const seasonSelect = document.getElementById("seasonSelect");
 const episodeSelect = document.getElementById("episodeSelect");
 let currentTracks = [];
 let tracksPage = 1;
+
+// Affichage auto des pistes au chargement si selects présents
+if (seasonSelect && episodeSelect && tracksTable) {
+    renderSeasonEpisodeSelects();
+} else if (tracksTable && allTracks && Object.keys(allTracks).length > 0) {
+    // Si pas de selects (ou retirés), afficher la première saison/épisode dispo
+    const firstSeason = Object.keys(allTracks)[0];
+    if (allTracks[firstSeason]) {
+        const episodeNums = Object.keys(allTracks[firstSeason]);
+        if (episodeNums.length > 0) {
+            displayTracks(parseInt(firstSeason), parseInt(episodeNums[0]));
+        }
+    }
+}
 
 function renderSeasonEpisodeSelects() {
     if (!seasonSelect || !episodeSelect) return;
@@ -228,6 +241,8 @@ document.addEventListener('click', function(e) {
                     window.addFavorite('serie', serieData);
                 }
             }
+            // Ajouter la piste aux favoris
+            const trackData = {
                 id: trackId,
                 title: trackTitle,
                 artist: trackArtist,
@@ -346,6 +361,8 @@ function renderComment(commentData) {
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
     
+    // Affiche le vrai nombre de likes
+    let initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
     col.innerHTML = `
         <div class="comment-card">
             ${menuHtml}
@@ -357,8 +374,123 @@ function renderComment(commentData) {
             </div>
             ${dateHtml}
             <div class="comment-text">${commentData.comment_text}</div>
+            <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
+                <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
+                    <svg class="svg-thumb-up" viewBox="0 -0.5 21 21" width="22" height="22" style="display:inline-block;vertical-align:middle;">
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Dribbble-Light-Preview" transform="translate(-219.000000, -760.000000)" fill="#000000">
+                                <g id="icons" transform="translate(56.000000, 160.000000)">
+                                    <path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+                <span class="like-count" style="color:#000 !important; font-weight:500;">${initialLikeCount}</span>
+            </div>
         </div>
     `;
+        // Like button logic: toggle .liked and update like count visually
+        const likeBtn = col.querySelector('.comment-like-btn');
+        const likeCountSpan = col.querySelector('.like-count');
+        // Force couleur du pouce dès l'affichage si déjà liké
+        if (likeBtn && commentData.liked_by_user) {
+            const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+            if (thumbSvg) {
+                const thumbPath = thumbSvg.querySelector('path');
+                thumbSvg.style.fill = '#700118';
+                thumbSvg.style.color = '#700118';
+                if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+            }
+        }
+        if (likeBtn && likeCountSpan) {
+            likeBtn.addEventListener('click', function () {
+                // Vérifier connexion utilisateur
+                var isUserLoggedIn = false;
+                try {
+                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+                } catch (e) {}
+                if (!isUserLoggedIn) {
+                    window.location.href = '/inscription';
+                    return;
+                }
+                const isLiked = likeBtn.classList.toggle('liked');
+                let count = parseInt(likeCountSpan.textContent, 10);
+                if (isNaN(count)) count = 0;
+                // Update counter immediately for instant feedback
+                if (isLiked) {
+                    likeCountSpan.textContent = count + 1;
+                } else {
+                    likeCountSpan.textContent = Math.max(0, count - 1);
+                }
+                // Force SVG thumb color for reliability
+                const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+                if (thumbSvg) {
+                    const thumbPath = thumbSvg.querySelector('path');
+                    if (isLiked) {
+                        thumbSvg.style.fill = '#700118';
+                        thumbSvg.style.color = '#700118';
+                        if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                    } else {
+                        thumbSvg.style.fill = '#1A1A1A';
+                        thumbSvg.style.color = '#1A1A1A';
+                        if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                    }
+                }
+                // AJAX pour enregistrer le like/dislike
+                fetch(window.ajaxurl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: isLiked ? 'like_comment' : 'unlike_comment',
+                        comment_id: commentData.id
+                    })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        likeCountSpan.textContent = data.data.like_count;
+                    } else {
+                        // rollback UI si erreur
+                        likeBtn.classList.toggle('liked');
+                        if (thumbSvg) {
+                            const thumbPath = thumbSvg.querySelector('path');
+                            // Rollback thumb color
+                            if (isLiked) {
+                                thumbSvg.style.fill = '#1A1A1A';
+                                thumbSvg.style.color = '#1A1A1A';
+                                if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                            } else {
+                                thumbSvg.style.fill = '#700118';
+                                thumbSvg.style.color = '#700118';
+                                if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                            }
+                        }
+                        likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
+                        alert('Erreur lors de la mise à jour du like.');
+                    }
+                })
+                .catch((err) => {
+                    likeBtn.classList.toggle('liked');
+                    if (thumbSvg) {
+                        const thumbPath = thumbSvg.querySelector('path');
+                        // Rollback thumb color
+                        if (isLiked) {
+                            thumbSvg.style.fill = '#1A1A1A';
+                            thumbSvg.style.color = '#1A1A1A';
+                            if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                        } else {
+                            thumbSvg.style.fill = '#700118';
+                            thumbSvg.style.color = '#700118';
+                            if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                        }
+                    }
+                    likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
+                    alert('Erreur réseau lors du like.');
+                });
+            });
+        }
     
     commentsZone.insertBefore(col, commentsZone.firstChild);
     

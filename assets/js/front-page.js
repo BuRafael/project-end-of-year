@@ -5,7 +5,7 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initCarousel();
-    if (typeof initScrollToTop === 'function') initScrollToTop();
+    // Suppression du scroll-to-top sur la front page
     initHearts();
     initCtaButton();
     animateCountersOnScroll();

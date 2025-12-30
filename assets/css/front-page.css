@@ -26,8 +26,9 @@
   display: block;
   transition: stroke 0.2s;
 }
+/* Unify scroll-to-top arrow color: always white, no red hover */
 .scroll-to-top:hover .scroll-arrow {
-  stroke: #700118;
+  stroke: #F4EFEC;
 }
 /* Scroll to top button minimal visible style */
 .scroll-to-top {

@@ -1,7 +1,6 @@
     </main>
 
 
-    <!-- Scroll to Top Button removed: now handled globally by main.js -->
     </main>
 
     <footer class="site-footer">

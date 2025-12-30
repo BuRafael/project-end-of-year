@@ -68,9 +68,52 @@ a {
   text-decoration: none; 
 }
 
+
 /* ==================================================
-   Scroll to Top Button
+   Scroll to Top Button (Floating, unified with front page)
    ================================================== */
+.scroll-to-top {
+  position: fixed;
+  right: 40px;
+  bottom: 40px;
+  width: 56px;
+  height: 56px;
+  background: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 0;
+  cursor: pointer;
+}
+.scroll-to-top svg {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+.scroll-arrow {
+  stroke: #F4EFEC;
+  stroke-width: 3.5;
+  fill: none;
+  display: block;
+  transition: stroke 0.2s;
+}
+.scroll-to-top:hover .scroll-arrow {
+  stroke: #700118;
+}
+@media (max-width: 600px) {
+  .scroll-to-top {
+    right: 16px;
+    bottom: 16px;
+    width: 40px;
+    height: 40px;
+  }
+  .scroll-to-top svg {
+    width: 24px;
+    height: 24px;
+  }
+}
 
 
 

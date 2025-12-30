@@ -81,8 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-    // Scroll to top button (disable on fiche film page)
-    if (!document.body.classList.contains('page-template-template-fiche-film')) {
+    // Scroll to top button : sur front page, fiches films et fiches séries
+    if (
+        document.body.classList.contains('home') ||
+        document.body.classList.contains('page-template-template-fiche-film') ||
+        document.body.classList.contains('page-template-template-fiche-serie')
+    ) {
         initScrollToTop();
     }
 });
