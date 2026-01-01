@@ -62,10 +62,23 @@ function cinemusic_get_user_favorites() {
         return $result;
     }
 
+    // On force musiques à être un tableau de chaînes d'ID (jamais d'objet)
+    $musiques = [];
+    if (is_array($favorites['musiques'])) {
+        foreach ($favorites['musiques'] as $m) {
+            if (is_array($m) && isset($m['id'])) {
+                $musiques[] = (string)$m['id'];
+            } elseif (is_string($m) || is_numeric($m)) {
+                $musiques[] = (string)$m;
+            }
+        }
+        // Supprimer les doublons éventuels
+        $musiques = array_values(array_unique($musiques));
+    }
     $favoris_data = [
         'films' => enrich_favoris($favorites['films'], 'films'),
         'series' => enrich_favoris($favorites['series'], 'series'),
-        'musiques' => enrich_favoris($favorites['musiques'], 'musiques'),
+        'musiques' => $musiques,
     ];
     wp_send_json_success($favoris_data);
 }
@@ -120,6 +133,11 @@ function cinemusic_remove_user_favorite() {
         $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
     }
     $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
+        // Si c'est un objet/array avec une clé id, comparer cette clé
+        if (is_array($fav) && isset($fav['id'])) {
+            return (string)$fav['id'] !== (string)$id;
+        }
+        // Sinon, comparer la valeur directement
         return (string)$fav !== (string)$id;
     }));
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);

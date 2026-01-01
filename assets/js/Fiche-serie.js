@@ -14,6 +14,16 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // === PISTES PAR SAISON ET ÉPISODE ===
+    const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
+    const allTracks = window.allTracks || {};
+    const tracksTable = document.getElementById("tracksTable");
+    const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Piste séries/';
+    const seasonSelect = document.getElementById("seasonSelect");
+    const episodeSelect = document.getElementById("episodeSelect");
+    let currentTracks = [];
+    let tracksPage = 1;
+
     // --- PERSISTENCE DES LIKES DE PISTES (TRACKS) ---
     if (tracksTable) {
         fetch(window.ajaxurl || window.wp_data?.ajax_url, {
@@ -25,10 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.musiques)) {
-                const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+                const favoriteTrackIds = data.data.musiques.map(String);
                 tracksTable.querySelectorAll('tr').forEach(row => {
-                    let trackId = row.querySelector('td:first-child')?.textContent?.trim();
-                    if (favoriteTrackIds.includes(String(trackId))) {
+                    const trackId = row.dataset.id;
+                    if (favoriteTrackIds.includes(trackId)) {
                         const heart = row.querySelector('.track-like');
                         if (heart) {
                             heart.classList.add('liked');
@@ -41,29 +51,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-// === PISTES PAR SAISON ET ÉPISODE ===
-const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
-const allTracks = window.allTracks || {};
-const tracksTable = document.getElementById("tracksTable");
-const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Piste séries/';
-const seasonSelect = document.getElementById("seasonSelect");
-const episodeSelect = document.getElementById("episodeSelect");
-let currentTracks = [];
-let tracksPage = 1;
 
-// Affichage auto des pistes au chargement si selects présents
-if (seasonSelect && episodeSelect && tracksTable) {
-    renderSeasonEpisodeSelects();
-} else if (tracksTable && allTracks && Object.keys(allTracks).length > 0) {
-    // Si pas de selects (ou retirés), afficher la première saison/épisode dispo
-    const firstSeason = Object.keys(allTracks)[0];
-    if (allTracks[firstSeason]) {
-        const episodeNums = Object.keys(allTracks[firstSeason]);
-        if (episodeNums.length > 0) {
-            displayTracks(parseInt(firstSeason), parseInt(episodeNums[0]));
+    // Affichage auto des pistes au chargement si selects présents
+    if (seasonSelect && episodeSelect && tracksTable) {
+        renderSeasonEpisodeSelects();
+    } else if (tracksTable && allTracks && Object.keys(allTracks).length > 0) {
+        // Si pas de selects (ou retirés), afficher la première saison/épisode dispo
+        const firstSeason = Object.keys(allTracks)[0];
+        if (allTracks[firstSeason]) {
+            const episodeNums = Object.keys(allTracks[firstSeason]);
+            if (episodeNums.length > 0) {
+                displayTracks(parseInt(firstSeason), parseInt(episodeNums[0]));
+            }
         }
     }
-}
 
 function renderSeasonEpisodeSelects() {
     if (!seasonSelect || !episodeSelect) return;
@@ -145,8 +146,13 @@ function renderTracksPage() {
             : `<div class="movie-track-artist">${t.artist}</div>`;
         const trackImage = t.image ? imagePath + t.image : imagePath;
         const isFirstTrack = index === 0 ? 'first-track-image' : '';
+        // Identifiant unique pour la piste
+        const serieSlug = window.currentSerieSlug || '';
+        const season = seasonSelect?.value || '1';
+        const episode = episodeSelect?.value || '1';
+        const trackId = `${serieSlug}-${season}-${episode}-${t.id}`;
         tracksTable.innerHTML += `
-            <tr>
+            <tr data-id="${trackId}">
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
@@ -193,14 +199,11 @@ function updateTracksMoreBtn(totalTracks) {
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('track-like')) {
         const row = e.target.closest('tr');
-        // Récupérer l'ID de la piste (depuis la première colonne ou data-id)
-        let trackId = row?.querySelector('td:first-child')?.textContent?.trim();
-        if (!trackId && e.target.dataset.id) trackId = e.target.dataset.id;
+        const trackId = row.dataset.id;
         const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
-        const trackNumber = row.querySelector('td:first-child')?.textContent || '';
 
         e.target.classList.toggle('liked');
         const liked = e.target.classList.contains('liked');

@@ -185,36 +185,40 @@ get_header();
                     <button class="like-btn" data-liked="false" data-type="serie" data-id="<?php echo esc_attr($stranger_page ? $stranger_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/Stranger Things2.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
+                    <?php $breakingbad_page = get_page_by_path('breaking-bad'); ?>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/breaking bad.webp' ); ?>" alt="Breaking Bad">
                     <div class="top-info">
                         <a href="<?php echo esc_url(home_url('/breaking-bad')); ?>" class="top-title-link">Breaking Bad</a>
                         <a href="<?php echo esc_url(home_url('/breaking-bad')); ?>" class="top-composer-link">Vince Gilligan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/breaking bad.webp' ); ?>" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-id="<?php echo esc_attr($breakingbad_page ? $breakingbad_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/breaking bad.webp' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
+                    <?php $euphoria_page = get_page_by_path('euphoria'); ?>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/euphoria.jpg' ); ?>" alt="Euphoria">
                     <div class="top-info">
                         <a href="<?php echo esc_url(home_url('/euphoria')); ?>" class="top-title-link">Euphoria</a>
                         <a href="<?php echo esc_url(home_url('/euphoria')); ?>" class="top-composer-link">Sam Levinson</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/euphoria.jpg' ); ?>" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-id="<?php echo esc_attr($euphoria_page ? $euphoria_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/euphoria.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
+                    <?php $wednesday_page = get_page_by_path('wednesday'); ?>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/wednesday.jpg' ); ?>" alt="Wednesday">
                     <div class="top-info">
                         <a href="<?php echo esc_url(home_url('/wednesday')); ?>" class="top-title-link">Wednesday</a>
                         <a href="<?php echo esc_url(home_url('/wednesday')); ?>" class="top-composer-link">Tim Burton</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/wednesday.jpg' ); ?>" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-id="<?php echo esc_attr($wednesday_page ? $wednesday_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/wednesday.jpg' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
                 <li>
+                    <?php $witcher_page = get_page_by_path('the-witcher'); ?>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/the witcher.webp' ); ?>" alt="The Witcher">
                     <div class="top-info">
                         <a href="<?php echo esc_url(home_url('/the-witcher')); ?>" class="top-title-link">The Witcher</a>
                         <a href="<?php echo esc_url(home_url('/the-witcher')); ?>" class="top-composer-link">Lauren Schmidt Hissrich</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/the witcher.webp' ); ?>" type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" data-id="<?php echo esc_attr($witcher_page ? $witcher_page->ID : ''); ?>" data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/the witcher.webp' ); ?>" type="button" aria-label="Like">♡</button>
                 </li>
             </ul>
         </div>

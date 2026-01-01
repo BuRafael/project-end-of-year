@@ -219,6 +219,8 @@ function loadComments() {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+    // ...déplacement du bloc plus bas...
+
 // === PISTES ===
 const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Fiche films/';
 const trackImagePath = typeof themeTrackImagePath !== 'undefined' ? themeTrackImagePath : 'assets/image/Pistes film/';
@@ -402,7 +404,7 @@ function renderTracks(limit = tracksLimit) {
         const coverSrc = coverPath + (t.cover || 'Inception piste.png');
         
         tracksTable.innerHTML += `
-            <tr>
+            <tr data-id="${window.currentMovieSlug || ''}-${t.id}">
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
@@ -456,21 +458,20 @@ if (tracksTable) {
     tracksTable.addEventListener('click', function (e) {
         const target = e.target;
         if (!target.classList.contains('track-like')) return;
-        
+
         const row = target.closest('tr');
+        const trackId = row.dataset.id;
         const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
-        const trackNumber = row.querySelector('td:first-child')?.textContent || '';
-        
+
         const liked = target.classList.toggle('liked');
         target.classList.toggle('bi-heart', !liked);
         target.classList.toggle('bi-heart-fill', liked);
         target.setAttribute('aria-pressed', liked ? 'true' : 'false');
-        
+
         // Favoris pistes : AJAX serveur (catégorie musiques)
-        const trackId = `${currentMovieSlug}-${trackNumber}`;
         if (liked) {
             const trackData = {
                 id: trackId,
@@ -503,6 +504,44 @@ if (tracksTable) {
                 body: form.toString()
             });
         }
+    });
+
+    // === AFFICHAGE DES FAVORIS PISTES (LIKE) ===
+    // On récupère les favoris musiques de l'utilisateur et on coche les coeurs correspondants
+    var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+    fetch(ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action: 'get_user_favorites' })
+    })
+    .then(async r => {
+        const text = await r.text();
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.error('Réponse AJAX non JSON:', text);
+            throw e;
+        }
+    })
+    .then(data => {
+        if (data.success && data.data && Array.isArray(data.data.musiques)) {
+            const favoriteTrackIds = data.data.musiques.map(String);
+            tracksTable.querySelectorAll('tr').forEach(row => {
+                const trackId = row.dataset.id;
+                if (favoriteTrackIds.includes(trackId)) {
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    }
+                }
+            });
+        }
+    })
+    .catch(e => {
+        console.error('Erreur AJAX favoris pistes:', e);
     });
 }
 
