@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 
@@ -34,8 +33,17 @@
     }
     ?>
 
+    <div id="menu-overlay" class="menu-overlay"></div>
     <header class="site-header">
         <div class="header-container container-fluid">
+            <div class="header-burger" id="header-burger" aria-label="Ouvrir le menu" tabindex="0">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                    <rect y="6" width="32" height="4" rx="2" fill="#F4EFEC"/>
+                    <rect y="14" width="32" height="4" rx="2" fill="#F4EFEC"/>
+                    <rect y="22" width="32" height="4" rx="2" fill="#F4EFEC"/>
+                </svg>
+            </div>
+
             <div class="header-logo">
                 <a href="<?php echo esc_url(home_url('/')); ?>">
                     <span class="brand-logo" aria-label="Logo Cinemusic">
@@ -72,42 +80,30 @@
                 ?>
             </nav>
 
-            <div class="header-right">
-                <?php if ( ! is_front_page() ) : ?>
-                    <form role="search" method="get" class="header-search" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-                        <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>">
-                        <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>">
-                            <span class="search-icon">🔍</span>
-                        </button>
-                    </form>
-                <?php endif; ?>
-
-                <div class="header-actions">
-                    <?php echo cinemusic_signup_button(); ?>
-
-                    <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
-                    <?php
-                    if (is_user_logged_in()) {
-                        $user_id = get_current_user_id();
-                        $avatar_url = get_user_meta($user_id, 'avatar_url', true);
-                        
-                        // Debug: Vérifier les valeurs
-                        // error_log('User ID: ' . $user_id . ' Avatar URL: ' . $avatar_url);
-                        
-                        if (!empty($avatar_url)) {
-                            // Afficher l'image de profil
-                            echo '<img src="' . esc_url($avatar_url) . '" alt="" class="profil-avatar">';
-                        } else {
-                            // Afficher l'icône par défaut
-                            ?>
-                            <svg class="profil-svg" width="65" height="72" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="currentColor"/>
-                                <path d="M32.5002 44.8718C21.9793 44.8718 13.0152 51.7433 9.60059 61.3703C10.4324 62.2827 11.3087 63.1457 12.2255 63.955C14.7682 55.1164 22.7448 48.4616 32.5002 48.4616C42.2555 48.4616 50.2321 55.1164 52.7748 63.955C53.6916 63.1457 54.5679 62.2827 55.3997 61.3704C51.9851 51.7433 43.021 44.8718 32.5002 44.8718Z" fill="currentColor"/>
-                            </svg>
-                            <?php
-                        }
+            <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
+                <div class="header-search-mobile-bg" id="header-search-mobile-bg"></div>
+                <form role="search" method="get" class="header-search" id="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="margin: 0;">
+                    <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;">
+                        <span class="search-icon">🔍</span>
+                    </button>
+                    <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>">
+                </form>
+                <button class="header-search-mobile" aria-label="Recherche">
+                    <span class="search-icon" aria-hidden="true" style="display: flex; align-items: center;">
+                        <svg width="28" height="28" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
+                            <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </button>
+                <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
+                <?php
+                if (is_user_logged_in()) {
+                    $user_id = get_current_user_id();
+                    $avatar_url = get_user_meta($user_id, 'avatar_url', true);
+                    if (!empty($avatar_url)) {
+                        echo '<img src="' . esc_url($avatar_url) . '" alt="" class="profil-avatar">';
                     } else {
-                        // Afficher l'icône par défaut pour utilisateur non connecté
                         ?>
                         <svg class="profil-svg" width="65" height="72" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="currentColor"/>
@@ -115,9 +111,16 @@
                         </svg>
                         <?php
                     }
+                } else {
                     ?>
-                    </a>
-                </div>
+                    <svg class="profil-svg" width="65" height="72" viewBox="0 0 65 72" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M42.2502 28.718C42.2502 34.6656 37.8849 39.4872 32.5002 39.4872C27.1154 39.4872 22.7502 34.6656 22.7502 28.718C22.7502 22.7703 27.1154 17.9487 32.5002 17.9487C37.8849 17.9487 42.2502 22.7703 42.2502 28.718ZM39.0002 28.718C39.0002 32.6831 36.09 35.8974 32.5002 35.8974C28.9103 35.8974 26.0002 32.6831 26.0002 28.718C26.0002 24.7528 28.9103 21.5385 32.5002 21.5385C36.09 21.5385 39.0002 24.7528 39.0002 28.718Z" fill="currentColor"/>
+                        <path d="M32.5002 44.8718C21.9793 44.8718 13.0152 51.7433 9.60059 61.3703C10.4324 62.2827 11.3087 63.1457 12.2255 63.955C14.7682 55.1164 22.7448 48.4616 32.5002 48.4616C42.2555 48.4616 50.2321 55.1164 52.7748 63.955C53.6916 63.1457 54.5679 62.2827 55.3997 61.3704C51.9851 51.7433 43.021 44.8718 32.5002 44.8718Z" fill="currentColor"/>
+                    </svg>
+                    <?php
+                }
+                ?>
+                </a>
             </div>
         </div>
     </header>

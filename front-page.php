@@ -26,6 +26,7 @@ get_header();
     <section class="hero">
         <h1>Trouvez la musique de vos films<br>et séries préférées&nbsp;!</h1>
 
+        <!-- Version desktop : barre de recherche -->
         <div class="search-bar">
             <input type="text" placeholder="Rechercher…">
             <button class="search-btn" type="button">
@@ -37,6 +38,12 @@ get_header();
                 </span>
             </button>
         </div>
+        <!-- Version mobile : bouton S'inscrire -->
+        <?php if ( !is_user_logged_in() ) : ?>
+        <div class="hero-register-btn-mobile" style="display: none; justify-content: center; margin-top: 24px;">
+            <a href="<?php echo esc_url( home_url('/register') ); ?>" class="btn-register-front" style="padding: 14px 32px; font-size: 1.2rem; border-radius: 32px; background: #700118; color: #fff; text-decoration: none; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: background 0.2s;">S'inscrire</a>
+        </div>
+        <?php endif; ?>
     </section>
 
     <!-- CAROUSEL Section -->
