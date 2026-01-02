@@ -2,9 +2,51 @@
 // Fichier réparé : toute la logique est dans ce handler, le like film est temporairement désactivé pour corriger les erreurs de structure.
 document.addEventListener('DOMContentLoaded', function() {
     // Gestion du like piste (track) pour les films
+
+    // Helper to render a track row (ensures artist cell uses correct class)
+    function renderTrackRow(track, slug) {
+        const tr = document.createElement('tr');
+        // Numéro
+        const tdNum = document.createElement('td');
+        tdNum.textContent = track.id;
+        tr.appendChild(tdNum);
+        // Titre
+        const tdTitle = document.createElement('td');
+        tdTitle.className = 'movie-track-title';
+        tdTitle.textContent = track.title;
+        tr.appendChild(tdTitle);
+        // Liens (placeholder, can be customized)
+        const tdLinks = document.createElement('td');
+        tdLinks.className = 'col-links';
+        tdLinks.innerHTML = '';
+        tr.appendChild(tdLinks);
+        // Durée
+        const tdDuration = document.createElement('td');
+        tdDuration.className = 'col-duration text-center';
+        tdDuration.textContent = track.duration || '';
+        tr.appendChild(tdDuration);
+        // Like
+        const tdLike = document.createElement('td');
+        const heart = document.createElement('i');
+        heart.className = 'bi bi-heart track-like';
+        tdLike.appendChild(heart);
+        tr.appendChild(tdLike);
+        // Artiste (toujours en gris)
+        const tdArtist = document.createElement('td');
+        tdArtist.className = 'movie-track-artist';
+        tdArtist.textContent = track.artist || '';
+        tr.appendChild(tdArtist);
+        return tr;
+    }
     const tracksTable = document.getElementById('tracksTable');
-    if (tracksTable) {
-        // 1. Charger les favoris de l'utilisateur et mettre à jour les coeurs
+    function getTrackUniqueId(row) {
+        // Utilise le slug du film + id piste pour garantir unicité
+        const trackId = row.querySelector('td:first-child')?.textContent?.trim();
+        const slug = typeof window.currentMovieSlug !== 'undefined' ? window.currentMovieSlug : 'film';
+        return `${slug}-${trackId}`;
+    }
+    function refreshTrackLikes() {
+        if (!tracksTable) return;
         fetch(window.ajaxurl || window.wp_data?.ajax_url, {
             method: 'POST',
             credentials: 'same-origin',
@@ -14,29 +56,43 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.musiques)) {
+                // On suppose que côté serveur, l'id stocké est bien du type slug-id
                 const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
-                // Pour chaque ligne du tableau, si l'id est dans les favoris, activer le coeur
                 tracksTable.querySelectorAll('tr').forEach(row => {
-                    let trackId = row.querySelector('td:first-child')?.textContent?.trim();
-                    if (favoriteTrackIds.includes(String(trackId))) {
-                        const heart = row.querySelector('.track-like');
-                        if (heart) {
+                    let uniqueId = getTrackUniqueId(row);
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        if (favoriteTrackIds.includes(String(uniqueId))) {
                             heart.classList.add('liked');
                             heart.classList.remove('bi-heart');
                             heart.classList.add('bi-heart-fill');
+                        } else {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
                         }
                     }
                 });
             }
         });
+    }
 
-        // 2. Gestion du clic sur les coeurs
+    if (tracksTable) {
+        // Example: render all tracks at load (replace with your actual data source)
+        if (window.movieTracks && Array.isArray(window.movieTracks)) {
+            tracksTable.innerHTML = '';
+            window.movieTracks.forEach(track => {
+                const tr = renderTrackRow(track, window.currentMovieSlug || 'film');
+                tracksTable.appendChild(tr);
+            });
+        }
+        refreshTrackLikes();
         document.addEventListener('click', function(e) {
             if (e.target.classList.contains('track-like')) {
                 const row = e.target.closest('tr');
-                let trackId = row?.querySelector('td:first-child')?.textContent?.trim();
-                const trackTitle = row.querySelector('.composer-track-title, .movie-track-title')?.textContent || '';
-                const trackArtist = row.querySelector('.composer-track-artist, .movie-track-artist')?.textContent || '';
+                let uniqueId = getTrackUniqueId(row);
+                const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
+                const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
                 const trackDuration = row.querySelector('.col-duration')?.textContent || '';
                 const trackCover = row.querySelector('.composer-track-cover, .movie-track-cover')?.src || '';
                 e.target.classList.toggle('liked');
@@ -44,9 +100,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (liked) {
                     e.target.classList.remove('bi-heart');
                     e.target.classList.add('bi-heart-fill');
-                    // Ajouter la piste aux favoris serveur (catégorie musiques)
                     const trackData = {
-                        id: trackId,
+                        id: uniqueId,
                         title: trackTitle,
                         artist: trackArtist,
                         duration: trackDuration,
@@ -67,11 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     e.target.classList.remove('bi-heart-fill');
                     e.target.classList.add('bi-heart');
-                    // Retirer la piste des favoris serveur
                     const form = new URLSearchParams();
                     form.append('action', 'remove_user_favorite');
                     form.append('type', 'musiques');
-                    form.append('id', trackId);
+                    form.append('id', uniqueId);
                     fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                         method: 'POST',
                         credentials: 'same-origin',
@@ -81,6 +135,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
         });
+
+        // Ajout du refresh après chaque modification de la liste (ex: afficher plus/moins)
+        const tracksMoreBtn = document.getElementById('tracksMoreBtn');
+        if (tracksMoreBtn) {
+            tracksMoreBtn.addEventListener('click', function() {
+                setTimeout(refreshTrackLikes, 100); // attendre le DOM update
+            });
+        }
     }
     // Sélecteurs et variables globales nécessaires
     const commentsZone = document.getElementById('commentsZone');

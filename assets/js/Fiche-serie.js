@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let tracksPage = 1;
 
     // --- PERSISTENCE DES LIKES DE PISTES (TRACKS) ---
-    if (tracksTable) {
+    function refreshTrackLikes() {
+        if (!tracksTable) return;
         fetch(window.ajaxurl || window.wp_data?.ajax_url, {
             method: 'POST',
             credentials: 'same-origin',
@@ -38,17 +39,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 const favoriteTrackIds = data.data.musiques.map(String);
                 tracksTable.querySelectorAll('tr').forEach(row => {
                     const trackId = row.dataset.id;
-                    if (favoriteTrackIds.includes(trackId)) {
-                        const heart = row.querySelector('.track-like');
-                        if (heart) {
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        if (favoriteTrackIds.includes(trackId)) {
                             heart.classList.add('liked');
                             heart.classList.remove('bi-heart');
                             heart.classList.add('bi-heart-fill');
+                        } else {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
                         }
                     }
                 });
             }
         });
+    }
+    if (tracksTable) {
+        refreshTrackLikes();
     }
 
 
@@ -257,6 +265,7 @@ if (tracksMoreBtn) {
         if (tracksPage < maxPages) {
             tracksPage++;
             renderTracksPage();
+            setTimeout(refreshTrackLikes, 100);
             if (tracksPage === maxPages) {
                 this.textContent = 'Afficher moins…';
                 this.classList.add('show-less');
@@ -264,6 +273,7 @@ if (tracksMoreBtn) {
         } else {
             tracksPage = 1;
             renderTracksPage();
+            setTimeout(refreshTrackLikes, 100);
             this.textContent = 'Afficher plus…';
             this.classList.remove('show-less');
         }

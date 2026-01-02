@@ -29,6 +29,37 @@ function appendTrack(track) {
             <i class="bi bi-heart track-like"></i>
         </td>
     `;
+    // Ajout de l'événement de like/dislike sur le bouton coeur
+    tr.querySelectorAll('.track-like').forEach(heart => {
+        heart.addEventListener('click', function() {
+            const trackId = tr.querySelector('td:first-child')?.textContent?.trim();
+            const isLiked = heart.classList.contains('liked');
+            // Requête AJAX pour sauvegarder le like/dislike
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: isLiked ? 'remove_favorite' : 'add_favorite',
+                    track_id: trackId
+                }).toString()
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    if (isLiked) {
+                        heart.classList.remove('liked');
+                        heart.classList.remove('bi-heart-fill');
+                        heart.classList.add('bi-heart');
+                    } else {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    }
+                }
+            });
+        });
+    });
     tracksTable.appendChild(tr);
 }
 /**
@@ -91,6 +122,37 @@ if (tracksTable) {
         appendTrack(t);
     });
 
+    // Fonction pour rafraîchir l'état des likes sur toutes les pistes affichées
+    function refreshTrackLikes() {
+        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.musiques)) {
+                const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+                tracksTable.querySelectorAll('tr').forEach(row => {
+                    let trackId = row.querySelector('td:first-child')?.textContent?.trim();
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        if (favoriteTrackIds.includes(String(trackId))) {
+                            heart.classList.add('liked');
+                            heart.classList.remove('bi-heart');
+                            heart.classList.add('bi-heart-fill');
+                        } else {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     // Bouton "Afficher plus"
     const tracksMoreBtn = document.getElementById('tracksMoreBtn');
     let showingAll = false;
@@ -105,8 +167,17 @@ if (tracksTable) {
                 });
                 this.textContent = 'Afficher moins…';
                 showingAll = true;
-            } // <-- FIN du else (bouton pistes)
-        }); // <-- FIN eventListener bouton pistes
+                refreshTrackLikes();
+            } else {
+                // Afficher moins : on retire les pistes au-delà de 5
+                while (tracksTable.rows.length > 5) {
+                    tracksTable.deleteRow(tracksTable.rows.length - 1);
+                }
+                this.textContent = 'Afficher plus…';
+                showingAll = false;
+                refreshTrackLikes();
+            }
+        });
     }
 
 // === CARROUSEL : COMPOSITEURS SIMILAIRES (STRICTEMENT IDENTIQUE À FILMS SIMILAIRES) ===
