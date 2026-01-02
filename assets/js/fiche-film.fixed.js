@@ -1,19 +1,86 @@
 // DOMContentLoaded handler pour toute la logique
 // Fichier réparé : toute la logique est dans ce handler, le like film est temporairement désactivé pour corriger les erreurs de structure.
 document.addEventListener('DOMContentLoaded', function() {
+            // Local cache for liked track IDs, persisted in sessionStorage
+        // No local cache, use server state like series fiche
+
+        // Gestion suppression de commentaire
+        function renderComment(comment) {
+            const div = document.createElement('div');
+            div.className = 'comment-item col-12 d-flex align-items-start';
+            div.dataset.commentId = comment.id;
+            div.innerHTML = `
+                <div class="comment-avatar rounded-circle overflow-hidden d-flex align-items-center justify-content-center me-3" style="width:40px;height:40px;">
+                    <img src="${comment.avatar || ''}" alt="avatar" class="w-100 h-100" style="object-fit:cover;">
+                </div>
+                <div class="flex-grow-1">
+                    <div class="comment-author fw-bold small">${comment.author}</div>
+                    <div class="comment-text small mb-1">${comment.text}</div>
+                    <div class="comment-date text-muted small">${comment.date}</div>
+                </div>
+                ${comment.canDelete ? `<button class="btn btn-sm btn-danger ms-2 comment-delete-btn">Supprimer</button>` : ''}
+            `;
+            return div;
+        }
+
+        function loadComments(comments) {
+            if (!commentsZone) return;
+            commentsZone.innerHTML = '';
+            comments.forEach(comment => {
+                commentsZone.appendChild(renderComment(comment));
+            });
+        }
+
+        // Suppression côté client + serveur
+        if (commentsZone) {
+            commentsZone.addEventListener('click', function(e) {
+                if (e.target.classList.contains('comment-delete-btn')) {
+                    const commentDiv = e.target.closest('.comment-item');
+                    const commentId = commentDiv?.dataset.commentId;
+                    if (commentId) {
+                        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({ action: 'delete_movie_comment', comment_id: commentId }).toString()
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data.success) {
+                                commentDiv.remove();
+                            } else {
+                                alert('Erreur lors de la suppression du commentaire');
+                            }
+                        });
+                    }
+                }
+            });
+        }
     // Gestion du like piste (track) pour les films
 
     // Helper to render a track row (ensures artist cell uses correct class)
     function renderTrackRow(track, slug) {
         const tr = document.createElement('tr');
+        // If track.id already contains a dash, use as is, else prepend slug
+        const compositeId = (typeof track.id === 'string' && track.id.includes('-')) ? track.id : `${slug || 'film'}-${track.id}`;
+        tr.setAttribute('data-id', compositeId);
         // Numéro
         const tdNum = document.createElement('td');
         tdNum.textContent = track.id;
         tr.appendChild(tdNum);
-        // Titre
+        // Titre + compositeur (comme fiche série)
         const tdTitle = document.createElement('td');
-        tdTitle.className = 'movie-track-title';
-        tdTitle.textContent = track.title;
+        tdTitle.className = '';
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'movie-track-title';
+        titleDiv.textContent = track.title;
+        tdTitle.appendChild(titleDiv);
+        if (track.artist) {
+            const artistDiv = document.createElement('div');
+            artistDiv.className = 'movie-track-artist';
+            artistDiv.textContent = track.artist;
+            tdTitle.appendChild(artistDiv);
+        }
         tr.appendChild(tdTitle);
         // Liens (placeholder, can be customized)
         const tdLinks = document.createElement('td');
@@ -31,19 +98,12 @@ document.addEventListener('DOMContentLoaded', function() {
         heart.className = 'bi bi-heart track-like';
         tdLike.appendChild(heart);
         tr.appendChild(tdLike);
-        // Artiste (toujours en gris)
-        const tdArtist = document.createElement('td');
-        tdArtist.className = 'movie-track-artist';
-        tdArtist.textContent = track.artist || '';
-        tr.appendChild(tdArtist);
         return tr;
     }
     const tracksTable = document.getElementById('tracksTable');
     function getTrackUniqueId(row) {
-        // Utilise le slug du film + id piste pour garantir unicité
-        const trackId = row.querySelector('td:first-child')?.textContent?.trim();
-        const slug = typeof window.currentMovieSlug !== 'undefined' ? window.currentMovieSlug : 'film';
-        return `${slug}-${trackId}`;
+        // Use data-id attribute for unique ID (like series fiche)
+        return row.getAttribute('data-id');
     }
     function refreshTrackLikes() {
         if (!tracksTable) return;
@@ -56,13 +116,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.musiques)) {
-                // On suppose que côté serveur, l'id stocké est bien du type slug-id
-                const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+                const favoriteTrackIds = new Set(data.data.musiques.map(m => String(m)));
                 tracksTable.querySelectorAll('tr').forEach(row => {
                     let uniqueId = getTrackUniqueId(row);
                     const heart = row.querySelector('.track-like');
                     if (heart) {
-                        if (favoriteTrackIds.includes(String(uniqueId))) {
+                        if (favoriteTrackIds.has(String(uniqueId))) {
                             heart.classList.add('liked');
                             heart.classList.remove('bi-heart');
                             heart.classList.add('bi-heart-fill');
@@ -77,25 +136,35 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    if (tracksTable) {
-        // Example: render all tracks at load (replace with your actual data source)
-        if (window.movieTracks && Array.isArray(window.movieTracks)) {
-            tracksTable.innerHTML = '';
-            window.movieTracks.forEach(track => {
-                const tr = renderTrackRow(track, window.currentMovieSlug || 'film');
-                tracksTable.appendChild(tr);
-            });
-        }
-        refreshTrackLikes();
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('track-like')) {
-                const row = e.target.closest('tr');
-                let uniqueId = getTrackUniqueId(row);
-                const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
-                const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
-                const trackDuration = row.querySelector('.col-duration')?.textContent || '';
-                const trackCover = row.querySelector('.composer-track-cover, .movie-track-cover')?.src || '';
-                e.target.classList.toggle('liked');
+        if (!tracksTable) return;
+        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.musiques)) {
+                const favoriteTrackIds = new Set(data.data.musiques.map(m => String(m)));
+                // Use a robust selector to get all like icons in the table
+                tracksTable.querySelectorAll('tr').forEach(row => {
+                    const heart = row.querySelector('.track-like');
+                    let uniqueId = row.getAttribute('data-id');
+                    if (heart) {
+                        if (uniqueId && favoriteTrackIds.has(String(uniqueId))) {
+                            heart.classList.add('liked');
+                            heart.classList.remove('bi-heart');
+                            heart.classList.add('bi-heart-fill');
+                        } else {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
+                        }
+                    }
+                });
+            }
+        });
                 const liked = e.target.classList.contains('liked');
                 if (liked) {
                     e.target.classList.remove('bi-heart');
@@ -107,7 +176,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         duration: trackDuration,
                         cover: trackCover,
                         source: document.querySelector('.movie-header h1')?.textContent || '',
-                        url: window.location.href
+                        url: window.location.href,
+                        slug: window.currentMovieSlug || 'film'
                     };
                     const form = new URLSearchParams();
                     form.append('action', 'add_user_favorite');
@@ -118,6 +188,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         credentials: 'same-origin',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: form.toString()
+                    })
+                    .then(r => r.json())
+                    .then(() => {
+                        refreshTrackLikes();
                     });
                 } else {
                     e.target.classList.remove('bi-heart-fill');
@@ -131,16 +205,22 @@ document.addEventListener('DOMContentLoaded', function() {
                         credentials: 'same-origin',
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: form.toString()
+                    })
+                    .then(r => r.json())
+                    .then(() => {
+                        refreshTrackLikes();
                     });
                 }
             }
         });
 
-        // Ajout du refresh après chaque modification de la liste (ex: afficher plus/moins)
+        // Ajout du refresh et re-render après chaque modification de la liste (ex: afficher plus/moins)
         const tracksMoreBtn = document.getElementById('tracksMoreBtn');
         if (tracksMoreBtn) {
             tracksMoreBtn.addEventListener('click', function() {
-                setTimeout(refreshTrackLikes, 100); // attendre le DOM update
+                if (window.movieTracks && Array.isArray(window.movieTracks)) {
+                    renderAllTracksAndRefresh(window.movieTracks);
+                }
             });
         }
     }

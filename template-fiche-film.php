@@ -434,6 +434,7 @@ if (isset($movie_tracks[$page_slug])) {
     const themeImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
     const themeTrackImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Pistes film/';
     window.currentMovieSlug = '<?php echo esc_js($page_slug); ?>';
+    window.movieTracks = <?php echo json_encode($movie_tracks[$page_slug] ?? []); ?>;
 </script>
 
 

@@ -62,17 +62,16 @@ function cinemusic_get_user_favorites() {
         return $result;
     }
 
-    // On force musiques à être un tableau de chaînes d'ID (jamais d'objet)
+    // Pour musiques, toujours retourner tel quel (ID unique string, ex: 'slug-1')
     $musiques = [];
     if (is_array($favorites['musiques'])) {
         foreach ($favorites['musiques'] as $m) {
             if (is_array($m) && isset($m['id'])) {
                 $musiques[] = (string)$m['id'];
-            } elseif (is_string($m) || is_numeric($m)) {
-                $musiques[] = (string)$m;
+            } elseif (is_string($m)) {
+                $musiques[] = $m;
             }
         }
-        // Supprimer les doublons éventuels
         $musiques = array_values(array_unique($musiques));
     }
     $favoris_data = [
@@ -107,7 +106,24 @@ function cinemusic_add_user_favorite() {
             }, $favorites[$cat]);
         }
     }
-    // Éviter les doublons
+    // Pour musiques, toujours stocker l'ID composite string (ex: 'slug-1')
+    if ($type === 'musiques') {
+        $slug = isset($item['slug']) ? $item['slug'] : (isset($item['source']) ? sanitize_title($item['source']) : 'film');
+        $id = (string)$item['id'];
+        $composite_id = (strpos($id, $slug . '-') === 0) ? $id : ($slug . '-' . $id);
+        // Nettoyer les anciens formats (array ou id simple)
+        $favorites[$type] = array_filter($favorites[$type], function($fav) {
+            return is_string($fav);
+        });
+        if (in_array($composite_id, $favorites[$type], true)) {
+            update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+            wp_send_json_success($favorites);
+        }
+        $favorites[$type][] = $composite_id;
+        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+        wp_send_json_success($favorites);
+    }
+    // Pour films/séries, logique inchangée
     if (in_array($item['id'], $favorites[$type])) {
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
         wp_send_json_success($favorites);
@@ -132,12 +148,22 @@ function cinemusic_remove_user_favorite() {
     if (!is_array($favorites)) {
         $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
     }
+    // Pour musiques, comparer l'ID unique string strictement
+    if ($type === 'musiques') {
+        $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
+            if (is_array($fav) && isset($fav['id'])) {
+                return $fav['id'] !== $id;
+            }
+            return $fav !== $id;
+        }));
+        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+        wp_send_json_success($favorites);
+    }
+    // Pour films/séries, logique inchangée
     $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
-        // Si c'est un objet/array avec une clé id, comparer cette clé
         if (is_array($fav) && isset($fav['id'])) {
             return (string)$fav['id'] !== (string)$id;
         }
-        // Sinon, comparer la valeur directement
         return (string)$fav !== (string)$id;
     }));
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
@@ -588,15 +614,13 @@ function handle_user_registration()
             wp_set_current_user($user_id);
             wp_set_auth_cookie($user_id, true, is_ssl());
             do_action('wp_login', $username, get_user_by('ID', $user_id));
-
-            // Rediriger vers le step 2 (avatar)
+            // Rediriger vers la 2e étape si besoin
             $step2_page = get_page_by_path('signup-step2');
             if ($step2_page) {
                 wp_redirect(get_permalink($step2_page->ID));
             } else {
                 wp_redirect(home_url('/signup-step2'));
             }
-            exit;
             exit;
         } else {
             wp_redirect(home_url('/signup?registration=error'));

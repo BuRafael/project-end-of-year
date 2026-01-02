@@ -702,11 +702,16 @@ body .movie-page > section:last-child {
     color: rgba(244, 239, 236, 1);
 }
 
+
 .movie-track-artist {
     font-size: 0.75rem; /* 12px */
-    color: #999;
+    color: #999 !important;
     text-decoration: underline;
     cursor: pointer;
+    display: block;
+    margin-top: 2px;
+    font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: 400 !important;
     transition: color 0.2s ease;
 }
 
