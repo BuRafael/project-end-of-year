@@ -5,6 +5,40 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
+                        // Bloquer tout comportement par défaut sur les clics dans le <main> Favoris
+                        var mainFavoris = document.querySelector('main.favoris-page');
+                        if (mainFavoris) {
+                            mainFavoris.addEventListener('click', function(e) {
+                                e.preventDefault();
+                            }, true);
+                        }
+                    // Log tous les clics pour traquer l'élément déclencheur
+                    document.addEventListener('click', function(e) {
+                        console.log('[FAVORIS DEBUG] Clic sur:', e.target, 'type:', e.target.type, 'class:', e.target.className, 'parent:', e.target.parentElement?.className);
+                    }, true);
+                // Bloquer tout submit sur la page et logger l'origine
+                document.addEventListener('submit', function(e) {
+                    console.warn('[FAVORIS DEBUG] Submit bloqué !', e.target);
+                    e.preventDefault();
+                    return false;
+                }, true);
+            // Bloquer tout submit de formulaire sur la page Favoris (sécurité anti bug)
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        // Déterminer l'URL AJAX WordPress (fallback si besoin)
+        // Correction : si ajaxUrl est un objet (ex: {url: ...}), on prend la propriété url
+        var ajaxUrl = window.ajaxurl;
+        if (ajaxUrl && typeof ajaxUrl === 'object' && ajaxUrl.url) {
+            ajaxUrl = ajaxUrl.url;
+        }
+        if (!ajaxUrl || typeof ajaxUrl !== 'string') {
+            ajaxUrl = '/wp-admin/admin-ajax.php';
+        }
+        console.log('[FAVORIS DEBUG] ajaxUrl utilisé:', ajaxUrl);
     // Contrôle PHP pour savoir si l'utilisateur est connecté
     var isUserLoggedIn = false;
     try {
@@ -51,21 +85,28 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Charger les favoris depuis la base de données WordPress (AJAX)
     function loadFavorites(callback) {
-        fetch(ajaxurl, {
+        fetch(ajaxUrl, {
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: 'action=get_user_favorites'
         })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data) {
-                callback(data.data);
-            } else {
+        .then(async r => {
+            const text = await r.text();
+            try {
+                const data = JSON.parse(text);
+                console.log('[FAVORIS DEBUG] Réponse AJAX:', data);
+                if (data.success && data.data) {
+                    callback(data.data);
+                } else {
+                    callback({ films: [], series: [], musiques: [] });
+                }
+            } catch (e) {
+                console.error('[FAVORIS DEBUG] Erreur JSON:', e, '\nRéponse brute:', text);
                 callback({ films: [], series: [], musiques: [] });
             }
         })
-        .catch(() => callback({ films: [], series: [], musiques: [] }));
+        .catch((e) => { console.error('[FAVORIS DEBUG] Erreur AJAX:', e); callback({ films: [], series: [], musiques: [] }); });
     }
 
     // Afficher les films favoris
@@ -81,18 +122,18 @@ document.addEventListener('DOMContentLoaded', function() {
         filmsGrid.style.display = 'grid';
         filmsEmpty.style.display = 'none';
         
+        const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         filmsGrid.innerHTML = films.map(film => `
             <div class="favoris-card" data-id="${film.id}">
-                <button class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
+                <button type="button" class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-x-lg"></i>
                 </button>
                 <a href="${film.url}" class="favoris-card-link">
                     <div class="favoris-card-image">
-                        <img src="${film.image}" alt="${film.title}">
+                        <img src="${film.image ? film.image : defaultPoster}" alt="${film.title}">
                     </div>
                     <div class="favoris-card-content">
                         <h3 class="favoris-card-title">${film.title}</h3>
-                        <p class="favoris-card-meta">${film.year || ''}</p>
                     </div>
                 </a>
             </div>
@@ -114,18 +155,18 @@ document.addEventListener('DOMContentLoaded', function() {
         seriesGrid.style.display = 'grid';
         seriesEmpty.style.display = 'none';
         
+        const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         seriesGrid.innerHTML = series.map(serie => `
             <div class="favoris-card" data-id="${serie.id}">
-                <button class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
+                <button type="button" class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-x-lg"></i>
                 </button>
                 <a href="${serie.url}" class="favoris-card-link">
                     <div class="favoris-card-image">
-                        <img src="${serie.image}" alt="${serie.title}">
+                        <img src="${serie.image ? serie.image : defaultPoster}" alt="${serie.title}">
                     </div>
                     <div class="favoris-card-content">
                         <h3 class="favoris-card-title">${serie.title}</h3>
-                        <p class="favoris-card-meta">${serie.year || ''}</p>
                     </div>
                 </a>
             </div>
@@ -159,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
                 <div class="favoris-track-source">${track.source || ''}</div>
                 <div class="favoris-track-duration">${track.duration || ''}</div>
-                <button class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
+                <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-heart-fill"></i>
                 </button>
             </div>
@@ -195,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.append('action', 'remove_user_favorite');
         form.append('type', wpType);
         form.append('id', id);
-        fetch(ajaxurl, {
+        fetch(ajaxUrl, {
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -216,7 +257,7 @@ document.addEventListener('DOMContentLoaded', function() {
         form.append('action', 'add_user_favorite');
         form.append('type', wpType);
         form.append('item', JSON.stringify(item));
-        fetch(ajaxurl, {
+        fetch(ajaxUrl, {
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

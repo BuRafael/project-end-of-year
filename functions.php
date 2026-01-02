@@ -41,6 +41,7 @@ function cinemusic_get_user_favorites() {
     function enrich_favoris($ids, $type) {
         $result = [];
         foreach ($ids as $id) {
+            if (empty($id)) continue;
             $post = get_post($id);
             if (!$post) continue;
             $title = get_the_title($id);
@@ -62,22 +63,67 @@ function cinemusic_get_user_favorites() {
         return $result;
     }
 
-    // Pour musiques, toujours retourner tel quel (ID unique string, ex: 'slug-1')
+    // Pour musiques, enrichir les infos à partir des IDs composites (slug-id)
     $musiques = [];
     if (is_array($favorites['musiques'])) {
         foreach ($favorites['musiques'] as $m) {
+            $composite_id = '';
             if (is_array($m) && isset($m['id'])) {
-                $musiques[] = (string)$m['id'];
+                $composite_id = (string)$m['id'];
             } elseif (is_string($m)) {
-                $musiques[] = $m;
+                $composite_id = $m;
             }
+            if (!$composite_id) continue;
+            // Format attendu : slug-id
+            $parts = explode('-', $composite_id, 2);
+            if (count($parts) !== 2) continue;
+            $slug = $parts[0];
+            $track_id = $parts[1];
+            // Chercher la source des musiques (films ou séries)
+            $track = false;
+            // 1. Essayer de trouver dans les films
+            $args = array(
+                'post_type' => array('films', 'series'),
+                'posts_per_page' => 1,
+                'name' => $slug
+            );
+            $query = new WP_Query($args);
+            if ($query->have_posts()) {
+                $post = $query->posts[0];
+                // Les pistes sont stockées dans un champ ACF repeater ou meta personnalisée
+                $tracks = get_post_meta($post->ID, 'tracks', true);
+                if (!$tracks) $tracks = get_post_meta($post->ID, 'pistes', true); // fallback
+                if (is_array($tracks)) {
+                    foreach ($tracks as $t) {
+                        // ID peut être string ou int
+                        if ((isset($t['id']) && (string)$t['id'] === (string)$track_id) || (isset($t['ID']) && (string)$t['ID'] === (string)$track_id)) {
+                            $track = $t;
+                            break;
+                        }
+                    }
+                }
+                // Si trouvé, enrichir
+                if ($track) {
+                    $musiques[] = array(
+                        'id' => $composite_id,
+                        'title' => isset($track['title']) ? $track['title'] : '',
+                        'artist' => isset($track['artist']) ? $track['artist'] : '',
+                        'cover' => isset($track['cover']) ? $track['cover'] : '',
+                        'source' => get_the_title($post->ID),
+                        'duration' => isset($track['duration']) ? $track['duration'] : '',
+                        'platforms' => isset($track['platforms']) ? $track['platforms'] : [],
+                    );
+                }
+            }
+            wp_reset_postdata();
         }
-        $musiques = array_values(array_unique($musiques));
     }
     $favoris_data = [
         'films' => enrich_favoris($favorites['films'], 'films'),
         'series' => enrich_favoris($favorites['series'], 'series'),
         'musiques' => $musiques,
+        'debug_favorites_raw' => $favorites,
+        'debug_musiques_php' => $musiques,
     ];
     wp_send_json_success($favoris_data);
 }

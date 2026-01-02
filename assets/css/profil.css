@@ -91,7 +91,7 @@
 }
 
 .btn-profil-simple {
-	background: #fff;
+	background: #F4EFEC;
 	color: #232323;
 	border: 2px solid #e5e5e5;
 	border-radius: 10px;
@@ -131,7 +131,7 @@
 	border: 2px solid #a31c3a;
 }
 .btn-profil-simple.btn-logout-simple:hover {
-	background: #fff;
+	background: #F4EFEC;
 	color: #a31c3a;
 	border: 2px solid #a31c3a;
 }

@@ -403,8 +403,9 @@ function renderTracks(limit = tracksLimit) {
         }
         const coverSrc = coverPath + (t.cover || 'Inception piste.png');
         
+        const trackId = `${window.currentMovieSlug || ''}-${t.id}`;
         tracksTable.innerHTML += `
-            <tr data-id="${window.currentMovieSlug || ''}-${t.id}">
+            <tr data-id="${trackId}">
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
@@ -1216,4 +1217,21 @@ if (commentsMoreBtn) {
 loadComments();
 
 // Fin DOMContentLoaded
+});
+
+// Ajout du refresh et re-render après chaque modification de la liste (ex: afficher plus/moins)
+document.addEventListener('click', function(e) {
+    if (e.target && e.target.id === 'tracksMoreBtn') {
+        if (window.movieTracks && Array.isArray(window.movieTracks)) {
+            if (typeof renderAllTracksAndRefresh === 'function') {
+                renderAllTracksAndRefresh(window.movieTracks);
+            }
+            setTimeout(() => {
+                console.log('refreshTrackLikes called (afficher plus)');
+                if (typeof refreshTrackLikes === 'function') {
+                    refreshTrackLikes();
+                }
+            }, 400);
+        }
+    }
 });

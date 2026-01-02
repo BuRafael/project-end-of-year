@@ -237,14 +237,14 @@ body .movie-page > section:last-child {
 
 .series-selects .form-select:hover {
     border-color: #8B0120;
-    background-color: #FFFFFF;
+    background-color: #F4EFEC;
     color: #1A1A1A !important;
 }
 
 .series-selects .form-select:focus {
     outline: none;
     border-color: #700118;
-    background-color: #FFFFFF;
+    background-color: #F4EFEC;
     color: #1A1A1A !important;
     box-shadow: 0 0 0 3px rgba(112, 1, 24, 0.1);
 }
@@ -252,7 +252,7 @@ body .movie-page > section:last-child {
 /* Force white background and black text for options */
 .series-selects select option,
 .series-selects .form-select option {
-    background: #FFFFFF !important;
+    background: #F4EFEC !important;
     color: #1A1A1A !important;
     font-weight: normal !important;
     padding: 10px !important;

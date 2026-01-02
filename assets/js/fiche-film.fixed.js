@@ -96,6 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const tdLike = document.createElement('td');
         const heart = document.createElement('i');
         heart.className = 'bi bi-heart track-like';
+        heart.setAttribute('data-id', compositeId);
         tdLike.appendChild(heart);
         tr.appendChild(tdLike);
         return tr;
@@ -147,20 +148,16 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.musiques)) {
                 const favoriteTrackIds = new Set(data.data.musiques.map(m => String(m)));
-                // Use a robust selector to get all like icons in the table
-                tracksTable.querySelectorAll('tr').forEach(row => {
-                    const heart = row.querySelector('.track-like');
-                    let uniqueId = row.getAttribute('data-id');
-                    if (heart) {
-                        if (uniqueId && favoriteTrackIds.has(String(uniqueId))) {
-                            heart.classList.add('liked');
-                            heart.classList.remove('bi-heart');
-                            heart.classList.add('bi-heart-fill');
-                        } else {
-                            heart.classList.remove('liked');
-                            heart.classList.remove('bi-heart-fill');
-                            heart.classList.add('bi-heart');
-                        }
+                tracksTable.querySelectorAll('.track-like').forEach(heart => {
+                    let uniqueId = heart.getAttribute('data-id');
+                    if (uniqueId && favoriteTrackIds.has(String(uniqueId))) {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    } else {
+                        heart.classList.remove('liked');
+                        heart.classList.remove('bi-heart-fill');
+                        heart.classList.add('bi-heart');
                     }
                 });
             }
@@ -215,14 +212,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // Ajout du refresh et re-render après chaque modification de la liste (ex: afficher plus/moins)
-        const tracksMoreBtn = document.getElementById('tracksMoreBtn');
-        if (tracksMoreBtn) {
-            tracksMoreBtn.addEventListener('click', function() {
+        document.addEventListener('click', function(e) {
+            if (e.target && e.target.id === 'tracksMoreBtn') {
                 if (window.movieTracks && Array.isArray(window.movieTracks)) {
                     renderAllTracksAndRefresh(window.movieTracks);
+                    setTimeout(() => {
+                        console.log('refreshTrackLikes called (afficher plus)');
+                        refreshTrackLikes();
+                    }, 400);
                 }
-            });
-        }
+            }
+        });
     }
     // Sélecteurs et variables globales nécessaires
     const commentsZone = document.getElementById('commentsZone');

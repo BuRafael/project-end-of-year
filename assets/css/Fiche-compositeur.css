@@ -584,7 +584,7 @@ body .movie-page > section:last-child {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: #F4EFEC;
     border: 2px solid rgba(112, 1, 24, 0.3);
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -600,7 +600,7 @@ body .movie-page > section:last-child {
 }
 
 .comment-menu-dropdown button {
-    background: white;
+    background: #F4EFEC;
     border: none;
     padding: 10px 16px;
     text-align: left;
