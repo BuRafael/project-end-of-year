@@ -13,9 +13,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             }, true);
                         }
                     // Log tous les clics pour traquer l'élément déclencheur
-                    document.addEventListener('click', function(e) {
-                        console.log('[FAVORIS DEBUG] Clic sur:', e.target, 'type:', e.target.type, 'class:', e.target.className, 'parent:', e.target.parentElement?.className);
-                    }, true);
                 // Bloquer tout submit sur la page et logger l'origine
                 document.addEventListener('submit', function(e) {
                     console.warn('[FAVORIS DEBUG] Submit bloqué !', e.target);
@@ -38,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!ajaxUrl || typeof ajaxUrl !== 'string') {
             ajaxUrl = '/wp-admin/admin-ajax.php';
         }
-        console.log('[FAVORIS DEBUG] ajaxUrl utilisé:', ajaxUrl);
     // Contrôle PHP pour savoir si l'utilisateur est connecté
     var isUserLoggedIn = false;
     try {
@@ -96,9 +92,23 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 const data = JSON.parse(text);
                 console.log('[FAVORIS DEBUG] Réponse AJAX:', data);
+                try {
+                    if (data && data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+                        console.log('[DEBUG Favoris] debug_favorites_raw.musiques:', data.data.debug_favorites_raw.musiques);
+                    }
+                } catch (err) {
+                    console.warn('DEBUG Favoris: Impossible d’afficher la liste musiques', err);
+                }
                 if (data.success && data.data) {
+                    // Expose raw musiques IDs for fallback rendering
+                    if (data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+                        window.favorisDebugRawMusiques = data.data.debug_favorites_raw.musiques;
+                    } else {
+                        window.favorisDebugRawMusiques = [];
+                    }
                     callback(data.data);
                 } else {
+                    window.favorisDebugRawMusiques = [];
                     callback({ films: [], series: [], musiques: [] });
                 }
             } catch (e) {
@@ -176,6 +186,33 @@ document.addEventListener('DOMContentLoaded', function() {
     function renderMusiques(musiques) {
         if (!musiquesList || !musiquesEmpty) return;
         
+        // Si musiques enrichies vides, afficher un message d'erreur pour chaque piste likée
+        if (musiques.length === 0 && window.favorisDebugRawMusiques && window.favorisDebugRawMusiques.length > 0) {
+            musiquesList.style.display = 'block';
+            musiquesEmpty.style.display = 'none';
+            musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + window.favorisDebugRawMusiques.map((id, index) => {
+                return `
+                <tr class="favoris-track" data-id="${id}">
+                    <td class="favoris-track-number">${index + 1}</td>
+                    <td class="favoris-track-cover-cell"><img src="/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png" alt="Musique" class="favoris-track-cover"></td>
+                    <td class="favoris-track-title-cell">
+                        <div class="favoris-track-title" style="color:#e74c3c">Aucune info disponible</div>
+                        <div class="favoris-track-artist">ID: ${id}</div>
+                    </td>
+                    <td class="favoris-track-platforms"></td>
+                    <td class="favoris-track-duration">&mdash;</td>
+                    <td class="favoris-track-remove">
+                        <button type="button" class="favoris-remove-track" data-type="musique" data-id="${id}" aria-label="Retirer des favoris">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('') + `</tbody></table>`;
+            attachRemoveListeners();
+            return;
+        }
+
         if (musiques.length === 0) {
             musiquesList.style.display = 'none';
             musiquesEmpty.style.display = 'flex';
@@ -184,27 +221,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
         musiquesList.style.display = 'block';
         musiquesEmpty.style.display = 'none';
-        
-        musiquesList.innerHTML = musiques.map((track, index) => `
-            <div class="favoris-track" data-id="${track.id}">
-                <div class="favoris-track-number">${index + 1}</div>
-                <div class="favoris-track-info">
-                    <img src="${track.cover}" alt="${track.title}" class="favoris-track-cover">
-                    <div class="favoris-track-details">
-                        <div class="favoris-track-title">${track.title}</div>
-                        <div class="favoris-track-artist">${track.artist || 'Artiste inconnu'}</div>
-                    </div>
-                </div>
-                <div class="favoris-track-source">${track.source || ''}</div>
-                <div class="favoris-track-duration">${track.duration || ''}</div>
-                <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-        `).join('');
-
+        // Récupérer la liste des IDs likés
+        const favorisIds = Array.isArray(window.favorisMusiquesIds) ? window.favorisMusiquesIds : musiques.map(track => track.id);
+        musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + musiques.map((track, index) => {
+            // Fallback image si cover manquante
+            let cover = track.cover && track.cover.length > 0 ? track.cover : `/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png`;
+            // Si cover ne commence pas par /wp-content, on ajoute le chemin
+            if (cover && !cover.startsWith('/wp-content')) {
+                cover = `/wp-content/themes/project-end-of-year/assets/image/Pistes film/${cover}`;
+            }
+            return `
+            <tr class="favoris-track" data-id="${track.id}">
+                <td class="favoris-track-number">${index + 1}</td>
+                <td class="favoris-track-cover-cell">
+                    <img src="${cover}" alt="${track.title}" class="favoris-track-cover" onerror="this.onerror=null;this.src='/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png';">
+                </td>
+                <td class="favoris-track-title-cell">
+                    <div class="favoris-track-title">${track.title || 'Titre inconnu'}</div>
+                    <div class="favoris-track-artist">${track.artist || 'Artiste inconnu'}</div>
+                    <div class="favoris-track-source" style="font-size:0.85em;color:#aaa;">${track.source ? track.source : ''}</div>
+                </td>
+                <td class="favoris-track-platforms">
+                    <span class="track-icons">
+                        <i class="bi bi-spotify" aria-label="Spotify"></i>
+                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                        <i class="bi bi-apple" aria-label="Apple Music"></i>
+                    </span>
+                </td>
+                <td class="favoris-track-duration">${track.duration || '&mdash;'}</td>
+                <td class="favoris-track-remove">
+                    <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </td>
+            </tr>
+            `;
+        }).join('') + `</tbody></table>`;
         attachRemoveListeners();
-        attachCardClickListeners();
     }
 
     

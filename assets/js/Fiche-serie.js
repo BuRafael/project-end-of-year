@@ -35,8 +35,13 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(r => r.json())
         .then(data => {
-            if (data.success && data.data && Array.isArray(data.data.musiques)) {
-                const favoriteTrackIds = data.data.musiques.map(String);
+            let favoriteTrackIds = [];
+            if (data.success && data.data && Array.isArray(data.data.musiques) && data.data.musiques.length > 0) {
+                favoriteTrackIds = data.data.musiques.map(m => typeof m === 'string' ? m : m.id);
+            } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+                favoriteTrackIds = data.data.debug_favorites_raw.musiques;
+            }
+            if (favoriteTrackIds.length > 0) {
                 tracksTable.querySelectorAll('tr').forEach(row => {
                     const trackId = row.dataset.id;
                     const heart = row.querySelector('.track-like');

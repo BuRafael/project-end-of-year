@@ -387,6 +387,7 @@ const TRACKS_STEP = 5;
 let tracksLimit = currentMovieSlug === 'inception' ? tracks.length : TRACKS_MIN;
 
 function renderTracks(limit = tracksLimit) {
+
     if (!tracksTable) return;
     tracksLimit = limit;
     tracksTable.innerHTML = '';
@@ -402,7 +403,6 @@ function renderTracks(limit = tracksLimit) {
             coverPath = imagePath; // Si ce n'est pas une piste, utiliser le dossier des affiches
         }
         const coverSrc = coverPath + (t.cover || 'Inception piste.png');
-        
         const trackId = `${window.currentMovieSlug || ''}-${t.id}`;
         tracksTable.innerHTML += `
             <tr data-id="${trackId}">
@@ -440,6 +440,59 @@ function renderTracks(limit = tracksLimit) {
             tracksMoreBtn.innerText = 'Afficher plus…';
         }
     }
+    // Refresh track like state after rendering
+    var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+    fetch(ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action: 'get_user_favorites' })
+    })
+    .then(async r => {
+        const text = await r.text();
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.error('Réponse AJAX non JSON:', text);
+            throw e;
+        }
+    })
+    .then(data => {
+        console.log('[DEBUG get_user_favorites]', data);
+        if (data && data.data && data.data.musiques) {
+            console.log('[DEBUG musiques]', data.data.musiques);
+        }
+        if (data && data.data && data.data.debug_favorites_raw) {
+            console.log('[DEBUG debug_favorites_raw]', data.data.debug_favorites_raw);
+            if (data.data.debug_favorites_raw.musiques) {
+                console.log('[DEBUG debug_favorites_raw.musiques]', data.data.debug_favorites_raw.musiques);
+            }
+        }
+        let favoriteTrackIds = [];
+        if (data.success && data.data && Array.isArray(data.data.musiques) && data.data.musiques.length > 0) {
+            // Extract composite IDs from enriched musiques objects
+            favoriteTrackIds = data.data.musiques.map(m => typeof m === 'string' ? m : m.id);
+        } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+            // Fallback: use raw musiques IDs if enrichissement failed
+            favoriteTrackIds = data.data.debug_favorites_raw.musiques;
+        }
+        if (favoriteTrackIds.length > 0) {
+            tracksTable.querySelectorAll('tr').forEach(row => {
+                const trackId = row.dataset.id;
+                if (favoriteTrackIds.includes(trackId)) {
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    }
+                }
+            });
+        }
+    })
+    .catch(e => {
+        console.error('Erreur AJAX favoris pistes:', e);
+    });
 }
 
 if (tracksTable) {
@@ -474,8 +527,16 @@ if (tracksTable) {
 
         // Favoris pistes : AJAX serveur (catégorie musiques)
         if (liked) {
+            // Extract slug from trackId (format: slug-id)
+            let slug = '';
+            if (trackId && trackId.includes('-')) {
+                slug = trackId.split('-')[0];
+            } else {
+                slug = (document.body.getAttribute('data-movie-slug') || '').trim();
+            }
             const trackData = {
                 id: trackId,
+                slug: slug,
                 title: trackTitle,
                 artist: trackArtist,
                 duration: trackDuration,
@@ -487,11 +548,22 @@ if (tracksTable) {
             form.append('action', 'add_user_favorite');
             form.append('type', 'musiques');
             form.append('item', JSON.stringify(trackData));
+            console.log('[DEBUG add_user_favorite] form:', Object.fromEntries(form));
             fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                 method: 'POST',
                 credentials: 'same-origin',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: form.toString()
+            })
+            .then(async r => {
+                const text = await r.text();
+                try {
+                    const json = JSON.parse(text);
+                    console.log('[DEBUG add_user_favorite response]', json);
+                    return json;
+                } catch (e) {
+                    console.error('[DEBUG add_user_favorite response NON JSON]', text);
+                }
             });
         } else {
             const form = new URLSearchParams();

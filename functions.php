@@ -65,6 +65,8 @@ function cinemusic_get_user_favorites() {
 
     // Pour musiques, enrichir les infos à partir des IDs composites (slug-id)
     $musiques = [];
+    $debug_musiques_ids = [];
+    $debug_musiques_found = [];
     if (is_array($favorites['musiques'])) {
         foreach ($favorites['musiques'] as $m) {
             $composite_id = '';
@@ -74,6 +76,7 @@ function cinemusic_get_user_favorites() {
                 $composite_id = $m;
             }
             if (!$composite_id) continue;
+            $debug_musiques_ids[] = $composite_id;
             // Format attendu : slug-id
             $parts = explode('-', $composite_id, 2);
             if (count($parts) !== 2) continue;
@@ -90,19 +93,24 @@ function cinemusic_get_user_favorites() {
             $query = new WP_Query($args);
             if ($query->have_posts()) {
                 $post = $query->posts[0];
-                // Les pistes sont stockées dans un champ ACF repeater ou meta personnalisée
                 $tracks = get_post_meta($post->ID, 'tracks', true);
                 if (!$tracks) $tracks = get_post_meta($post->ID, 'pistes', true); // fallback
                 if (is_array($tracks)) {
                     foreach ($tracks as $t) {
-                        // ID peut être string ou int
                         if ((isset($t['id']) && (string)$t['id'] === (string)$track_id) || (isset($t['ID']) && (string)$t['ID'] === (string)$track_id)) {
                             $track = $t;
+                            $debug_musiques_found[] = [
+                                'id' => $composite_id,
+                                'slug' => $slug,
+                                'track_id' => $track_id,
+                                'track' => $track,
+                                'post_title' => get_the_title($post->ID),
+                                'post_id' => $post->ID
+                            ];
                             break;
                         }
                     }
                 }
-                // Si trouvé, enrichir
                 if ($track) {
                     $musiques[] = array(
                         'id' => $composite_id,
@@ -124,6 +132,8 @@ function cinemusic_get_user_favorites() {
         'musiques' => $musiques,
         'debug_favorites_raw' => $favorites,
         'debug_musiques_php' => $musiques,
+        'debug_musiques_ids' => $debug_musiques_ids,
+        'debug_musiques_found' => $debug_musiques_found,
     ];
     wp_send_json_success($favoris_data);
 }
