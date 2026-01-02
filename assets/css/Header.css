@@ -1,54 +1,13 @@
+/* Masquer la loupe sur desktop, afficher uniquement sur mobile */
+.header-search-mobile { display: none !important; }
 @media (max-width: 768px) {
-	.header-search-mobile-active {
-		position: fixed !important;
-		top: 70px !important;
-		left: 0;
-		width: 100vw !important;
-		z-index: 2000 !important;
-		background: #F4EFEC !important;
-		border-radius: 0 0 24px 24px !important;
-		box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-		display: flex !important;
-		align-items: center !important;
-		justify-content: center !important;
-		padding: 12px 16px !important;
-		margin: 0 !important;
-		animation: fadeIn .2s;
-	}
-	.header-search {
-		width: 100% !important;
-		max-width: 480px !important;
-		margin: 0 auto !important;
-		background: transparent !important;
-		border-radius: 999px !important;
-		box-shadow: none !important;
-	}
-	.header-search input {
-		background: #fff !important;
-		color: #1A1A1A !important;
-		border-radius: 999px !important;
-		font-size: 1.1rem !important;
-		padding: 12px 18px !important;
-	}
-	.header-search button {
-		color: #700118 !important;
-		font-size: 1.3rem !important;
-	}
-	.header-search-mobile {
-		z-index: 2100 !important;
-	}
-	.header-search-mobile-bg {
-		position: fixed;
-		top: 0; left: 0; right: 0; bottom: 0;
-		background: rgba(0,0,0,0.18);
-		z-index: 1999;
-		display: none;
-	}
-	.header-search-mobile-bg.active {
-		display: block;
-	}
+	.header-search-mobile { display: flex !important; }
 }
+/* === TOUTES LES MODIFS MOBILE SONT UNIQUEMENT DANS LES BLOCS CI-DESSOUS === */
+/* NE PAS TOUCHER AU DESKTOP AU-DESSUS */
 @media (max-width: 768px) {
+   /* Place ici UNIQUEMENT les styles qui doivent s'appliquer au mobile */
+   /* ...existing code mobile... */
 	.header-right {
 		display: flex !important;
 		align-items: center !important;
@@ -158,11 +117,16 @@
 	   padding: 0 !important;
    }
    .header-burger {
-	   margin-left: -12px !important;
+	   margin-left: 0 !important;
+	   padding-left: 0 !important;
    }
    .header-right {
 	   margin-left: auto !important;
-	   margin-right: -12px !important;
+	   margin-right: 0 !important;
+	   padding-right: 0 !important;
+   }
+   .profil-icon {
+	   margin-right: 0 !important;
    }
 }
 @media (max-width: 768px) {
@@ -175,7 +139,7 @@
    .header-container {
 	   margin: 0;
 	   width: 100vw;
-	   padding: 0 8px;
+	   padding: 0 !important;
 	   box-sizing: border-box;
 	   display: flex;
 	   align-items: center;
@@ -184,13 +148,26 @@
 	   position: relative;
    }
    .header-burger {
+	   margin-left: 0 !important;
+	   padding-left: 0 !important;
+   }
+   .header-right {
+	   margin-left: auto !important;
+	   margin-right: 0 !important;
+	   padding-right: 0 !important;
+   }
+   .profil-icon {
+	   margin-right: 0 !important;
+   }
+   .header-burger {
 	   display: flex !important;
 	   align-items: center;
 	   justify-content: flex-start;
 	   height: 100%;
 	   width: 40px;
 	   cursor: pointer;
-	   margin-left: 8px;
+	   margin-left: 0 !important;
+	   padding-left: 0 !important;
 	   position: static;
    }
    .header-logo {
@@ -219,12 +196,24 @@
 	   align-items: center;
 	   justify-content: flex-end;
 	   height: 100%;
-	   width: 40px;
-	   margin-right: 8px;
+	   width: 56px !important;
+	   margin-right: 0 !important;
+	   padding-right: 0 !important;
 	   position: static;
 	   z-index: 2;
 	   order: 2;
    }
+   .profil-icon {
+	   margin-right: 0 !important;
+   }
+@media (max-width: 768px) {
+	.header-search {
+		display: none !important;
+	}
+	.header-search.header-search-mobile-active {
+		display: flex !important;
+	}
+}
 }
 /* Synchronise le hover logo/texte CINEMUSIC */
 .header-logo a:hover .brand-logo,
