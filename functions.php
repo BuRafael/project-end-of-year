@@ -1,4 +1,29 @@
 <?php
+// Custom Post Type Films
+function register_films_post_type() {
+    register_post_type('films', [
+        'label' => 'Films',
+        'public' => true,
+        'show_in_menu' => true,
+        'supports' => ['title', 'editor', 'thumbnail', 'custom-fields'],
+        'has_archive' => true,
+        'rewrite' => ['slug' => 'films'],
+    ]);
+}
+add_action('init', 'register_films_post_type');
+
+// Custom Post Type Series
+function register_series_post_type() {
+    register_post_type('series', [
+        'label' => 'Séries',
+        'public' => true,
+        'show_in_menu' => true,
+        'supports' => ['title', 'editor', 'thumbnail', 'custom-fields'],
+        'has_archive' => true,
+        'rewrite' => ['slug' => 'series'],
+    ]);
+}
+add_action('init', 'register_series_post_type');
 // Création de la table de likes pour les commentaires de films
 if (!function_exists('create_movie_comment_likes_table')) {
     function create_movie_comment_likes_table() {
