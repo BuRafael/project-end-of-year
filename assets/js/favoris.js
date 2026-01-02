@@ -124,18 +124,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         filmsGrid.innerHTML = films.map(film => `
-            <div class="favoris-card" data-id="${film.id}">
+            <div class="favoris-card" data-id="${film.id}" data-url="${film.url}">
                 <button type="button" class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-x-lg"></i>
                 </button>
-                <a href="${film.url}" class="favoris-card-link">
-                    <div class="favoris-card-image">
-                        <img src="${film.image ? film.image : defaultPoster}" alt="${film.title}">
-                    </div>
-                    <div class="favoris-card-content">
-                        <h3 class="favoris-card-title">${film.title}</h3>
-                    </div>
-                </a>
+                <div class="favoris-card-image">
+                    <img src="${film.image ? film.image : defaultPoster}" alt="${film.title}">
+                </div>
+                <div class="favoris-card-content">
+                    <h3 class="favoris-card-title">${film.title}</h3>
+                </div>
             </div>
         `).join('');
 
@@ -157,22 +155,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         seriesGrid.innerHTML = series.map(serie => `
-            <div class="favoris-card" data-id="${serie.id}">
+            <div class="favoris-card" data-id="${serie.id}" data-url="${serie.url}">
                 <button type="button" class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-x-lg"></i>
                 </button>
-                <a href="${serie.url}" class="favoris-card-link">
-                    <div class="favoris-card-image">
-                        <img src="${serie.image ? serie.image : defaultPoster}" alt="${serie.title}">
-                    </div>
-                    <div class="favoris-card-content">
-                        <h3 class="favoris-card-title">${serie.title}</h3>
-                    </div>
-                </a>
+                <div class="favoris-card-image">
+                    <img src="${serie.image ? serie.image : defaultPoster}" alt="${serie.title}">
+                </div>
+                <div class="favoris-card-content">
+                    <h3 class="favoris-card-title">${serie.title}</h3>
+                </div>
             </div>
         `).join('');
 
         attachRemoveListeners();
+        attachCardClickListeners();
     }
 
     // Afficher les musiques favorites
@@ -207,18 +204,31 @@ document.addEventListener('DOMContentLoaded', function() {
         `).join('');
 
         attachRemoveListeners();
+        attachCardClickListeners();
     }
 
-    // Attacher les événements de suppression
+    
+    function attachCardClickListeners() {
+        document.querySelectorAll('.favoris-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Si on clique sur la croix, ne rien faire
+                if (e.target.closest('.favoris-remove')) return;
+                const url = card.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    }
+
+    // Attacher les événements de suppression et empêcher la propagation du clic sur la croix
     function attachRemoveListeners() {
         document.querySelectorAll('.favoris-remove, .favoris-remove-track').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
                 const type = this.dataset.type;
                 const id = this.dataset.id;
-                
                 removeFavorite(type, id);
             });
         });
