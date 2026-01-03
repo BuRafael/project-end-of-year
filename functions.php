@@ -1120,3 +1120,338 @@ function update_movies_database() {
 // Décommenter la ligne suivante et visiter n'importe quelle page du site pour mettre à jour la DB
 add_action('wp_head', 'update_movies_database', 1);
 
+
+// create custom post type for films / series / animes
+function register_media_post_types() {
+    // Custom Post Type unique pour tous les médias (Films, Séries, Animes)
+    register_post_type('movie', array(
+        'labels' => array(
+            'name' => __('Médias', 'project-end-of-year'),
+            'singular_name' => __('Média', 'project-end-of-year'),
+            'add_new' => __('Ajouter un média', 'project-end-of-year'),
+            'add_new_item' => __('Ajouter un nouveau média', 'project-end-of-year'),
+            'edit_item' => __('Modifier le média', 'project-end-of-year'),
+            'new_item' => __('Nouveau média', 'project-end-of-year'),
+            'view_item' => __('Voir le média', 'project-end-of-year'),
+            'search_items' => __('Rechercher des médias', 'project-end-of-year'),
+            'not_found' => __('Aucun média trouvé', 'project-end-of-year'),
+            'not_found_in_trash' => __('Aucun média dans la corbeille', 'project-end-of-year'),
+        ),
+        'public' => true,
+        'has_archive' => true,
+        'show_in_rest' => true,
+        'supports' => array('title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'comments'),
+        'menu_icon' => 'dashicons-format-video',
+        'rewrite' => array('slug' => 'movie'),
+        'taxonomies' => array('media_type', 'genre', 'annee'),
+        'show_in_menu' => true,
+        'menu_position' => 5,
+        'capability_type' => 'post',
+    ));
+
+    // Taxonomie: Type de média (Film, Série, Anime)
+    register_taxonomy('media_type', array('movie'), array(
+        'labels' => array(
+            'name' => __('Types de média', 'project-end-of-year'),
+            'singular_name' => __('Type de média', 'project-end-of-year'),
+            'search_items' => __('Rechercher des types', 'project-end-of-year'),
+            'all_items' => __('Tous les types', 'project-end-of-year'),
+            'edit_item' => __('Modifier le type', 'project-end-of-year'),
+            'update_item' => __('Mettre à jour le type', 'project-end-of-year'),
+            'add_new_item' => __('Ajouter un nouveau type', 'project-end-of-year'),
+            'new_item_name' => __('Nom du nouveau type', 'project-end-of-year'),
+        ),
+        'hierarchical' => true,
+        'show_in_rest' => true,
+        'show_admin_column' => true,
+        'rewrite' => array('slug' => 'type'),
+    ));
+
+    // Taxonomie: Genre
+    register_taxonomy('genre', array('movie'), array(
+        'labels' => array(
+            'name' => __('Genres', 'project-end-of-year'),
+            'singular_name' => __('Genre', 'project-end-of-year'),
+            'search_items' => __('Rechercher des genres', 'project-end-of-year'),
+            'all_items' => __('Tous les genres', 'project-end-of-year'),
+            'edit_item' => __('Modifier le genre', 'project-end-of-year'),
+            'update_item' => __('Mettre à jour le genre', 'project-end-of-year'),
+            'add_new_item' => __('Ajouter un nouveau genre', 'project-end-of-year'),
+            'new_item_name' => __('Nom du nouveau genre', 'project-end-of-year'),
+        ),
+        'hierarchical' => true,
+        'show_in_rest' => true,
+        'show_admin_column' => true,
+        'rewrite' => array('slug' => 'genre'),
+    ));
+
+    // Taxonomie: Année
+    register_taxonomy('annee', array('movie'), array(
+        'labels' => array(
+            'name' => __('Années', 'project-end-of-year'),
+            'singular_name' => __('Année', 'project-end-of-year'),
+            'search_items' => __('Rechercher des années', 'project-end-of-year'),
+            'all_items' => __('Toutes les années', 'project-end-of-year'),
+            'edit_item' => __('Modifier l\'année', 'project-end-of-year'),
+            'update_item' => __('Mettre à jour l\'année', 'project-end-of-year'),
+            'add_new_item' => __('Ajouter une nouvelle année', 'project-end-of-year'),
+            'new_item_name' => __('Nom de la nouvelle année', 'project-end-of-year'),
+        ),
+        'hierarchical' => false,
+        'show_in_rest' => true,
+        'show_admin_column' => true,
+        'rewrite' => array('slug' => 'annee'),
+    ));
+}
+add_action('init', 'register_media_post_types');
+
+// Créer les termes par défaut pour la taxonomie media_type
+function create_default_media_types() {
+    $types = array('Film', 'Série', 'Anime');
+    
+    foreach ($types as $type) {
+        if (!term_exists($type, 'media_type')) {
+            wp_insert_term($type, 'media_type');
+        }
+    }
+}
+add_action('init', 'create_default_media_types');
+
+// Ajouter des meta boxes pour les champs personnalisés du CPT movie
+function add_movie_meta_boxes() {
+    add_meta_box(
+        'movie_details',
+        __('Détails du média', 'project-end-of-year'),
+        'render_movie_meta_box',
+        'movie',
+        'normal',
+        'high'
+    );
+}
+add_action('add_meta_boxes', 'add_movie_meta_boxes');
+
+// Afficher les champs personnalisés dans la meta box
+function render_movie_meta_box($post) {
+    // Nonce pour la sécurité
+    wp_nonce_field('movie_meta_box', 'movie_meta_box_nonce');
+    
+    // Récupérer les valeurs existantes
+    $duration = get_post_meta($post->ID, '_movie_duration', true);
+    $rating = get_post_meta($post->ID, '_movie_rating', true);
+    $director = get_post_meta($post->ID, '_movie_director', true);
+    $cast = get_post_meta($post->ID, '_movie_cast', true);
+    ?>
+    
+    <div style="display: grid; gap: 15px;">
+        <div>
+            <label for="movie_duration" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                <?php _e('Durée', 'project-end-of-year'); ?>
+            </label>
+            <input type="text" id="movie_duration" name="movie_duration" 
+                   value="<?php echo esc_attr($duration); ?>" 
+                   placeholder="Ex: 2h28" 
+                   style="width: 100%; padding: 8px;">
+            <p class="description">Format: 2h28, 1h45, etc.</p>
+        </div>
+        
+        <div>
+            <label for="movie_rating" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                <?php _e('Note', 'project-end-of-year'); ?>
+            </label>
+            <input type="text" id="movie_rating" name="movie_rating" 
+                   value="<?php echo esc_attr($rating); ?>" 
+                   placeholder="Ex: 8,8/10" 
+                   style="width: 100%; padding: 8px;">
+            <p class="description">Format: 8,8/10, 7,5/10, etc.</p>
+        </div>
+        
+        <div>
+            <label for="movie_director" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                <?php _e('Réalisateur', 'project-end-of-year'); ?>
+            </label>
+            <input type="text" id="movie_director" name="movie_director" 
+                   value="<?php echo esc_attr($director); ?>" 
+                   placeholder="Ex: Christopher Nolan" 
+                   style="width: 100%; padding: 8px;">
+        </div>
+        
+        <div>
+            <label for="movie_cast" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                <?php _e('Acteurs', 'project-end-of-year'); ?>
+            </label>
+            <textarea id="movie_cast" name="movie_cast" 
+                      rows="3" 
+                      placeholder="Ex: Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page" 
+                      style="width: 100%; padding: 8px;"><?php echo esc_textarea($cast); ?></textarea>
+            <p class="description">Séparez les acteurs par des virgules.</p>
+        </div>
+    </div>
+    
+    <?php
+}
+
+// Sauvegarder les champs personnalisés
+function save_movie_meta_box($post_id) {
+    // Vérifier le nonce
+    if (!isset($_POST['movie_meta_box_nonce']) || 
+        !wp_verify_nonce($_POST['movie_meta_box_nonce'], 'movie_meta_box')) {
+        return;
+    }
+    
+    // Vérifier l'autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+    
+    // Vérifier les permissions
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+    
+    // Sauvegarder les champs
+    if (isset($_POST['movie_duration'])) {
+        update_post_meta($post_id, '_movie_duration', sanitize_text_field($_POST['movie_duration']));
+    }
+    
+    if (isset($_POST['movie_rating'])) {
+        update_post_meta($post_id, '_movie_rating', sanitize_text_field($_POST['movie_rating']));
+    }
+    
+    if (isset($_POST['movie_director'])) {
+        update_post_meta($post_id, '_movie_director', sanitize_text_field($_POST['movie_director']));
+    }
+    
+    if (isset($_POST['movie_cast'])) {
+        update_post_meta($post_id, '_movie_cast', sanitize_textarea_field($_POST['movie_cast']));
+    }
+}
+add_action('save_post_movie', 'save_movie_meta_box');
+
+// Créer des posts de démonstration pour les films
+function create_demo_movies() {
+    // Vérifier si les posts existent déjà
+    $existing = get_posts(array(
+        'post_type' => 'movie',
+        'name' => 'inception',
+        'posts_per_page' => 1
+    ));
+    
+    if (!empty($existing)) {
+        return; // Les posts existent déjà
+    }
+    
+    $demo_movies = array(
+        array(
+            'title' => 'Inception',
+            'slug' => 'inception',
+            'duration' => '2h28',
+            'rating' => '8,8/10',
+            'director' => 'Christopher Nolan',
+            'cast' => 'Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy, Dileep Rao, Ken Watanabe',
+            'synopsis' => 'Dom Cobb est un voleur expérimenté dans l\'art périlleux de l\'extraction : sa spécialité consiste à s\'approprier les secrets les plus précieux d\'un individu, enfouis au plus profond de son subconscient, pendant qu\'il rêve et que son esprit est particulièrement vulnérable. Très recherché pour ses talents dans l\'univers trouble de l\'espionnage industriel, Cobb est aussi devenu un fugitif traqué dans le monde entier. Cependant, une ultime mission pourrait lui permettre de retrouver sa vie d\'avant.',
+            'year' => '2010',
+            'image' => 'inception affiche film.jpg'
+        ),
+        array(
+            'title' => 'La La Land',
+            'slug' => 'la-la-land',
+            'duration' => '2h08',
+            'rating' => '8,0/10',
+            'director' => 'Damien Chazelle',
+            'cast' => 'Ryan Gosling, Emma Stone, John Legend, J.K. Simmons',
+            'synopsis' => 'Mia, une actrice en devenir, et Sebastian, un passionné de jazz, tentent de réaliser leurs rêves à Los Angeles. Leur histoire d\'amour est mise à l\'épreuve par leurs ambitions.',
+            'year' => '2016',
+            'image' => 'La La Land.jpg'
+        ),
+        array(
+            'title' => 'Parasite',
+            'slug' => 'parasite',
+            'duration' => '2h12',
+            'rating' => '8,6/10',
+            'director' => 'Bong Joon-ho',
+            'cast' => 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik',
+            'synopsis' => 'La famille Kim, au chômage, s\'intéresse de près à la richissime famille Park. Un enchaînement d\'événements inattendus va lier leur destin.',
+            'year' => '2019',
+            'image' => 'Parasite.jpg'
+        ),
+        array(
+            'title' => 'Interstellar',
+            'slug' => 'interstellar',
+            'duration' => '2h49',
+            'rating' => '8,6/10',
+            'director' => 'Christopher Nolan',
+            'cast' => 'Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine',
+            'synopsis' => 'Dans un futur proche, la Terre se meurt. Un groupe d\'explorateurs utilise un trou de ver pour franchir les limites du voyage spatial humain et sauver l\'humanité.',
+            'year' => '2014',
+            'image' => 'interstellar affiche similaire.jpg'
+        ),
+        array(
+            'title' => 'Arrival',
+            'slug' => 'arrival',
+            'duration' => '1h56',
+            'rating' => '7,9/10',
+            'director' => 'Denis Villeneuve',
+            'cast' => 'Amy Adams, Jeremy Renner, Forest Whitaker, Michael Stuhlbarg',
+            'synopsis' => 'Lorsque de mystérieux vaisseaux venus du fond de l\'espace surgissent un peu partout sur Terre, une équipe d\'experts est rassemblée sous la direction de la linguiste Louise Banks afin de tenter de comprendre leurs intentions. Face à l\'énigme que constituent leur présence et leurs messages mystérieux, les réactions dans le monde sont contrastées et l\'humanité se trouve bientôt au bord d\'une guerre absolue.',
+            'year' => '2016',
+            'image' => 'arrival affiche similaire.jpg'
+        ),
+    );
+    
+    foreach ($demo_movies as $movie_data) {
+        // Créer le post
+        $post_id = wp_insert_post(array(
+            'post_title' => $movie_data['title'],
+            'post_name' => $movie_data['slug'],
+            'post_content' => $movie_data['synopsis'],
+            'post_status' => 'publish',
+            'post_type' => 'movie',
+        ));
+        
+        if ($post_id && !is_wp_error($post_id)) {
+            // Assigner la taxonomie "Film"
+            wp_set_object_terms($post_id, 'film', 'media_type');
+            
+            // Ajouter les meta fields
+            update_post_meta($post_id, '_movie_duration', $movie_data['duration']);
+            update_post_meta($post_id, '_movie_rating', $movie_data['rating']);
+            update_post_meta($post_id, '_movie_director', $movie_data['director']);
+            update_post_meta($post_id, '_movie_cast', $movie_data['cast']);
+            
+            // Ajouter l'image à la une si elle existe
+            $image_path = get_template_directory() . '/assets/image/Fiche films/' . $movie_data['image'];
+            if (file_exists($image_path)) {
+                $upload_dir = wp_upload_dir();
+                $filename = basename($image_path);
+                $target_path = $upload_dir['path'] . '/' . $filename;
+                
+                // Copier l'image dans le dossier uploads si elle n'existe pas déjà
+                if (!file_exists($target_path)) {
+                    copy($image_path, $target_path);
+                }
+                
+                // Créer l'attachement
+                $filetype = wp_check_filetype($filename, null);
+                $attachment = array(
+                    'guid' => $upload_dir['url'] . '/' . $filename,
+                    'post_mime_type' => $filetype['type'],
+                    'post_title' => sanitize_file_name($filename),
+                    'post_content' => '',
+                    'post_status' => 'inherit'
+                );
+                
+                $attach_id = wp_insert_attachment($attachment, $target_path, $post_id);
+                
+                if ($attach_id && !is_wp_error($attach_id)) {
+                    require_once(ABSPATH . 'wp-admin/includes/image.php');
+                    $attach_data = wp_generate_attachment_metadata($attach_id, $target_path);
+                    wp_update_attachment_metadata($attach_id, $attach_data);
+                    set_post_thumbnail($post_id, $attach_id);
+                }
+            }
+        }
+    }
+}
+// Décommenter la ligne suivante et visiter n'importe quelle page pour créer les posts (puis re-commenter)
+// add_action('wp_footer', 'create_demo_movies', 1);
+
