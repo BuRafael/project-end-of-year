@@ -88,8 +88,14 @@
                     </button>
                     <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>">
                 </form>
-                <!-- Bouton loupe visible uniquement sur mobile -->
-                <button class="header-search-mobile" aria-label="Recherche" style="display:none;"></button>
+                <button class="header-search-mobile" aria-label="Recherche">
+                    <span class="search-icon" aria-hidden="true" style="display: flex; align-items: center;">
+                        <svg width="28" height="28" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
+                            <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </button>
                 <a href="<?php echo esc_url(home_url('/profil')); ?>" class="profil-icon" aria-label="<?php esc_attr_e('Profil', 'project-end-of-year'); ?>">
                 <?php
                 if (is_user_logged_in()) {

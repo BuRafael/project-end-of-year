@@ -1,7 +1,12 @@
-/* Masquer la loupe sur desktop, afficher uniquement sur mobile */
-.header-search-mobile { display: none !important; }
+/* Masquer la loupe du header sur desktop */
+.header-search-mobile {
+	display: none;
+}
+
 @media (max-width: 768px) {
-	.header-search-mobile { display: flex !important; }
+	.header-search-mobile {
+		display: flex !important;
+	}
 }
 /* === TOUTES LES MODIFS MOBILE SONT UNIQUEMENT DANS LES BLOCS CI-DESSOUS === */
 /* NE PAS TOUCHER AU DESKTOP AU-DESSUS */
