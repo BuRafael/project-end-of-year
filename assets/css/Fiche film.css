@@ -1,3 +1,348 @@
+.comment-menu-btn {
+    color: #700118 !important;
+    background: transparent !important;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.3rem;
+    box-shadow: none;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comment-menu-btn i {
+    color: #700118 !important;
+}
+.comment-menu-dropdown button {
+    color: #111 !important;
+}
+.comment-card {
+    position: relative;
+}
+.comment-menu {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 20;
+    display: block !important;
+}
+.comment-menu-btn {
+    color: #d32f2f !important;
+    background: transparent !important;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.3rem;
+    box-shadow: none;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+/* Pouce like commentaire : noir par défaut, rouge si liké */
+.comment-like-btn .svg-thumb-up {
+    color: #1A1A1A !important;
+    fill: #1A1A1A !important;
+    transition: color 0.2s, fill 0.2s;
+}
+.comment-like-btn.liked .svg-thumb-up {
+    color: #700118 !important;
+    fill: #700118 !important;
+}
+.comment-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+.movie-section-label {
+    text-transform: uppercase !important;
+}
+/* TITRE FICHE FILM : 48px Futura Demi (Adobe Futura 100) */
+.movie-header h1,
+.movie-header h1.fw-bold {
+    font-size: 48px !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    color: #F4EFEC !important;
+    line-height: 1.1 !important;
+    letter-spacing: 0 !important;
+    margin-bottom: 0.5rem !important;
+    background: none !important;
+    border: none !important;
+}
+/* Style du titre "À la une" */
+.featured-a-la-une-text {
+    font-size: 36px !important;
+    font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+    font-weight: 600 !important; /* 100 demibold n'existe pas, 600 = demi-bold */
+    color: #F4EFEC !important;
+    letter-spacing: 0.5px;
+    margin-bottom: 24px;
+}
+/* Avatar wrapper for comments: always round and not stretched */
+.comment-user-avatar-wrapper {
+    display: inline-block;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #F4EFEC;
+    vertical-align: middle;
+    margin-right: 8px;
+}
+.comment-user-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+}
+/* SVG heart under series poster: white outline, no fill by default, filled red when liked */
+#movieLikeBtn .svg-heart-main {
+    display: block;
+    margin: 0 auto;
+    width: 38px;
+    height: 38px;
+}
+#movieLikeBtn .svg-heart-shape {
+    stroke: #888888;
+    stroke-width: 2.2;
+    fill: none;
+    transition: fill 0.2s, stroke 0.2s;
+}
+#movieLikeBtn.liked .svg-heart-shape {
+    stroke: #700118;
+    fill: #700118;
+}
+/* Only show fallback SVG if Bootstrap icon font is not loaded */
+#movieLikeBtn .svg-heart-fallback {
+    display: none;
+}
+#movieLikeBtn:not(:has(.bi-heart)),
+#movieLikeBtn:not(:has(.bi-heart-fill)) {
+    .svg-heart-fallback {
+        display: block;
+    }
+}
+/* Always black by default, red when liked */
+#movieLikeBtn .svg-heart-fallback {
+    color: #1A1A1A;
+}
+#movieLikeBtn.liked .svg-heart-fallback {
+    color: #700118;
+}
+/* Fallback SVG heart for like button under movie poster */
+#movieLikeBtn .svg-heart-fallback {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 2.2rem;
+    height: 2.2rem;
+    color: #1A1A1A;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+    transition: color 0.2s;
+}
+#movieLikeBtn.liked .svg-heart-fallback {
+    color: #700118;
+}
+#movieLikeBtn .bi-heart, #movieLikeBtn .bi-heart-fill {
+    position: relative;
+    z-index: 2;
+}
+/* Hide fallback SVG if Bootstrap icon is visible */
+#movieLikeBtn .bi-heart, #movieLikeBtn .bi-heart-fill {
+    display: inline-block;
+}
+#movieLikeBtn .bi-heart:before, #movieLikeBtn .bi-heart-fill:before {
+    content: '';
+}
+/* Heart under movie poster: black by default, red when liked */
+/* Heart under movie poster: always visible, black by default, red when liked */
+#movieLikeBtn i.bi-heart,
+#movieLikeBtn i.bi-heart-fill {
+    color: #1A1A1A !important;
+    font-size: 2.2rem !important;
+    display: inline-block !important;
+    transition: color 0.2s;
+    background: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+#movieLikeBtn.liked i.bi-heart,
+#movieLikeBtn.liked i.bi-heart-fill {
+    color: #700118 !important;
+}
+.movie-like-btn.liked .bi-heart {
+    color: #700118 !important;
+    fill: #700118 !important;
+}
+/* Bouton Afficher plus en noir */
+#commentsMoreBtn, #tracksMoreBtn {
+    background: #1A1A1A !important;
+    color: #F4EFEC !important;
+    border: none !important;
+    font-size: 14px !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.1px;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+}
+#commentsMoreBtn:hover, #tracksMoreBtn:hover {
+    background: #700118 !important;
+    color: #F4EFEC !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+}
+
+/* Coeur de like film/piste rouge quand liké */
+.movie-like-btn.liked .bi-heart,
+.track-like.liked {
+    color: #700118 !important;
+    fill: #700118 !important;
+}
+.movie-page .comment-text {
+    color: #1A1A1A !important;
+}
+/* Pouce noir par défaut */
+.movie-page .comment-like-btn svg, .movie-page .movie-comment-like-btn svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+        fill: #1A1A1A !important;
+        stroke: none !important;
+        stroke-width: 0 !important;
+        transition: fill 0.2s;
+    }
+}
+/* Pouce rouge quand liké */
+.movie-page .comment-like-btn.liked svg, .movie-page .movie-comment-like-btn.liked svg {
+    fill: #700118;
+    stroke: #700118;
+}
+/* Hover : pouce rouge si non liké, reste rouge si liké */
+.movie-page .comment-like-btn:hover svg:not(.liked), .movie-page .movie-comment-like-btn:hover svg:not(.liked) {
+    stroke: #700118;
+}
+/* Commentaires en noir pour lisibilité */
+.movie-page .comment-list, .movie-page .comment-list *,
+.movie-page .comment-content, .movie-page .comment-content * {
+    color: #1A1A1A !important;
+}
+
+/* Style du bouton like : pouce en bas à droite du commentaire */
+.movie-page .comment-like-btn, .movie-page .movie-comment-like-btn {
+    position: absolute;
+    right: 16px;
+    bottom: 12px;
+        position: static;
+        background: none;
+        color: #1A1A1A;
+        border: none;
+        border-radius: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: none;
+        font-size: 1.3rem;
+        transition: color 0.2s, transform 0.18s;
+        z-index: 2;
+        cursor: pointer;
+        padding: 0;
+}
+.movie-page .comment-like-btn svg, .movie-page .movie-comment-like-btn svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+    fill: none;
+    stroke: #888;
+    stroke-width: 2.2;
+    transition: fill 0.2s, stroke 0.2s;
+}
+.movie-page .comment-like-btn.liked svg, .movie-page .movie-comment-like-btn.liked svg {
+    fill: #700118;
+    stroke: #700118;
+}
+.movie-page .comment-like-btn:hover svg, .movie-page .movie-comment-like-btn:hover svg {
+    stroke: #700118;
+}
+.movie-like-btn.liked .bi-heart-fill {
+    color: #700118 !important;
+    fill: #700118 !important;
+}
+.movie-page .comment-like-btn:hover svg, .movie-page .movie-comment-like-btn:hover svg {
+    stroke: #1ec773;
+}
+.movie-page .comment-item, .movie-page .comment {
+    position: relative;
+}
+.movie-page .movie-meta-label,
+.movie-page h5 {
+    color: #700118 !important;
+    font-weight: bold !important;
+}
+.movie-page .section-title,
+.movie-page h3.section-title {
+    font-weight: bold !important;
+}
+/* Force tout le texte en blanc du site sur la fiche film sauf sous-titres */
+.movie-page, .movie-page * {
+    color: #F4EFEC !important;
+}
+.movie-header h5,
+.movie-meta-label,
+.movie-section-title,
+.movie-section-label,
+.movie-section h5,
+.movie-section .label,
+.movie-section .subtitle,
+.movie-section .section-label {
+    color: #700118 !important;
+    font-size: 18px !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    letter-spacing: 0 !important;
+}
+/* Force tout le texte en blanc du site sur la fiche film */
+.movie-page, .movie-page * {
+    color: #F4EFEC !important;
+}
+/* Espace toutes les sections des fiches film */
+body .movie-page > section {
+    margin-top: 64px !important;
+    margin-bottom: 64px !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+}
+body .movie-page > section:first-child {
+    margin-top: 0 !important;
+}
+body .movie-page > section:last-child {
+    margin-bottom: 0 !important;
+}
+.carousel-arrow {
+    color: #F4EFEC !important;
+}
+.carousel-arrow:hover {
+    color: #700118 !important;
+}
+.carousel-arrow {
+    font-size: 48px !important;
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+/* Force large carousel arrows for fiche film */
+.carousel-arrow {
+    font-size: 80px !important;
+}
 :root {
     --main-primary: #700118;
     --main-white: #F4EFEC;
@@ -13,7 +358,7 @@
 .text-dark { color: #1A1A1A !important; }
 .text-light { color: #F4EFEC !important; }
 .bg-dark { background: #1A1A1A !important; }
-.bg-white { background: #FFFFFF !important; }
+.bg-white { background: #F4EFEC !important; }
 .border-main { border-color: #700118 !important; }
 .border-light { border-color: #F4EFEC !important; }
 .fw-600 { font-weight: 600 !important; }
@@ -51,13 +396,30 @@
     color: #888;
     font-size: 0.95rem;
     margin-bottom: 2px !important; /* colle davantage le sous-titre à l'affiche */
-}
+        color: #B0B0B0 !important;
+        font-size: 12px !important;
+        font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+        font-weight: 400 !important;
+        margin-top: 2px;
+        text-decoration: none !important;
+        cursor: pointer;
+        transition: color 0.2s ease;
+    }
+    
+    /* Lien vers compositeur */
+    a.movie-track-artist {
+        color: #B0B0B0 !important;
+        font-size: 12px !important;
+        font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+        font-weight: 400 !important;
+        margin-top: 2px;
+        text-decoration: underline !important;
+        cursor: pointer;
+    }
 
-.movie-header {
-    padding-top: 16px; /* abaisse le bloc titre/sous-titre */
-    animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
-}
-
+    a.movie-track-artist:hover {
+        color: rgba(112, 1, 24, 1);
+    }
 .movie-header .row {
     align-items: flex-start;
     gap: 8px;
@@ -115,13 +477,9 @@
 
 
 .movie-like-btn {
-        border-radius: 50%;
-        background: transparent;
-        color: #700118;
-        border: none;
-    border: none;
+    border-radius: 50%;
     background: transparent;
-    color: rgba(244, 239, 236, 1);
+    border: none;
     cursor: pointer;
     font-size: 1.5rem;
     padding: 0;
@@ -133,7 +491,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s ease;
+    transition: transform 0.2s ease;
     position: static;
     margin-top: 12px;
     align-self: center;
@@ -207,29 +565,10 @@
     font-weight: 700;
     color: rgba(112, 1, 24, 1);
     text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
-}
-
-.movie-meta-value {
-    font-size: 0.95rem;
-    color: rgba(244, 239, 236, 1);
-    margin-top: 0;
-    line-height: 1.4;
-}
-
-/* ===== SECTIONS ===== */
-.movie-section {
-    margin-top: 50px;
-    padding-top: 20px;
-    border-top: none;
+     /* Removed .carousel-arrow styles */
     animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
-.section-title {
-    font-size: 1.3rem;
-    font-weight: 700;
     color: rgba(244, 239, 236, 1);
     text-transform: uppercase;
     letter-spacing: 2px;
@@ -277,7 +616,7 @@
 }
 
 .movie-tracks-table tbody tr:hover {
-    background: rgba(112, 1, 24, 0.1);
+    background: rgba(26, 26, 26, 0.42) !important; /* gris foncé, opacité très forte, forcée */
     transform: translateX(4px);
 }
 
@@ -293,14 +632,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 74px;
-    vertical-align: middle !important;
-    padding-left: 0;
-    padding-right: 0;
-}
-
-.col-num {
-    width: 40px;
+    /* Removed .carousel-arrow styles */
+    /* Removed hover and active states */
 }
 
 .col-links {
@@ -369,11 +702,16 @@
     color: rgba(244, 239, 236, 1);
 }
 
+
 .movie-track-artist {
     font-size: 0.75rem; /* 12px */
-    color: #999;
+    color: #999 !important;
     text-decoration: underline;
     cursor: pointer;
+    display: block;
+    margin-top: 2px;
+    font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: 400 !important;
     transition: color 0.2s ease;
 }
 
@@ -522,10 +860,7 @@ a.movie-track-artist:hover {
     position: relative;
 }
 
-.comment-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 30px rgba(112, 1, 24, 0.2);
-}
+
 
 .comment-card .comment-user {
     font-weight: 700;
@@ -535,6 +870,42 @@ a.movie-track-artist:hover {
     flex-direction: row;
     align-items: center;
     gap: 10px;
+    flex-wrap: nowrap;
+    margin-bottom: 8px;
+}
+
+.comment-user-avatar-wrapper {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 50%;
+    background: rgba(112, 1, 24, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin-right: 8px;
+}
+
+.movie-page .comment-user-name, .movie-page .comment-date {
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 0;
+}
+
+.movie-page .comment-date {
+    margin-left: 6px;
+    margin-bottom: 0;
+}
+
+.comment-like-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 8px !important;
+    justify-content: flex-start !important;
+}
 }
 
 .comment-user-avatar {
@@ -543,6 +914,7 @@ a.movie-track-artist:hover {
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid rgba(112, 1, 24, 0.3);
+    display: block;
 }
 
 .comment-user-icon {
@@ -550,9 +922,18 @@ a.movie-track-artist:hover {
     color: rgba(112, 1, 24, 0.6);
 }
 
-.comment-user-name {
+
+.movie-page .comment-user-name {
+    color: #1A1A1A !important;
+    font-weight: 600;
     text-align: left;
-    font-size: 0.9rem;
+}
+
+.movie-page .comment-date {
+    color: #1A1A1A !important;
+    font-size: 0.95em;
+    margin-left: 8px;
+    font-weight: 400;
 }
 
 .comment-date {
@@ -591,7 +972,7 @@ a.movie-track-artist:hover {
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: #F4EFEC;
     border: 2px solid rgba(112, 1, 24, 0.3);
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -607,7 +988,7 @@ a.movie-track-artist:hover {
 }
 
 .comment-menu-dropdown button {
-    background: white;
+    background: #F4EFEC;
     border: none;
     padding: 10px 16px;
     text-align: left;
@@ -641,31 +1022,7 @@ a.movie-track-artist:hover {
 }
 
 /* ===== FILMS SIMILAIRES ===== */
-.carousel-arrow {
-    width: 44px;
-    height: 80px;
-    border-radius: 4px;
-    border: 2px solid rgba(244, 239, 236, 1);
-    background: rgba(0, 0, 0, 0.3);
-    color: rgba(244, 239, 236, 1);
-    padding: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.2rem;
-}
 
-.carousel-arrow:hover {
-    background: rgba(0, 0, 0, 0.5);
-    color: rgba(112, 1, 24, 1);
-    border-color: rgba(244, 239, 236, 1);
-    transform: scale(1.08);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
-
-.carousel-arrow:active {
-    transform: scale(0.96);
-}
 
 #similarMovies {
     transition: opacity 0.2s ease;
@@ -708,15 +1065,43 @@ a.movie-track-artist:hover {
 }
 
 .similar-card-title {
-    font-size: 0.85rem;
-    color: #000;
-    font-weight: 700;
+    font-size: 16px !important;
+    color: #1A1A1A !important;
+    font-family: 'futura-pt', 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
     min-height: 2.4em;
+}
+
+/* Désactive tout effet hover sur .similar-card-title partout sauf front-page */
+.movies-section .similar-card-title,
+#series-section .similar-card-title {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+.movies-section .similar-card-title:hover,
+.movies-section .similar-card-title:focus,
+.movies-section .similar-card-title:active,
+#series-section .similar-card-title:hover,
+#series-section .similar-card-title:focus,
+#series-section .similar-card-title:active {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    filter: none !important;
+    outline: none !important;
+    transform: none !important;
+    animation: none !important;
+}
 }
 
 /* ===== NEWSLETTER / CALL TO ACTION ===== */
@@ -751,10 +1136,10 @@ a.movie-track-artist:hover {
     height: 120px;
     background: rgba(244, 239, 236, 1);
     flex-shrink: 0;
-    margin-top: 5px;
-}
-
-.newsletter-title {
+        stroke: #1A1A1A;
+        stroke-width: 2.2;
+        transition: fill 0.2s, stroke 0.2s;
+        transform: rotate(0deg);
     font-size: 1.3rem;
     color: rgba(244, 239, 236, 1);
     line-height: 1.5;
@@ -794,29 +1179,9 @@ a.movie-track-artist:hover {
     color: rgba(244, 239, 236, 1);
 }
 
-.scroll-top-btn {
-    background: transparent;
-    border: 2px solid rgba(112, 1, 24, 1);
-    color: rgba(112, 1, 24, 1);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-    transition: all 0.2s ease;
-    font-size: 1.5rem;
-    flex-shrink: 0;
-    margin-top: 100px;
-}
 
-.scroll-top-btn:hover {
-    background: rgba(112, 1, 24, 1);
-    border-color: rgba(112, 1, 24, 1);
-    color: rgba(244, 239, 236, 1);
-    transform: translateY(-3px);
-}
+
+
 
 /* ===== SEPARATOR SECTION ===== */
 .separator-section {
@@ -859,15 +1224,7 @@ a.movie-track-artist:hover {
     color: #F4EFEC;
 }
 
-.cta-text p::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 150px;
-    height: 1px;
-    background: #F4EFEC;
-}
+
 
 .cta-btn {
     display: inline-block;

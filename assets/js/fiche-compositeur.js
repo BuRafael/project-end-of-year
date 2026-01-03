@@ -1,3 +1,67 @@
+
+
+// Fonction pour afficher une piste dans le tableau
+function appendTrack(track) {
+    if (!tracksTable) return;
+    const tr = document.createElement('tr');
+    const trackImage = track.image.includes('Hans Zimmer') ? imagePath + track.image : filmImagePath + track.image;
+    tr.innerHTML = `
+        <td>${track.id}</td>
+        <td>
+            <div class="composer-track-info">
+                <img src="${trackImage}" class="composer-track-cover" alt="${track.title}">
+                <div>
+                    <div class="composer-track-title">${track.title}</div>
+                    <div class="composer-track-film">${track.film}</div>
+                </div>
+            </div>
+        </td>
+        <td class="col-links">
+            <span class="track-icons">
+                <i class="bi bi-spotify" aria-label="Spotify"></i>
+                <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                <i class="bi bi-apple" aria-label="Apple Music"></i>
+            </span>
+        </td>
+        <td class="col-duration text-center">${track.duration}</td>
+        <td class="col-like text-end">
+            <i class="bi bi-heart track-like"></i>
+        </td>
+    `;
+    // Ajout de l'événement de like/dislike sur le bouton coeur
+    tr.querySelectorAll('.track-like').forEach(heart => {
+        heart.addEventListener('click', function() {
+            const trackId = tr.querySelector('td:first-child')?.textContent?.trim();
+            const isLiked = heart.classList.contains('liked');
+            // Requête AJAX pour sauvegarder le like/dislike
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: isLiked ? 'remove_favorite' : 'add_favorite',
+                    track_id: trackId
+                }).toString()
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.success) {
+                    if (isLiked) {
+                        heart.classList.remove('liked');
+                        heart.classList.remove('bi-heart-fill');
+                        heart.classList.add('bi-heart');
+                    } else {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    }
+                }
+            });
+        });
+    });
+    tracksTable.appendChild(tr);
+}
 /**
  * Fiche Compositeur JavaScript
  * Gère les pistes, commentaires, filmographie et interactions
@@ -24,11 +88,70 @@ const imagePath = typeof composerImagePath !== 'undefined' ? composerImagePath :
 const filmImagePath = imagePath.replace('Fiche Compositeur', 'Fiche films');
 
 if (tracksTable) {
+    // Charger les favoris utilisateur et mettre à jour les coeurs
+    fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.success && data.data && Array.isArray(data.data.musiques)) {
+            const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+            tracksTable.querySelectorAll('tr').forEach(row => {
+                let trackId = row.querySelector('td:first-child')?.textContent?.trim();
+                if (favoriteTrackIds.includes(String(trackId))) {
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    }
+                }
+            });
+
+        }
+
+    });
+}
+    // ...existing code...
     // Afficher les 5 premières pistes
     const initialTracks = tracks.slice(0, 5);
     initialTracks.forEach(t => {
         appendTrack(t);
     });
+
+    // Fonction pour rafraîchir l'état des likes sur toutes les pistes affichées
+    function refreshTrackLikes() {
+        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.musiques)) {
+                const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
+                tracksTable.querySelectorAll('tr').forEach(row => {
+                    let trackId = row.querySelector('td:first-child')?.textContent?.trim();
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        if (favoriteTrackIds.includes(String(trackId))) {
+                            heart.classList.add('liked');
+                            heart.classList.remove('bi-heart');
+                            heart.classList.add('bi-heart-fill');
+                        } else {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     // Bouton "Afficher plus"
     const tracksMoreBtn = document.getElementById('tracksMoreBtn');
@@ -44,69 +167,66 @@ if (tracksTable) {
                 });
                 this.textContent = 'Afficher moins…';
                 showingAll = true;
+                refreshTrackLikes();
             } else {
-                // Masquer les pistes supplémentaires
-                const rows = tracksTable.querySelectorAll('tr');
-                for (let i = rows.length - 1; i >= 5; i--) {
-                    rows[i].remove();
+                // Afficher moins : on retire les pistes au-delà de 5
+                while (tracksTable.rows.length > 5) {
+                    tracksTable.deleteRow(tracksTable.rows.length - 1);
                 }
                 this.textContent = 'Afficher plus…';
                 showingAll = false;
+                refreshTrackLikes();
             }
         });
     }
 
-    // Like/unlike tracks (event delegation)
-    tracksTable.addEventListener('click', function (e) {
-        const target = e.target;
-        if (!target.classList.contains('track-like')) return;
-        const liked = target.classList.toggle('liked');
-        target.classList.toggle('bi-heart', !liked);
-        target.classList.toggle('bi-heart-fill', liked);
-        target.setAttribute('aria-pressed', liked ? 'true' : 'false');
-    });
-}
+// === CARROUSEL : COMPOSITEURS SIMILAIRES (STRICTEMENT IDENTIQUE À FILMS SIMILAIRES) ===
+const allComposers = [
+    { name: "Ramin Djawadi", specialty: "Game of Thrones, Westworld", image: "Ramin Djawadi.jpg" },
+    { name: "James Newton Howard", specialty: "The Dark Knight, Hunger Games", image: "James Newton Howard.jpg" },
+    { name: "Junkie XL (Tom Holkenborg)", specialty: "Mad Max: Fury Road, Deadpool", image: "Junkie XL (Tom Holkenborg).jpg" },
+    { name: "Ludwig Göransson", specialty: "Black Panther, Tenet", image: "Ludwig Göransson.jpg" },
+    { name: "Cliff Martinez", specialty: "Drive, Solaris", image: "Cliff Martinez.jpg" },
+    { name: "Steve Jablonsky", specialty: "Transformers, The Island", image: "Steve Jablonsky.jpg" },
+    { name: "Henry Jackman", specialty: "Kingsman, Captain America", image: "Henry jackman.jpg" },
+    { name: "Benjamin Wallfisch", specialty: "Blade Runner 2049, It", image: "Benjamin Wallfisch.jpg" },
+    { name: "Harry Gregson-Williams", specialty: "Shrek, The Martian", image: "Harry Gregson-Williams.jpg" },
+    { name: "John Powell", specialty: "How to Train Your Dragon, Shrek", image: "John Powell.webp" }
+];
 
-function appendTrack(track) {
-    if (!tracksTable) return;
-    
-    const tr = document.createElement('tr');
-    const trackImage = track.image.includes('Hans Zimmer') ? imagePath + track.image : filmImagePath + track.image;
-    
-    tr.innerHTML = `
-        <td>${track.id}</td>
-        <td>
-            <div class="composer-track-info">
-                <img src="${trackImage}" class="composer-track-cover" alt="${track.title}">
-                <div>
-                    <div class="composer-track-title">${track.title}</div>
-                    <div class="composer-track-film">${track.film}</div>
-                </div>
+const similarComposersRow = document.getElementById("similarComposers");
+if (similarComposersRow) {
+    // Générer toutes les cartes compositeur strictement comme les films similaires
+    similarComposersRow.innerHTML = '';
+    allComposers.forEach(composer => {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-3 mb-3';
+        col.innerHTML = `
+            <div class="carousel-card movie-card d-flex flex-column align-items-center p-0">
+                <img src="/wp-content/themes/project-end-of-year/assets/image/Fiche Compositeur/${composer.image}" alt="${composer.name}" class="movie-card-img">
+                <div class="similar-card-title w-100 text-center py-3 px-2">${composer.name}</div>
             </div>
-        </td>
-        <td class="col-links">
-            <span class="track-icons">
-                <i class="bi bi-spotify" aria-label="Spotify"></i>
-                <i class="bi bi-amazon" aria-label="Amazon Music"></i>
-                <i class="bi bi-youtube" aria-label="YouTube Music"></i>
-                <i class="bi bi-apple" aria-label="Apple Music"></i>
-            </span>
-        </td>
-        <td class="col-duration text-center">${track.duration}</td>
-        <td class="col-like text-end">
-            <i class="bi bi-heart track-like"></i>
-        </td>
-    `;
-    tracksTable.appendChild(tr);
-}
+        `;
+        similarComposersRow.appendChild(col);
+    });
 
-// === COMMENTAIRES ===
-const commentsZone = document.getElementById("commentsZone");
-const commentInput = document.querySelector('.comment-input');
-
-// Vérifier que composerComments est défini
-if (typeof composerComments === 'undefined') {
-    console.error('composerComments n\'est pas défini');
+    // ScrollBy identique à movies-series.js
+    const carousel = document.querySelector('.composer-carousel');
+    const leftArrow = carousel.querySelector('.carousel-arrow.left');
+    const rightArrow = carousel.querySelector('.carousel-arrow.right');
+    const row = carousel.querySelector('.row');
+    if (leftArrow && rightArrow && row) {
+        let card = row.querySelector('.col-6, .col-md-3, .col-12');
+        let cardWidth = card ? card.offsetWidth : 250;
+        let gap = 24;
+        let scrollAmount = cardWidth + gap;
+        leftArrow.addEventListener('click', function() {
+            row.scrollBy({ left: -(scrollAmount), behavior: 'smooth' });
+        });
+        rightArrow.addEventListener('click', function() {
+            row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    }
 }
 
 // Charger les commentaires existants
@@ -136,8 +256,10 @@ function loadComments() {
             }
         } else {
             commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
+
         }
     });
+}
 }
 
 // Afficher un commentaire
@@ -235,12 +357,9 @@ function renderComment(commentData) {
 
 // Publier un commentaire
 if (commentInput && !commentInput.disabled && typeof composerComments !== 'undefined') {
-    console.log('Event listener ajouté pour les commentaires');
     commentInput.addEventListener('keypress', function(e) {
-        console.log('Touche pressée:', e.key);
         if (e.key === 'Enter' && this.value.trim()) {
             const commentText = this.value.trim();
-            console.log('Envoi du commentaire:', commentText);
             
             fetch(composerComments.ajax_url, {
                 method: 'POST',
@@ -253,11 +372,9 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
                 })
             })
             .then(response => {
-                console.log('Réponse reçue:', response);
                 return response.json();
             })
             .then(data => {
-                console.log('Données:', data);
                 if (data.success) {
                     // Supprimer le message vide
                     const emptyMsg = commentsZone.querySelector('.text-center');
@@ -284,13 +401,7 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
             });
         }
     });
-} else {
-    console.log('Conditions non remplies:', {
-        commentInput: !!commentInput,
-        disabled: commentInput?.disabled,
-        composerComments: typeof composerComments
-    });
-}
+
 
 // Modifier un commentaire
 function editComment(commentId, newText, textElement) {
@@ -339,59 +450,6 @@ function deleteComment(commentId, element) {
 loadComments();
 
 // === CARROUSEL : COMPOSITEURS SIMILAIRES ===
-const allComposers = [
-    { name: "Alexandre Desplat", specialty: "The Grand Budapest Hotel", image: "alexandre-desplat.jpg" },
-    { name: "Bear McCreary", specialty: "Battlestar Galactica", image: "Bear McCreary.jpg" },
-    { name: "Clint Mansell", specialty: "Requiem for a Dream", image: "Clint Mansell.jpeg" },
-    { name: "Danny Elfman", specialty: "Batman, Edward Scissorhands", image: "Danny Elfman.jpeg" },
-    { name: "Michael Giacchino", specialty: "Up, Star Trek", image: "giacchino_2025.jpg" },
-    { name: "Jóhann Jóhannsson", specialty: "Sicario, Arrival", image: "Johann Johannsson.jpeg" },
-    { name: "John Murphy", specialty: "28 Days Later, Sunshine", image: "John Murphy.jpg" },
-    { name: "Ludwig Göransson", specialty: "Black Panther, Tenet", image: "Ludwig-Goranssen-01.jpg" },
-    { name: "Thomas Newman", specialty: "American Beauty, Skyfall", image: "thomas-newman.jpg" }
-];
+// ...existing code...
 
-let carouselIndex = 0;
-const itemsPerPage = 4;
-const similarComposers = document.getElementById("similarComposers");
-const carouselArrows = document.querySelectorAll('.carousel-arrow');
-const leftArrow = carouselArrows[0];
-const rightArrow = carouselArrows[1];
-const composerImageFolder = imagePath.replace('Fiche Compositeur', 'Fiche compositeurs similaire');
 
-function renderCarousel() {
-    if (!similarComposers) return;
-    similarComposers.innerHTML = '';
-    for (let i = 0; i < itemsPerPage; i++) {
-        const index = (carouselIndex + i) % allComposers.length;
-        const composer = allComposers[index];
-        similarComposers.innerHTML += `
-            <div class="col-6 col-md-3">
-                <div class="similar-composer-card">
-                    <img src="${composerImageFolder}${composer.image}" alt="${composer.name}" onerror="this.src='${imagePath}Hans Zimmer.jpg'">
-                    <div class="similar-composer-name">${composer.name}</div>
-                    <div class="similar-composer-specialty">${composer.specialty}</div>
-                </div>
-            </div>
-        `;
-    }
-}
-
-if (leftArrow) {
-    leftArrow.addEventListener('click', function () {
-        carouselIndex = (carouselIndex - 1 + allComposers.length) % allComposers.length;
-        renderCarousel();
-    });
-}
-
-if (rightArrow) {
-    rightArrow.addEventListener('click', function () {
-        carouselIndex = (carouselIndex + 1) % allComposers.length;
-        renderCarousel();
-    });
-}
-
-// render initial
-renderCarousel();
-
-}); // Fin DOMContentLoaded

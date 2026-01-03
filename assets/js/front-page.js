@@ -5,9 +5,10 @@
 
 document.addEventListener('DOMContentLoaded', function() {
     initCarousel();
-    if (typeof initScrollToTop === 'function') initScrollToTop();
+    // Suppression du scroll-to-top sur la front page
     initHearts();
     initCtaButton();
+    animateCountersOnScroll();
 });
 
 /**
@@ -56,66 +57,109 @@ function initCarousel() {
  * ========== HEARTS (Like Buttons) ==========
  * Toggle heart icons for films/series/anime
  */
-function initHearts() {
-    const likeButtons = document.querySelectorAll('.like-btn');
-
-    likeButtons.forEach(button => {
-        // Récupérer l'ID du média (film/série)
-        const mediaCard = button.closest('.media-card, .film-card, .serie-card, li');
-        const mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
-        const mediaLink = mediaCard?.querySelector('a')?.href || '';
-        const mediaId = mediaLink.split('/').filter(Boolean).pop() || '';
-        const mediaType = button.dataset.type || 'film'; // 'film' ou 'serie'
-        
-        // Utiliser data-poster si disponible (grandes affiches), sinon fallback sur l'image affichée
-        const mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
-        
-        // Vérifier si déjà en favoris
-        const storageKey = mediaType === 'serie' ? 'favoriteSeries' : 'favoriteFilms';
-        const favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        const isAlreadyFavorite = favorites.some(item => item.id === mediaId);
-        
-        if (isAlreadyFavorite) {
-            button.setAttribute('data-liked', 'true');
-            button.textContent = '♥';
-            button.style.color = '#700118';
-        }
-        
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            const isLiked = this.getAttribute('data-liked') === 'true';
-            
-            if (isLiked) {
-                this.setAttribute('data-liked', 'false');
-                this.textContent = '♡'; // empty heart
-                this.style.color = '#ffffff';
-                
-                // Retirer des favoris
-                let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                favorites = favorites.filter(item => item.id !== mediaId);
-                localStorage.setItem(storageKey, JSON.stringify(favorites));
-            } else {
-                this.setAttribute('data-liked', 'true');
-                this.textContent = '♥'; // filled heart
-                this.style.color = '#700118'; // red color
-                
-                // Ajouter aux favoris
-                let favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                const mediaData = {
-                    id: mediaId,
-                    title: mediaTitle,
-                    image: mediaImage,
-                    url: mediaLink,
-                    year: new Date().getFullYear().toString() // À améliorer si l'année est disponible
-                };
-                
-                if (!favorites.some(item => item.id === mediaId)) {
-                    favorites.push(mediaData);
-                    localStorage.setItem(storageKey, JSON.stringify(favorites));
-                }
-            }
-        });
+function getUserFavorites(type, callback) {
+  fetch(window.cinemusicAjax.ajaxurl, {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'action=get_user_favorites'
+  })
+    .then(r => r.json())
+    .then(data => {
+      if (data.success && data.data && data.data[type]) {
+        callback(data.data[type]);
+      } else {
+        callback([]);
+      }
     });
+}
+
+function updateFavorite(action, type, item, callback) {
+  const form = new FormData();
+  form.append('action', action);
+  form.append('type', type);
+  if (action === 'add_user_favorite') {
+    form.append('item', JSON.stringify(item));
+  } else {
+    form.append('id', item.id);
+  }
+  fetch(window.cinemusicAjax.ajaxurl, {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: form
+  })
+    .then(r => r.json())
+    .then(data => callback(data));
+}
+
+function normalizeType(type) {
+  if (type === 'film') return 'films';
+  if (type === 'serie') return 'series';
+  return type;
+}
+
+function initHearts() {
+  const likeButtons = document.querySelectorAll('.like-btn');
+  // On charge les favoris de l'utilisateur connecté
+  getUserFavorites('films', favFilms => {
+    getUserFavorites('series', favSeries => {
+      likeButtons.forEach(button => {
+        const mediaCard = button.closest('.media-card, .film-card, .serie-card, li, .track-row');
+        const mediaTypeRaw = button.dataset.type || 'films';
+        const mediaType = normalizeType(mediaTypeRaw);
+        let mediaId = '', mediaTitle = '', mediaImage = '', mediaLink = '', item = {};
+        if (mediaType === 'musiques') {
+          // Cas piste/musique (ex: top 5 musiques)
+          mediaId = button.dataset.trackId || mediaCard?.dataset.trackId || '';
+          mediaTitle = button.dataset.trackTitle || mediaCard?.dataset.trackTitle || '';
+          mediaImage = button.dataset.trackCover || mediaCard?.dataset.trackCover || '';
+          const artist = button.dataset.trackArtist || mediaCard?.dataset.trackArtist || '';
+          const duration = button.dataset.trackDuration || mediaCard?.dataset.trackDuration || '';
+          const source = button.dataset.trackSource || mediaCard?.dataset.trackSource || '';
+          mediaLink = button.dataset.trackUrl || mediaCard?.dataset.trackUrl || '';
+          item = { id: mediaId, title: mediaTitle, artist, duration, cover: mediaImage, source, url: mediaLink };
+        } else {
+          // Cas film/série : utiliser l'ID WordPress si présent
+          mediaId = button.dataset.id || '';
+          mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
+          mediaLink = mediaCard?.querySelector('a')?.href || '';
+          mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
+          item = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
+        }
+        // Vérifier si déjà favori
+        let isFav = false;
+        if (mediaType === 'films') isFav = favFilms.some(f => String(f.id) === String(mediaId));
+        else if (mediaType === 'series') isFav = favSeries.some(s => String(s.id) === String(mediaId));
+        // TODO: charger favMusiques si besoin
+        if (isFav) {
+          button.setAttribute('data-liked', 'true');
+          button.textContent = '♥';
+          button.style.color = '#700118';
+        } else {
+          button.setAttribute('data-liked', 'false');
+          button.textContent = '♡';
+          button.style.color = '#ffffff';
+        }
+        button.addEventListener('click', function(e) {
+          e.preventDefault();
+          const isLiked = this.getAttribute('data-liked') === 'true';
+          if (isLiked) {
+            updateFavorite('remove_user_favorite', mediaType, item, () => {
+              this.setAttribute('data-liked', 'false');
+              this.textContent = '♡';
+              this.style.color = '#ffffff';
+            });
+          } else {
+            updateFavorite('add_user_favorite', mediaType, item, () => {
+              this.setAttribute('data-liked', 'true');
+              this.textContent = '♥';
+              this.style.color = '#700118';
+            });
+          }
+        });
+      });
+    });
+  });
 }
 
 /**
@@ -146,3 +190,49 @@ function initTogglePassword() {
         toggle.textContent = type === 'password' ? '👁️' : '🙈';
     });
 }
+
+// ========== COMPTEUR ANIMÉ AU SCROLL ========== 
+function animateCountersOnScroll() {
+  const counters = document.querySelectorAll('.front-stats__number');
+
+  function animateCounter(counter) {
+    const target = +counter.getAttribute('data-animate-number');
+    const duration = 1200;
+    const start = 0;
+    let startTimestamp = null;
+
+    function step(timestamp) {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      counter.textContent = '+' + Math.floor(progress * (target - start) + start);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      } else {
+        counter.textContent = '+' + target;
+      }
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  function onScroll() {
+    const statsSection = document.querySelector('.front-stats');
+    if (!statsSection) return;
+    const rect = statsSection.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      counters.forEach(counter => {
+        animateCounter(counter);
+      });
+    }
+  }
+  window.addEventListener('scroll', onScroll);
+  // Relance aussi à chaque focus de la fenêtre
+  window.addEventListener('focus', onScroll);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  initCarousel();
+  if (typeof initScrollToTop === 'function') initScrollToTop();
+  initHearts();
+  initCtaButton();
+  animateCountersOnScroll();
+});

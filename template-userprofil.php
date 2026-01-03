@@ -7,6 +7,5 @@ get_header();
     <h1>User Profil</h1>
 </div>
 
-<?php
 get_footer();
 ?>

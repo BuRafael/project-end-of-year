@@ -12,7 +12,7 @@
 
 .footer-container {
     width: calc(100% - 160px);
-    margin: 0 80px;
+    margin: 0 80px 40px 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,12 +39,12 @@
 
 .footer-left .footer-menu li a {
     color: #F4EFEC;
-    font-size: 16px;
+    font-size: 20px !important;
     text-decoration: none;
     transition: color .15s ease;
     position: relative;
-    font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
-    font-weight: bold;
+    font-family: "futura-pt", "Futura", Arial, sans-serif !important;
+    font-weight: 700 !important;
 }
 
 
@@ -88,19 +88,21 @@
 
 
 .logo-img {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
-    display: block;
+    height: 60px !important;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 
 .footer-logo-text {
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 2rem !important;
+    font-family: "futura-pt", "Futura", Arial, sans-serif;
+    font-weight: 700;
     color: #F4EFEC;
-    font-size: 18px;
-    letter-spacing: 2px;
-    font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
-    font-weight: bold;
+    letter-spacing: 1px;
 }
 
 

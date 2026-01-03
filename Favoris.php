@@ -16,9 +16,9 @@ get_header();
 
     <!-- Tabs Navigation -->
     <div class="favoris-tabs">
-        <button class="favoris-tab active" data-tab="musiques">Musiques</button>
-        <button class="favoris-tab" data-tab="films">Films</button>
-        <button class="favoris-tab" data-tab="series">Séries</button>
+        <button type="button" class="favoris-tab active" data-tab="musiques">Musiques</button>
+        <button type="button" class="favoris-tab" data-tab="films">Films</button>
+        <button type="button" class="favoris-tab" data-tab="series">Séries</button>
     </div>
 
     <div class="favoris-divider"></div>
@@ -58,8 +58,10 @@ get_header();
             <p class="empty-message">Vous n'avez pas encore de favoris :(</p>
         </div>
     </div>
+
+<script>
+window.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';
+</script>
 </main>
 
-<?php
-get_footer();
-?>
+<?php get_footer(); ?>

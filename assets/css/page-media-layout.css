@@ -1,35 +1,578 @@
-.featured-infos-col {
-  align-items: flex-start;
-  gap: 16px;
+/* Harmonisation du titre principal fiche film et fiche série via CSS global */
+.movie-header h1.fw-bold {
+  font-size: 24px !important;
+  font-family: 'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight: 600 !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+/* Harmonisation du titre principal fiche film et fiche série */
+.movie-header h1.fw-bold {
+  font-size: 24px !important;
+  font-family: 'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight: 600 !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0 !important;
+  margin-bottom: 0.5rem !important;
+}
+.movies-section .similar-card-title {
+  font-size:16px !important;
+  font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight:600 !important;
+  color:#700118 !important;
+}
+.similar-card-title {
+  font-size:16px !important;
+  font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight:600 !important;
+  color:#700118 !important;
+}
+.movies-section .similar-card .card-title,
+.movies-section .trend-card .card-title,
+.movies-section .new-card .card-title,
+.carousel-card .card-title,
+.carousel-card-title {
+  font-size:16px !important;
+  font-family:'Futura Demi','Futura PT Demi','Futura Std Demi','Futura',Arial,sans-serif !important;
+  font-weight:600 !important;
+  color:#700118 !important;
+}
+.movies-section .similar-card,
+.movies-section .trend-card,
+.movies-section .new-card {
+  background: #F4EFEC !important;
+  border: none !important;
+}
+.carousel-arrow,
+.carousel-arrow:hover {
+  transform: none !important;
+  transition: none !important;
+}
+.featured-card:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
+.page-template-template-series .section-title.mb-4,
+.page-template-template-series #genres-populaires-title.section-title,
+.page-template-template-series h2.section-title,
+.page-template-template-series h2.section-title.mb-4 {
+  font-size: 32px !important;
+  font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+  font-weight: 600 !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  text-transform: none !important;
+  margin-left: 0 !important;
+  text-align: left !important;
 }
 .btn-main.fiche-a-la-une {
+  margin-top: 20px !important;
+}
+.btn-main.fiche-a-la-une {
+  display: inline-block !important;
+  width: auto !important;
+  min-width: unset !important;
+  max-width: unset !important;
+  align-self: flex-start !important;
+}
+.page-template-template-films .section-title.mb-4,
+.page-template-template-films #genres-populaires-title.section-title,
+.page-template-template-films h2.section-title,
+.page-template-template-films h2.section-title.mb-4 {
+  font-size: 32px !important;
+  font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+  font-weight: 600 !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+  text-transform: none !important;
+  margin-left: 0 !important;
+  text-align: left !important;
+}
+.page-template-template-films .featured-meta {
+  font-size: 18px !important;
+  font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+  font-weight: 400 !important;
+  color: #F4EFEC !important;
+}
+.page-template-template-films .featured-synopsis p {
+  font-size: 16px !important;
+  font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+  font-weight: 400 !important;
+  color: #F4EFEC !important;
+}
+.page-template-template-films .featured-title {
+  font-size: 32px !important;
+  font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+  font-weight: bold !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0.5px;
+  margin-bottom: 24px;
+}
+/* Centered horizontal line for CTA section */
+.cta-section .cta-hr {
+  width: 120px;
+  height: 3px;
+  background: #F4EFEC;
+  border: none;
+  border-radius: 2px;
+  margin: 24px auto 32px auto;
+  display: block;
+}
+/* Center CTA text block and improve readability */
+/* Center CTA text block and improve readability */
+.cta-section .cta-text {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Center and align CTA section with main content */
+/* Center and align CTA section with main content */
+.cta-section.section-animated {
+  max-width: 1100px;
+  margin: 60px auto 0 auto;
+  padding: 40px 24px;
+  box-sizing: border-box;
+  background: #1A1A1A;
+  border-radius: 18px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+/* Genre carousel titles (Action, Comédie, Romance, Horreur, Science-Fiction) */
+h3.section-title.mb-3 {
+  color: #700118 !important;
+  font-size: 20px !important;
+}
+.section-title, #genres-populaires-title.section-title {
+  font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+  color: #F4EFEC !important;
+  letter-spacing: 0.5px !important;
+  margin-left: 24px !important;
+  text-align: left !important;
+  border-bottom: none !important;
+  text-transform: uppercase !important;
+}
+.movies-section {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+/* Suppression de l'effet ripple sur les flèches du carrousel */
+.carousel-arrow::before,
+.carousel-arrow:active::before {
+  display: none !important;
+  content: none !important;
+}
+/* Suppression de l'effet focus/active sur les flèches du carrousel */
+.carousel-arrow:focus,
+.carousel-arrow:active {
+  outline: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+/* --- CAROUSEL ARROWS FIX --- */
+.carousel-arrow {
+  position: absolute !important;
+  left: auto;
+  right: auto;
+  z-index: 2 !important;
+  width: 48px !important;
+  height: 48px !important;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  pointer-events: auto !important;
+  color: #1A1A1A !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 80px !important;
+}
+.carousel-arrow:hover {
+  color: #700118 !important;
+}
+.carousel-arrow.left {
+  left: -40px !important;
+}
+.carousel-arrow.right {
+  right: -40px !important;
+}
+.movies-section .row.flex-grow-1 {
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.movies-section .row.flex-grow-1::-webkit-scrollbar {
+  display: none;
+}
+  scrollbar-width: auto;
+  scrollbar-color: auto;
+  gap: 24px;
+}
+/* Limiter la largeur de la ligne du carrousel pour n'afficher que 4 films à la fois */
+.movies-section .row.flex-grow-1 > .col-6,
+.movies-section .row.flex-grow-1 > .col-md-3 {
+  flex: 0 0 180px;
+  max-width: 180px;
+  min-width: 140px;
+  margin-right: 16px;
+}
+@media (max-width: 1200px) {
+  .movies-section .row.flex-grow-1 > .col-6,
+  .movies-section .row.flex-grow-1 > .col-md-3 {
+    flex: 0 0 calc(33.333% - 14px);
+    max-width: calc(33.333% - 14px);
+  }
+}
+@media (max-width: 768px) {
+  .movies-section .row.flex-grow-1 > .col-6,
+  .movies-section .row.flex-grow-1 > .col-md-3 {
+    flex: 0 0 calc(50% - 10px);
+    max-width: calc(50% - 10px);
+  }
+}
+@media (max-width: 480px) {
+  .movies-section .row.flex-grow-1 > .col-6,
+  .movies-section .row.flex-grow-1 > .col-md-3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+/* Carrousel Action : flèches centrées verticalement et en dehors du contenu */
+/* Carrousel Action : flèches centrées horizontalement dans le flux */
+/* Carrousel Action : flèches centrées verticalement et horizontalement, superposées sur les bords */
+.movies-carousel {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+.movies-carousel .row {
+  margin: 0 48px;
+  width: 100%;
+}
+/* Centrage vertical des flèches du carrousel Action */
+.movies-carousel {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.movies-carousel .row {
+  flex-grow: 1;
+}
+@media (max-width: 600px) {
+  .movies-section .similar-card img,
+  .trend-card img,
+  .new-card img,
+  .featured-img-wrap img {
+    height: 140px !important;
+    width: 100% !important;
+    border-radius: 14px !important;
+  }
+  .featured-img-wrap img {
+    height: 200px !important;
+    width: 100% !important;
+  }
+}
+/* Harmonisation boutons principaux carrousels et site */
+.btn-main {
   background: #F4EFEC;
   color: #a0022c;
-  border: 2px solid #a0022c;
+  border: none;
   border-radius: 8px;
   padding: 7px 22px;
   font-weight: 700;
   font-size: 1rem;
   box-shadow: 0 2px 8px #70011833;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
-  margin-top: 8px;
+  margin-top: auto;
+}
+.btn-main:hover,
+  background: transparent;
+  color: #a0022c;
+  border-color: #a0022c;
+}
+/* Harmonisation border-radius images carrousels */
+.movies-section .similar-card img,
+.trend-card img,
+.new-card img,
+.featured-img-wrap img {
+  border-radius: 18px !important;
+}
+/* Titres principaux harmonisés : Futura 100, gras, 24px, majuscules, rouge site */
+/* Import Futura 100 si disponible en webfont locale ou via @font-face */
+
+/* Applique Futura 100 sur les titres principaux */
+/* Sous-titres et titres secondaires : Futura 100, normal, 1.1rem, couleur claire */
+/* Secondary titles (cards, featured text) */
+.trend-card h4,
+.new-card h4,
+.featured-a-la-une-text {
+  font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+  font-weight: 400;
+  font-size: 1.1rem;
+  color: #F4EFEC;
+  letter-spacing: 0.5px;
+}
+/* Police ultra light Futura 100 sur les titres principaux */
+.movies-section .carousel-viewport {
+  overflow: hidden;
+}
+.movies-section .carousel-track {
+  min-width: 0;
+}
+.movies-section .similar-card img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  object-position: 50% 18%;
+  background: #0c0c0c;
+  border-radius: 6px;
+  border: 3px solid rgba(0,0,0,0.5);
+  margin-bottom: 10px;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.movies-section .similar-card {
+  background: rgba(244,239,236,1);
+  border-radius: 8px;
+  padding: 10px 10px 12px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+  animation: slideUp 0.6s cubic-bezier(0.4,0,0.2,1) backwards;
+}
+
+.movies-section .similar-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 40px rgba(112,1,24,0.25);
+}
+
+
+
+/* Carrousel horizontal pour les genres sur la page Films */
+.carousel-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  overflow-x: auto;
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+  padding-bottom: 8px;
+}
+/* Suppression du style personnalisé de la scrollbar pour les carrousels */
+
+/* Harmonisation largeur et marges de toutes les sections principales */
+.featured-media,
+.trending-media,
+.new-media {
+  max-width: 1100px;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+/* Suppression de la bordure basse sur tous les titres section-title */
+/* border-bottom already handled above */
+
+/* Main section titles left-aligned */
+/* margin-left and text-align handled in unified rule above */
+
+
+/* Carousel genre titles centered */
+.movies-section h3.section-title {
+  margin-left: 0 !important;
+  text-align: center !important;
+  width: 100%;
+  display: block;
+}
+
+/* Forcer l'alignement à gauche du titre GENRES POPULAIRES même si parent flex ou centré */
+
+/* Suppression forcée de la ligne décorative sous Nouveautés */
+.new-media h2.section-title.mb-4::after {
+  display: none !important;
+  border: none !important;
+  background: none !important;
+  content: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+.new-media .section-title::after, .new-media h2.section-title::after, .new-media h2.mb-4.section-title::after, .new-media h2.section-title.mb-4::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+}
+.new-media .section-title.mb-4::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+.new-media h2.section-title::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+}
+/* Suppression ligne rouge sous Nouveautés */
+.new-media .section-title::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+body {
+  /* Contour blanc supprimé */
+  box-sizing: border-box;
+  min-height: 100vh;
+}
+.trending-media .section-title,
+.trending-media .section-title::after,
+.trending-media .section-title::before {
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  display: block;
+  height: auto;
+}
+.trending-media .section-title::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+}
+.trending-media .section-title {
+  position: relative;
+  margin-bottom: 18px;
+}
+/* --- SECTION TENDANCE DU MOMENT --- */
+.trending-media {
+  margin: 38px auto 0 auto;
+  max-width: 1100px;
+}
+.trend-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 24px;
+}
+.trend-card {
+  background: #191919;
+  border-radius: 10px;
+  padding: 12px 12px 8px 12px;
+  text-align: center;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: none !important;
+}
+.trend-card:hover {
+  /* Effet hover désactivé */
+  transform: none;
+  box-shadow: none;
+}
+.trend-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 8px;
+  border: 3px solid #F4EFEC;
+  box-sizing: border-box;
+}
+.trend-card h4 {
+  color: #F4EFEC;
+  font-size: 1.05rem;
+  margin: 0;
+.carousel-arrow {
+  position: absolute;
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  background: none !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  pointer-events: auto;
+}
+.carousel-arrow.left {
+  left: -40px;
+}
+.carousel-arrow.right {
+  right: -40px;
+}
+.movies-carousel {
+  position: relative;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+.movies-carousel {
+  position: relative;
+}
+    gap: 16px;
+    justify-content: flex-start;
+}
+.btn-main.fiche-a-la-une {
+  background: #F4EFEC !important;
+  color: #700118 !important;
+  border: none;
+  border-radius: 8px;
+  padding: 7px 22px;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 2px 8px #70011833;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.18s;
+  margin-top: auto;
 }
 .btn-main.fiche-a-la-une:hover {
-  background: #a0022c;
-  color: #fff;
-  box-shadow: 0 4px 18px #70011855;
-  transform: scale(1.04);
+  background: #700118 !important;
+  color: #F4EFEC !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 /* --- SECTION À LA UNE MODERNE --- */
-.featured-media {
-  position: relative;
+.featured-media,
+.trending-media,
+.new-media {
   max-width: 1100px;
-  margin: 0 auto 38px auto;
-  padding: 0 0 0 0;
-  border-radius: 22px;
+  margin: 38px auto 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
   overflow: hidden;
-  box-shadow: 0 6px 32px rgba(0,0,0,0.16);
-  background: #18171a;
+  box-shadow: none;
+  background: none;
 }
 .featured-banner-bg {
   position: absolute;
@@ -50,7 +593,7 @@
   max-height: 100%;
   object-fit: cover;
   object-position: center center;
-  filter: brightness(0.45) blur(1.2px) saturate(1.08);
+  filter: brightness(0.45) saturate(1.08);
   pointer-events: none;
   user-select: none;
   display: block;
@@ -58,20 +601,21 @@
 .featured-media-inner {
   position: relative;
   z-index: 2;
-  padding: 0 40px 40px 40px;
+  padding: 0 0 40px 0;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-top: 180px;
+  margin-top: 0;
+  width: 100%;
 }
 .featured-a-la-une-text {
-  font-size: 2.1rem;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: 2px;
-  text-shadow: 0 4px 24px #000a;
-  margin-bottom: 18px;
-  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #F4EFEC;
+  letter-spacing: 0.5px;
+  text-shadow: none;
+  margin-bottom: 16px;
+  text-transform: none;
   z-index: 5;
   text-align: left;
   width: 100%;
@@ -79,7 +623,7 @@
 .featured-card {
   display: flex;
   gap: 38px;
-  align-items: flex-end;
+  align-items: center;
   background: rgba(35,35,35,0.98);
   border-radius: 18px;
   box-shadow: 0 2px 18px rgba(0,0,0,0.22);
@@ -93,15 +637,17 @@
 .featured-img-wrap {
   position: relative;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-height: 340px;
 }
 .featured-img-wrap img {
   width: 220px;
   height: 320px;
   object-fit: cover;
-  border-radius: 12px;
+    align-items: center;
   box-shadow: 0 4px 24px #000a, 0 2px 12px rgba(0,0,0,0.18);
-  border: 3px solid #F4EFEC;
+  border: none;
 }
 .badge-featured.badge-a-la-une {
   position: absolute;
@@ -116,8 +662,8 @@
   box-shadow: 0 6px 24px #0008;
   letter-spacing: 1px;
   border: 2px solid #fff8;
-  z-index: 10;
-  opacity: 0.97;
+    padding: 0 0 0 32px !important;
+    height: auto;
   text-transform: uppercase;
 }
 .featured-infos-col {
@@ -125,15 +671,31 @@
   min-width: 0;
   background: none !important;
   border-radius: 0 !important;
-  padding: 0 !important;
+  padding: 0 0 0 18px !important;
+  height: 100%;
   box-shadow: none !important;
   margin-left: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  word-break: break-word;
+.featured-infos-col {
+  flex: 1 1 0%;
+  min-width: 0;
+  background: none !important;
+  border-radius: 0 !important;
+  padding: 0 0 0 18px !important;
+  height: 100%;
+  min-height: 320px;
+  box-shadow: none !important;
+  margin-left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  word-break: break-word;
 }
 .featured-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
   margin-bottom: 14px;
   color: #F4EFEC;
   font-weight: 800;
@@ -147,13 +709,18 @@
   gap: 10px;
   align-items: center;
   font-weight: 500;
-}
-.improved-meta .meta-dot {
-  font-size: 1.3em;
-  color: #700118;
-  margin: 0 2px;
-}
-.featured-synopsis {
+  .featured-meta {
+    color: #e0e0e0;
+    font-size: 1.08rem;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .meta-dot {
+    font-size: 1.2em;
+    color: #700118;
+  }
   background: none !important;
   border: none !important;
   padding: 0 !important;
@@ -163,6 +730,15 @@
   font-weight: 500;
   font-size: 1.13rem;
   box-shadow: none !important;
+.trending-media .section-title::after {
+  display: none !important;
+  content: none !important;
+  background: none !important;
+  border: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
 }
 .featured-synopsis p {
   color: #f4efec;
@@ -182,17 +758,17 @@
     padding: 18px 10px 18px 10px;
   }
   .featured-img-wrap img {
-    width: 160px;
-    height: 230px;
+    width: 220px;
+    height: 320px;
+    object-fit: cover;
+    box-shadow: 0 4px 24px #000a, 0 2px 12px rgba(0,0,0,0.18);
+    border: none;
+    border-radius: 18px !important;
   }
-  .featured-infos-col {
-    padding: 14px 8px 14px 8px;
-  }
-}
 .top-media h2 {
   font-size: 2rem;
   margin-bottom: 16px;
-  color: #fff;
+  color: #F4EFEC;
   background: #232323;
   border-radius: 14px;
   transition: box-shadow 0.25s, transform 0.22s;
@@ -239,7 +815,7 @@
   z-index: auto;
   background: #700118;
   color: #fff;
-  border-radius: 50%;
+  /* border-radius removed to avoid white background */
   width: 32px;
   height: 32px;
   display: flex;
@@ -277,7 +853,7 @@
 }
 .new-card:hover {
   transform: translateY(-6px) scale(1.04);
-  box-shadow: 0 4px 18px rgba(112,1,24,0.13);
+  box-shadow: none !important;
 }
 .new-card img {
   width: 100%;
@@ -307,7 +883,7 @@
 .see-all {
   font-size: 1rem;
   color: #fff;
-  background: #700118;
+  font-weight: 800;
   border-radius: 4px;
   padding: 4px 14px;
   margin-left: 12px;
@@ -321,4 +897,3 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   gap: 24px;
-}

@@ -1,3 +1,96 @@
+.comment-menu-btn {
+    color: #700118 !important;
+    background: transparent !important;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.3rem;
+    box-shadow: none;
+    z-index: 21;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.comment-menu-btn i {
+    color: #700118 !important;
+}
+.comment-menu-dropdown button {
+    color: #111 !important;
+}
+/* Harmonisation carrousel compositeur avec films/séries */
+.carousel-card {
+    flex: 0 0 calc(25% - 12px);
+    min-width: 200px;
+}
+@media (max-width: 1200px) {
+    .carousel-card {
+        flex: 0 0 calc(33.333% - 10px);
+    }
+}
+@media (max-width: 768px) {
+    .carousel-card {
+        flex: 0 0 calc(50% - 8px);
+    }
+}
+@media (max-width: 480px) {
+    .carousel-card {
+        flex: 0 0 100%;
+    }
+}
+.movie-card {
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    background: #181818;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    margin-bottom: 8px;
+}
+.movie-card:hover {
+    transform: translateY(-8px);
+}
+.movie-card-img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    display: block;
+}
+.movie-card-title {
+    background: linear-gradient(135deg, rgba(112, 1, 24, 0.9), rgba(139, 1, 32, 0.9));
+    color: #F4EFEC;
+    padding: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+    min-height: 2.6em;
+    max-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+.movie-card-year {
+    background: #1A1A1A;
+    color: rgba(244, 239, 236, 0.7);
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    text-align: center;
+}
+/* Espace toutes les sections des fiches compositeur */
+body .movie-page > section {
+    margin-top: 64px !important;
+    margin-bottom: 64px !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+}
+body .movie-page > section:first-child {
+    margin-top: 0 !important;
+}
+body .movie-page > section:last-child {
+    margin-bottom: 0 !important;
+}
 .text-main { color: #700118 !important; }
 .text-dark { color: #1A1A1A !important; }
 .text-light { color: #F4EFEC !important; }
@@ -17,18 +110,35 @@
 
 /* Page Container */
 .composer-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding-top: 40px;
-    padding-bottom: 60px;
+        max-width: 1100px;
+        margin: 40px auto 40px auto;
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        box-sizing: border-box;
+}
+@media (max-width: 1200px) {
+    .composer-page {
+        max-width: 98vw;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+@media (max-width: 600px) {
+    .composer-page {
+        padding-left: 4px;
+        padding-right: 4px;
+    }
 }
 
 /* ===== ENTÊTE COMPOSITEUR ===== */
 .composer-sub {
     margin-left: 2px;
     color: #888;
-    font-size: 0.95rem;
+    font-size: 1rem;
     margin-bottom: 8px;
+    font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
 }
 
 .composer-header {
@@ -51,10 +161,15 @@
 }
 
 .composer-header h1 {
-    font-size: 2.5rem;
-    color: rgba(244, 239, 236, 1);
+    font-family: 'Futura Bold', 'Futura PT Bold', 'Futura Std Bold', 'Futura', Arial, sans-serif !important;
+    font-weight: bold !important;
+    font-size: 48px !important;
+    color: #F4EFEC !important;
+    letter-spacing: 0 !important;
+    margin-top: 10px;
     margin-bottom: 4px;
     animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+    text-align: left !important;
 }
 
 .composer-poster-wrapper {
@@ -97,9 +212,14 @@
 }
 
 .composer-header h5 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: rgba(112, 1, 24, 1);
+    font-family: 'Futura DemiBold', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+    color: #700118 !important;
+    margin-bottom: 10px;
+    text-align: left !important;
 }
 
 /* META */
@@ -111,35 +231,47 @@
 }
 
 .composer-meta-label {
-    font-weight: 700;
-    color: rgba(112, 1, 24, 1);
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 1px;
-    margin-bottom: 2px;
+    font-family: 'Futura DemiBold', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+    color: #700118 !important;
+    margin-bottom: 10px;
+    text-align: left !important;
 }
 
 .composer-meta-value {
-    font-size: 0.95rem;
+    font-size: 16px !important;
     color: rgba(244, 239, 236, 1);
     margin-top: 0;
     line-height: 1.4;
+    font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: 400 !important;
 }
 
 /* ===== SECTIONS ===== */
 .composer-section {
-    margin-top: 50px;
-    padding-top: 20px;
+    margin-top: 32px !important;
+    margin-bottom: 32px !important;
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
     border-top: none;
     animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
 .section-title {
-    font-size: 1.3rem;
-    font-weight: 700;
-    color: rgba(244, 239, 236, 1);
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+    font-weight: bold !important;
+    font-size: 2rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px;
+    color: #F4EFEC;
+    margin-bottom: 1.2rem;
+    text-align: left !important;
+    justify-content: flex-start !important;
+    align-items: flex-start !important;
+    margin-left: 0 !important;
     position: relative;
     padding-bottom: 12px;
     animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
@@ -452,7 +584,7 @@
     position: absolute;
     top: 100%;
     right: 0;
-    background: white;
+    background: #F4EFEC;
     border: 2px solid rgba(112, 1, 24, 0.3);
     border-radius: 6px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -468,7 +600,7 @@
 }
 
 .comment-menu-dropdown button {
-    background: white;
+    background: #F4EFEC;
     border: none;
     padding: 10px 16px;
     text-align: left;
@@ -502,51 +634,8 @@
 }
 
 /* ===== COMPOSITEURS SIMILAIRES (même style que films similaires) ===== */
-.carousel-arrow {
-    width: 44px;
-    height: 80px;
-    border-radius: 4px;
-    border: 2px solid rgba(244, 239, 236, 1);
-    background: rgba(0, 0, 0, 0.3);
-    color: rgba(244, 239, 236, 1);
-    padding: 0;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: pointer;
-    font-weight: 700;
-    font-size: 1.2rem;
-}
 
-.carousel-arrow:hover {
-    background: rgba(0, 0, 0, 0.5);
-    color: rgba(112, 1, 24, 1);
-    border-color: rgba(244, 239, 236, 1);
-    transform: scale(1.08);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-}
 
-.carousel-arrow:active {
-    transform: scale(0.96);
-}
-
-/* Cartes compositeurs similaires */
-.similar-composer-card {
-    background: rgba(244, 239, 236, 1);
-    border-radius: 8px;
-    padding: 10px 10px 12px;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
-}
-
-.similar-composer-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(112, 1, 24, 0.25);
-}
-
-.similar-composer-card img {
-    display: block;
-    width: 100%;
-    height: 220px;
     object-fit: cover;
     border-radius: 6px;
     border: 3px solid rgba(0, 0, 0, 0.5);

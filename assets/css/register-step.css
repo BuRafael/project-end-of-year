@@ -27,36 +27,38 @@
   --reg-panel: #1a1a1a;
   --reg-border: #F4EFEC;
   --reg-muted: #c7c8cc;
-  --reg-shadow: 0 0 18px 4px rgba(244, 239, 236, 0.45);
+	--reg-shadow: none;
 }
 
 body {
-	background: var(--reg-bg);
+	background: #1a1a1a;
 	color: var(--reg-white);
 	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
 	font-weight: 100;
 }
 
-.register-hero {
 	position: relative;
 	max-width: 960px;
-	margin: 60px auto 80px;
+	margin: 60px auto 240px;
 	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
 	gap: 26px;
+	background: transparent;
 }
 
 .register-hero__logo {
 	display: flex;
 	align-items: center;
+	filter: brightness(0) invert(0.95) sepia(0.1) saturate(0.7) hue-rotate(0deg) brightness(1.1);
 }
 
 .register-hero__logo img {
 	width: 80px;
 	height: auto;
+	background: transparent;
 }
 
 .register-hero__title {
@@ -65,6 +67,7 @@ body {
 	align-items: center;
 	gap: 8px;
 	position: relative;
+	background: transparent;
 }
 
 
@@ -76,19 +79,22 @@ body {
 	font-weight: 900;
 	font-size: 2.5rem;
 	text-align: center;
+	background: transparent;
 }
 
 .register-hero__title h1 {
 	margin: 0;
-	font-size: 3rem;
+	font-size: 48px;
 	letter-spacing: 0.5px;
 	color: var(--reg-white);
-	font-weight: 900;
+	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-weight: bold;
 	display: flex;
 	align-items: center;
 	gap: 20px;
 	justify-content: center;
 	text-align: center;
+	background: transparent;
 }
 }
 
@@ -109,10 +115,10 @@ body {
 	width: 455px;
 	max-width: 100%;
 	background: #1A1A1A;
-	border: 3px solid #F4EFEC;
+	border: 3px solid var(--reg-white);
 	border-radius: 16px;
 	padding: 40px 35px 45px;
-	box-shadow: var(--reg-shadow);
+	box-shadow: none;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -134,9 +140,10 @@ body {
 
 .register-card h2 {
 	margin: 0 0 28px;
-	font-size: 26px;
+	font-size: 24px;
 	color: var(--reg-white);
-	font-weight: 900;
+	font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+	font-weight: 600;
 	text-align: center;
 	letter-spacing: 0.3px;
 }
@@ -216,8 +223,9 @@ body {
 	border-radius: 24px;
 	background: var(--reg-white);
 	color: var(--reg-primary);
-	font-weight: 700;
-	font-size: 1.05rem;
+	font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+	font-weight: 600;
+	font-size: 14px;
 	letter-spacing: 0.4px;
 	cursor: pointer;
 	display: inline-flex;
@@ -230,7 +238,7 @@ body {
 	user-select: none;
 	position: static;
 	overflow: visible;
-	box-shadow: 0 4px 16px rgba(112, 1, 24, 0.10);
+	box-shadow: none;
 }
 .btn-register-primary:hover {
 	background: var(--reg-primary);
@@ -264,6 +272,14 @@ body {
 .register-hero--step2 {
 	margin-top: 40px;
 }
+section.register-hero--step2 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	min-height: 100vh;
+	background: transparent;
+}
 
 .register-card--avatar {
 	width: 455px;
@@ -279,14 +295,17 @@ body {
 	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	animation: slideInCard 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
 	margin-top: 0 !important;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .register-card--avatar h2 {
 	margin-bottom: 28px;
 	margin-top: 0;
 	text-align: center;
-	font-size: 26px;
-	font-weight: 900;
+	font-size: 24px;
+	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-weight: 600;
 	letter-spacing: 0.3px;
 }
 
@@ -347,10 +366,38 @@ body {
 	padding: 5px 12px;
 	border-radius: 14px;
 	border: none;
-	background: linear-gradient(90deg, var(--reg-primary) 60%, #a8002d 100%);
-	color: var(--reg-white);
-	font-size: 0.92rem;
-	font-weight: 600;
+	background: var(--reg-white);
+	color: #111;
+	font-size: 14px;
+	font-weight: 400;
+	border: 1.5px solid var(--reg-primary);
+	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	/* Bouton Passer spécifique */
+	.btn-skip {
+		background: var(--reg-panel) !important;
+		color: var(--reg-white) !important;
+		font-size: 14px !important;
+		font-weight: 600 !important;
+		font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif !important;
+		border: 1.5px solid var(--reg-white) !important;
+		border-radius: 24px !important;
+		width: 140px !important;
+		height: 40px !important;
+		padding: 0 18px !important;
+		display: inline-flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		cursor: pointer !important;
+		margin: 12px auto 0 auto !important;
+		letter-spacing: 0.4px !important;
+		text-align: center !important;
+		white-space: nowrap !important;
+		box-shadow: none !important;
+		user-select: none !important;
+		position: static !important;
+		overflow: visible !important;
+		transition: background 0.2s, color 0.2s, box-shadow 0.2s !important;
+	}
 	cursor: pointer;
 	transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 	outline: none;
@@ -362,16 +409,6 @@ body {
 	margin-bottom: 8px;
 	margin-top: 0;
 	letter-spacing: 0.3px;
-}
-.btn-upload:hover {
-	background: linear-gradient(90deg, #a8002d 0%, var(--reg-primary) 100%);
-	color: var(--reg-white);
-	box-shadow: 0 6px 18px rgba(112, 1, 24, 0.18);
-}
-.btn-upload:hover {
-	background: var(--reg-primary);
-	color: var(--reg-white);
-	border-color: var(--reg-primary);
 }
 
 button.btn-upload {
@@ -394,14 +431,6 @@ button.btn-upload {
 	flex-shrink: 0;
 }
 
-.btn-upload:hover {
-	background: var(--reg-primary);
-	color: var(--reg-white);
-}
-
-.btn-upload:hover .upload-icon {
-	filter: brightness(0) invert(1);
-}
 
 .avatar-actions {
 	display: flex;
@@ -455,7 +484,7 @@ button.btn-upload {
 }
 .btn-ghost:hover {
 	background: #232323;
-	color: #fff;
+	color: var(--reg-white);
 
 /* Small text links inside messages */
 .success-message a,
@@ -487,6 +516,10 @@ button.btn-upload {
 		padding: 26px 22px;
 		margin: 40px auto 60px;
 		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.avatar-actions {

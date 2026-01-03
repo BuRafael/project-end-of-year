@@ -3,7 +3,53 @@
  * Gère l'affichage et les interactions de la page favoris
  */
 
+
 document.addEventListener('DOMContentLoaded', function() {
+                        // Bloquer tout comportement par défaut sur les clics dans le <main> Favoris
+                        var mainFavoris = document.querySelector('main.favoris-page');
+                        if (mainFavoris) {
+                            mainFavoris.addEventListener('click', function(e) {
+                                e.preventDefault();
+                            }, true);
+                        }
+                    // Log tous les clics pour traquer l'élément déclencheur
+                // Bloquer tout submit sur la page et logger l'origine
+                document.addEventListener('submit', function(e) {
+                    console.warn('[FAVORIS DEBUG] Submit bloqué !', e.target);
+                    e.preventDefault();
+                    return false;
+                }, true);
+            // Bloquer tout submit de formulaire sur la page Favoris (sécurité anti bug)
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    return false;
+                });
+            });
+        // Déterminer l'URL AJAX WordPress (fallback si besoin)
+        // Correction : si ajaxUrl est un objet (ex: {url: ...}), on prend la propriété url
+        var ajaxUrl = window.ajaxurl;
+        if (ajaxUrl && typeof ajaxUrl === 'object' && ajaxUrl.url) {
+            ajaxUrl = ajaxUrl.url;
+        }
+        if (!ajaxUrl || typeof ajaxUrl !== 'string') {
+            ajaxUrl = '/wp-admin/admin-ajax.php';
+        }
+    // Contrôle PHP pour savoir si l'utilisateur est connecté
+    var isUserLoggedIn = false;
+    try {
+        isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+    } catch (e) {}
+    // Si l'utilisateur n'est pas connecté, ne rien afficher côté JS
+    if (!isUserLoggedIn) {
+        // Optionnel : vider les grilles si jamais du JS s'exécute
+        var grids = ['filmsGrid', 'seriesGrid', 'musiquesList'];
+        grids.forEach(function(id) {
+            var el = document.getElementById(id);
+            if (el) el.innerHTML = '';
+        });
+        return;
+    }
 
     // Récupération des éléments
     const tabs = document.querySelectorAll('.favoris-tab');
@@ -32,15 +78,45 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Charger les favoris depuis localStorage
-    function loadFavorites() {
-        const favorites = {
-            films: JSON.parse(localStorage.getItem('favoriteFilms') || '[]'),
-            series: JSON.parse(localStorage.getItem('favoriteSeries') || '[]'),
-            musiques: JSON.parse(localStorage.getItem('favoriteTracks') || '[]')
-        };
 
-        return favorites;
+    // Charger les favoris depuis la base de données WordPress (AJAX)
+    function loadFavorites(callback) {
+        fetch(ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=get_user_favorites'
+        })
+        .then(async r => {
+            const text = await r.text();
+            try {
+                const data = JSON.parse(text);
+                console.log('[FAVORIS DEBUG] Réponse AJAX:', data);
+                try {
+                    if (data && data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+                        console.log('[DEBUG Favoris] debug_favorites_raw.musiques:', data.data.debug_favorites_raw.musiques);
+                    }
+                } catch (err) {
+                    console.warn('DEBUG Favoris: Impossible d’afficher la liste musiques', err);
+                }
+                if (data.success && data.data) {
+                    // Expose raw musiques IDs for fallback rendering
+                    if (data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+                        window.favorisDebugRawMusiques = data.data.debug_favorites_raw.musiques;
+                    } else {
+                        window.favorisDebugRawMusiques = [];
+                    }
+                    callback(data.data);
+                } else {
+                    window.favorisDebugRawMusiques = [];
+                    callback({ films: [], series: [], musiques: [] });
+                }
+            } catch (e) {
+                console.error('[FAVORIS DEBUG] Erreur JSON:', e, '\nRéponse brute:', text);
+                callback({ films: [], series: [], musiques: [] });
+            }
+        })
+        .catch((e) => { console.error('[FAVORIS DEBUG] Erreur AJAX:', e); callback({ films: [], series: [], musiques: [] }); });
     }
 
     // Afficher les films favoris
@@ -56,20 +132,18 @@ document.addEventListener('DOMContentLoaded', function() {
         filmsGrid.style.display = 'grid';
         filmsEmpty.style.display = 'none';
         
+        const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         filmsGrid.innerHTML = films.map(film => `
-            <div class="favoris-card" data-id="${film.id}">
-                <button class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
+            <div class="favoris-card" data-id="${film.id}" data-url="${film.url}">
+                <button type="button" class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-x-lg"></i>
                 </button>
-                <a href="${film.url}" class="favoris-card-link">
-                    <div class="favoris-card-image">
-                        <img src="${film.image}" alt="${film.title}">
-                    </div>
-                    <div class="favoris-card-content">
-                        <h3 class="favoris-card-title">${film.title}</h3>
-                        <p class="favoris-card-meta">${film.year || ''}</p>
-                    </div>
-                </a>
+                <div class="favoris-card-image">
+                    <img src="${film.image ? film.image : defaultPoster}" alt="${film.title}">
+                </div>
+                <div class="favoris-card-content">
+                    <h3 class="favoris-card-title">${film.title}</h3>
+                </div>
             </div>
         `).join('');
 
@@ -89,30 +163,56 @@ document.addEventListener('DOMContentLoaded', function() {
         seriesGrid.style.display = 'grid';
         seriesEmpty.style.display = 'none';
         
+        const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         seriesGrid.innerHTML = series.map(serie => `
-            <div class="favoris-card" data-id="${serie.id}">
-                <button class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
+            <div class="favoris-card" data-id="${serie.id}" data-url="${serie.url}">
+                <button type="button" class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
                     <i class="bi bi-x-lg"></i>
                 </button>
-                <a href="${serie.url}" class="favoris-card-link">
-                    <div class="favoris-card-image">
-                        <img src="${serie.image}" alt="${serie.title}">
-                    </div>
-                    <div class="favoris-card-content">
-                        <h3 class="favoris-card-title">${serie.title}</h3>
-                        <p class="favoris-card-meta">${serie.year || ''}</p>
-                    </div>
-                </a>
+                <div class="favoris-card-image">
+                    <img src="${serie.image ? serie.image : defaultPoster}" alt="${serie.title}">
+                </div>
+                <div class="favoris-card-content">
+                    <h3 class="favoris-card-title">${serie.title}</h3>
+                </div>
             </div>
         `).join('');
 
         attachRemoveListeners();
+        attachCardClickListeners();
     }
 
     // Afficher les musiques favorites
     function renderMusiques(musiques) {
         if (!musiquesList || !musiquesEmpty) return;
         
+        // Si musiques enrichies vides, afficher un message d'erreur pour chaque piste likée
+        if (musiques.length === 0 && window.favorisDebugRawMusiques && window.favorisDebugRawMusiques.length > 0) {
+            musiquesList.style.display = 'block';
+            musiquesEmpty.style.display = 'none';
+            musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + window.favorisDebugRawMusiques.map((id, index) => {
+                return `
+                <tr class="favoris-track" data-id="${id}">
+                    <td class="favoris-track-number">${index + 1}</td>
+                    <td class="favoris-track-cover-cell"><img src="/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png" alt="Musique" class="favoris-track-cover"></td>
+                    <td class="favoris-track-title-cell">
+                        <div class="favoris-track-title" style="color:#e74c3c">Aucune info disponible</div>
+                        <div class="favoris-track-artist">ID: ${id}</div>
+                    </td>
+                    <td class="favoris-track-platforms"></td>
+                    <td class="favoris-track-duration">&mdash;</td>
+                    <td class="favoris-track-remove">
+                        <button type="button" class="favoris-remove-track" data-type="musique" data-id="${id}" aria-label="Retirer des favoris">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('') + `</tbody></table>`;
+            attachRemoveListeners();
+            return;
+        }
+
         if (musiques.length === 0) {
             musiquesList.style.display = 'none';
             musiquesEmpty.style.display = 'flex';
@@ -121,71 +221,122 @@ document.addEventListener('DOMContentLoaded', function() {
 
         musiquesList.style.display = 'block';
         musiquesEmpty.style.display = 'none';
-        
-        musiquesList.innerHTML = musiques.map((track, index) => `
-            <div class="favoris-track" data-id="${track.id}">
-                <div class="favoris-track-number">${index + 1}</div>
-                <div class="favoris-track-info">
-                    <img src="${track.cover}" alt="${track.title}" class="favoris-track-cover">
-                    <div class="favoris-track-details">
-                        <div class="favoris-track-title">${track.title}</div>
-                        <div class="favoris-track-artist">${track.artist || 'Artiste inconnu'}</div>
-                    </div>
-                </div>
-                <div class="favoris-track-source">${track.source || ''}</div>
-                <div class="favoris-track-duration">${track.duration || ''}</div>
-                <button class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
-                    <i class="bi bi-heart-fill"></i>
-                </button>
-            </div>
-        `).join('');
-
+        // Récupérer la liste des IDs likés
+        const favorisIds = Array.isArray(window.favorisMusiquesIds) ? window.favorisMusiquesIds : musiques.map(track => track.id);
+        musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + musiques.map((track, index) => {
+            // Fallback image si cover manquante
+            let cover = track.cover && track.cover.length > 0 ? track.cover : `/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png`;
+            // Si cover ne commence pas par /wp-content, on ajoute le chemin
+            if (cover && !cover.startsWith('/wp-content')) {
+                cover = `/wp-content/themes/project-end-of-year/assets/image/Pistes film/${cover}`;
+            }
+            return `
+            <tr class="favoris-track" data-id="${track.id}">
+                <td class="favoris-track-number">${index + 1}</td>
+                <td class="favoris-track-cover-cell">
+                    <img src="${cover}" alt="${track.title}" class="favoris-track-cover" onerror="this.onerror=null;this.src='/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png';">
+                </td>
+                <td class="favoris-track-title-cell">
+                    <div class="favoris-track-title">${track.title || 'Titre inconnu'}</div>
+                    <div class="favoris-track-artist">${track.artist || 'Artiste inconnu'}</div>
+                    <div class="favoris-track-source" style="font-size:0.85em;color:#aaa;">${track.source ? track.source : ''}</div>
+                </td>
+                <td class="favoris-track-platforms">
+                    <span class="track-icons">
+                        <i class="bi bi-spotify" aria-label="Spotify"></i>
+                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                        <i class="bi bi-apple" aria-label="Apple Music"></i>
+                    </span>
+                </td>
+                <td class="favoris-track-duration">${track.duration || '&mdash;'}</td>
+                <td class="favoris-track-remove">
+                    <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
+                        <i class="bi bi-x-lg"></i>
+                    </button>
+                </td>
+            </tr>
+            `;
+        }).join('') + `</tbody></table>`;
         attachRemoveListeners();
     }
 
-    // Attacher les événements de suppression
+    
+    function attachCardClickListeners() {
+        document.querySelectorAll('.favoris-card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Si on clique sur la croix, ne rien faire
+                if (e.target.closest('.favoris-remove')) return;
+                const url = card.getAttribute('data-url');
+                if (url) {
+                    window.location.href = url;
+                }
+            });
+        });
+    }
+
+    // Attacher les événements de suppression et empêcher la propagation du clic sur la croix
     function attachRemoveListeners() {
         document.querySelectorAll('.favoris-remove, .favoris-remove-track').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
                 const type = this.dataset.type;
                 const id = this.dataset.id;
-                
                 removeFavorite(type, id);
             });
         });
     }
 
     // Supprimer un favori
+
     function removeFavorite(type, id) {
-        let storageKey = '';
-        
-        if (type === 'film') {
-            storageKey = 'favoriteFilms';
-        } else if (type === 'serie') {
-            storageKey = 'favoriteSeries';
-        } else if (type === 'musique') {
-            storageKey = 'favoriteTracks';
-        }
-        
-        if (!storageKey) return;
-        
-        const favorites = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        const updated = favorites.filter(item => item.id !== id);
-        localStorage.setItem(storageKey, JSON.stringify(updated));
-        
-        // Recharger l'affichage
-        init();
+        let wpType = '';
+        if (type === 'film') wpType = 'films';
+        else if (type === 'serie') wpType = 'series';
+        else if (type === 'musique') wpType = 'musiques';
+        if (!wpType) return;
+        const form = new URLSearchParams();
+        form.append('action', 'remove_user_favorite');
+        form.append('type', wpType);
+        form.append('id', id);
+        fetch(ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString()
+        })
+        .then(() => init());
+    }
+
+
+    // Ajouter un favori (à appeler dans ton code d'ajout)
+    window.addFavorite = function(type, item) {
+        let wpType = '';
+        if (type === 'film') wpType = 'films';
+        else if (type === 'serie') wpType = 'series';
+        else if (type === 'musique') wpType = 'musiques';
+        if (!wpType) return;
+        const form = new URLSearchParams();
+        form.append('action', 'add_user_favorite');
+        form.append('type', wpType);
+        form.append('item', JSON.stringify(item));
+        fetch(ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: form.toString()
+        })
+        .then(() => init());
     }
 
     // Initialiser l'affichage
     function init() {
-        const favorites = loadFavorites();
-        renderFilms(favorites.films);
-        renderSeries(favorites.series);
-        renderMusiques(favorites.musiques);
+        loadFavorites(function(favorites) {
+            renderFilms(favorites.films);
+            renderSeries(favorites.series);
+            renderMusiques(favorites.musiques);
+        });
     }
 
     // Lancer l'initialisation

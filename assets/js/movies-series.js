@@ -4,52 +4,71 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // === SCROLL CARROUSEL PAR FLÈCHES ===
+    document.querySelectorAll('.movies-carousel').forEach(function(carousel) {
+        const leftArrow = carousel.querySelector('.carousel-arrow.left');
+        const rightArrow = carousel.querySelector('.carousel-arrow.right');
+        const row = carousel.querySelector('.row');
+        if (!leftArrow || !rightArrow || !row) return;
+        // Largeur d'une carte + gap (ajuster si besoin)
+        let card = row.querySelector('.col-6, .col-md-3, .col-12');
+        let cardWidth = card ? card.offsetWidth : 250;
+        let gap = 24; // même valeur que dans le CSS
+        let scrollAmount = cardWidth + gap;
+        leftArrow.addEventListener('click', function() {
+            row.scrollBy({ left: -(scrollAmount), behavior: 'smooth' });
+        });
+        rightArrow.addEventListener('click', function() {
+            row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    });
 
-// === CARROUSELS ===
-const carousels = document.querySelectorAll('.movies-carousel');
+    // Indicateur visuel/debug pour vérifier l'exécution du JS sur la page Films
 
-carousels.forEach(carousel => {
-    const track = carousel.querySelector('.carousel-track');
-    const leftBtn = carousel.querySelector('.carousel-arrow.left');
-    const rightBtn = carousel.querySelector('.carousel-arrow.right');
-    
-    let currentIndex = 0;
-    
-    function updateCarousel() {
-        const cardWidth = track.querySelector('.carousel-card') ? track.querySelector('.carousel-card').offsetWidth : 200;
-        const gap = 16;
-        const offset = -(currentIndex * (cardWidth + gap));
-        track.style.transform = `translateX(${offset}px)`;
-    }
+// === CARROUSELS PAR GENRE (nouvelle version harmonisée) ===
+const genreList = ['Action', 'Comédie', 'Horreur', 'Romance', 'Science-Fiction'];
+const mediaType = document.body.dataset.mediaType || 'film';
+// Remplacer par vos données dynamiques si besoin
+const genreMovies = {
+    'Action': [
+        { title: 'Action 1', img: '/assets/image/Fiche films/wicked.jpg' },
+        { title: 'Action 2', img: '/assets/image/Fiche films/ne zha 2.jpg' },
+        { title: 'Action 3', img: '/assets/image/Fiche films/minecraft - the movie.webp' },
+        { title: 'Action 4', img: '/assets/image/Fiche films/mission impossible the final reckoning.webp' },
+        { title: 'Action 5', img: '/assets/image/Fiche films/f1 (2025).png' }
+    ],
+    'Comédie': [
+        { title: 'Comédie 1', img: '/assets/image/Fiche films/lilo & stitch (2025).jpeg' },
+        { title: 'Comédie 2', img: '/assets/image/Fiche films/the ice tower.jpg' },
+        { title: 'Comédie 3', img: '/assets/image/Fiche films/sinners.avif' },
+        { title: 'Comédie 4', img: '/assets/image/Fiche films/one battle after another.jpg' },
+        { title: 'Comédie 5', img: '/assets/image/Fiche films/the naked gun.webp' }
+    ],
+    'Horreur': [
+        { title: 'Horreur 1', img: '/assets/image/Fiche films/blue moon.jpg' },
+        { title: 'Horreur 2', img: '/assets/image/Fiche films/wicked.jpg' },
+        { title: 'Horreur 3', img: '/assets/image/Fiche films/ne zha 2.jpg' },
+        { title: 'Horreur 4', img: '/assets/image/Fiche films/minecraft - the movie.webp' },
+        { title: 'Horreur 5', img: '/assets/image/Fiche films/mission impossible the final reckoning.webp' }
+    ],
+    'Romance': [
+        { title: 'Romance 1', img: '/assets/image/Fiche films/lilo & stitch (2025).jpeg' },
+        { title: 'Romance 2', img: '/assets/image/Fiche films/the ice tower.jpg' },
+        { title: 'Romance 3', img: '/assets/image/Fiche films/sinners.avif' },
+        { title: 'Romance 4', img: '/assets/image/Fiche films/one battle after another.jpg' },
+        { title: 'Romance 5', img: '/assets/image/Fiche films/the naked gun.webp' }
+    ],
+    'Science-Fiction': [
+        { title: 'SF 1', img: '/assets/image/Fiche films/blue moon.jpg' },
+        { title: 'SF 2', img: '/assets/image/Fiche films/wicked.jpg' },
+        { title: 'SF 3', img: '/assets/image/Fiche films/ne zha 2.jpg' },
+        { title: 'SF 4', img: '/assets/image/Fiche films/minecraft - the movie.webp' },
+        { title: 'SF 5', img: '/assets/image/Fiche films/mission impossible the final reckoning.webp' }
+    ]
+};
 
-    function animateCarousel(delta) {
-        const viewport = carousel.querySelector('.carousel-viewport');
-        const cardCount = track.querySelectorAll('.carousel-card').length;
-        const cardsPerView = Math.max(1, Math.floor((viewport ? viewport.offsetWidth : 0) / 220));
-        const maxIndex = Math.max(0, cardCount - cardsPerView);
 
-        const nextIndex = Math.min(Math.max(currentIndex + delta, 0), maxIndex);
-        if (nextIndex === currentIndex) return;
-
-        track.classList.add('is-transitioning');
-        setTimeout(() => {
-            currentIndex = nextIndex;
-            updateCarousel();
-            track.classList.remove('is-transitioning');
-        }, 140);
-    }
-
-    if (leftBtn) {
-        leftBtn.addEventListener('click', () => animateCarousel(-1));
-    }
-    
-    if (rightBtn) {
-        rightBtn.addEventListener('click', () => animateCarousel(1));
-    }
-    
-    // Mettre à jour au redimensionnement
-    window.addEventListener('resize', updateCarousel);
-});
+// Carrousel Action : la version PHP dynamique gère l'affichage, pas de JS ici !
 
 // === RECHERCHE AUTOCOMPLETE ===
 const searchInput = document.querySelector('.header-search input');

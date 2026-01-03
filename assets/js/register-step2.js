@@ -53,4 +53,22 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => ripple.remove(), 450);
         });
     });
+
+    // Affichage/masquage du mot de passe
+    const passwordToggles = document.querySelectorAll('.password-toggle');
+    passwordToggles.forEach((btn) => {
+        btn.addEventListener('click', function () {
+            const inputId = btn.getAttribute('data-toggle-password');
+            const input = document.getElementById(inputId);
+            if (!input) return;
+            if (input.type === 'password') {
+                input.type = 'text';
+                btn.querySelector('img').style.filter = 'invert(0.5)'; // Optionnel : effet visuel
+            } else {
+                input.type = 'password';
+                btn.querySelector('img').style.filter = 'invert(0)';
+            }
+        });
+    });
+
 });

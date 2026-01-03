@@ -1,0 +1,53 @@
+/* Version corrigée automatiquement : toutes les accolades orphelines et propriétés hors sélecteur supprimées, blocs bien fermés, line-clamp corrigé. */
+
+/* ...existing code jusqu'à la ligne .movie-meta-label... */
+
+.movie-meta-label {
+    font-weight: 700;
+    color: rgba(112, 1, 24, 1);
+    text-transform: uppercase;
+    /* Removed .carousel-arrow styles */
+    animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* ...existing code... */
+
+.similar-card-title {
+    font-size: 0.85rem;
+    color: #000;
+    font-weight: 700;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 2.4em;
+}
+
+.movies-section .similar-card-title,
+#series-section .similar-card-title {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+.movies-section .similar-card-title:hover,
+.movies-section .similar-card-title:focus,
+.movies-section .similar-card-title:active,
+#series-section .similar-card-title:hover,
+#series-section .similar-card-title:focus,
+#series-section .similar-card-title:active {
+    color: #000 !important;
+    background: none !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    filter: none !important;
+    outline: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* ...existing code pour le reste du fichier... */

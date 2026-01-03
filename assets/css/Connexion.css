@@ -15,7 +15,7 @@
 }
 
 body {
-	background: var(--reg-bg);
+	background: #1a1a1a;
 	color: var(--reg-white);
 	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
 	font-weight: 100;
@@ -24,31 +24,35 @@ body {
 .register-hero {
 	position: relative;
 	max-width: 960px;
-	margin: 60px auto 80px;
+	margin: 60px auto 240px;
 	padding: 0 24px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	text-align: center;
 	gap: 26px;
+	background: transparent;
 }
 
 .register-hero__logo {
 	display: flex;
 	align-items: center;
+	filter: brightness(0) invert(0.95) sepia(0.1) saturate(0.7) hue-rotate(0deg) brightness(1.1);
 }
 
 .register-hero__logo img {
 	width: 80px;
 	height: auto;
+	background: transparent;
 }
 
 .register-hero__title {
 	display: flex;
-	align-items: center;
-	gap: 20px;
 	flex-direction: column;
+	align-items: center;
+	gap: 8px;
 	position: relative;
+	background: transparent;
 }
 
 
@@ -60,6 +64,7 @@ body {
 	font-weight: 900;
 	font-size: 2.5rem;
 	text-align: center;
+	background: transparent;
 }
 
 .register-hero__title h1 {
@@ -73,6 +78,7 @@ body {
 	gap: 20px;
 	justify-content: center;
 	text-align: center;
+	background: transparent;
 }
 
 .register-hero__title h1 {
@@ -89,11 +95,11 @@ body {
 .register-card {
 	width: 455px;
 	max-width: 100%;
-	background: var(--reg-panel);
-	border: 3px solid var(--reg-border);
+	background: #1a1a1a;
+	border: 3px solid var(--reg-white);
 	border-radius: 16px;
 	padding: 40px 35px 45px;
-	box-shadow: var(--reg-shadow);
+	box-shadow: none;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -113,11 +119,12 @@ body {
 	}
 }
 
-.register-card h2 {
+.register-card h2, .login-title-custom {
 	margin: 0 0 28px;
-	font-size: 26px;
+	font-size: 24px;
 	color: var(--reg-white);
-	font-weight: 900;
+	font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+	font-weight: 600;
 	text-align: center;
 	letter-spacing: 0.3px;
 }
@@ -165,41 +172,21 @@ body {
 	transform: translateY(-2px);
 }
 
-.field--password .password-toggle {
-	position: absolute;
-	top: 50%;
-	right: 10px;
-	transform: translateY(-50%);
-	border: none;
-	background: transparent;
-	color: var(--reg-white);
-	cursor: pointer;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	padding: 0;
-	font-size: 0.95rem;
-}
 
-.password-toggle .toggle-icon {
-	pointer-events: none;
-}
-.password-toggle .toggle-icon img {
-	width: 26px;
-	height: 26px;
-	filter: drop-shadow(0 0 2px #700118);
-}
+
+/* Nettoyage : suppression des styles orphelins/dupliqués */
 
 .btn-register-primary {
 	margin: 12px auto 0 auto;
-	width: 120px;
-	height: 38px;
+	width: 140px;
+	height: 40px;
 	border: none;
 	border-radius: 24px;
 	background: var(--reg-white);
 	color: var(--reg-primary);
-	font-weight: 700;
-	font-size: 1rem;
+	font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+	font-weight: 600;
+	font-size: 14px;
 	letter-spacing: 0.4px;
 	cursor: pointer;
 	display: inline-flex;
@@ -212,37 +199,100 @@ body {
 	user-select: none;
 	position: static;
 	overflow: visible;
-	box-shadow: 0 4px 16px rgba(112, 1, 24, 0.10);
+	box-shadow: none;
+}
+.btn-register-primary:hover {
+	background: var(--reg-primary);
+	color: var(--reg-white);
+	box-shadow: none;
+	/* filter: blur(0.5px); */
+}
+.btn-register-primary:active {
+	transform: none;
 }
 
+	margin: 12px auto 0 auto;
+	width: 120px;
+	height: 38px;
+	border: none;
+	border-radius: 24px;
+	background: var(--reg-white);
+	color: var(--reg-primary);
+	font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 0.4px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	white-space: nowrap;
+	padding: 0 18px;
+	transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+	user-select: none;
+	position: static;
+	/* Auth link custom styles */
+	.login-link-custom {
+		margin-top: 44px;
+		text-align: center;
+		font-size: 16px;
+	}
+	.no-account-text {
+		font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+		font-weight: 400;
+		font-size: 16px;
+		color: var(--reg-white) !important;
+	}
+	.signup-link-custom {
+		color: var(--reg-primary) !important;
+		text-decoration: none;
+		font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+		font-weight: 700;
+		font-size: 16px;
+		margin-left: 6px;
+	}
+	.signup-link-custom {
+		color: var(--reg-primary);
+		text-decoration: none;
+		font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+		font-weight: 700;
+		font-size: 16px;
+		margin-left: 6px;
+	}
+}
+.btn-register-primary {
+	margin: 12px auto 0 auto;
+	width: 140px;
+	height: 40px;
+	border: none;
+	border-radius: 24px;
+	background: var(--reg-white);
+	color: var(--reg-primary);
+	font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 0.4px;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	white-space: nowrap;
+	padding: 0 18px;
+	transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+	user-select: none;
+	position: static;
+	overflow: visible;
+	box-shadow: none;
+}
 .btn-register-primary:hover {
 	background: var(--reg-primary);
 	color: var(--reg-white);
 	box-shadow: 0 6px 18px rgba(112, 1, 24, 0.18);
 }
-
 .btn-register-primary:active {
 	transform: none;
-}
-
-.error-message,
-.success-message {
-	padding: 12px 16px;
-	border-radius: 8px;
-	margin-bottom: 16px;
-	font-size: 0.95rem;
-}
-
-.success-message {
-	background: rgba(92, 184, 92, 0.12);
-	color: #b3f6b3;
-	border: 1px solid rgba(92, 184, 92, 0.35);
-}
-
-.error-message {
-	background: rgba(207, 92, 92, 0.12);
-	color: #f6b3b3;
-	border: 1px solid rgba(207, 92, 92, 0.35);
 }
 
 .success-message a,

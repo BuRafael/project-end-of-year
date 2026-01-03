@@ -1,5 +1,342 @@
-
 <?php
+// Custom Post Type Films
+function register_films_post_type() {
+    register_post_type('films', [
+        'label' => 'Films',
+        'public' => true,
+        'show_in_menu' => true,
+        'supports' => ['title', 'editor', 'thumbnail', 'custom-fields'],
+        'has_archive' => true,
+        'rewrite' => ['slug' => 'films'],
+    ]);
+}
+add_action('init', 'register_films_post_type');
+
+// Custom Post Type Series
+function register_series_post_type() {
+    register_post_type('series', [
+        'label' => 'Séries',
+        'public' => true,
+        'show_in_menu' => true,
+        'supports' => ['title', 'editor', 'thumbnail', 'custom-fields'],
+        'has_archive' => true,
+        'rewrite' => ['slug' => 'series'],
+    ]);
+}
+add_action('init', 'register_series_post_type');
+// Création de la table de likes pour les commentaires de films
+if (!function_exists('create_movie_comment_likes_table')) {
+    function create_movie_comment_likes_table() {
+        global $wpdb;
+        $table_name = $wpdb->prefix . 'movie_comment_likes';
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS $table_name (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            comment_id BIGINT UNSIGNED NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY unique_like (comment_id, user_id)
+        ) $charset_collate;";
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
+    add_action('after_switch_theme', 'create_movie_comment_likes_table');
+}
+// === FAVORIS UTILISATEUR : API AJAX ===
+add_action('wp_ajax_get_user_favorites', 'cinemusic_get_user_favorites');
+add_action('wp_ajax_add_user_favorite', 'cinemusic_add_user_favorite');
+add_action('wp_ajax_remove_user_favorite', 'cinemusic_remove_user_favorite');
+
+function cinemusic_get_user_favorites() {
+    if (!is_user_logged_in()) {
+        wp_send_json_error(['message' => 'Non connecté.']);
+    }
+    $user_id = get_current_user_id();
+    $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
+    if (!is_array($favorites)) {
+        $favorites = [
+            'films' => [],
+            'series' => [],
+            'musiques' => []
+        ];
+    }
+
+    // Helper pour enrichir les favoris
+    function enrich_favoris($ids, $type) {
+        $result = [];
+        foreach ($ids as $id) {
+            if (empty($id)) continue;
+            $post = get_post($id);
+            if (!$post) continue;
+            $title = get_the_title($id);
+            $url = get_permalink($id);
+            $image = get_the_post_thumbnail_url($id, 'medium');
+            if (!$image) $image = '';
+            $year = get_post_meta($id, 'annee', true);
+            if (!$year && ($type === 'films' || $type === 'series')) {
+                $year = get_the_date('Y', $id);
+            }
+            $result[] = [
+                'id' => $id,
+                'title' => $title,
+                'url' => $url,
+                'image' => $image,
+                'year' => $year
+            ];
+        }
+        return $result;
+    }
+
+    // Pour musiques, enrichir les infos à partir des IDs composites (slug-id)
+    $musiques = [];
+    $debug_musiques_ids = [];
+    $debug_musiques_found = [];
+    if (is_array($favorites['musiques'])) {
+        foreach ($favorites['musiques'] as $m) {
+            $composite_id = '';
+            if (is_array($m) && isset($m['id'])) {
+                $composite_id = (string)$m['id'];
+            } elseif (is_string($m)) {
+                $composite_id = $m;
+            }
+            if (!$composite_id) continue;
+            $debug_musiques_ids[] = $composite_id;
+            // Format attendu : slug-id
+            $parts = explode('-', $composite_id, 2);
+            if (count($parts) !== 2) continue;
+            $slug = $parts[0];
+            $track_id = $parts[1];
+            // Chercher la source des musiques (films ou séries)
+            $track = false;
+            // 1. Essayer de trouver dans les films
+            $args = array(
+                'post_type' => array('films', 'series'),
+                'posts_per_page' => 1,
+                'name' => $slug
+            );
+            $query = new WP_Query($args);
+            if ($query->have_posts()) {
+                $post = $query->posts[0];
+                $tracks = get_post_meta($post->ID, 'tracks', true);
+                if (!$tracks) $tracks = get_post_meta($post->ID, 'pistes', true); // fallback
+                if (is_array($tracks)) {
+                    foreach ($tracks as $t) {
+                        if ((isset($t['id']) && (string)$t['id'] === (string)$track_id) || (isset($t['ID']) && (string)$t['ID'] === (string)$track_id)) {
+                            $track = $t;
+                            $debug_musiques_found[] = [
+                                'id' => $composite_id,
+                                'slug' => $slug,
+                                'track_id' => $track_id,
+                                'track' => $track,
+                                'post_title' => get_the_title($post->ID),
+                                'post_id' => $post->ID
+                            ];
+                            break;
+                        }
+                    }
+                }
+                if ($track) {
+                    $musiques[] = array(
+                        'id' => $composite_id,
+                        'title' => isset($track['title']) ? $track['title'] : '',
+                        'artist' => isset($track['artist']) ? $track['artist'] : '',
+                        'cover' => isset($track['cover']) ? $track['cover'] : '',
+                        'source' => get_the_title($post->ID),
+                        'duration' => isset($track['duration']) ? $track['duration'] : '',
+                        'platforms' => isset($track['platforms']) ? $track['platforms'] : [],
+                    );
+                }
+            }
+            wp_reset_postdata();
+        }
+    }
+    $favoris_data = [
+        'films' => enrich_favoris($favorites['films'], 'films'),
+        'series' => enrich_favoris($favorites['series'], 'series'),
+        'musiques' => $musiques,
+        'debug_favorites_raw' => $favorites,
+        'debug_musiques_php' => $musiques,
+        'debug_musiques_ids' => $debug_musiques_ids,
+        'debug_musiques_found' => $debug_musiques_found,
+    ];
+    wp_send_json_success($favoris_data);
+}
+
+function cinemusic_add_user_favorite() {
+    if (!is_user_logged_in() || !isset($_POST['type']) || !isset($_POST['item'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    $user_id = get_current_user_id();
+    $type = sanitize_text_field($_POST['type']);
+    $item = json_decode(stripslashes($_POST['item']), true);
+    $allowed = ['films', 'series', 'musiques'];
+    if (!in_array($type, $allowed) || !is_array($item) || !isset($item['id'])) {
+        wp_send_json_error(['message' => 'Type ou item invalide.']);
+    }
+    $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
+    if (!is_array($favorites)) {
+        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
+    }
+    // Nettoyage : convertir tous les favoris films/séries en liste d'IDs si besoin
+    foreach (['films', 'series'] as $cat) {
+        if (isset($favorites[$cat]) && is_array($favorites[$cat])) {
+            $favorites[$cat] = array_map(function($f) {
+                if (is_array($f) && isset($f['id'])) return $f['id'];
+                return $f;
+            }, $favorites[$cat]);
+        }
+    }
+    // Pour musiques, toujours stocker l'ID composite string (ex: 'slug-1')
+    if ($type === 'musiques') {
+        $slug = isset($item['slug']) ? $item['slug'] : (isset($item['source']) ? sanitize_title($item['source']) : 'film');
+        $id = (string)$item['id'];
+        $composite_id = (strpos($id, $slug . '-') === 0) ? $id : ($slug . '-' . $id);
+        // Nettoyer les anciens formats (array ou id simple)
+        $favorites[$type] = array_filter($favorites[$type], function($fav) {
+            return is_string($fav);
+        });
+        if (in_array($composite_id, $favorites[$type], true)) {
+            update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+            wp_send_json_success($favorites);
+        }
+        $favorites[$type][] = $composite_id;
+        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+        wp_send_json_success($favorites);
+    }
+    // Pour films/séries, logique inchangée
+    if (in_array($item['id'], $favorites[$type])) {
+        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+        wp_send_json_success($favorites);
+    }
+    $favorites[$type][] = $item['id'];
+    update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+    wp_send_json_success($favorites);
+}
+
+function cinemusic_remove_user_favorite() {
+    if (!is_user_logged_in() || !isset($_POST['type']) || !isset($_POST['id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    $user_id = get_current_user_id();
+    $type = sanitize_text_field($_POST['type']);
+    $id = sanitize_text_field($_POST['id']);
+    $allowed = ['films', 'series', 'musiques'];
+    if (!in_array($type, $allowed)) {
+        wp_send_json_error(['message' => 'Type invalide.']);
+    }
+    $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
+    if (!is_array($favorites)) {
+        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
+    }
+    // Pour musiques, comparer l'ID unique string strictement
+    if ($type === 'musiques') {
+        $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
+            if (is_array($fav) && isset($fav['id'])) {
+                return $fav['id'] !== $id;
+            }
+            return $fav !== $id;
+        }));
+        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+        wp_send_json_success($favorites);
+    }
+    // Pour films/séries, logique inchangée
+    $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
+        if (is_array($fav) && isset($fav['id'])) {
+            return (string)$fav['id'] !== (string)$id;
+        }
+        return (string)$fav !== (string)$id;
+    }));
+    update_user_meta($user_id, 'cinemusic_favorites', $favorites);
+    wp_send_json_success($favorites);
+}
+// === SYSTÈME DE LIKE SUR COMMENTAIRES ===
+add_action('wp_ajax_like_comment', 'theme_like_comment');
+add_action('wp_ajax_unlike_comment', 'theme_unlike_comment');
+add_action('wp_ajax_get_liked_comments', 'theme_get_liked_comments');
+function theme_like_comment() {
+    if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    global $wpdb;
+    $comment_id = intval($_POST['comment_id']);
+    $user_id = get_current_user_id();
+    $table = $wpdb->prefix . 'movie_comment_likes';
+    // Vérifier si déjà liké
+    $exists = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d AND user_id = %d", $comment_id, $user_id));
+    if ($exists) {
+        wp_send_json_error(['message' => 'Déjà liké.']);
+    }
+    // Si la table n'existe pas, on la crée automatiquement
+    if($wpdb->get_var("SHOW TABLES LIKE '$table'") != $table) {
+        $charset_collate = $wpdb->get_charset_collate();
+        $sql = "CREATE TABLE IF NOT EXISTS $table (
+            id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            comment_id BIGINT UNSIGNED NOT NULL,
+            user_id BIGINT UNSIGNED NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE KEY unique_like (comment_id, user_id)
+        ) $charset_collate;";
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        dbDelta($sql);
+    }
+    $result = $wpdb->insert($table, [
+        'comment_id' => $comment_id,
+        'user_id' => $user_id
+    ]);
+    if ($result === false) {
+        error_log('theme_like_comment SQL error: ' . $wpdb->last_error);
+        wp_send_json_error(['message' => 'Erreur SQL lors de l\'ajout du like', 'sql_error' => $wpdb->last_error]);
+    }
+    // Compter les likes
+    $like_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d", $comment_id));
+    wp_send_json_success(['like_count' => intval($like_count)]);
+}
+
+// Nouvelle fonction : unlike un commentaire
+function theme_unlike_comment() {
+    if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    global $wpdb;
+    $comment_id = intval($_POST['comment_id']);
+    $user_id = get_current_user_id();
+    $table = $wpdb->prefix . 'movie_comment_likes';
+    $wpdb->delete($table, [
+        'comment_id' => $comment_id,
+        'user_id' => $user_id
+    ]);
+    // Compter les likes
+    $like_count = $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $table WHERE comment_id = %d", $comment_id));
+    wp_send_json_success(['like_count' => intval($like_count)]);
+}
+
+// Nouvelle fonction : récupérer les IDs des commentaires likés par l'utilisateur pour un film
+function theme_get_liked_comments() {
+    if (!is_user_logged_in() || !isset($_POST['movie_id'])) {
+        wp_send_json_error(['message' => 'Non autorisé.']);
+    }
+    global $wpdb;
+    $user_id = get_current_user_id();
+    $movie_id = sanitize_text_field($_POST['movie_id']);
+    $comments_table = $wpdb->prefix . 'movie_comments';
+    $likes_table = $wpdb->prefix . 'movie_comment_likes';
+    // Récupérer tous les commentaires de ce film
+    $comments = $wpdb->get_results($wpdb->prepare("SELECT id FROM $comments_table WHERE movie_id = %s", $movie_id));
+    $comment_ids = array_map(function($c){return $c->id;}, $comments);
+    $liked_comment_ids = [];
+    if (!empty($comment_ids)) {
+        $placeholders = implode(',', array_fill(0, count($comment_ids), '%d'));
+        $query = $wpdb->prepare(
+            "SELECT comment_id FROM $likes_table WHERE user_id = %d AND comment_id IN ($placeholders)",
+            array_merge([$user_id], $comment_ids)
+        );
+        $results = $wpdb->get_col($query);
+        $liked_comment_ids = array_map('intval', $results);
+    }
+    wp_send_json_success(['liked_comment_ids' => $liked_comment_ids]);
+}
 /**
  * Helper: render site-wide Sign Up (S'inscrire) button only when logged out
  */
@@ -180,6 +517,10 @@ function theme_scripts() {
     if (is_front_page()) {
         wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('header-style', 'footer-style'), $version);
         wp_enqueue_script('front-page-script', get_template_directory_uri() . '/assets/js/front-page.js', array(), $version, true);
+        // Passer l'URL AJAX à front-page.js
+        wp_localize_script('front-page-script', 'cinemusicAjax', array(
+            'ajaxurl' => admin_url('admin-ajax.php'),
+        ));
     }
     
     // Get current page template (handle both is_page_template() and fallback method)
@@ -191,7 +532,8 @@ function theme_scripts() {
     // Fiche film template styles and scripts
     if (is_page_template('template-fiche-film.php') || $current_template === 'template-fiche-film.php') {
         wp_enqueue_style('fiche-film-style', get_template_directory_uri() . '/assets/css/Fiche film.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/Fiche film.css'));
-        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-film.js'), true);
+        // Make fiche-film.js depend on main.js (theme-script) so carrousel is always available (casse corrigée)
+        wp_enqueue_script('fiche-film-script', get_template_directory_uri() . '/assets/js/Fiche-film.js', array('theme-script','bootstrap-js'), filemtime(get_template_directory() . '/assets/js/Fiche-film.js'), true);
         
         // Récupérer le slug de la page actuelle pour le movie_id
         global $post;
@@ -226,12 +568,14 @@ function theme_scripts() {
     if (is_page_template('template-fiche-compositeur.php') || $current_template === 'template-fiche-compositeur.php') {
         wp_enqueue_style('fiche-compositeur-style', get_template_directory_uri() . '/assets/css/Fiche-compositeur.css', array('header-style', 'footer-style', 'bootstrap'), time());
         wp_enqueue_script('fiche-compositeur-script', get_template_directory_uri() . '/assets/js/fiche-compositeur.js', array('bootstrap-js'), time(), true);
-        
+
         // Passer les variables AJAX au JS (pour les commentaires)
+        global $post;
+        $composer_slug = isset($post->post_name) ? $post->post_name : '';
         wp_localize_script('fiche-compositeur-script', 'composerComments', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('composer_comment_nonce'),
-            'composer_id' => 'hans-zimmer' // ID du compositeur actuel
+            'composer_id' => $composer_slug // ID dynamique du compositeur actuel
         ));
     }
     
@@ -265,6 +609,7 @@ function theme_scripts() {
     if (is_page_template('Favoris.php') || $current_template === 'Favoris.php' || is_page('favoris')) {
         wp_enqueue_style('favoris-style', get_template_directory_uri() . '/assets/css/favoris.css', array('header-style', 'footer-style', 'bootstrap'), filemtime(get_template_directory() . '/assets/css/favoris.css'));
         wp_enqueue_script('favoris-script', get_template_directory_uri() . '/assets/js/favoris.js', array(), filemtime(get_template_directory() . '/assets/js/favoris.js'), true);
+        wp_localize_script('favoris-script', 'ajaxurl', array('url' => admin_url('admin-ajax.php')));
     }
     
     // Global script (smooth scroll)
@@ -350,15 +695,13 @@ function handle_user_registration()
             wp_set_current_user($user_id);
             wp_set_auth_cookie($user_id, true, is_ssl());
             do_action('wp_login', $username, get_user_by('ID', $user_id));
-
-            // Rediriger vers le step 2 (avatar)
+            // Rediriger vers la 2e étape si besoin
             $step2_page = get_page_by_path('signup-step2');
             if ($step2_page) {
                 wp_redirect(get_permalink($step2_page->ID));
             } else {
                 wp_redirect(home_url('/signup-step2'));
             }
-            exit;
             exit;
         } else {
             wp_redirect(home_url('/signup?registration=error'));
@@ -699,6 +1042,7 @@ function add_movie_comment() {
     }
 }
 add_action('wp_ajax_add_movie_comment', 'add_movie_comment');
+add_action('wp_ajax_nopriv_add_movie_comment', 'add_movie_comment');
 
 // Modifier un commentaire
 function edit_movie_comment() {
@@ -785,20 +1129,27 @@ function get_movie_comments() {
     ));
     
     $comments_data = [];
+    $likes_table = $wpdb->prefix . 'movie_comment_likes';
     foreach ($comments as $comment) {
         $user = get_userdata($comment->user_id);
         $avatar = get_user_meta($comment->user_id, 'avatar_url', true);
-        
+        // Récupérer le nombre de likes pour ce commentaire
+        $like_count = (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $likes_table WHERE comment_id = %d", $comment->id));
+        $liked_by_user = false;
+        if ($current_user_id) {
+            $liked_by_user = (bool) $wpdb->get_var($wpdb->prepare("SELECT COUNT(*) FROM $likes_table WHERE comment_id = %d AND user_id = %d", $comment->id, $current_user_id));
+        }
         $comments_data[] = [
             'id' => $comment->id,
             'user_name' => $user->display_name,
             'avatar' => $avatar,
             'comment_text' => $comment->comment_text,
             'is_author' => ($comment->user_id == $current_user_id),
-            'created_at' => $comment->created_at
+            'created_at' => $comment->created_at,
+            'like_count' => $like_count,
+            'liked_by_user' => $liked_by_user
         ];
     }
-    
     wp_send_json_success(['comments' => $comments_data]);
 }
 add_action('wp_ajax_get_movie_comments', 'get_movie_comments');
@@ -1115,7 +1466,6 @@ function update_movies_database() {
     // Réinsérer les films avec les nouvelles données
     insert_default_movies();
     
-    echo "Base de données mise à jour avec succès !";
 }
 // Décommenter la ligne suivante et visiter n'importe quelle page du site pour mettre à jour la DB
 add_action('wp_head', 'update_movies_database', 1);

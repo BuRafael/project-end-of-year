@@ -13,15 +13,14 @@ get_header();
 
     <!-- TITRE + INFOS GENERALES -->
     <section class="composer-header mb-5">
-        <h1 class="fw-bold mb-1">Hans Zimmer</h1>
-        <p class="composer-sub small text-secondary mb-4">Compositeur de musiques de films</p>
+        <h1 class="mb-1">Hans Zimmer</h1>
 
         <div class="row g-4">
             <!-- PHOTO -->
             <div class="col-md-4 col-lg-3">
                 <div class="composer-poster-wrapper text-center text-md-start">
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche Compositeur/hans Zimmer photo correct.png' ); ?>" alt="Photo Hans Zimmer"
-                         class="composer-poster img-fluid shadow">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche Compositeur/Hans Zimmer.jpg' ); ?>" alt="Photo Hans Zimmer"
+                        class="composer-poster img-fluid shadow">
                 </div>
             </div>
 
@@ -143,35 +142,17 @@ get_header();
     <!-- ===== COMPOSITEURS SIMILAIRES ===== -->
     <section class="composer-section mt-5 mb-4">
         <h3 class="section-title mb-3">Compositeurs similaires</h3>
-
-        <div class="d-flex align-items-center">
-            <button class="carousel-arrow d-flex align-items-center justify-content-center">
-                <i class="bi bi-chevron-left"></i>
-            </button>
-
+        <div class="d-flex align-items-center movies-carousel composer-carousel">
+            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
             <div class="row flex-grow-1 mx-3 g-3" id="similarComposers">
-                <!-- JS insère 4 compositeurs -->
-            </div>
 
-            <button class="carousel-arrow d-flex align-items-center justify-content-center" type="button">
-                <i class="bi bi-chevron-right"></i>
-            </button>
+            </div>
+            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
         </div>
     </section>
 
     <!-- ===== CTA SECTION ===== -->
-    <section class="cta-section">
-        <div class="cta-text">
-            <p>
-                Ne ratez plus jamais vos bandes originales préférées.<br>
-                Rejoignez notre communauté et plongez dans<br>
-                l'univers musical de tous vos films et séries favoris !
-            </p>
-            <?php if (!is_user_logged_in()) : ?>
-                <?php echo cinemusic_signup_button(); ?>
-            <?php endif; ?>
-        </div>
-    </section>
+
 
 </main>
 
@@ -180,6 +161,4 @@ get_header();
     const composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
 </script>
 
-<?php
-get_footer();
-?>
+<?php get_footer(); ?>

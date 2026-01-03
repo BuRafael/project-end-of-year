@@ -1,3 +1,21 @@
+        <!-- Scroll to Top Button -->
+        <button class="scroll-to-top" id="scrollToTop" aria-label="Remonter en haut" type="button" style="display: none;">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polyline class="scroll-arrow" points="7,17 14,10 21,17" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </button>
+<script>
+// Affiche le bouton au scroll et remonte en haut au clic
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = document.getElementById('scrollToTop');
+    window.addEventListener('scroll', function() {
+        btn.style.display = window.scrollY > 200 ? 'flex' : 'none';
+    });
+    btn.addEventListener('click', function() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+});
+</script>
 <?php
 get_header();
 ?>
@@ -8,12 +26,24 @@ get_header();
     <section class="hero">
         <h1>Trouvez la musique de vos films<br>et séries préférées&nbsp;!</h1>
 
+        <!-- Version desktop : barre de recherche -->
         <div class="search-bar">
             <input type="text" placeholder="Rechercher…">
             <button class="search-btn" type="button">
-                <span class="search-icon">🔍</span>
+                <span class="search-icon" aria-hidden="true" style="display: flex; align-items: center;">
+                    <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
+                        <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </span>
             </button>
         </div>
+        <!-- Version mobile : bouton S'inscrire -->
+        <?php if ( !is_user_logged_in() ) : ?>
+        <div class="hero-register-btn-mobile" style="display: none; justify-content: center; margin-top: 24px;">
+            <a href="<?php echo esc_url( home_url('/register') ); ?>" class="btn-register-front" style="padding: 14px 32px; font-size: 1.2rem; border-radius: 32px; background: #700118; color: #fff; text-decoration: none; font-weight: bold; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: background 0.2s;">S'inscrire</a>
+        </div>
+        <?php endif; ?>
     </section>
 
     <!-- CAROUSEL Section -->
@@ -27,28 +57,28 @@ get_header();
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
                         <div class="slide-content">
                             <span class="slide-title">Your Name</span>
-                            <a href="<?php echo esc_url(home_url('/your-name')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-film/your-name')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Stranger Things">
                         <div class="slide-content">
                             <span class="slide-title">Stranger Things</span>
-                            <a href="<?php echo esc_url(home_url('/stranger-things')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-serie/stranger-things')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Spirited away bannière.jpg' ); ?>" alt="Spirited Away">
                         <div class="slide-content">
                             <span class="slide-title">Spirited Away</span>
-                            <a href="<?php echo esc_url(home_url('/spirited-away')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-film/spirited-away')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
                         <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Wicked.jpg' ); ?>" alt="Wicked">
                         <div class="slide-content">
                             <span class="slide-title">Wicked</span>
-                            <a href="<?php echo esc_url(home_url('/wicked')); ?>" class="btn-voir">Découvrir</a>
+                            <a href="<?php echo esc_url(home_url('/fiche-film/wicked')); ?>" class="btn-voir">Découvrir</a>
                         </div>
                     </div>
                     <div class="slide">
@@ -89,6 +119,7 @@ get_header();
             </div>
         </div>
     </section>
+
 
     <!-- TOP 5 Section -->
     <section class="tops-section">
@@ -166,7 +197,7 @@ get_header();
                         <a href="<?php echo esc_url($movie_url); ?>" class="top-title-link"><?php the_title(); ?></a>
                         <a href="<?php echo esc_url($movie_url); ?>" class="top-composer-link"><?php echo esc_html($director); ?></a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="film" 
+                    <button class="like-btn" data-liked="false" data-type="serie" 
                             data-poster="<?php echo esc_url($poster); ?>" 
                             type="button" aria-label="Like">♡</button>
                 </li>
@@ -209,7 +240,7 @@ get_header();
                         <a href="<?php echo esc_url($movie_url); ?>" class="top-title-link"><?php the_title(); ?></a>
                         <a href="<?php echo esc_url($movie_url); ?>" class="top-composer-link"><?php echo esc_html($director); ?></a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="film" 
+                    <button class="like-btn" data-liked="false" data-type="anime" 
                             data-poster="<?php echo esc_url($poster); ?>" 
                             type="button" aria-label="Like">♡</button>
                 </li>
@@ -222,24 +253,34 @@ get_header();
         </div>
     </section>
 
-    <!-- CTA Section (Call To Action) -->
-    <section class="cta-section">
-        <div class="cta-text">
-            <p>
-                Ne ratez plus jamais vos bandes originales préférées.<br>
-                Rejoignez notre communauté et plongez dans<br>
-                l'univers musical de tous vos films et séries favoris !
-            </p>
-            <?php if (!is_user_logged_in()) : ?>
-                <?php echo cinemusic_signup_button(); ?>
-            <?php endif; ?>
-        </div>
-    </section>
 
-    <!-- Scroll to Top Button -->
-    <button class="scroll-to-top" id="scrollToTop" aria-label="Revenir en haut" type="button" style="display: none;">↑</button>
+
+
+
+
+
+
+        <script>
+        // Animation au scroll pour .section-animated
+        document.addEventListener('DOMContentLoaded', function() {
+            const animatedSections = document.querySelectorAll('.section-animated');
+            function revealSections() {
+                animatedSections.forEach(section => {
+                    const rect = section.getBoundingClientRect();
+                    if(rect.top < window.innerHeight - 100) {
+                        section.classList.add('visible');
+                    }
+                });
+            }
+            window.addEventListener('scroll', revealSections);
+            revealSections();
+        });
+        </script>
 
 </main>
+
+<!-- CTA Section (Call To Action) -->
+
 
 <?php
 get_footer();

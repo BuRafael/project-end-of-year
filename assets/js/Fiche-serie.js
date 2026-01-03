@@ -1,3 +1,11 @@
+// ...existing code...
+
+
+// ...existing code...
+
+
+// ...existing code...
+
 
 
 /**
@@ -6,17 +14,70 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // === PISTES PAR SAISON ET ÉPISODE ===
+    const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
+    const allTracks = window.allTracks || {};
+    const tracksTable = document.getElementById("tracksTable");
+    const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Piste séries/';
+    const seasonSelect = document.getElementById("seasonSelect");
+    const episodeSelect = document.getElementById("episodeSelect");
+    let currentTracks = [];
+    let tracksPage = 1;
+
+    // --- PERSISTENCE DES LIKES DE PISTES (TRACKS) ---
+    function refreshTrackLikes() {
+        if (!tracksTable) return;
+        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+        })
+        .then(r => r.json())
+        .then(data => {
+            let favoriteTrackIds = [];
+            if (data.success && data.data && Array.isArray(data.data.musiques) && data.data.musiques.length > 0) {
+                favoriteTrackIds = data.data.musiques.map(m => typeof m === 'string' ? m : m.id);
+            } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+                favoriteTrackIds = data.data.debug_favorites_raw.musiques;
+            }
+            if (favoriteTrackIds.length > 0) {
+                tracksTable.querySelectorAll('tr').forEach(row => {
+                    const trackId = row.dataset.id;
+                    const heart = row.querySelector('.track-like');
+                    if (heart) {
+                        if (favoriteTrackIds.includes(trackId)) {
+                            heart.classList.add('liked');
+                            heart.classList.remove('bi-heart');
+                            heart.classList.add('bi-heart-fill');
+                        } else {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    if (tracksTable) {
+        refreshTrackLikes();
+    }
 
 
-// === PISTES PAR SAISON ET ÉPISODE ===
-const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
-const allTracks = window.allTracks || {};
-const tracksTable = document.getElementById("tracksTable");
-const imagePath = typeof themeImagePath !== 'undefined' ? themeImagePath : 'assets/image/Piste séries/';
-const seasonSelect = document.getElementById("seasonSelect");
-const episodeSelect = document.getElementById("episodeSelect");
-let currentTracks = [];
-let tracksPage = 1;
+    // Affichage auto des pistes au chargement si selects présents
+    if (seasonSelect && episodeSelect && tracksTable) {
+        renderSeasonEpisodeSelects();
+    } else if (tracksTable && allTracks && Object.keys(allTracks).length > 0) {
+        // Si pas de selects (ou retirés), afficher la première saison/épisode dispo
+        const firstSeason = Object.keys(allTracks)[0];
+        if (allTracks[firstSeason]) {
+            const episodeNums = Object.keys(allTracks[firstSeason]);
+            if (episodeNums.length > 0) {
+                displayTracks(parseInt(firstSeason), parseInt(episodeNums[0]));
+            }
+        }
+    }
 
 function renderSeasonEpisodeSelects() {
     if (!seasonSelect || !episodeSelect) return;
@@ -82,61 +143,6 @@ function renderSeasonEpisodeSelects() {
 
 if (seasonSelect && episodeSelect && tracksTable) {
     renderSeasonEpisodeSelects();
-    seasonSelect.addEventListener('change', function() {
-        episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
-        const serieSlug = window.currentSerieSlug || '';
-        if (serieSlug === 'euphoria') {
-            for (let e = 1; e <= 8; e++) {
-                const opt = document.createElement('option');
-                opt.value = e;
-                opt.textContent = 'Épisode ' + e;
-                episodeSelect.appendChild(opt);
-            }
-            episodeSelect.value = 1;
-            displayTracks(parseInt(this.value), 1);
-        } else if (serieSlug === 'wednesday') {
-            for (let e = 1; e <= 8; e++) {
-                const opt = document.createElement('option');
-                opt.value = e;
-                opt.textContent = 'Épisode ' + e;
-                episodeSelect.appendChild(opt);
-            }
-            episodeSelect.value = 1;
-            displayTracks(1, 1);
-        } else {
-            const season = this.value;
-            if (allTracks[season]) {
-                const episodeNums = Object.keys(allTracks[season]);
-                episodeNums.forEach(epNum => {
-                    const opt = document.createElement('option');
-                    opt.value = epNum;
-                    opt.textContent = 'Épisode ' + epNum;
-                    episodeSelect.appendChild(opt);
-                });
-                const firstEp = episodeNums[0];
-                episodeSelect.value = firstEp;
-                displayTracks(parseInt(season), parseInt(firstEp));
-            } else {
-                episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
-                tracksTable.innerHTML = `<tr><td colspan=\"5\" style=\"text-align:center; color: #888; font-style: italic;\">Rien à écouter pour le moment...</td></tr>`;
-                updateTracksMoreBtn(0);
-            }
-        }
-    });
-    episodeSelect.addEventListener('change', function() {
-        displayTracks(parseInt(seasonSelect.value), parseInt(this.value));
-    });
-}
-
-
-// Fonction pour afficher les pistes
-function displayTracks(season, episode) {
-    if (!tracksTable) return;
-    const tracks = (allTracks[season] && allTracks[season][episode]) ? allTracks[season][episode] : [];
-    currentTracks = tracks;
-    tracksPage = 1;
-    renderTracksPage();
-    updateTracksMoreBtn(tracks.length);
 }
 
 function renderTracksPage() {
@@ -153,8 +159,13 @@ function renderTracksPage() {
             : `<div class="movie-track-artist">${t.artist}</div>`;
         const trackImage = t.image ? imagePath + t.image : imagePath;
         const isFirstTrack = index === 0 ? 'first-track-image' : '';
+        // Identifiant unique pour la piste
+        const serieSlug = window.currentSerieSlug || '';
+        const season = seasonSelect?.value || '1';
+        const episode = episodeSelect?.value || '1';
+        const trackId = `${serieSlug}-${season}-${episode}-${t.id}`;
         tracksTable.innerHTML += `
-            <tr>
+            <tr data-id="${trackId}">
                 <td>${t.id}</td>
                 <td>
                     <div class="movie-track-info">
@@ -201,47 +212,51 @@ function updateTracksMoreBtn(totalTracks) {
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('track-like')) {
         const row = e.target.closest('tr');
+        const trackId = row.dataset.id;
         const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
-        const trackNumber = row.querySelector('td:first-child')?.textContent || '';
-        
+
         e.target.classList.toggle('liked');
         const liked = e.target.classList.contains('liked');
-        
         if (liked) {
             e.target.classList.remove('bi-heart');
             e.target.classList.add('bi-heart-fill');
-        } else {
-            e.target.classList.remove('bi-heart-fill');
-            e.target.classList.add('bi-heart');
-        }
-        
-        // Gérer les favoris de pistes
-        let favoriteTracks = JSON.parse(localStorage.getItem('favoriteTracks') || '[]');
-        const trackId = `${window.currentMovieSlug}-${trackNumber}`;
-        
-        if (liked) {
-            // Ajouter aux favoris
+            // Ajouter la piste aux favoris serveur (catégorie musiques)
             const trackData = {
                 id: trackId,
                 title: trackTitle,
                 artist: trackArtist,
                 duration: trackDuration,
                 cover: trackCover,
-                source: document.querySelector('.movie-header h1')?.textContent || ''
+                source: document.querySelector('.movie-header h1')?.textContent || '',
+                url: window.location.href
             };
-            
-            // Vérifier si pas déjà présent
-            if (!favoriteTracks.some(track => track.id === trackId)) {
-                favoriteTracks.push(trackData);
-                localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
-            }
+            const form = new URLSearchParams();
+            form.append('action', 'add_user_favorite');
+            form.append('type', 'musiques');
+            form.append('item', JSON.stringify(trackData));
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form.toString()
+            });
         } else {
-            // Retirer des favoris
-            favoriteTracks = favoriteTracks.filter(track => track.id !== trackId);
-            localStorage.setItem('favoriteTracks', JSON.stringify(favoriteTracks));
+            e.target.classList.remove('bi-heart-fill');
+            e.target.classList.add('bi-heart');
+            // Retirer la piste des favoris serveur
+            const form = new URLSearchParams();
+            form.append('action', 'remove_user_favorite');
+            form.append('type', 'musiques');
+            form.append('id', trackId);
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: form.toString()
+            });
         }
     }
 });
@@ -255,6 +270,7 @@ if (tracksMoreBtn) {
         if (tracksPage < maxPages) {
             tracksPage++;
             renderTracksPage();
+            setTimeout(refreshTrackLikes, 100);
             if (tracksPage === maxPages) {
                 this.textContent = 'Afficher moins…';
                 this.classList.add('show-less');
@@ -262,6 +278,7 @@ if (tracksMoreBtn) {
         } else {
             tracksPage = 1;
             renderTracksPage();
+            setTimeout(refreshTrackLikes, 100);
             this.textContent = 'Afficher plus…';
             this.classList.remove('show-less');
         }
@@ -311,17 +328,16 @@ function renderComment(commentData) {
     col.className = 'col-12 col-md-3';
     col.dataset.commentId = commentData.id;
     
-    const menuHtml = commentData.is_author ? `
+    const menuHtml = `
         <div class="comment-menu">
             <button class="comment-menu-btn" aria-label="Options">
                 <i class="bi bi-three-dots-vertical"></i>
             </button>
             <div class="comment-menu-dropdown">
-                <button class="comment-edit-btn">Modifier</button>
-                <button class="comment-delete-btn">Supprimer</button>
+                <button class="comment-edit-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Modifier</button>
+                <button class="comment-delete-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Supprimer</button>
             </div>
-        </div>
-    ` : '';
+        </div>`;
     
     // Formater la date
     let dateHtml = '';
@@ -343,17 +359,136 @@ function renderComment(commentData) {
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
     
+    // Affiche le vrai nombre de likes
+    let initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
     col.innerHTML = `
         <div class="comment-card">
             ${menuHtml}
             <div class="comment-user">
-                ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                <span class="comment-user-avatar-wrapper">
+                    ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                </span>
                 <span class="comment-user-name">${commentData.user_name}</span>
             </div>
             ${dateHtml}
             <div class="comment-text">${commentData.comment_text}</div>
+            <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
+                <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
+                    <svg class="svg-thumb-up" viewBox="0 -0.5 21 21" width="22" height="22" style="display:inline-block;vertical-align:middle;">
+                        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                            <g id="Dribbble-Light-Preview" transform="translate(-219.000000, -760.000000)" fill="#000000">
+                                <g id="icons" transform="translate(56.000000, 160.000000)">
+                                    <path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/>
+                                </g>
+                            </g>
+                        </g>
+                    </svg>
+                </button>
+                <span class="like-count" style="color:#000 !important; font-weight:500;">${initialLikeCount}</span>
+            </div>
         </div>
     `;
+        // Like button logic: toggle .liked and update like count visually
+        const likeBtn = col.querySelector('.comment-like-btn');
+        const likeCountSpan = col.querySelector('.like-count');
+        // Force couleur du pouce dès l'affichage si déjà liké
+        if (likeBtn && commentData.liked_by_user) {
+            const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+            if (thumbSvg) {
+                const thumbPath = thumbSvg.querySelector('path');
+                thumbSvg.style.fill = '#700118';
+                thumbSvg.style.color = '#700118';
+                if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+            }
+        }
+        if (likeBtn && likeCountSpan) {
+            likeBtn.addEventListener('click', function () {
+                // Vérifier connexion utilisateur
+                var isUserLoggedIn = false;
+                try {
+                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+                } catch (e) {}
+                if (!isUserLoggedIn) {
+                    window.location.href = '/inscription';
+                    return;
+                }
+                const isLiked = likeBtn.classList.toggle('liked');
+                let count = parseInt(likeCountSpan.textContent, 10);
+                if (isNaN(count)) count = 0;
+                // Update counter immediately for instant feedback
+                if (isLiked) {
+                    likeCountSpan.textContent = count + 1;
+                } else {
+                    likeCountSpan.textContent = Math.max(0, count - 1);
+                }
+                // Force SVG thumb color for reliability
+                const thumbSvg = likeBtn.querySelector('.svg-thumb-up');
+                if (thumbSvg) {
+                    const thumbPath = thumbSvg.querySelector('path');
+                    if (isLiked) {
+                        thumbSvg.style.fill = '#700118';
+                        thumbSvg.style.color = '#700118';
+                        if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                    } else {
+                        thumbSvg.style.fill = '#1A1A1A';
+                        thumbSvg.style.color = '#1A1A1A';
+                        if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                    }
+                }
+                // AJAX pour enregistrer le like/dislike
+                fetch(window.ajaxurl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: isLiked ? 'like_comment' : 'unlike_comment',
+                        comment_id: commentData.id
+                    })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        likeCountSpan.textContent = data.data.like_count;
+                    } else {
+                        // rollback UI si erreur
+                        likeBtn.classList.toggle('liked');
+                        if (thumbSvg) {
+                            const thumbPath = thumbSvg.querySelector('path');
+                            // Rollback thumb color
+                            if (isLiked) {
+                                thumbSvg.style.fill = '#1A1A1A';
+                                thumbSvg.style.color = '#1A1A1A';
+                                if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                            } else {
+                                thumbSvg.style.fill = '#700118';
+                                thumbSvg.style.color = '#700118';
+                                if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                            }
+                        }
+                        likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
+                        alert('Erreur lors de la mise à jour du like.');
+                    }
+                })
+                .catch((err) => {
+                    likeBtn.classList.toggle('liked');
+                    if (thumbSvg) {
+                        const thumbPath = thumbSvg.querySelector('path');
+                        // Rollback thumb color
+                        if (isLiked) {
+                            thumbSvg.style.fill = '#1A1A1A';
+                            thumbSvg.style.color = '#1A1A1A';
+                            if (thumbPath) thumbPath.setAttribute('fill', '#1A1A1A');
+                        } else {
+                            thumbSvg.style.fill = '#700118';
+                            thumbSvg.style.color = '#700118';
+                            if (thumbPath) thumbPath.setAttribute('fill', '#700118');
+                        }
+                    }
+                    likeCountSpan.textContent = isLiked ? count : Math.max(0, count-1);
+                    alert('Erreur réseau lors du like.');
+                });
+            });
+        }
     
     commentsZone.insertBefore(col, commentsZone.firstChild);
     
@@ -616,66 +751,128 @@ initGenericCarousel({
     `
 });
 
-// === LIKE BUTTON (SERIE) ===
+// === LIKE BUTTON (SERIE) synchronisé avec le compte utilisateur ===
 const movieLikeBtn = document.getElementById('movieLikeBtn');
 if (movieLikeBtn) {
-    // Récupérer les infos de la série depuis les attributs data
-    const serieTitle = movieLikeBtn.dataset.serieTitle || document.querySelector('.movie-header h1')?.textContent || '';
-    const serieYear = movieLikeBtn.dataset.serieYear || document.querySelector('.movie-sub')?.textContent?.match(/\d{4}/)?.[0] || '';
-    const seriePoster = movieLikeBtn.dataset.serieImage || document.getElementById('moviePosterImg')?.src || '';
-    const serieSlug = movieLikeBtn.dataset.serieSlug || window.currentMovieSlug || '';
-    
-    // Vérifier si déjà en favoris
-    const favoriteSeries = JSON.parse(localStorage.getItem('favoriteSeries') || '[]');
-    const isAlreadyFavorite = favoriteSeries.some(serie => serie.id === serieSlug);
-    
-    if (isAlreadyFavorite) {
-        movieLikeBtn.classList.add('liked');
-        const icon = movieLikeBtn.querySelector('i');
+    // Vérifier l'état de connexion utilisateur
+    let isUserLoggedIn = false;
+    try {
+        isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+    } catch (e) {}
+
+    // Désactiver le bouton si déconnecté
+    if (!isUserLoggedIn) {
+        movieLikeBtn.classList.remove('liked');
+        movieLikeBtn.setAttribute('aria-pressed', 'false');
+        const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
         if (icon) {
-            icon.classList.remove('bi-heart');
-            icon.classList.add('bi-heart-fill');
-        }
-    }
-    
-    movieLikeBtn.addEventListener('click', function() {
-        this.classList.toggle('liked');
-        const icon = this.querySelector('i');
-        const liked = this.classList.contains('liked');
-        
-        if (liked) {
-            icon.classList.remove('bi-heart');
-            icon.classList.add('bi-heart-fill');
-        } else {
-            icon.classList.remove('bi-heart-fill');
             icon.classList.add('bi-heart');
+            icon.classList.remove('bi-heart-fill');
+            icon.style.color = '#1A1A1A';
         }
-        this.setAttribute('aria-pressed', liked);
-        
-        // Gérer les favoris
-        let favoriteSeries = JSON.parse(localStorage.getItem('favoriteSeries') || '[]');
-        
-        if (liked) {
-            // Ajouter aux favoris
-            const serieData = {
-                id: serieSlug,
-                title: serieTitle,
-                year: serieYear,
-                image: seriePoster,
-                url: window.location.href
-            };
-            
-            // Vérifier si pas déjà présent
-            if (!favoriteSeries.some(serie => serie.id === serieSlug)) {
-                favoriteSeries.push(serieData);
-                localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
+        movieLikeBtn.disabled = true;
+    } else {
+        // Charger l'état du like depuis la base (favoris utilisateur)
+        var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+        fetch(ajaxUrl, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' })
+        })
+        .then(async r => {
+            const text = await r.text();
+            try {
+                return JSON.parse(text);
+            } catch (e) {
+                console.error('Réponse AJAX non JSON:', text);
+                throw e;
             }
-        } else {
-            // Retirer des favoris
-            favoriteSeries = favoriteSeries.filter(serie => serie.id !== serieSlug);
-            localStorage.setItem('favoriteSeries', JSON.stringify(favoriteSeries));
-        }
-    });
+        })
+        .then(data => {
+            if (data.success && data.data && Array.isArray(data.data.series)) {
+                const serieId = movieLikeBtn.dataset.serieId || '';
+                const isFavorite = data.data.series.some(serie => String(serie.id) === String(serieId));
+                if (isFavorite) {
+                    movieLikeBtn.classList.add('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'true');
+                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+                    if (icon) {
+                        icon.classList.remove('bi-heart');
+                        icon.classList.add('bi-heart-fill');
+                        icon.style.color = '#700118';
+                    }
+                } else {
+                    movieLikeBtn.classList.remove('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'false');
+                    const icon = movieLikeBtn.querySelector('.bi-heart, .bi-heart-fill, .svg-heart-shape');
+                    if (icon) {
+                        icon.classList.add('bi-heart');
+                        icon.classList.remove('bi-heart-fill');
+                        icon.style.color = '#1A1A1A';
+                    }
+                }
+            }
+        })
+        .catch(e => {
+            console.error('Erreur AJAX favoris:', e);
+        });
+
+        // Gestion du clic
+        movieLikeBtn.addEventListener('click', function () {
+            const icon = this.querySelector('.svg-heart-shape');
+            const liked = this.classList.toggle('liked');
+            this.setAttribute('aria-pressed', liked ? 'true' : 'false');
+            if (icon) {
+                if (liked) {
+                    icon.setAttribute('fill', '#700118');
+                    icon.setAttribute('stroke', '#700118');
+                } else {
+                    icon.setAttribute('fill', 'none');
+                    icon.setAttribute('stroke', '#888888');
+                }
+            }
+            // Ajouter ou retirer des favoris via AJAX
+            const serieId = this.dataset.serieId || '';
+            const serieTitle = this.dataset.serieTitle || document.querySelector('.movie-header h1')?.textContent || '';
+            const serieYear = this.dataset.serieYear || document.querySelector('.movie-sub')?.textContent || '';
+            const seriePoster = this.dataset.serieImage || document.getElementById('moviePosterImg')?.src || '';
+            if (liked) {
+                // Ajouter aux favoris
+                const serieData = {
+                    id: serieId,
+                    title: serieTitle,
+                    year: serieYear,
+                    image: seriePoster,
+                    url: window.location.href
+                };
+                const form = new URLSearchParams();
+                form.append('action', 'add_user_favorite');
+                form.append('type', 'series');
+                form.append('item', JSON.stringify(serieData));
+                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+                fetch(ajaxUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                });
+            } else {
+                // Retirer des favoris
+                const form = new URLSearchParams();
+                form.append('action', 'remove_user_favorite');
+                form.append('type', 'series');
+                form.append('id', serieId);
+                var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+                fetch(ajaxUrl, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                });
+            }
+        });
+    }
 }
 
 // === PASSWORD TOGGLE ===
@@ -688,5 +885,19 @@ document.querySelectorAll('.password-toggle').forEach(btn => {
         }
     });
 });
+
+// Fallback pour éviter ReferenceError si displayTracks n'est pas défini ailleurs
+function displayTracks(season, episode) {
+    if (!allTracks || !allTracks[season] || !allTracks[season][episode]) {
+        currentTracks = [];
+        renderTracksPage();
+        updateTracksMoreBtn(0);
+        return;
+    }
+    currentTracks = allTracks[season][episode];
+    tracksPage = 1;
+    renderTracksPage();
+    updateTracksMoreBtn(currentTracks.length);
+}
 
 });
