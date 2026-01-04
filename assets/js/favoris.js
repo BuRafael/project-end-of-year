@@ -194,13 +194,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 return `
                 <tr class="favoris-track" data-id="${id}">
                     <td class="favoris-track-number">${index + 1}</td>
-                    <td class="favoris-track-cover-cell"><img src="/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png" alt="Musique" class="favoris-track-cover"></td>
                     <td class="favoris-track-title-cell">
                         <div class="favoris-track-title" style="color:#e74c3c">Aucune info disponible</div>
                         <div class="favoris-track-artist">ID: ${id}</div>
                     </td>
-                    <td class="favoris-track-platforms"></td>
-                    <td class="favoris-track-duration">&mdash;</td>
                     <td class="favoris-track-remove">
                         <button type="button" class="favoris-remove-track" data-type="musique" data-id="${id}" aria-label="Retirer des favoris">
                             <i class="bi bi-x-lg"></i>
@@ -221,35 +218,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
         musiquesList.style.display = 'block';
         musiquesEmpty.style.display = 'none';
-        // Récupérer la liste des IDs likés
-        const favorisIds = Array.isArray(window.favorisMusiquesIds) ? window.favorisMusiquesIds : musiques.map(track => track.id);
+        
         musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + musiques.map((track, index) => {
-            // Fallback image si cover manquante
-            let cover = track.cover && track.cover.length > 0 ? track.cover : `/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png`;
-            // Si cover ne commence pas par /wp-content, on ajoute le chemin
-            if (cover && !cover.startsWith('/wp-content')) {
-                cover = `/wp-content/themes/project-end-of-year/assets/image/Pistes film/${cover}`;
-            }
             return `
             <tr class="favoris-track" data-id="${track.id}">
                 <td class="favoris-track-number">${index + 1}</td>
-                <td class="favoris-track-cover-cell">
-                    <img src="${cover}" alt="${track.title}" class="favoris-track-cover" onerror="this.onerror=null;this.src='/wp-content/themes/project-end-of-year/assets/image/Pistes film/default-piste.png';">
-                </td>
                 <td class="favoris-track-title-cell">
                     <div class="favoris-track-title">${track.title || 'Titre inconnu'}</div>
                     <div class="favoris-track-artist">${track.artist || 'Artiste inconnu'}</div>
-                    <div class="favoris-track-source" style="font-size:0.85em;color:#aaa;">${track.source ? track.source : ''}</div>
                 </td>
-                <td class="favoris-track-platforms">
-                    <span class="track-icons">
-                        <i class="bi bi-spotify" aria-label="Spotify"></i>
-                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
-                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
-                        <i class="bi bi-apple" aria-label="Apple Music"></i>
-                    </span>
-                </td>
-                <td class="favoris-track-duration">${track.duration || '&mdash;'}</td>
+                <td class="favoris-track-source">${track.source || ''}</td>
                 <td class="favoris-track-remove">
                     <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
                         <i class="bi bi-x-lg"></i>

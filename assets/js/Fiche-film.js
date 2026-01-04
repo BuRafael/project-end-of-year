@@ -519,6 +519,9 @@ if (tracksTable) {
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
+        
+        // Extraire juste le nom du fichier de l'image
+        const coverFileName = trackCover ? trackCover.split('/').pop() : '';
 
         const liked = target.classList.toggle('liked');
         target.classList.toggle('bi-heart', !liked);
@@ -527,20 +530,18 @@ if (tracksTable) {
 
         // Favoris pistes : AJAX serveur (catégorie musiques)
         if (liked) {
-            // Extract slug from trackId (format: slug-id)
-            let slug = '';
-            if (trackId && trackId.includes('-')) {
-                slug = trackId.split('-')[0];
-            } else {
-                slug = (document.body.getAttribute('data-movie-slug') || '').trim();
-            }
+            // Récupérer le slug de la page depuis l'URL
+            const pageSlug = window.location.pathname.split('/').filter(p => p).pop() || 'film';
+            // Créer l'ID composite au format slug-trackId
+            const compositeId = pageSlug + '-' + trackId;
+            
             const trackData = {
-                id: trackId,
-                slug: slug,
+                id: compositeId,
+                slug: pageSlug,
                 title: trackTitle,
                 artist: trackArtist,
                 duration: trackDuration,
-                cover: trackCover,
+                cover: coverFileName,
                 source: document.querySelector('.movie-header h1')?.textContent || '',
                 url: window.location.href
             };
@@ -566,10 +567,14 @@ if (tracksTable) {
                 }
             });
         } else {
+            // Récupérer le slug de la page pour créer l'ID composite
+            const pageSlug = window.location.pathname.split('/').filter(p => p).pop() || 'film';
+            const compositeId = pageSlug + '-' + trackId;
+            
             const form = new URLSearchParams();
             form.append('action', 'remove_user_favorite');
             form.append('type', 'musiques');
-            form.append('id', trackId);
+            form.append('id', compositeId);
             fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                 method: 'POST',
                 credentials: 'same-origin',

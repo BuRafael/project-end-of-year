@@ -1,4 +1,41 @@
 <?php
+// Fonction temporaire pour créer les pages manquantes
+function cinemusic_create_missing_pages() {
+    $pages = array(
+        array('title' => 'La La Land', 'slug' => 'la-la-land', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Parasite', 'slug' => 'parasite', 'template' => 'template-fiche-film.php'),
+        array('title' => 'Interstellar', 'slug' => 'interstellar', 'template' => 'template-fiche-film.php'),
+    );
+    
+    $results = array();
+    foreach ($pages as $page) {
+        $exists = get_page_by_path($page['slug']);
+        
+        if (!$exists) {
+            $id = wp_insert_post(array(
+                'post_title' => $page['title'],
+                'post_name' => $page['slug'],
+                'post_status' => 'publish',
+                'post_type' => 'page',
+                'comment_status' => 'closed',
+                'ping_status' => 'closed'
+            ));
+            
+            if ($id) {
+                update_post_meta($id, '_wp_page_template', $page['template']);
+                $results[] = 'Créé: ' . $page['title'] . ' (ID: ' . $id . ')';
+            }
+        } else {
+            update_post_meta($exists->ID, '_wp_page_template', $page['template']);
+            $results[] = 'Existe: ' . $page['title'];
+        }
+    }
+    
+    return $results;
+}
+// DÉCOMMENTER LA LIGNE SUIVANTE, VISITER LE SITE, PUIS RE-COMMENTER
+// add_action('wp_footer', function() { echo '<!-- Pages créées: ' . implode(', ', cinemusic_create_missing_pages()) . ' -->'; });
+
 // Custom Post Type Films
 function register_films_post_type() {
     register_post_type('films', [
@@ -71,8 +108,49 @@ function cinemusic_get_user_favorites() {
             if (!$post) continue;
             $title = get_the_title($id);
             $url = get_permalink($id);
+            $slug = $post->post_name;
+            
+            // Récupérer l'image à la une
             $image = get_the_post_thumbnail_url($id, 'medium');
-            if (!$image) $image = '';
+            
+            // Si pas d'image à la une, chercher dans les dossiers du thème
+            if (!$image) {
+                $theme_dir = get_template_directory_uri();
+                // Mapping des images disponibles
+                $image_map = array(
+                    'breaking-bad' => $theme_dir . '/assets/image/Front Page/breaking bad.webp',
+                    'euphoria' => $theme_dir . '/assets/image/Front Page/Euphoria.jpg',
+                    'wednesday' => $theme_dir . '/assets/image/Front Page/Wednesday.jpg',
+                    'the-witcher' => $theme_dir . '/assets/image/Front Page/the witcher.webp',
+                    'stranger-things' => $theme_dir . '/assets/image/Front Page/Stranger Things.jpg',
+                    'spirited-away' => $theme_dir . '/assets/image/Front Page/Chihiro.jpg',
+                    'chihiro' => $theme_dir . '/assets/image/Front Page/Chihiro.jpg',
+                    'attack-on-titan' => $theme_dir . '/assets/image/Front Page/attack on titan.jpg',
+                    'attaque-des-titans' => $theme_dir . '/assets/image/Front Page/Attaque des titans.jpg',
+                    'lattaque-des-titans' => $theme_dir . '/assets/image/Front Page/Attaque des titans.jpg',
+                    'demon-slayer' => $theme_dir . '/assets/image/Front Page/Demon Slayer.jpg',
+                    'jujutsu-kaisen' => $theme_dir . '/assets/image/Front Page/jujutsu kaisen.jpg',
+                    'your-name' => $theme_dir . '/assets/image/Front Page/Your Name.jpg',
+                    'la-la-land' => $theme_dir . '/assets/image/Front Page/La La Land.jpg',
+                    'inception' => $theme_dir . '/assets/image/Front Page/Inception.jpg',
+                    'interstellar' => $theme_dir . '/assets/image/Front Page/Interstellar.jpg',
+                    'parasite' => $theme_dir . '/assets/image/Front Page/Parasite.jpg',
+                    'arrival' => $theme_dir . '/assets/image/Front Page/Arrival.webp',
+                );
+                
+                if (isset($image_map[$slug])) {
+                    $image = $image_map[$slug];
+                } else {
+                    // Fallback: chercher dans Front Page d'abord
+                    $possible_paths = array(
+                        $theme_dir . '/assets/image/Front Page/' . $slug . '.jpg',
+                        $theme_dir . '/assets/image/Front Page/' . $slug . '.webp',
+                        $theme_dir . '/assets/image/Front Page/' . $slug . '.png',
+                    );
+                    $image = $possible_paths[0]; // Utiliser le premier par défaut
+                }
+            }
+            
             $year = get_post_meta($id, 'annee', true);
             if (!$year && ($type === 'films' || $type === 'series')) {
                 $year = get_the_date('Y', $id);
@@ -92,63 +170,202 @@ function cinemusic_get_user_favorites() {
     $musiques = [];
     $debug_musiques_ids = [];
     $debug_musiques_found = [];
+    
+    // Fonction helper pour obtenir les pistes de séries
+    function get_series_tracks() {
+        return array(
+            'breaking-bad' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Breaking Bad Main Title Theme', 'artist' => 'Dave Porter', 'duration' => '0:56', 'image' => 'Breaking bad piste.png'),
+                        array('id' => '2', 'title' => 'Out of Time Man', 'artist' => 'Mick Harvey', 'duration' => '3:34', 'image' => 'Breaking bad piste.png'),
+                        array('id' => '3', 'title' => 'Frenesi', 'artist' => 'Artie Shaw', 'duration' => '2:29', 'image' => 'Breaking bad piste.png'),
+                        array('id' => '4', 'title' => 'Negro Y Azul: The Ballad of Heisenberg', 'artist' => 'Los Cuates de Sinaloa', 'duration' => '2:16', 'image' => 'Breaking bad piste.png'),
+                        array('id' => '5', 'title' => 'Fallacies', 'artist' => 'Twaughthammer', 'duration' => '2:10', 'image' => 'Breaking bad piste.png'),
+                        array('id' => '6', 'title' => 'The Morning After', 'artist' => 'Dave Porter', 'duration' => '1:45', 'image' => 'Breaking bad piste.png')
+                    )
+                )
+            ),
+            'stranger-things' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Stranger Things', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '1:12', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '2', 'title' => 'Kids', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '2:45', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '3', 'title' => 'Nancy and Barb', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '2:30', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '4', 'title' => 'This Isn\'t You', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '2:15', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '5', 'title' => 'Lay-Z-Boy', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '1:50', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '6', 'title' => 'Friendship', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '2:20', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '7', 'title' => 'Eleven', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '3:10', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '8', 'title' => 'Castle Byers', 'artist' => 'Kyle Dixon & Michael Stein', 'duration' => '2:05', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '9', 'title' => 'Can\'t Seem to Make You Mine', 'artist' => 'The Seeds', 'duration' => '2:35', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '10', 'title' => 'She Has Funny Cars', 'artist' => 'Jefferson Airplane', 'duration' => '2:58', 'image' => 'stranger-things-piste.png'),
+                        array('id' => '11', 'title' => 'I Shall Not Care', 'artist' => 'Pearls Before Swine', 'duration' => '3:20', 'image' => 'stranger-things-piste.png')
+                    )
+                )
+            ),
+            'euphoria' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Hold Up', 'artist' => 'Beyoncé', 'duration' => '3:41', 'image' => 'euphoria piste.png'),
+                        array('id' => '2', 'title' => 'Can\'t Get Used to Losing You', 'artist' => 'Andy Williams', 'duration' => '2:25', 'image' => 'euphoria piste.png'),
+                        array('id' => '3', 'title' => 'The Only South I Know', 'artist' => 'Kofa', 'duration' => '2:50', 'image' => 'euphoria piste.png'),
+                        array('id' => '4', 'title' => 'Getcha\' Weight Up', 'artist' => 'Rockstar JT', 'duration' => '3:30', 'image' => 'euphoria piste.png'),
+                        array('id' => '5', 'title' => 'Brighter Tomorrow', 'artist' => 'Soul Swingers', 'duration' => '2:20', 'image' => 'euphoria piste.png'),
+                        array('id' => '6', 'title' => 'Once Again', 'artist' => 'Stratus', 'duration' => '3:00', 'image' => 'euphoria piste.png'),
+                        array('id' => '7', 'title' => 'Beckham', 'artist' => 'Yung Baby Tate', 'duration' => '3:01', 'image' => 'euphoria piste.png'),
+                        array('id' => '8', 'title' => 'Home', 'artist' => 'Audri & Aaron', 'duration' => '3:15', 'image' => 'euphoria piste.png'),
+                        array('id' => '9', 'title' => 'I\'m Gone', 'artist' => 'Jozzy & Tommy Genesis', 'duration' => '2:40', 'image' => 'euphoria piste.png'),
+                        array('id' => '10', 'title' => 'Narcos', 'artist' => 'Migos', 'duration' => '3:14', 'image' => 'euphoria piste.png'),
+                        array('id' => '11', 'title' => 'Feelings', 'artist' => 'Lil Dude', 'duration' => '2:40', 'image' => 'euphoria piste.png'),
+                        array('id' => '12', 'title' => 'Secrets', 'artist' => 'Hass Irv', 'duration' => '3:00', 'image' => 'euphoria piste.png'),
+                        array('id' => '13', 'title' => 'G.O.A.T.', 'artist' => 'Kenny Mason', 'duration' => '2:14', 'image' => 'euphoria piste.png'),
+                        array('id' => '14', 'title' => 'Cocky AF', 'artist' => 'Megan Thee Stallion', 'duration' => '2:54', 'image' => 'euphoria piste.png'),
+                        array('id' => '15', 'title' => '2 True', 'artist' => 'Nesha Nycee', 'duration' => '2:50', 'image' => 'euphoria piste.png'),
+                        array('id' => '16', 'title' => 'I Know There\'s Gonna Be (Good Times)', 'artist' => 'Jamie xx ft. Young Thug & Popcaan', 'duration' => '4:04', 'image' => 'euphoria piste.png'),
+                        array('id' => '17', 'title' => 'New Level', 'artist' => 'A$AP Ferg ft. Future', 'duration' => '4:27', 'image' => 'euphoria piste.png'),
+                        array('id' => '18', 'title' => 'Motivation', 'artist' => 'Sam Austins', 'duration' => '2:50', 'image' => 'euphoria piste.png'),
+                        array('id' => '19', 'title' => 'Pusha', 'artist' => 'JAG', 'duration' => '3:00', 'image' => 'euphoria piste.png'),
+                        array('id' => '20', 'title' => 'Billy Boy', 'artist' => '$NOT', 'duration' => '2:17', 'image' => 'euphoria piste.png'),
+                        array('id' => '21', 'title' => 'Run Cried the Crawling', 'artist' => 'Agnes Obel', 'duration' => '4:08', 'image' => 'euphoria piste.png'),
+                        array('id' => '22', 'title' => 'Snowflake', 'artist' => 'Jim Reeves', 'duration' => '2:53', 'image' => 'euphoria piste.png')
+                    )
+                )
+            ),
+            'wednesday' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Wednesday\'s Theme', 'artist' => 'Danny Elfman & Chris Bacon', 'duration' => '3:14', 'image' => 'wednesday piste.png'),
+                        array('id' => '2', 'title' => 'Nevermore Academy', 'artist' => 'Danny Elfman & Chris Bacon', 'duration' => '2:45', 'image' => 'wednesday piste.png'),
+                        array('id' => '3', 'title' => 'Wednesday Investigates', 'artist' => 'Danny Elfman & Chris Bacon', 'duration' => '2:12', 'image' => 'wednesday piste.png'),
+                        array('id' => '4', 'title' => 'The Monster', 'artist' => 'Danny Elfman & Chris Bacon', 'duration' => '3:30', 'image' => 'wednesday piste.png'),
+                        array('id' => '5', 'title' => 'Thing', 'artist' => 'Danny Elfman & Chris Bacon', 'duration' => '1:58', 'image' => 'wednesday piste.png')
+                    )
+                )
+            ),
+            'the-witcher' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'The End\'s Beginning', 'artist' => 'Sonya Belousova & Giona Ostinelli', 'duration' => '1:45', 'image' => 'the witcher piste.png'),
+                        array('id' => '2', 'title' => 'Geralt of Rivia', 'artist' => 'Sonya Belousova & Giona Ostinelli', 'duration' => '3:09', 'image' => 'the witcher piste.png'),
+                        array('id' => '3', 'title' => 'Ravix of Fourhorn', 'artist' => 'Sonya Belousova & Giona Ostinelli', 'duration' => '1:01', 'image' => 'the witcher piste.png'),
+                        array('id' => '4', 'title' => 'The Lesser Evil', 'artist' => 'Sonya Belousova & Giona Ostinelli', 'duration' => '2:39', 'image' => 'the witcher piste.png'),
+                        array('id' => '5', 'title' => 'Renfri', 'artist' => 'Sonya Belousova & Giona Ostinelli', 'duration' => '2:12', 'image' => 'the witcher piste.png'),
+                        array('id' => '6', 'title' => 'Toss a Coin to Your Witcher', 'artist' => 'Joey Batey', 'duration' => '2:30', 'image' => 'the witcher piste.png')
+                    )
+                )
+            ),
+            'jujutsu-kaisen' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Kaikai Kitan', 'artist' => 'Eve', 'duration' => '4:05', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '2', 'title' => 'Ryomen Sukuna', 'artist' => 'Hiroaki Tsutsumi', 'duration' => '4:01', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '3', 'title' => 'Occult Phenomenon Research Club', 'artist' => 'Tsutsumi & Okehazama', 'duration' => '2:05', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '4', 'title' => 'Impatience', 'artist' => 'Tsutsumi', 'duration' => '2:39', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '5', 'title' => 'As Usual', 'artist' => 'Alisa Okehazama', 'duration' => '2:04', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '6', 'title' => 'The Source of The Curse', 'artist' => 'Tsutsumi', 'duration' => '3:12', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '7', 'title' => 'Takagi VS Itadori', 'artist' => 'Tsutsumi', 'duration' => '2:17', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '8', 'title' => 'Eye Catch B', 'artist' => 'Tsutsumi', 'duration' => '0:33', 'image' => 'jujutsu kaisen piste.png'),
+                        array('id' => '9', 'title' => 'A Thousand‑Year Curse', 'artist' => 'Tsutsumi', 'duration' => '1:44', 'image' => 'jujutsu kaisen piste.png')
+                    )
+                )
+            ),
+            'attack-on-titan' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Guren no Yumiya', 'artist' => 'Linked Horizon', 'duration' => '5:13', 'image' => 'attack on titan piste.png'),
+                        array('id' => '2', 'title' => 'Vogel im Käfig', 'artist' => 'Hiroyuki Sawano', 'duration' => '6:28', 'image' => 'attack on titan piste.png'),
+                        array('id' => '3', 'title' => 'Attack on Titan', 'artist' => 'Hiroyuki Sawano', 'duration' => '5:40', 'image' => 'attack on titan piste.png'),
+                        array('id' => '4', 'title' => 'XL-TT', 'artist' => 'Hiroyuki Sawano', 'duration' => '3:00', 'image' => 'attack on titan piste.png'),
+                        array('id' => '5', 'title' => 'The Reluctant Heroes', 'artist' => 'Hiroyuki Sawano', 'duration' => '4:51', 'image' => 'attack on titan piste.png')
+                    )
+                )
+            ),
+            'demon-slayer' => array(
+                1 => array(
+                    1 => array(
+                        array('id' => '1', 'title' => 'Gurenge', 'artist' => 'LiSA', 'duration' => '3:59', 'image' => 'demon slayer piste.png'),
+                        array('id' => '2', 'title' => 'Kamado Tanjiro no Uta', 'artist' => 'Go Shiina', 'duration' => '4:14', 'image' => 'demon slayer piste.png'),
+                        array('id' => '3', 'title' => 'Homura', 'artist' => 'LiSA', 'duration' => '4:18', 'image' => 'demon slayer piste.png'),
+                        array('id' => '4', 'title' => 'Akaza', 'artist' => 'Yuki Kajiura & Go Shiina', 'duration' => '3:27', 'image' => 'demon slayer piste.png'),
+                        array('id' => '5', 'title' => 'Tanjiro\'s Battle', 'artist' => 'Yuki Kajiura & Go Shiina', 'duration' => '2:54', 'image' => 'demon slayer piste.png')
+                    )
+                )
+            )
+        );
+    }
+    
+    // Fonction helper pour obtenir les pistes de films
+    function get_film_tracks() {
+        return array(
+            'la-la-land' => array(
+                array('id' => '1', 'title' => 'Another Day of Sun', 'artist' => 'Justin Hurwitz', 'duration' => '3:48', 'image' => 'la la land piste.png'),
+                array('id' => '2', 'title' => 'Someone in the Crowd', 'artist' => 'Emma Stone', 'duration' => '4:20', 'image' => 'la la land piste.png'),
+                array('id' => '3', 'title' => "Mia & Sebastian's Theme", 'artist' => 'Justin Hurwitz', 'duration' => '1:36', 'image' => 'la la land piste.png'),
+                array('id' => '4', 'title' => 'A Lovely Night', 'artist' => 'Ryan Gosling & Emma Stone', 'duration' => '3:56', 'image' => 'la la land piste.png'),
+                array('id' => '5', 'title' => "Herman's Habit", 'artist' => 'Justin Hurwitz', 'duration' => '1:51', 'image' => 'la la land piste.png'),
+                array('id' => '6', 'title' => 'City of Stars (Pier)', 'artist' => 'Ryan Gosling', 'duration' => '1:51', 'image' => 'la la land piste.png'),
+                array('id' => '7', 'title' => 'Planetarium', 'artist' => 'Justin Hurwitz', 'duration' => '4:16', 'image' => 'la la land piste.png'),
+                array('id' => '8', 'title' => 'Summer Montage / Madeline', 'artist' => 'Justin Hurwitz', 'duration' => '2:04', 'image' => 'la la land piste.png'),
+                array('id' => '9', 'title' => 'City of Stars (Duet)', 'artist' => 'Ryan Gosling & Emma Stone', 'duration' => '2:25', 'image' => 'la la land piste.png'),
+                array('id' => '10', 'title' => 'Start a Fire', 'artist' => 'John Legend', 'duration' => '3:11', 'image' => 'la la land piste.png'),
+                array('id' => '11', 'title' => 'Engagement Party', 'artist' => 'Justin Hurwitz', 'duration' => '1:25', 'image' => 'la la land piste.png'),
+                array('id' => '12', 'title' => 'Audition (The Fools Who Dream)', 'artist' => 'Emma Stone', 'duration' => '3:48', 'image' => 'la la land piste.png'),
+                array('id' => '13', 'title' => 'Epilogue', 'artist' => 'Justin Hurwitz', 'duration' => '7:39', 'image' => 'la la land piste.png'),
+                array('id' => '14', 'title' => 'The End', 'artist' => 'Justin Hurwitz', 'duration' => '0:46', 'image' => 'la la land piste.png'),
+                array('id' => '15', 'title' => 'City of Stars (Humming)', 'artist' => 'Emma Stone', 'duration' => '2:43', 'image' => 'la la land piste.png')
+            ),
+            'spirited-away' => array(
+                array('id' => '1', 'title' => 'One Summer\'s Day', 'artist' => 'Joe Hisaishi', 'duration' => '2:25', 'image' => 'spirited away piste.png'),
+                array('id' => '2', 'title' => 'A Road to Somewhere', 'artist' => 'Joe Hisaishi', 'duration' => '3:46', 'image' => 'spirited away piste.png'),
+                array('id' => '3', 'title' => 'The Empty Restaurant', 'artist' => 'Joe Hisaishi', 'duration' => '3:27', 'image' => 'spirited away piste.png'),
+                array('id' => '4', 'title' => 'Night Coming', 'artist' => 'Joe Hisaishi', 'duration' => '2:21', 'image' => 'spirited away piste.png'),
+                array('id' => '5', 'title' => 'The Dragon Boy', 'artist' => 'Joe Hisaishi', 'duration' => '2:28', 'image' => 'spirited away piste.png'),
+                array('id' => '6', 'title' => 'Sootballs', 'artist' => 'Joe Hisaishi', 'duration' => '2:35', 'image' => 'spirited away piste.png'),
+                array('id' => '7', 'title' => 'Procession of the Spirit', 'artist' => 'Joe Hisaishi', 'duration' => '3:09', 'image' => 'spirited away piste.png'),
+                array('id' => '8', 'title' => 'The Sixth Station', 'artist' => 'Joe Hisaishi', 'duration' => '3:39', 'image' => 'spirited away piste.png'),
+                array('id' => '9', 'title' => 'The Name of Life', 'artist' => 'Youmi Kimura', 'duration' => '4:28', 'image' => 'spirited away piste.png'),
+                array('id' => '10', 'title' => 'Always With Me', 'artist' => 'Youmi Kimura', 'duration' => '3:42', 'image' => 'spirited away piste.png')
+            ),
+            'your-name' => array(
+                array('id' => '1', 'title' => 'Dream Lantern', 'artist' => 'RADWIMPS', 'duration' => '1:48', 'image' => 'your name piste.png'),
+                array('id' => '2', 'title' => 'Zenzenzense', 'artist' => 'RADWIMPS', 'duration' => '4:45', 'image' => 'your name piste.png'),
+                array('id' => '3', 'title' => 'Sparkle', 'artist' => 'RADWIMPS', 'duration' => '6:50', 'image' => 'your name piste.png'),
+                array('id' => '4', 'title' => 'Nandemonaiya', 'artist' => 'RADWIMPS', 'duration' => '5:44', 'image' => 'your name piste.png'),
+                array('id' => '5', 'title' => 'Date', 'artist' => 'RADWIMPS', 'duration' => '2:12', 'image' => 'your name piste.png'),
+                array('id' => '6', 'title' => 'Mitsuha\'s Theme', 'artist' => 'RADWIMPS', 'duration' => '3:10', 'image' => 'your name piste.png')
+            ),
+            'inception' => array(
+                array('id' => '1', 'title' => 'Half Remembered Dream', 'artist' => 'Hans Zimmer', 'duration' => '1:12', 'image' => 'inception piste.png'),
+                array('id' => '2', 'title' => 'We Built Our Own World', 'artist' => 'Hans Zimmer', 'duration' => '1:55', 'image' => 'inception piste.png'),
+                array('id' => '3', 'title' => 'Dream Is Collapsing', 'artist' => 'Hans Zimmer', 'duration' => '2:23', 'image' => 'inception piste.png'),
+                array('id' => '4', 'title' => 'Radical Notion', 'artist' => 'Hans Zimmer', 'duration' => '3:07', 'image' => 'inception piste.png'),
+                array('id' => '5', 'title' => 'Old Souls', 'artist' => 'Hans Zimmer', 'duration' => '7:44', 'image' => 'inception piste.png'),
+                array('id' => '6', 'title' => '528491', 'artist' => 'Hans Zimmer', 'duration' => '2:23', 'image' => 'inception piste.png'),
+                array('id' => '7', 'title' => 'Mombasa', 'artist' => 'Hans Zimmer', 'duration' => '4:54', 'image' => 'inception piste.png'),
+                array('id' => '8', 'title' => 'One Simple Idea', 'artist' => 'Hans Zimmer', 'duration' => '2:28', 'image' => 'inception piste.png'),
+                array('id' => '9', 'title' => 'Dream Within a Dream', 'artist' => 'Hans Zimmer', 'duration' => '5:27', 'image' => 'inception piste.png'),
+                array('id' => '10', 'title' => 'Waiting for a Train', 'artist' => 'Hans Zimmer', 'duration' => '9:30', 'image' => 'inception piste.png'),
+                array('id' => '11', 'title' => 'Paradox', 'artist' => 'Hans Zimmer', 'duration' => '3:39', 'image' => 'inception piste.png'),
+                array('id' => '12', 'title' => 'Time', 'artist' => 'Hans Zimmer', 'duration' => '4:35', 'image' => 'inception piste.png')
+            )
+        );
+    }
+    
     if (is_array($favorites['musiques'])) {
+        // Les musiques sont maintenant stockées directement avec toutes leurs infos
         foreach ($favorites['musiques'] as $m) {
-            $composite_id = '';
-            if (is_array($m) && isset($m['id'])) {
-                $composite_id = (string)$m['id'];
-            } elseif (is_string($m)) {
-                $composite_id = $m;
+            if (is_array($m)) {
+                // Nouveau format : objet complet
+                $musiques[] = array(
+                    'id' => isset($m['id']) ? $m['id'] : '',
+                    'title' => isset($m['title']) ? $m['title'] : 'Titre inconnu',
+                    'artist' => isset($m['artist']) ? $m['artist'] : 'Artiste inconnu',
+                    'cover' => isset($m['cover']) ? $m['cover'] : 'default-piste.png',
+                    'source' => isset($m['source']) ? $m['source'] : '',
+                    'duration' => isset($m['duration']) ? $m['duration'] : '',
+                    'platforms' => array(),
+                );
             }
-            if (!$composite_id) continue;
-            $debug_musiques_ids[] = $composite_id;
-            // Format attendu : slug-id
-            $parts = explode('-', $composite_id, 2);
-            if (count($parts) !== 2) continue;
-            $slug = $parts[0];
-            $track_id = $parts[1];
-            // Chercher la source des musiques (films ou séries)
-            $track = false;
-            // 1. Essayer de trouver dans les films
-            $args = array(
-                'post_type' => array('films', 'series'),
-                'posts_per_page' => 1,
-                'name' => $slug
-            );
-            $query = new WP_Query($args);
-            if ($query->have_posts()) {
-                $post = $query->posts[0];
-                $tracks = get_post_meta($post->ID, 'tracks', true);
-                if (!$tracks) $tracks = get_post_meta($post->ID, 'pistes', true); // fallback
-                if (is_array($tracks)) {
-                    foreach ($tracks as $t) {
-                        if ((isset($t['id']) && (string)$t['id'] === (string)$track_id) || (isset($t['ID']) && (string)$t['ID'] === (string)$track_id)) {
-                            $track = $t;
-                            $debug_musiques_found[] = [
-                                'id' => $composite_id,
-                                'slug' => $slug,
-                                'track_id' => $track_id,
-                                'track' => $track,
-                                'post_title' => get_the_title($post->ID),
-                                'post_id' => $post->ID
-                            ];
-                            break;
-                        }
-                    }
-                }
-                if ($track) {
-                    $musiques[] = array(
-                        'id' => $composite_id,
-                        'title' => isset($track['title']) ? $track['title'] : '',
-                        'artist' => isset($track['artist']) ? $track['artist'] : '',
-                        'cover' => isset($track['cover']) ? $track['cover'] : '',
-                        'source' => get_the_title($post->ID),
-                        'duration' => isset($track['duration']) ? $track['duration'] : '',
-                        'platforms' => isset($track['platforms']) ? $track['platforms'] : [],
-                    );
-                }
-            }
-            wp_reset_postdata();
         }
     }
     $favoris_data = [
@@ -187,20 +404,35 @@ function cinemusic_add_user_favorite() {
             }, $favorites[$cat]);
         }
     }
-    // Pour musiques, toujours stocker l'ID composite string (ex: 'slug-1')
+    // Pour musiques, stocker l'objet complet avec toutes les infos
     if ($type === 'musiques') {
         $slug = isset($item['slug']) ? $item['slug'] : (isset($item['source']) ? sanitize_title($item['source']) : 'film');
         $id = (string)$item['id'];
         $composite_id = (strpos($id, $slug . '-') === 0) ? $id : ($slug . '-' . $id);
-        // Nettoyer les anciens formats (array ou id simple)
-        $favorites[$type] = array_filter($favorites[$type], function($fav) {
-            return is_string($fav);
-        });
-        if (in_array($composite_id, $favorites[$type], true)) {
-            update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-            wp_send_json_success($favorites);
+        
+        // Créer l'objet musique complet
+        $music_item = array(
+            'id' => $composite_id,
+            'title' => isset($item['title']) ? $item['title'] : 'Titre inconnu',
+            'artist' => isset($item['artist']) ? $item['artist'] : 'Artiste inconnu',
+            'cover' => isset($item['cover']) ? $item['cover'] : 'default-piste.png',
+            'source' => isset($item['source']) ? $item['source'] : ucwords(str_replace('-', ' ', $slug)),
+            'duration' => isset($item['duration']) ? $item['duration'] : '',
+        );
+        
+        // Vérifier si déjà dans les favoris
+        $already_exists = false;
+        foreach ($favorites[$type] as $fav) {
+            if (is_array($fav) && isset($fav['id']) && $fav['id'] === $composite_id) {
+                $already_exists = true;
+                break;
+            }
         }
-        $favorites[$type][] = $composite_id;
+        
+        if (!$already_exists) {
+            $favorites[$type][] = $music_item;
+        }
+        
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
         wp_send_json_success($favorites);
     }
@@ -1745,6 +1977,17 @@ function create_demo_movies() {
             'synopsis' => 'Lorsque de mystérieux vaisseaux venus du fond de l\'espace surgissent un peu partout sur Terre, une équipe d\'experts est rassemblée sous la direction de la linguiste Louise Banks afin de tenter de comprendre leurs intentions. Face à l\'énigme que constituent leur présence et leurs messages mystérieux, les réactions dans le monde sont contrastées et l\'humanité se trouve bientôt au bord d\'une guerre absolue.',
             'year' => '2016',
             'image' => 'arrival affiche similaire.jpg'
+        ),
+        array(
+            'title' => 'Breaking Bad',
+            'slug' => 'breaking-bad-film',
+            'duration' => '2h02',
+            'rating' => '9,5/10',
+            'director' => 'Vince Gilligan',
+            'cast' => 'Bryan Cranston, Aaron Paul, Anna Gunn, Dean Norris',
+            'synopsis' => 'Walter White, professeur de chimie, découvre qu\'il est atteint d\'un cancer. Pour assurer l\'avenir financier de sa famille, il décide de fabriquer de la méthamphétamine avec l\'aide de son ancien élève Jesse Pinkman.',
+            'year' => '2008',
+            'image' => 'breaking bad.webp'
         ),
     );
     

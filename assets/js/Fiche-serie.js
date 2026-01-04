@@ -217,19 +217,28 @@ document.addEventListener('click', function(e) {
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
+        
+        // Extraire juste le nom du fichier de l'image
+        const coverFileName = trackCover ? trackCover.split('/').pop() : '';
 
         e.target.classList.toggle('liked');
         const liked = e.target.classList.contains('liked');
         if (liked) {
             e.target.classList.remove('bi-heart');
             e.target.classList.add('bi-heart-fill');
+            // Récupérer le slug de la page depuis l'URL
+            const pageSlug = window.location.pathname.split('/').filter(p => p).pop() || 'serie';
+            // Créer l'ID composite au format slug-trackId
+            const compositeId = pageSlug + '-' + trackId;
+            
             // Ajouter la piste aux favoris serveur (catégorie musiques)
             const trackData = {
-                id: trackId,
+                id: compositeId,
                 title: trackTitle,
                 artist: trackArtist,
                 duration: trackDuration,
-                cover: trackCover,
+                cover: coverFileName,
+                slug: pageSlug,
                 source: document.querySelector('.movie-header h1')?.textContent || '',
                 url: window.location.href
             };
@@ -246,11 +255,15 @@ document.addEventListener('click', function(e) {
         } else {
             e.target.classList.remove('bi-heart-fill');
             e.target.classList.add('bi-heart');
+            // Récupérer le slug de la page pour créer l'ID composite
+            const pageSlug = window.location.pathname.split('/').filter(p => p).pop() || 'serie';
+            const compositeId = pageSlug + '-' + trackId;
+            
             // Retirer la piste des favoris serveur
             const form = new URLSearchParams();
             form.append('action', 'remove_user_favorite');
             form.append('type', 'musiques');
-            form.append('id', trackId);
+            form.append('id', compositeId);
             fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                 method: 'POST',
                 credentials: 'same-origin',
