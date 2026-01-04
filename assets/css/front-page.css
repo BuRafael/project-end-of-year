@@ -829,7 +829,14 @@ main.home-container > section:last-child {
 
 @media (max-width: 768px) {
   .hero h1 {
-    font-size: 1.8rem;
+    font-size: 2rem;
+    line-height: 1.3;
+    padding: 0 15px;
+  }
+
+  .search-bar {
+    max-width: 90%;
+    margin: 25px auto 0;
   }
 
   .slide img {
@@ -837,44 +844,69 @@ main.home-container > section:last-child {
   }
 
   .carousel-arrow {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
   }
 
   .carousel-arrow.left {
-    left: 12px;
+    left: 10px;
   }
 
   .carousel-arrow.right {
-    right: 12px;
+    right: 10px;
+  }
+
+  .about-section {
+    padding: 0 15px;
   }
 
   .about-section h2 {
-    font-size: 28px;
+    font-size: 30px;
+    margin-bottom: 30px;
   }
 
   .about-col {
-    padding: 0 10px;
+    padding: 0 15px;
   }
 
   .tops-section {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 24px;
+    padding: 0 10px;
   }
 
   .top-list li {
-    padding: 10px 8px;
+    padding: 14px 12px 14px 50px;
+  }
+
+  .top-list li::before {
+    left: 16px;
+    font-size: 16px;
   }
 
   .top-list li img {
-    width: 35px;
-    height: 48px;
-    margin-right: 8px;
+    width: 42px;
+    height: 60px;
+    margin-right: 12px;
+  }
+
+  .top-title-link {
+    font-size: 15px;
+  }
+
+  .top-composer-link {
+    font-size: 14px;
+  }
+
+  .like-btn {
+    font-size: 1.3rem;
+    padding: 8px;
   }
 
   .cta-text p {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    padding: 0 15px;
   }
 
   .scroll-to-top {
@@ -882,69 +914,113 @@ main.home-container > section:last-child {
     bottom: 20px;
     width: 52px;
     height: 52px;
-    font-size: 28px;
   }
 
   .home-container {
-    padding: 20px 10px 60px;
+    padding: 30px 15px 60px;
   }
 }
 
 @media (max-width: 480px) {
   .hero h1 {
-    font-size: 1.5rem;
-    line-height: 1.2;
+    font-size: 1.6rem;
+    line-height: 1.25;
+    padding: 0 10px;
   }
 
   .search-bar {
-    max-width: 90vw;
+    max-width: 92%;
+    margin: 20px auto 0;
+  }
+
+  .search-bar input {
+    font-size: 1rem;
+    padding: 12px 18px;
   }
 
   .slide img {
-    height: 220px;
+    height: 240px;
+  }
+
+  .carousel-arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
   }
 
   .carousel-dots {
-    gap: 6px;
-    margin-top: 12px;
+    gap: 8px;
+    margin-top: 14px;
   }
 
   .dot {
-    width: 6px;
-    height: 6px;
+    width: 7px;
+    height: 7px;
+  }
+
+  .about-section {
+    padding: 0 12px;
   }
 
   .about-section h2 {
-    font-size: 24px;
+    font-size: 26px;
+    margin-bottom: 25px;
+  }
+
+  .about-col {
+    padding: 0 10px;
+    font-size: 0.95rem;
   }
 
   .tops-section {
-    gap: 16px;
+    gap: 18px;
+    padding: 0 8px;
+  }
+
+  .top-header {
+    font-size: 1.1rem;
+    padding: 14px 18px;
   }
 
   .top-list li {
-    padding: 8px;
+    padding: 12px 10px 12px 45px;
+  }
+
+  .top-list li::before {
+    left: 14px;
+    font-size: 15px;
   }
 
   .top-list li img {
-    width: 32px;
-    height: 44px;
+    width: 38px;
+    height: 54px;
+    margin-right: 10px;
   }
 
-  .top-title {
-    font-size: 0.85rem;
+  .top-title-link {
+    font-size: 14px;
   }
 
-  .top-sub {
-    font-size: 0.75rem;
+  .top-composer-link {
+    font-size: 13px;
+  }
+
+  .like-btn {
+    font-size: 1.2rem;
+    padding: 6px;
+  }
+
+  .cta-text p {
+    font-size: 0.9rem;
+    padding: 0 12px;
   }
 
   .cta-btn {
-    padding: 10px 24px;
-    font-size: 0.9rem;
+    padding: 12px 28px;
+    font-size: 0.95rem;
   }
 
   .home-container {
-    padding: 20px 8px 40px;
+    padding: 25px 10px 50px;
   }
 }

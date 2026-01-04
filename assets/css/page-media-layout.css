@@ -245,12 +245,52 @@ h3.section-title.mb-3 {
     flex: 0 0 calc(50% - 10px);
     max-width: calc(50% - 10px);
   }
+
+  .movies-section {
+    padding: 0 15px;
+  }
+
+  .movies-carousel .row {
+    margin: 0 35px;
+  }
+
+  .similar-card,
+  .trend-card,
+  .new-card {
+    margin-bottom: 1rem;
+  }
+
+  .featured-media-inner {
+    padding: 0 15px 30px;
+  }
 }
 @media (max-width: 480px) {
   .movies-section .row.flex-grow-1 > .col-6,
   .movies-section .row.flex-grow-1 > .col-md-3 {
     flex: 0 0 100%;
     max-width: 100%;
+  }
+
+  .movies-section {
+    padding: 0 10px;
+  }
+
+  .movies-carousel .row {
+    margin: 0 30px;
+  }
+
+  .similar-card img,
+  .trend-card img,
+  .new-card img {
+    height: 180px;
+  }
+
+  .featured-media-inner {
+    padding: 0 10px 25px;
+  }
+
+  .section-title {
+    font-size: 1.3rem;
   }
 }
 /* Carrousel Action : flèches centrées verticalement et en dehors du contenu */

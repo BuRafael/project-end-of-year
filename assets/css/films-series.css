@@ -392,7 +392,45 @@ body { box-sizing: border-box; min-height: 100vh; background: #1A1A1A !important
     line-height: 1.7;
     text-align: center;
 }
-@media (max-width: 900px) { .featured-media-inner { padding: 0 10px 32px 10px; margin-top: 120px; } .featured-card { flex-direction: column; gap: 18px; padding: 18px 10px 18px 10px; } .featured-img-wrap img { width: 220px; height: 320px; object-fit: cover; box-shadow: 0 4px 24px #000a, 0 2px 12px rgba(0,0,0,0.18); border: none; border-radius: 18px !important; } }
+@media (max-width: 900px) { 
+  .featured-media-inner { padding: 0 10px 32px 10px; margin-top: 120px; } 
+  .featured-card { flex-direction: column; gap: 18px; padding: 18px 10px 18px 10px; } 
+  .featured-img-wrap img { width: 220px; height: 320px; object-fit: cover; box-shadow: 0 4px 24px #000a, 0 2px 12px rgba(0,0,0,0.18); border: none; border-radius: 18px !important; } 
+  .featured-infos-col { padding: 20px 15px !important; gap: 20px; min-height: auto; }
+  .featured-title { font-size: 1.8rem !important; }
+  .featured-meta { font-size: 1rem !important; flex-wrap: wrap; }
+  .featured-synopsis p { font-size: 1rem !important; line-height: 1.6; text-align: justify; }
+}
+
+@media (max-width: 768px) {
+  .featured-media { margin-top: 100px !important; }
+  .featured-media-inner { padding: 0 15px 30px 15px; margin-top: 80px; }
+  .featured-card { padding: 15px 10px; gap: 15px; }
+  .featured-img-wrap img { width: 180px; height: 260px; }
+  .featured-infos-col { padding: 15px 10px !important; gap: 15px; }
+  .featured-title { font-size: 1.5rem !important; margin-bottom: 8px; }
+  .featured-meta { font-size: 0.9rem !important; gap: 6px; }
+  .featured-synopsis p { font-size: 0.95rem !important; line-height: 1.5; }
+  .btn-main { font-size: 0.9rem; padding: 8px 18px; }
+  .section-title { font-size: 1.6rem !important; }
+  .trend-list { grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px; }
+}
+
+@media (max-width: 480px) {
+  .featured-media { margin-top: 80px !important; }
+  .featured-media-inner { padding: 0 10px 25px 10px; margin-top: 60px; }
+  .featured-card { padding: 12px 8px; gap: 12px; }
+  .featured-img-wrap img { width: 150px; height: 220px; }
+  .featured-infos-col { padding: 12px 8px !important; gap: 12px; }
+  .featured-title { font-size: 1.3rem !important; }
+  .featured-meta { font-size: 0.85rem !important; gap: 5px; }
+  .featured-synopsis p { font-size: 0.9rem !important; line-height: 1.4; }
+  .btn-main { font-size: 0.85rem; padding: 7px 15px; }
+  .section-title { font-size: 1.4rem !important; }
+  .trend-list { grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 12px; }
+  .trend-card { padding: 10px 10px 6px 10px; }
+  .trend-card h4 { font-size: 0.95rem; }
+}
 .top-media h2 { font-size: 2rem; margin-bottom: 16px; color: #fff; background: #232323; border-radius: 14px; transition: box-shadow 0.25s, transform 0.22s; cursor: pointer; }
 .top-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 24px; }
 .top-card { background: #191919; border-radius: 10px; padding: 12px 12px 8px 12px; text-align: center; position: relative; transition: transform 0.2s; }

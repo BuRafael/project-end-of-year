@@ -309,4 +309,106 @@ body .movie-page > section:last-child {
     width: 100%;
 }
 
+/* ==================================================
+   RESPONSIVE Design
+   ================================================== */
 
+@media (max-width: 1024px) {
+    .movie-header h1,
+    .movie-header h1.fw-bold {
+        font-size: 38px !important;
+    }
+    
+    .series-selects {
+        gap: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .movie-header h1,
+    .movie-header h1.fw-bold {
+        font-size: 32px !important;
+        line-height: 1.2 !important;
+    }
+    
+    .movie-sub {
+        font-size: 13px !important;
+    }
+    
+    .series-selects {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .series-selects select,
+    .series-selects .form-select {
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    .movie-tracks-table {
+        font-size: 0.9rem;
+    }
+    
+    .movie-track-number {
+        font-size: 0.85rem;
+        padding: 8px;
+    }
+    
+    .movie-track-cover-cell {
+        padding: 8px;
+    }
+    
+    .movie-track-cover {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .movie-track-title {
+        font-size: 0.9rem;
+    }
+    
+    .movie-track-artist {
+        font-size: 11px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .movie-header h1,
+    .movie-header h1.fw-bold {
+        font-size: 26px !important;
+    }
+    
+    .movie-sub {
+        font-size: 12px !important;
+    }
+    
+    .movie-tracks-table {
+        font-size: 0.85rem;
+    }
+    
+    .movie-track-number {
+        font-size: 0.8rem;
+        padding: 6px;
+    }
+    
+    .movie-track-cover {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .movie-track-title {
+        font-size: 0.85rem;
+    }
+    
+    .movie-track-artist {
+        font-size: 10px !important;
+    }
+    
+    .comment-avatar {
+        width: 36px !important;
+        height: 36px !important;
+        min-width: 36px !important;
+        min-height: 36px !important;
+    }
+}

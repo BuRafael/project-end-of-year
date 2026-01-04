@@ -390,7 +390,7 @@
     }
     
     .favoris-title {
-        font-size: 2.5rem;
+        font-size: 2.2rem;
     }
     
     .favoris-subtitle {
@@ -398,10 +398,121 @@
     }
     
     .favoris-tabs {
-        gap: 1.5rem;
+        gap: 1rem;
+        flex-wrap: wrap;
     }
     
     .favoris-tab {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        padding: 0.45rem 1rem;
+    }
+
+    .favoris-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .favoris-card {
+        max-width: 180px;
+    }
+
+    .favoris-card-img {
+        height: 200px;
+    }
+
+    .favoris-card-title {
+        font-size: 0.9rem;
+    }
+
+    .favoris-card-year {
+        font-size: 0.8rem;
+    }
+
+    .favoris-tracks-table {
+        font-size: 0.9rem;
+    }
+
+    .favoris-track-number {
+        font-size: 0.85rem;
+    }
+
+    .favoris-track-title {
+        font-size: 0.9rem;
+    }
+
+    .favoris-track-artist {
+        font-size: 0.8rem;
+    }
+
+    .favoris-track-source {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .favoris-page {
+        padding: 30px 10px 50px;
+    }
+
+    .favoris-title {
+        font-size: 1.8rem;
+    }
+
+    .favoris-subtitle {
+        font-size: 0.95rem;
+    }
+
+    .favoris-tabs {
+        gap: 0.75rem;
+    }
+
+    .favoris-tab {
+        font-size: 0.9rem;
+        padding: 0.4rem 0.85rem;
+    }
+
+    .favoris-grid {
+        grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+        gap: 1.25rem;
+    }
+
+    .favoris-card {
+        max-width: 160px;
+    }
+
+    .favoris-card-img {
+        height: 180px;
+    }
+
+    .favoris-card-title {
+        font-size: 0.85rem;
+    }
+
+    .favoris-card-year {
+        font-size: 0.75rem;
+    }
+
+    .favoris-tracks-table {
+        font-size: 0.85rem;
+    }
+
+    .favoris-track-number {
+        font-size: 0.8rem;
+    }
+
+    .favoris-track-title {
+        font-size: 0.85rem;
+    }
+
+    .favoris-track-artist {
+        font-size: 0.75rem;
+    }
+
+    .favoris-track-source {
+        font-size: 0.8rem;
+    }
+
+    .favoris-remove-track {
+        font-size: 1.1rem;
     }
 }
