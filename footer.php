@@ -26,14 +26,14 @@
 
             <div class="footer-center">
                 <div class="footer-picto">
+                    <!-- Logo SVG direct -->
                     <?php
-                    $footer_logo_path = get_template_directory() . '/assets/image/Icones et Logo/Logo.svg';
-                    $footer_logo_uri  = get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg';
-                    if (file_exists($footer_logo_path)) {
-                        echo '<img src="' . esc_url($footer_logo_uri) . '" alt="' . esc_attr(get_bloginfo('name')) . '" class="logo-img" loading="lazy">';
-                    } elseif (has_custom_logo()) {
-                        $logo_id = get_theme_mod('custom_logo');
-                        echo wp_get_attachment_image($logo_id, 'full', false, array('class' => 'logo-img', 'loading' => 'lazy'));
+                    $svg_path = get_template_directory() . '/assets/image/Icones et Logo/Logo cinemusic.svg';
+                    if (file_exists($svg_path)) {
+                        $svg = file_get_contents($svg_path);
+                        // Ajoute la classe logo-svg au SVG
+                        $svg = preg_replace('/<svg /', '<svg class="logo-svg" ', $svg, 1);
+                        echo $svg;
                     }
                     ?>
                 </div>

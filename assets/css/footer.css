@@ -1,6 +1,6 @@
 .site-footer {
     height: 180px;
-    background: linear-gradient(180deg, #700118 30%, #000000 100%);
+    background: linear-gradient(180deg, #1A1A1A 12%, #700118 79%);
     color: #F4EFEC;
     display: flex;
     align-items: center;
@@ -44,12 +44,13 @@
     transition: color .15s ease;
     position: relative;
     font-family: "futura-pt", "Futura", Arial, sans-serif !important;
-    font-weight: 700 !important;
+    font-weight: 700 !important; /* demibold */
+    font-style: normal !important;
 }
 
 
 .footer-left .footer-menu li a:hover {
-    color: #000000;
+    color: #1A1A1A;
 }
 
 
@@ -61,7 +62,7 @@
     transform: translateX(-50%);
     width: 35px;
     height: 2px;
-    background-color: #000000;
+    background-color: #1A1A1A;
 }
 
 
@@ -81,9 +82,28 @@
 
 
 .logo-svg {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
     display: block;
+    margin-top: 24px;
+    transition: filter 0.2s, fill 0.2s;
+    cursor: pointer;
+    /* Pour le hover, on utilise filter pour rendre le SVG noir */
+}
+.logo-svg:hover {
+    filter: none;
+    /* Pour le hover, on force la couleur des paths à #1A1A1A */
+}
+.logo-svg:hover path {
+    fill: #1A1A1A !important;
+}
+.logo-svg:hover path:nth-of-type(2),
+.logo-svg:hover path:nth-of-type(3),
+.logo-svg:hover path:nth-of-type(4) {
+    fill: #F4EFEC !important;
+}
+.logo-svg:hover path {
+    fill: #1A1A1A !important;
 }
 
 
@@ -98,10 +118,18 @@
 .footer-logo-text {
     display: inline-block;
     vertical-align: middle;
-    font-size: 2rem !important;
-    font-family: "futura-pt", "Futura", Arial, sans-serif;
-    font-weight: 700;
+    font-size: 36px !important;
+    font-family: "futura-pt", "Futura", Arial, sans-serif !important;
+    font-weight: 700 !important; /* bold */
     color: #F4EFEC;
+    font-style: normal !important;
+    margin-top: -12px;
+    margin-bottom: 12px;
+}
+
+.footer-logo-text:hover {
+    color: #1A1A1A !important;
+}
     letter-spacing: 1px;
 }
 
