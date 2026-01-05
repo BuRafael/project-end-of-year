@@ -4,6 +4,40 @@ document.addEventListener('DOMContentLoaded', function() {
             // Local cache for liked track IDs, persisted in sessionStorage
         // No local cache, use server state like series fiche
 
+                // ===== FILMS SIMILAIRES CAROUSEL =====
+                // Static list of similar films for demo (replace with dynamic if needed)
+                const similarMoviesData = window.similarMoviesData || [
+                    { slug: 'inception', title: 'Inception', image: themeImagePath + 'inception affiche film.jpg' },
+                    { slug: 'interstellar', title: 'Interstellar', image: themeImagePath + 'interstellar.jpg' },
+                    { slug: 'arrival', title: 'Arrival', image: themeImagePath + 'Arrival.webp' },
+                    { slug: 'spirited-away', title: 'Le Voyage de Chihiro', image: themeImagePath + 'chihiro.jpg' },
+                    { slug: 'your-name', title: 'Your Name', image: themeImagePath + 'your name.jpg' }
+                ];
+
+                function renderSimilarMoviesCarousel(movies) {
+                    const container = document.getElementById('similarMovies');
+                    if (!container) return;
+                    container.innerHTML = '';
+                    movies.forEach(movie => {
+                        const col = document.createElement('div');
+                        col.className = 'carousel-card';
+                        col.style.cursor = 'pointer';
+                        col.innerHTML = `
+                            <div class=\"carousel-card-inner\">
+                                <img src=\"${movie.image}\" alt=\"${movie.title}\" class=\"carousel-card-img\">
+                                <div class=\"carousel-card-title\">${movie.title}</div>
+                            </div>
+                        `;
+                        col.addEventListener('click', function() {
+                            window.location.href = `/fiche-film/${movie.slug}`;
+                        });
+                        container.appendChild(col);
+                    });
+                }
+
+                // Render on DOMContentLoaded
+                renderSimilarMoviesCarousel(similarMoviesData);
+
         // Gestion suppression de commentaire
         function renderComment(comment) {
             const div = document.createElement('div');
@@ -14,9 +48,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     <img src="${comment.avatar || ''}" alt="avatar" class="w-100 h-100" style="object-fit:cover;">
                 </div>
                 <div class="flex-grow-1">
-                    <div class="comment-author fw-bold small">${comment.author}</div>
+                    <div class="comment-meta-row">
+                        <span class="comment-author fw-bold small">${comment.author}</span>
+                        <span class="comment-date text-muted small">${comment.date}</span>
+                    </div>
                     <div class="comment-text small mb-1">${comment.text}</div>
-                    <div class="comment-date text-muted small">${comment.date}</div>
                 </div>
                 ${comment.canDelete ? `<button class="btn btn-sm btn-danger ms-2 comment-delete-btn">Supprimer</button>` : ''}
             `;

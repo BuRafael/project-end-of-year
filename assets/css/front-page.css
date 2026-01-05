@@ -366,15 +366,16 @@ main.home-container > section:last-child {
 }
 
 .slide-title {
-   font-size: 3.5em;
-   font-weight: 800;
-   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-size: 64px !important;
+  font-family: 'futura-pt', 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+  font-weight: 900 !important;
   margin: 0;
   color: #F4EFEC;
-   line-height: 1;
-   letter-spacing: -0.02em;
-   font-family: 'futura-pt', 'Futura', 'Futura PT', Arial, sans-serif;
-   position: relative;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  position: relative;
+  text-shadow: 0 4px 16px rgba(0,0,0,0.7), 0 2px 4px rgba(0,0,0,0.4);
+  /* Effet ombre plus marqué pour la lisibilité */
   }
 
   .slide-title::after {
@@ -389,35 +390,32 @@ main.home-container > section:last-child {
 }
 
 .btn-voir {
-   display: inline-flex;
-   align-items: center;
-   gap: 10px;
-   padding: 14px 32px;
-   background: rgba(244, 239, 236, 0.95);
-   color: #1A1A1A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 165px;
+  height: 50px;
+  padding: 0;
+  background: #F4EFEC;
+  color: #700118 !important;
   text-decoration: none;
-   border-radius: 6px;
-  font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
-  font-weight: 600;
-  font-size: 18px;
-  letter-spacing: 0.5px;
-  border: none;
+  border-radius: 5px;
+  font-family: 'futura-pt', 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 20px !important;
+  letter-spacing: 0;
+  border: 1.5px solid #1A1A1A;
   cursor: pointer;
   text-transform: none;
-  backdrop-filter: blur(10px);
+  box-shadow: none;
   position: relative;
   overflow: hidden;
+  backdrop-filter: none;
   }
 
+  /* Suppression de l'effet de survol inutile */
   .btn-voir::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s ease;
+    display: none !important;
   }
 
   .btn-voir:hover::before {
@@ -425,13 +423,13 @@ main.home-container > section:last-child {
 }
 
 .btn-voir:hover {
-  border: 2px solid #700118; /* Contour rouge au hover simple */
+  background: #700118;
+  color: #F4EFEC !important;
+  border: 1.5px solid #700118;
 }
 
   .btn-voir::after {
-    content: '→';
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 0.85;
+    display: none !important;
   }
 
   .btn-voir:hover::after {
@@ -570,7 +568,7 @@ main.home-container > section:last-child {
 }
 
 .top-card {
-  background: #111;
+  background: #0F0F0F;
   border-radius: 8px;
   overflow: hidden;
   border: 1px solid #333;
@@ -578,7 +576,7 @@ main.home-container > section:last-child {
 
 .top-card:hover {
   box-shadow: none !important;
-  background: #111 !important;
+  background: #0F0F0F !important;
   border: 1px solid #333 !important;
   transform: none !important;
 }

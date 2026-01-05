@@ -40,8 +40,8 @@ function renderComment(commentData) {
                     ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
                 </span>
                 <span class="comment-user-name">${commentData.user_name}</span>
+                <span class="comment-date">${dateHtml.replace('<div class=\"comment-date\">','').replace('</div>','')}</span>
             </div>
-            ${dateHtml}
             <div class="comment-text">${commentData.comment_text}</div>
             <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
                 <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
@@ -104,7 +104,7 @@ function renderComment(commentData) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
-                    action: isLiked ? 'remove_comment_like' : 'add_comment_like',
+                    action: isLiked ? 'unlike_comment' : 'like_comment',
                     nonce: movieComments.nonce,
                     comment_id: commentData.id
                 })
