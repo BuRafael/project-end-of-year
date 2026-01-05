@@ -23,7 +23,24 @@
             <span style="display:block;">CINEMUSIC</span>
         </h1>
         <div class="register-hero__logo">
-            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
+            <?php
+            $svg_path = get_template_directory() . '/assets/image/Icones et Logo/Logo_cinemusic_modif.svg';
+            if (file_exists($svg_path)) {
+                $svg = file_get_contents($svg_path);
+                // Réduit la taille du SVG
+                $svg = preg_replace('/<svg ([^>]*)width="[0-9]+" height="[0-9]+"/', '<svg $1width="38" height="48"', $svg, 1);
+                // Met tout en blanc du site
+                $svg = preg_replace('/fill=\"#([0-9A-Fa-f]{6})\"/', 'fill="#F4EFEC"', $svg);
+                // Mets les 3 petits ronds (paths avec fill="#1A1A1A") en noir du site
+                // On cible les 3 paths qui sont à la position 2, 3 et 4 dans le SVG
+                $svg = preg_replace_callback('/(<path[^>]+fill=\")#F4EFEC(\"[^>]*>)/', function($m) {
+                    static $i = 0; $i++;
+                    if ($i >= 2 && $i <= 4) return $m[1] . '#1A1A1A' . $m[2];
+                    return $m[1] . '#F4EFEC' . $m[2];
+                }, $svg);
+                echo $svg;
+            }
+            ?>
         </div>
         <div class="register-card">
         <h2><?php esc_html_e('Créez ton profil!', 'project-end-of-year'); ?></h2>

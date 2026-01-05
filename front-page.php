@@ -126,201 +126,94 @@ get_header();
         <!-- TOP 5 FILMS -->
         <div class="top-card">
             <div class="top-header">Top 5 films</div>
-            <?php 
-            $movie_query = new WP_Query(array(
-                'post_type'      => 'movie',
-                'posts_per_page' => 5,
-                'tax_query'      => array(
-                    array(
-                        'taxonomy' => 'media_type',
-                        'field'    => 'slug',
-                        'terms'    => 'film',
-                    ),
-                ),
-            ));
-            ?>
             <ul class="top-list">
-                <?php 
-                if ($movie_query->have_posts()) :
-                    $position = 0;
-                    while ($movie_query->have_posts()) : $movie_query->the_post();
-                        $position++;
-                        
-                        // Afficher le 1er film normalement
-                        if ($position == 1) :
-                            $director = get_post_meta(get_the_ID(), '_movie_director', true);
-                            $thumbnail = get_the_post_thumbnail_url(get_the_ID(), 'medium');
-                            $poster = get_the_post_thumbnail_url(get_the_ID(), 'full');
-                            $movie_url = get_permalink();
-                ?>
                 <li>
-                    <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/inception.jpg' ); ?>" alt="Inception">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-title-link"><?php the_title(); ?></a>
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-composer-link"><?php echo esc_html($director); ?></a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/inception') ); ?>" class="top-title-link">Inception</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/inception') ); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="film" 
-                            data-id="<?php echo esc_attr(get_the_ID()); ?>"
-                            data-poster="<?php echo esc_url($poster); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" type="button" aria-label="Like">♡</button>
                 </li>
-                <?php 
-                        endif;
-                        
-                        // Insérer La La Land en 2ème position
-                        if ($position == 1) : 
-                            $lalaland_page = get_page_by_path('la-la-land');
-                            $lalaland_url = $lalaland_page ? get_permalink($lalaland_page->ID) : home_url('/la-la-land');
-                ?>
-                <!-- La La Land - 2ème position -->
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/La La Land.jpg' ); ?>" alt="La La Land">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($lalaland_url); ?>" class="top-title-link">La La Land</a>
-                        <a href="<?php echo esc_url($lalaland_url); ?>" class="top-composer-link">Damien Chazelle</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/la-la-land') ); ?>" class="top-title-link">La La Land</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/la-la-land') ); ?>" class="top-composer-link">Damien Chazelle</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="film" 
-                            data-id="<?php echo esc_attr($lalaland_page ? $lalaland_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/La La Land.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" type="button" aria-label="Like">♡</button>
                 </li>
-                <?php 
-                        endif;
-                        
-                        // Sauter le 2ème et afficher du 3ème au 5ème
-                        if ($position >= 3) :
-                            $director = get_post_meta(get_the_ID(), '_movie_director', true);
-                            $thumbnail = get_the_post_thumbnail_url(get_the_ID(), 'medium');
-                            $poster = get_the_post_thumbnail_url(get_the_ID(), 'full');
-                            $movie_url = get_permalink();
-                ?>
                 <li>
-                    <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/parasite.jpg' ); ?>" alt="Parasite">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-title-link"><?php the_title(); ?></a>
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-composer-link"><?php echo esc_html($director); ?></a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/parasite') ); ?>" class="top-title-link">Parasite</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/parasite') ); ?>" class="top-composer-link">Bong Joon-ho</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="film" 
-                            data-id="<?php echo esc_attr(get_the_ID()); ?>"
-                            data-poster="<?php echo esc_url($poster); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="film" type="button" aria-label="Like">♡</button>
                 </li>
-                <?php 
-                        endif;
-                    endwhile;
-                    wp_reset_postdata();
-                endif;
-                ?>
+                <li>
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/interstellar.jpg' ); ?>" alt="Interstellar">
+                    <div class="top-info">
+                        <a href="<?php echo esc_url( home_url('/fiche-film/interstellar') ); ?>" class="top-title-link">Interstellar</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/interstellar') ); ?>" class="top-composer-link">Christopher Nolan</a>
+                    </div>
+                    <button class="like-btn" data-liked="false" data-type="film" type="button" aria-label="Like">♡</button>
+                </li>
+                <li>
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Arrival.webp' ); ?>" alt="Arrival">
+                    <div class="top-info">
+                        <a href="<?php echo esc_url( home_url('/fiche-film/arrival') ); ?>" class="top-title-link">Arrival</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/arrival') ); ?>" class="top-composer-link">Denis Villeneuve</a>
+                    </div>
+                    <button class="like-btn" data-liked="false" data-type="film" type="button" aria-label="Like">♡</button>
+                </li>
+            </ul>
             </ul>
         </div>
 
         <!-- TOP 5 SERIES -->
          <div class="top-card">
             <div class="top-header">Top 5 series</div>
-            <?php 
-            $serie_query = new WP_Query(array(
-                'post_type'      => 'movie',
-                'posts_per_page' => 5,
-                'tax_query'      => array(
-                    array(
-                        'taxonomy' => 'media_type',
-                        'field'    => 'slug',
-                        'terms'    => 'serie',
-                    ),
-                ),
-            ));
-            ?>
             <ul class="top-list">
-                <?php 
-                if ($serie_query->have_posts()) :
-                    while ($serie_query->have_posts()) : $serie_query->the_post();
-                        $director = get_post_meta(get_the_ID(), '_movie_director', true);
-                        $thumbnail = get_the_post_thumbnail_url(get_the_ID(), 'medium');
-                        $poster = get_the_post_thumbnail_url(get_the_ID(), 'full');
-                        $movie_url = get_permalink();
-                ?>
                 <li>
-                    <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Stranger Things">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-title-link"><?php the_title(); ?></a>
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-composer-link"><?php echo esc_html($director); ?></a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/stranger-things') ); ?>" class="top-title-link">Stranger Things</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/stranger-things') ); ?>" class="top-composer-link">Duffer Brothers</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr(get_the_ID()); ?>"
-                            data-poster="<?php echo esc_url($poster); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" type="button" aria-label="Like">♡</button>
                 </li>
-                <?php 
-                    endwhile;
-                    wp_reset_postdata();
-                endif;
-                ?>
-                <!-- Breaking Bad - page WordPress -->
-                <?php 
-                $breaking_bad_page = get_page_by_path('breaking-bad');
-                $breaking_bad_url = $breaking_bad_page ? get_permalink($breaking_bad_page->ID) : home_url('/breaking-bad');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/breaking bad.webp' ); ?>" alt="Breaking Bad">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($breaking_bad_url); ?>" class="top-title-link">Breaking Bad</a>
-                        <a href="<?php echo esc_url($breaking_bad_url); ?>" class="top-composer-link">Vince Gilligan</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/breaking-bad') ); ?>" class="top-title-link">Breaking Bad</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/breaking-bad') ); ?>" class="top-composer-link">Vince Gilligan</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($breaking_bad_page ? $breaking_bad_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/breaking bad.webp' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" type="button" aria-label="Like">♡</button>
                 </li>
-                
-                <!-- Euphoria - page WordPress -->
-                <?php 
-                $euphoria_page = get_page_by_path('euphoria');
-                $euphoria_url = $euphoria_page ? get_permalink($euphoria_page->ID) : home_url('/euphoria');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/euphoria.jpg' ); ?>" alt="Euphoria">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($euphoria_url); ?>" class="top-title-link">Euphoria</a>
-                        <a href="<?php echo esc_url($euphoria_url); ?>" class="top-composer-link">Sam Levinson</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/euphoria') ); ?>" class="top-title-link">Euphoria</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/euphoria') ); ?>" class="top-composer-link">Sam Levinson</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($euphoria_page ? $euphoria_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/euphoria.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" type="button" aria-label="Like">♡</button>
                 </li>
-                
-                <!-- Wednesday - page WordPress -->
-                <?php 
-                $wednesday_page = get_page_by_path('wednesday');
-                $wednesday_url = $wednesday_page ? get_permalink($wednesday_page->ID) : home_url('/wednesday');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/wednesday.jpg' ); ?>" alt="Wednesday">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($wednesday_url); ?>" class="top-title-link">Wednesday</a>
-                        <a href="<?php echo esc_url($wednesday_url); ?>" class="top-composer-link">Tim Burton</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/wednesday') ); ?>" class="top-title-link">Wednesday</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/wednesday') ); ?>" class="top-composer-link">Tim Burton</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($wednesday_page ? $wednesday_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/wednesday.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" type="button" aria-label="Like">♡</button>
                 </li>
-                
-                <!-- The Witcher - page WordPress -->
-                <?php 
-                $witcher_page = get_page_by_path('the-witcher');
-                $witcher_url = $witcher_page ? get_permalink($witcher_page->ID) : home_url('/the-witcher');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/the witcher.webp' ); ?>" alt="The Witcher">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($witcher_url); ?>" class="top-title-link">The Witcher</a>
-                        <a href="<?php echo esc_url($witcher_url); ?>" class="top-composer-link">Lauren Schmidt Hissrich</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/the-witcher') ); ?>" class="top-title-link">The Witcher</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-serie/the-witcher') ); ?>" class="top-composer-link">Lauren Schmidt Hissrich</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($witcher_page ? $witcher_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche série/the witcher.webp' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="serie" type="button" aria-label="Like">♡</button>
                 </li>
             </ul>
         </div>
@@ -328,117 +221,46 @@ get_header();
         <!-- TOP 5 ANIMES -->
                  <div class="top-card">
             <div class="top-header">Top 5 anime</div>
-            <?php 
-            $anime_query = new WP_Query(array(
-                'post_type'      => 'movie',
-                'posts_per_page' => 5,
-                'tax_query'      => array(
-                    array(
-                        'taxonomy' => 'media_type',
-                        'field'    => 'slug',
-                        'terms'    => 'anime',
-                    ),
-                ),
-            ));
-            ?>
             <ul class="top-list">
-                <?php 
-                if ($anime_query->have_posts()) :
-                    while ($anime_query->have_posts()) : $anime_query->the_post();
-                        $director = get_post_meta(get_the_ID(), '_movie_director', true);
-                        $thumbnail = get_the_post_thumbnail_url(get_the_ID(), 'medium');
-                        $poster = get_the_post_thumbnail_url(get_the_ID(), 'full');
-                        $movie_url = get_permalink();
-                ?>
                 <li>
-                    <img src="<?php echo esc_url($thumbnail); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-title-link"><?php the_title(); ?></a>
-                        <a href="<?php echo esc_url($movie_url); ?>" class="top-composer-link"><?php echo esc_html($director); ?></a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/your-name') ); ?>" class="top-title-link">Your Name</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/your-name') ); ?>" class="top-composer-link">Makoto Shinkai</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr(get_the_ID()); ?>"
-                            data-poster="<?php echo esc_url($poster); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="anime" type="button" aria-label="Like">♡</button>
                 </li>
-                <?php 
-                    endwhile;
-                    wp_reset_postdata();
-                endif;
-                ?>
-                
-                <!-- Spirited Away - page WordPress -->
-                <?php 
-                $spirited_page = get_page_by_path('spirited-away');
-                if (!$spirited_page) {
-                    $spirited_page = get_page_by_path('chihiro');
-                }
-                $spirited_url = $spirited_page ? get_permalink($spirited_page->ID) : home_url('/spirited-away');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/chihiro.jpg' ); ?>" alt="Spirited Away">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($spirited_url); ?>" class="top-title-link">Spirited Away</a>
-                        <a href="<?php echo esc_url($spirited_url); ?>" class="top-composer-link">Hayao Miyazaki</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/spirited-away') ); ?>" class="top-title-link">Spirited Away</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-film/spirited-away') ); ?>" class="top-composer-link">Hayao Miyazaki</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($spirited_page ? $spirited_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/chihiro.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="anime" type="button" aria-label="Like">♡</button>
                 </li>
-                
-                <!-- L'Attaque des Titans - page WordPress -->
-                <?php 
-                $aot_page = get_page_by_path('attaque-des-titans');
-                if (!$aot_page) {
-                    $aot_page = get_page_by_path('attack-on-titan');
-                }
-                $aot_url = $aot_page ? get_permalink($aot_page->ID) : home_url('/attaque-des-titans');
-                ?>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="L'Attaque des Titans">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/attack on titan.jpg' ); ?>" alt="Attack on Titan">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($aot_url); ?>" class="top-title-link">L'Attaque des Titans</a>
-                        <a href="<?php echo esc_url($aot_url); ?>" class="top-composer-link">Hajime Isayama</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-anime/attack-on-titan') ); ?>" class="top-title-link">Attack on Titan</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-anime/attack-on-titan') ); ?>" class="top-composer-link">Hajime Isayama</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($aot_page ? $aot_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/attack on titan.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="anime" type="button" aria-label="Like">♡</button>
                 </li>
-                
-                <!-- Demon Slayer - page WordPress -->
-                <?php 
-                $demon_page = get_page_by_path('demon-slayer');
-                $demon_url = $demon_page ? get_permalink($demon_page->ID) : home_url('/demon-slayer');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/demon slayer.jpg' ); ?>" alt="Demon Slayer">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($demon_url); ?>" class="top-title-link">Demon Slayer</a>
-                        <a href="<?php echo esc_url($demon_url); ?>" class="top-composer-link">Koyoharu Gotouge</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-anime/demon-slayer') ); ?>" class="top-title-link">Demon Slayer</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-anime/demon-slayer') ); ?>" class="top-composer-link">Koyoharu Gotouge</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($demon_page ? $demon_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/demon slayer.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="anime" type="button" aria-label="Like">♡</button>
                 </li>
-                
-                <!-- Jujutsu Kaisen - page WordPress -->
-                <?php 
-                $jujutsu_page = get_page_by_path('jujutsu-kaisen');
-                $jujutsu_url = $jujutsu_page ? get_permalink($jujutsu_page->ID) : home_url('/jujutsu-kaisen');
-                ?>
                 <li>
                     <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/jujutsu kaisen.jpg' ); ?>" alt="Jujutsu Kaisen">
                     <div class="top-info">
-                        <a href="<?php echo esc_url($jujutsu_url); ?>" class="top-title-link">Jujutsu Kaisen</a>
-                        <a href="<?php echo esc_url($jujutsu_url); ?>" class="top-composer-link">Gege Akutami</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-anime/jujutsu-kaisen') ); ?>" class="top-title-link">Jujutsu Kaisen</a>
+                        <a href="<?php echo esc_url( home_url('/fiche-anime/jujutsu-kaisen') ); ?>" class="top-composer-link">Gege Akutami</a>
                     </div>
-                    <button class="like-btn" data-liked="false" data-type="serie" 
-                            data-id="<?php echo esc_attr($jujutsu_page ? $jujutsu_page->ID : ''); ?>"
-                            data-poster="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Fiche films/jujutsu kaisen.jpg' ); ?>" 
-                            type="button" aria-label="Like">♡</button>
+                    <button class="like-btn" data-liked="false" data-type="anime" type="button" aria-label="Like">♡</button>
                 </li>
             </ul>
         </div>

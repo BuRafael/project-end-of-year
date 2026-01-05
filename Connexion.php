@@ -23,10 +23,27 @@
     <div class="register-hero__title">
         <p><?php esc_html_e('Bienvenue sur', 'project-end-of-year'); ?></p>
         <h1>
-            <span style="display:block; margin-top: 12px;">CINEMUSIC</span>
+            <span style="display:block;">CINEMUSIC</span>
         </h1>
         <div class="register-hero__logo">
-            <img src="<?php echo esc_url(get_template_directory_uri() . '/assets/image/Icones et Logo/Logo.svg'); ?>" alt="<?php bloginfo('name'); ?>" loading="lazy">
+            <?php
+            $svg_path = get_template_directory() . '/assets/image/Icones et Logo/Logo_cinemusic_modif.svg';
+            if (file_exists($svg_path)) {
+                $svg = file_get_contents($svg_path);
+                // Réduit la taille du SVG
+                $svg = preg_replace('/<svg ([^>]*)width="[0-9]+" height="[0-9]+"/', '<svg $1width="38" height="48"', $svg, 1);
+                // Met tout en blanc du site
+                $svg = preg_replace('/fill="#([0-9A-Fa-f]{6})"/', 'fill="#F4EFEC"', $svg);
+                // Mets les 3 points en noir du site (remplace tout fill sur les paths points, même si déjà noir)
+                $svg = preg_replace('/(<path[^>]+d="M6\.82432[^>]+)fill="#([0-9A-Fa-f]{6})"/i', '$1fill="#1A1A1A"', $svg);
+                $svg = preg_replace('/(<path[^>]+d="M6\.82432[^>]+)fill="#([0-9A-Fa-f]{6})"/i', '$1fill="#1A1A1A"', $svg);
+                $svg = preg_replace('/(<path[^>]+d="M6\.82432[^>]+)fill="#([0-9A-Fa-f]{6})"/i', '$1fill="#1A1A1A"', $svg);
+                // Pour être sûr, repasse tout le SVG en blanc sauf les points
+                $svg = preg_replace('/(<path[^>]+d="M6\.82432[^>]+)fill="#1A1A1A"/i', '$1fill="#1A1A1A"', $svg); // points restent noirs
+                $svg = preg_replace('/(<path(?![^>]+d="M6\.82432)[^>]+)fill="#([0-9A-Fa-f]{6})"/i', '$1fill="#F4EFEC"', $svg); // tout le reste en blanc
+                echo $svg;
+            }
+            ?>
         </div>
     </div>
 

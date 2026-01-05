@@ -130,6 +130,38 @@
 .footer-logo-text:hover {
     color: #1A1A1A !important;
 }
+.footer-logo-text:hover ~ .footer-picto .logo-svg path {
+    fill: #1A1A1A !important;
+}
+.footer-logo-text:hover ~ .footer-picto .logo-svg path:nth-of-type(2),
+.footer-logo-text:hover ~ .footer-picto .logo-svg path:nth-of-type(3),
+.footer-logo-text:hover ~ .footer-picto .logo-svg path:nth-of-type(4) {
+    fill: #F4EFEC !important;
+}
+.footer-picto:hover ~ .footer-logo-text,
+.footer-logo-text:hover {
+    color: #1A1A1A !important;
+}
+.footer-picto:hover .logo-svg path,
+.footer-logo-text:hover ~ .footer-picto .logo-svg path {
+    fill: #1A1A1A !important;
+}
+.footer-picto:hover .logo-svg path:nth-of-type(2),
+.footer-picto:hover .logo-svg path:nth-of-type(3),
+.footer-picto:hover .logo-svg path:nth-of-type(4),
+.footer-logo-text:hover ~ .footer-picto .logo-svg path:nth-of-type(2),
+.footer-logo-text:hover ~ .footer-picto .logo-svg path:nth-of-type(3),
+.footer-logo-text:hover ~ .footer-picto .logo-svg path:nth-of-type(4) {
+    fill: #F4EFEC !important;
+}
+.footer-picto:hover .logo-svg path {
+    fill: #1A1A1A !important;
+}
+.footer-picto:hover .logo-svg path:nth-of-type(2),
+.footer-picto:hover .logo-svg path:nth-of-type(3),
+.footer-picto:hover .logo-svg path:nth-of-type(4) {
+    fill: #F4EFEC !important;
+}
     letter-spacing: 1px;
 }
 
@@ -163,9 +195,8 @@
 .social-svg {
     width: 28px;
     height: 21px;
-    color: rgba(244, 239, 236, 1);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    stroke: rgba(244, 239, 236, 1);
+    fill: #F4EFEC !important;
+    transition: fill 0.2s;
 }
 
 
@@ -175,8 +206,7 @@
 }
 
 .social-icon:hover .social-svg {
-    color: #000000;
-    stroke: #000000;
+    fill: #1A1A1A !important;
     transform: scale(1.1);
 }
 

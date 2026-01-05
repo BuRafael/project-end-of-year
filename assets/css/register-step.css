@@ -1,3 +1,73 @@
+		font-family: 'Futura Demi', 'Futura PT Demi', 'Futura Std Demi', 'Futura', Arial, sans-serif;
+		font-weight: 900;
+		font-size: 48px;
+		color: var(--reg-white);
+	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-weight: bold;
+	font-size: 48px;
+	color: var(--reg-white);
+.btn-register-primary {
+	width: 100px;
+	height: 30px;
+	border-radius: 30px;
+	background: #F4EFEC;
+	color: #700118;
+	font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-size: 12px;
+	font-weight: 600;
+	border: none;
+	text-decoration: none;
+	transition: background 0.2s, color 0.2s;
+	box-shadow: none;
+	outline: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.btn-register-primary:hover, .btn-register-primary:focus {
+	background: #700118;
+	color: #F4EFEC;
+}
+.register-card input[type="text"],
+.register-card input[type="email"],
+.register-card input[type="password"] {
+	font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-size: 10px;
+	font-weight: 100;
+	font-style: normal;
+	letter-spacing: 0.5px;
+}
+::placeholder {
+	font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-size: 10px;
+	font-weight: 100;
+	font-style: normal;
+	color: #bdbdbd;
+	opacity: 1;
+}
+.register-card {
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+.register-card form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+.register-card .field {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.register-card {
+	margin-top: 40px;
+}
 .avatar-preview {
 	display: flex;
 	justify-content: center;
@@ -294,7 +364,7 @@ section.register-hero--step2 {
 	box-shadow: var(--reg-shadow);
 	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 	animation: slideInCard 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
-	margin-top: 0 !important;
+	margin-top: 40px !important;
     margin-left: auto;
     margin-right: auto;
 }
@@ -317,8 +387,8 @@ section.register-hero--step2 {
 }
 
 .avatar-circle {
-	width: 120px;
-	height: 120px;
+	width: 100px;
+	height: 100px;
 	border-radius: 50%;
 	border: 3px solid var(--reg-white);
 	background: #232323;
@@ -359,19 +429,25 @@ section.register-hero--step2 {
 }
 
 .btn-upload {
+		white-space: nowrap;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	gap: 8px;
-	padding: 5px 12px;
-	border-radius: 14px;
+	width: 140px;
+	height: 30px;
+	border-radius: 5px;
 	border: none;
 	background: var(--reg-white);
 	color: #111;
-	font-size: 14px;
+	font-size: 12px;
 	font-weight: 400;
-	border: 1.5px solid var(--reg-primary);
 	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	box-shadow: none;
+	outline: none;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background 0.2s, color 0.2s;
 	/* Bouton Passer spécifique */
 	.btn-skip {
 		background: var(--reg-panel) !important;

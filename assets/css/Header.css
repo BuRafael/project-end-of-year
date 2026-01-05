@@ -1,3 +1,27 @@
+/* Bouton S'inscrire header */
+.btn-inscription {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 150px;
+	height: 50px;
+	border-radius: 25px;
+	background: #F4EFEC;
+	color: #700118;
+	font-family: 'futura-pt', 'Futura', Arial, sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	border: none;
+	text-decoration: none;
+	transition: background 0.2s, color 0.2s;
+	box-shadow: none;
+	outline: none;
+	cursor: pointer;
+}
+.btn-inscription:hover, .btn-inscription:focus {
+	background: #700118;
+	color: #F4EFEC;
+}
 /* Masquer la loupe du header sur desktop */
 .header-search-mobile {
 	display: none;
@@ -176,19 +200,20 @@
 	   position: static;
    }
    .header-logo {
-	   display: flex;
-	   align-items: center;
-	   justify-content: center;
-	   height: 100%;
-	   width: 40px;
-	   margin: 0 auto;
-	   z-index: 1;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	height: 100%;
+	width: 50px;
+	margin: 0 auto;
+	z-index: 1;
+	margin-top: -24px;
    }
    .header-logo .brand-logo {
-	   height: 40px !important;
-	   width: 40px !important;
-	   margin: 0 auto;
-	   display: block;
+	height: 50px !important;
+	width: 50px !important;
+	margin: 0 auto;
+	display: block;
    }
    .header-logo .brand-text {
 	   display: none !important;
@@ -307,13 +332,14 @@
 }
 
 .header-logo .brand-text {
-    display: inline-block;
-    vertical-align: middle;
-    font-size: 2rem;
-    font-family: "futura-pt", "Futura", Arial, sans-serif;
-    font-weight: 700;
-    color: #F4EFEC;
-    letter-spacing: 1px;
+	display: inline-block;
+	vertical-align: middle;
+	font-size: 36px !important;
+	font-family: "futura-pt", "Futura", Arial, sans-serif !important;
+	font-weight: 700 !important; /* bold */
+	color: #F4EFEC;
+	letter-spacing: 1px;
+	font-style: normal !important;
 }
 
 .header-logo a:hover {
@@ -321,11 +347,19 @@
 }
 
 .header-logo a:hover .brand-logo {
-    filter: none !important;
+	filter: none !important;
+}
+.header-logo a:hover .logo-svg path {
+	fill: #700118 !important;
+}
+.header-logo a:hover .logo-svg path:nth-of-type(2),
+.header-logo a:hover .logo-svg path:nth-of-type(3),
+.header-logo a:hover .logo-svg path:nth-of-type(4) {
+	fill: #F4EFEC !important;
 }
 
 .header-logo a:hover .brand-text {
-    color: #700118 !important;
+	color: #700118 !important;
 }
 
 .header-nav {

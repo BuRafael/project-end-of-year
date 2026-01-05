@@ -37,7 +37,6 @@ body {
 .register-hero__logo {
 	display: flex;
 	align-items: center;
-	filter: brightness(0) invert(0.95) sepia(0.1) saturate(0.7) hue-rotate(0deg) brightness(1.1);
 }
 
 .register-hero__logo img {
@@ -69,10 +68,11 @@ body {
 
 .register-hero__title h1 {
 	margin: 0;
-	font-size: 3rem;
+	font-size: 48px;
 	letter-spacing: 0.5px;
 	color: var(--reg-white);
-	font-weight: 900;
+	font-family: 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif;
+	font-weight: bold;
 	display: flex;
 	align-items: center;
 	gap: 20px;
