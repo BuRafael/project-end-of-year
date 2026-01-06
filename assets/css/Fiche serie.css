@@ -1,3 +1,39 @@
+/* Remove hover, filter, and transition effects from carousel card image and series name */
+#series-section .similar-card-img,
+#series-section .similar-card-img:hover,
+#series-section .similar-card-img:focus,
+#series-section .similar-card-img:active {
+    filter: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transform: none !important;
+    cursor: default !important;
+}
+#series-section .similar-card-title,
+#series-section .similar-card-title:hover,
+#series-section .similar-card-title:focus,
+#series-section .similar-card-title:active {
+    filter: none !important;
+    transition: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transform: none !important;
+    cursor: default !important;
+}
+/* FORCE REMOVE ALL SHADOW, HOVER, ELEVATION EFFECTS ON CAROUSEL CARDS */
+#series-section .similar-card,
+#series-section .similar-card:hover,
+#series-section .similar-card:focus,
+#series-section .similar-card:active {
+    box-shadow: none !important;
+    background: none !important;
+    transform: none !important;
+    transition: none !important;
+    filter: none !important;
+    outline: none !important;
+    cursor: default !important;
+}
 .movie-sub {
     margin-left: 2px;
     color: #888;
@@ -73,24 +109,28 @@ body .movie-page > section:first-child {
 body .movie-page > section:last-child {
     margin-bottom: 0 !important;
 }
-/* Désactive tout effet hover, focus, active et translation sur le nom du film/série dans les carrousels de fiche série */
+/* Désactive tout effet hover, focus, active, ombre et surelevement sur les cartes du carrousel fiche série */
+#series-section .similar-card,
 #series-section .similar-card-title {
-    color: #000 !important;
-    background: none !important;
     box-shadow: none !important;
-    transition: none !important;
+    background: none !important;
     transform: none !important;
+    transition: none !important;
+    filter: none !important;
+    outline: none !important;
 }
+#series-section .similar-card:hover,
+#series-section .similar-card:focus,
+#series-section .similar-card:active,
 #series-section .similar-card-title:hover,
 #series-section .similar-card-title:focus,
 #series-section .similar-card-title:active {
-    color: #000 !important;
-    background: none !important;
     box-shadow: none !important;
-    cursor: default !important;
+    background: none !important;
+    transform: none !important;
     filter: none !important;
     outline: none !important;
-    transform: none !important;
+    cursor: default !important;
 }
 .carousel-arrow {
     color: #F4EFEC !important;

@@ -361,15 +361,13 @@ function renderComment(commentData) {
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
-        
         let timeAgo;
-        if (diffMins < 1) timeAgo = 'à l\'instant';
+        if (diffMins < 1) timeAgo = "à l'instant";
         else if (diffMins < 60) timeAgo = `il y a ${diffMins} min`;
         else if (diffHours < 24) timeAgo = `il y a ${diffHours}h`;
         else if (diffDays < 7) timeAgo = `il y a ${diffDays}j`;
-        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-        
-        dateHtml = `<div class="comment-date">${timeAgo}</div>`;
+        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+        dateHtml = `<span class="comment-date">${timeAgo}</span>`;
     }
     
     // Affiche le vrai nombre de likes
@@ -382,8 +380,8 @@ function renderComment(commentData) {
                     ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
                 </span>
                 <span class="comment-user-name">${commentData.user_name}</span>
+                ${dateHtml}
             </div>
-            ${dateHtml}
             <div class="comment-text">${commentData.comment_text}</div>
             <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
                 <button class="comment-like-btn${commentData.liked_by_user ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
@@ -805,7 +803,8 @@ if (movieLikeBtn) {
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.series)) {
                 const serieId = movieLikeBtn.dataset.serieId || '';
-                const isFavorite = data.data.series.some(serie => String(serie.id) === String(serieId));
+                const serieSlug = movieLikeBtn.dataset.serieSlug || '';
+                const isFavorite = data.data.series.some(serie => String(serie.id) === String(serieId) || String(serie.id) === serieSlug);
                 if (isFavorite) {
                     movieLikeBtn.classList.add('liked');
                     movieLikeBtn.setAttribute('aria-pressed', 'true');

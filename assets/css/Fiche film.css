@@ -1,47 +1,26 @@
 /* Carousel similar films card styles */
-.carousel-card:hover,
-.carousel-card-img:hover,
-.carousel-card-title:hover {
-    background: #fff;
-    color: #181818;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-    border-color: #111;
-    filter: none;
-    outline: none;
-    transition: none;
-}
-.carousel-card {
-    width: 171px;
-    height: 220px;
+/* Style harmonisé pour .similar-card comme sur la page films */
+.similar-card {
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.07);
     display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    margin: 0 8px;
-    padding: 0;
-}
-.carousel-card-inner {
-    width: 100%;
-    height: 100%;
-    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
+    padding: 12px 8px 8px 8px;
+    min-height: 220px;
+    cursor: pointer;
+    transition: none;
 }
-.carousel-card-img {
-    width: 156px;
+.similar-card img {
+    width: 100%;
     height: 160px;
     object-fit: cover;
-    border: 1px solid #111;
     border-radius: 8px;
-    margin-top: 8px;
     margin-bottom: 8px;
-    background: #eee;
 }
-.carousel-card-title {
+.similar-card-title {
     font-family: 'Futura', 'Arial', sans-serif;
     font-weight: 600;
     font-size: 16px;
@@ -49,6 +28,14 @@
     text-align: center;
     margin-top: 4px;
     margin-bottom: 0;
+    min-height: 2.6em;
+    max-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
 }
 /* Pseudo et date sur la même ligne dans les commentaires */
 .comment-meta-row {

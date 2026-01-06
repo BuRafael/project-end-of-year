@@ -13,6 +13,7 @@ add_filter('body_class', function($classes) use ($page_slug) {
  */
 
 get_header();
+// Import du CSS harmonisé pour tous les carrousels
 
 // Récupérer les infos du film basé sur le slug
 global $post;
@@ -287,6 +288,7 @@ if (isset($movie_tracks[$page_slug])) {
                          class="movie-poster img-fluid shadow" id="moviePosterImg">
                     <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button"
                         data-movie-id="<?php echo esc_attr($post->ID); ?>"
+                        data-movie-slug="<?php echo esc_attr($page_slug); ?>"
                         data-movie-image="<?php echo esc_url($poster_url); ?>"
                         data-movie-title="<?php echo esc_attr($title); ?>"
                         data-movie-year="<?php echo esc_attr($year); ?>">
@@ -409,19 +411,12 @@ if (isset($movie_tracks[$page_slug])) {
     <!-- ===== FILMS SIMILAIRES ===== -->
     <section class="movie-section">
         <h3 class="section-title mb-3 film-section-title">Films similaires</h3>
-
-        <div class="d-flex align-items-center">
-            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                ❮
-            </button>
-
+        <div class="movies-carousel d-flex align-items-center">
+            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
             <div class="row flex-grow-1 mx-3 g-3" id="similarMovies">
                 <!-- JS insère 4 films -->
             </div>
-
-            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                ❯
-            </button>
+            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
         </div>
     </section>
 

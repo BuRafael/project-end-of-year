@@ -11,6 +11,21 @@
 body, body * {
   font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
 }
+h1, h2, h3, h4, h5, h6,
+.section-title,
+.movie-section-title,
+.movie-header h1,
+.btn,
+button,
+.carousel-card-title,
+.similar-card-title,
+.trend-card h4,
+.new-card h4,
+input,
+textarea,
+label {
+  font-family: 'futura-pt', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
+}
 /* ==================================================
    Base CSS - Reset + Global Styles
    ================================================== */

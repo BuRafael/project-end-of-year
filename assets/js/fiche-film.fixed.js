@@ -4,39 +4,37 @@ document.addEventListener('DOMContentLoaded', function() {
             // Local cache for liked track IDs, persisted in sessionStorage
         // No local cache, use server state like series fiche
 
-                // ===== FILMS SIMILAIRES CAROUSEL =====
-                // Static list of similar films for demo (replace with dynamic if needed)
-                const similarMoviesData = window.similarMoviesData || [
-                    { slug: 'inception', title: 'Inception', image: themeImagePath + 'inception affiche film.jpg' },
-                    { slug: 'interstellar', title: 'Interstellar', image: themeImagePath + 'interstellar.jpg' },
-                    { slug: 'arrival', title: 'Arrival', image: themeImagePath + 'Arrival.webp' },
-                    { slug: 'spirited-away', title: 'Le Voyage de Chihiro', image: themeImagePath + 'chihiro.jpg' },
-                    { slug: 'your-name', title: 'Your Name', image: themeImagePath + 'your name.jpg' }
-                ];
+    // ===== FILMS SIMILAIRES CARROUSEL (markup harmonisé) =====
+    // Liste statique à adapter selon le film courant
+    const similarMoviesData = window.similarMoviesData || [
+        { slug: 'inception', title: 'Inception', image: themeImagePath + 'inception affiche film.jpg' },
+        { slug: 'interstellar', title: 'Interstellar', image: themeImagePath + 'interstellar.jpg' },
+        { slug: 'arrival', title: 'Arrival', image: themeImagePath + 'Arrival.webp' },
+        { slug: 'spirited-away', title: 'Le Voyage de Chihiro', image: themeImagePath + 'chihiro.jpg' },
+        { slug: 'your-name', title: 'Your Name', image: themeImagePath + 'your name.jpg' }
+    ];
 
-                function renderSimilarMoviesCarousel(movies) {
-                    const container = document.getElementById('similarMovies');
-                    if (!container) return;
-                    container.innerHTML = '';
-                    movies.forEach(movie => {
-                        const col = document.createElement('div');
-                        col.className = 'carousel-card';
-                        col.style.cursor = 'pointer';
-                        col.innerHTML = `
-                            <div class=\"carousel-card-inner\">
-                                <img src=\"${movie.image}\" alt=\"${movie.title}\" class=\"carousel-card-img\">
-                                <div class=\"carousel-card-title\">${movie.title}</div>
-                            </div>
-                        `;
-                        col.addEventListener('click', function() {
-                            window.location.href = `/fiche-film/${movie.slug}`;
-                        });
-                        container.appendChild(col);
-                    });
-                }
+    function renderSimilarMoviesCarousel(movies) {
+        const container = document.getElementById('similarMovies');
+        if (!container) return;
+        container.innerHTML = '';
+        movies.forEach(movie => {
+            const col = document.createElement('div');
+            col.className = 'col-6 col-md-3';
+            col.innerHTML = `
+                <div class=\"similar-card\" style=\"cursor:pointer;\">
+                    <img src=\"${movie.image}\" alt=\"${movie.title}\" style=\"width:100%;height:160px;object-fit:cover;border-radius:8px;\">
+                    <div class=\"similar-card-title\">${movie.title}</div>
+                </div>
+            `;
+            col.addEventListener('click', function() {
+                window.location.href = `/fiche-film/${movie.slug}`;
+            });
+            container.appendChild(col);
+        });
+    }
 
-                // Render on DOMContentLoaded
-                renderSimilarMoviesCarousel(similarMoviesData);
+    renderSimilarMoviesCarousel(similarMoviesData);
 
         // Gestion suppression de commentaire
         function renderComment(comment) {

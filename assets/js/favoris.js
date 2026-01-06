@@ -220,15 +220,33 @@ document.addEventListener('DOMContentLoaded', function() {
         musiquesEmpty.style.display = 'none';
         
         musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + musiques.map((track, index) => {
+            let coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
+            if (track.cover && !track.cover.toLowerCase().includes('piste')) {
+                coverPath = '/wp-content/themes/project-end-of-year/assets/image/Films/';
+            }
+            const coverSrc = coverPath + (track.cover || 'Inception piste.png');
             return `
             <tr class="favoris-track" data-id="${track.id}">
-                <td class="favoris-track-number">${index + 1}</td>
-                <td class="favoris-track-title-cell">
-                    <div class="favoris-track-title">${track.title || 'Titre inconnu'}</div>
-                    <div class="favoris-track-artist">${track.artist || 'Artiste inconnu'}</div>
+                <td>${track.id || index + 1}</td>
+                <td>
+                    <div class="movie-track-info">
+                        <img src="${coverSrc}" class="movie-track-cover" alt="${track.title || 'Titre inconnu'}">
+                        <div>
+                            <div class="movie-track-title">${track.title || 'Titre inconnu'}</div>
+                            <div class="movie-track-artist">${track.artist || 'Artiste inconnu'}</div>
+                        </div>
+                    </div>
                 </td>
-                <td class="favoris-track-source">${track.source || ''}</td>
-                <td class="favoris-track-remove">
+                <td class="col-links">
+                    <span class="track-icons">
+                        <i class="bi bi-spotify" aria-label="Spotify"></i>
+                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                        <i class="bi bi-apple" aria-label="Apple Music"></i>
+                    </span>
+                </td>
+                <td class="col-duration text-center">${track.duration || ''}</td>
+                <td class="col-like text-end">
                     <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
                         <i class="bi bi-x-lg"></i>
                     </button>
@@ -238,6 +256,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }).join('') + `</tbody></table>`;
         attachRemoveListeners();
     }
+        // Force the order of the tabs: Films, Séries, Pistes
+        const tabsContainer = document.querySelector('.favoris-tabs');
+        if (tabsContainer) {
+            const filmsTab = tabsContainer.querySelector('.favoris-tab[data-tab="films"]');
+            const seriesTab = tabsContainer.querySelector('.favoris-tab[data-tab="series"]');
+            const musiquesTab = tabsContainer.querySelector('.favoris-tab[data-tab="musiques"]');
+            if (filmsTab && seriesTab && musiquesTab) {
+                musiquesTab.textContent = 'Pistes';
+                tabsContainer.appendChild(filmsTab);
+                tabsContainer.appendChild(seriesTab);
+                tabsContainer.appendChild(musiquesTab);
+            }
+        }
 
     
     function attachCardClickListeners() {

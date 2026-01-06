@@ -99,24 +99,28 @@ function cinemusic_get_user_favorites() {
         ];
     }
 
-    // Helper pour enrichir les favoris
+    // Helper pour enrichir les favoris (accepte ID ou slug)
     function enrich_favoris($ids, $type) {
         $result = [];
         foreach ($ids as $id) {
             if (empty($id)) continue;
-            $post = get_post($id);
+            if (is_numeric($id)) {
+                $post = get_post($id);
+            } else {
+                $post = get_page_by_path($id, OBJECT, $type);
+                if (!$post && $type !== 'series') {
+                    // Try series post type if not found and not already series
+                    $post = get_page_by_path($id, OBJECT, 'series');
+                }
+            }
             if (!$post) continue;
-            $title = get_the_title($id);
-            $url = get_permalink($id);
+            $title = get_the_title($post->ID);
+            $url = get_permalink($post->ID);
             $slug = $post->post_name;
-            
             // Récupérer l'image à la une
-            $image = get_the_post_thumbnail_url($id, 'medium');
-            
-            // Si pas d'image à la une, chercher dans les dossiers du thème
+            $image = get_the_post_thumbnail_url($post->ID, 'medium');
             if (!$image) {
                 $theme_dir = get_template_directory_uri();
-                // Mapping des images disponibles
                 $image_map = array(
                     'breaking-bad' => $theme_dir . '/assets/image/Front Page/breaking bad.webp',
                     'euphoria' => $theme_dir . '/assets/image/Front Page/Euphoria.jpg',
@@ -436,8 +440,15 @@ function cinemusic_add_user_favorite() {
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
         wp_send_json_success($favorites);
     }
-    // Pour films/séries, logique inchangée
-    if (in_array($item['id'], $favorites[$type])) {
+    // Pour films : ID numérique, pour séries : slug ou ID accepté
+    $already = false;
+    foreach ($favorites[$type] as $fav) {
+        if ((string)$fav === (string)$item['id']) {
+            $already = true;
+            break;
+        }
+    }
+    if ($already) {
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
         wp_send_json_success($favorites);
     }
@@ -473,10 +484,8 @@ function cinemusic_remove_user_favorite() {
         wp_send_json_success($favorites);
     }
     // Pour films/séries, logique inchangée
+    // Pour films : ID numérique, pour séries : slug ou ID accepté
     $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
-        if (is_array($fav) && isset($fav['id'])) {
-            return (string)$fav['id'] !== (string)$id;
-        }
         return (string)$fav !== (string)$id;
     }));
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);

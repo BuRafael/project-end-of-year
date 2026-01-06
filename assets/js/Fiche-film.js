@@ -218,6 +218,73 @@ function loadComments() {
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    // === LIKE BUTTON (FICHE FILM) ===
+    const movieLikeBtn = document.getElementById('movieLikeBtn');
+    if (movieLikeBtn) {
+        const movieId = movieLikeBtn.getAttribute('data-movie-id');
+        const movieSlug = (window.currentMovieSlug || (window.wp_data && window.wp_data.slug) || '').toString();
+        const movieTitle = movieLikeBtn.getAttribute('data-movie-title');
+        const movieImage = movieLikeBtn.getAttribute('data-movie-image');
+        // 1. Charger l'état du like depuis le serveur
+        fetch(window.ajaxurl || (window.wp_data && window.wp_data.ajax_url), {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({ action: 'get_user_favorites' })
+        })
+        .then(r => r.json())
+        .then(data => {
+            let isFav = false;
+            if (data && data.success && data.data && Array.isArray(data.data.films)) {
+                isFav = data.data.films.some(f => String(f.id) === String(movieId) || String(f.id) === movieSlug);
+            }
+            if (isFav) {
+                movieLikeBtn.classList.add('liked');
+                movieLikeBtn.setAttribute('aria-pressed', 'true');
+                movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#700118');
+            } else {
+                movieLikeBtn.classList.remove('liked');
+                movieLikeBtn.setAttribute('aria-pressed', 'false');
+                movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#F4EFEC');
+            }
+        });
+        // 2. Gérer le clic sur le bouton
+        movieLikeBtn.addEventListener('click', function() {
+            var isUserLoggedIn = false;
+            try {
+                isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+            } catch (e) {}
+            if (!isUserLoggedIn) {
+                window.location.href = '/inscription';
+                return;
+            }
+            const isLiked = movieLikeBtn.classList.contains('liked');
+            const action = isLiked ? 'remove_user_favorite' : 'add_user_favorite';
+            const item = { id: movieId, title: movieTitle, image: movieImage };
+            const form = new FormData();
+            form.append('action', action);
+            form.append('type', 'films');
+            if (action === 'add_user_favorite') {
+                form.append('item', JSON.stringify(item));
+            } else {
+                form.append('id', movieId);
+            }
+            fetch(window.ajaxurl || (window.wp_data && window.wp_data.ajax_url), {
+                method: 'POST',
+                credentials: 'same-origin',
+                body: form
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.success) {
+                    movieLikeBtn.classList.toggle('liked');
+                    const liked = movieLikeBtn.classList.contains('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', liked ? '#700118' : '#F4EFEC');
+                }
+            });
+        });
+    }
 
     // ...déplacement du bloc plus bas...
 
@@ -624,7 +691,6 @@ if (tracksTable) {
 }
 
 // Gestion du like du film (coeur sous l'affiche) - version synchronisée avec le compte utilisateur
-const movieLikeBtn = document.getElementById('movieLikeBtn');
 if (movieLikeBtn) {
     // Vérifier l'état de connexion utilisateur
     let isUserLoggedIn = false;

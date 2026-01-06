@@ -17,7 +17,7 @@ get_header();
         <div class="favoris-tabs mb-4 d-flex justify-content-center">
             <button class="favoris-tab active" data-tab="films">Films</button>
             <button class="favoris-tab" data-tab="series">Séries</button>
-            <button class="favoris-tab" data-tab="musiques">Musique</button>
+            <button class="favoris-tab" data-tab="musiques">Pistes</button>
         </div>
         <div class="favoris-contents w-100" style="max-width:900px;">
             <div id="filmsContent" class="favoris-content active">
@@ -30,7 +30,7 @@ get_header();
             </div>
             <div id="musiquesContent" class="favoris-content">
                 <div id="musiquesList" class="favoris-list"></div>
-                <div id="musiquesEmpty" class="favoris-empty text-center mt-4" style="display:none; font-size:1.2rem;">Vous n'avez pas encore de musiques favorites :(</div>
+                <div id="musiquesEmpty" class="favoris-empty text-center mt-4" style="display:none; font-size:1.2rem;">Vous n'avez pas encore de pistes favorites :(</div>
             </div>
         </div>
         <?php endif; ?>
