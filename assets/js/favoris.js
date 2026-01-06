@@ -135,9 +135,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         filmsGrid.innerHTML = films.map(film => `
             <div class="favoris-card" data-id="${film.id}" data-url="${film.url}">
-                <button type="button" class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+                                <button type="button" class="favoris-remove" data-type="film" data-id="${film.id}" aria-label="Retirer des favoris">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
+                                        <circle cx="17.5" cy="17.5" r="17" fill="#F4EFEC" stroke="#700118" stroke-width="1"/>
+                                        <path d="M24.6094 10.3906L10.3906 24.6094M10.3906 10.3906L24.6094 24.6094" stroke="#700118" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
                 <div class="favoris-card-image">
                     <img src="${film.image ? film.image : defaultPoster}" alt="${film.title}">
                 </div>
@@ -166,9 +169,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const defaultPoster = '/wp-content/themes/project-end-of-year/assets/image/Films/default-poster.jpg';
         seriesGrid.innerHTML = series.map(serie => `
             <div class="favoris-card" data-id="${serie.id}" data-url="${serie.url}">
-                <button type="button" class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
-                    <i class="bi bi-x-lg"></i>
-                </button>
+                                <button type="button" class="favoris-remove" data-type="serie" data-id="${serie.id}" aria-label="Retirer des favoris">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
+                                        <circle cx="17.5" cy="17.5" r="17" fill="#F4EFEC" stroke="#700118" stroke-width="1"/>
+                                        <path d="M24.6094 10.3906L10.3906 24.6094M10.3906 10.3906L24.6094 24.6094" stroke="#700118" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
                 <div class="favoris-card-image">
                     <img src="${serie.image ? serie.image : defaultPoster}" alt="${serie.title}">
                 </div>
@@ -219,23 +225,37 @@ document.addEventListener('DOMContentLoaded', function() {
         musiquesList.style.display = 'block';
         musiquesEmpty.style.display = 'none';
         
-        musiquesList.innerHTML = `<table class="favoris-tracks-table"><tbody>` + musiques.map((track, index) => {
+                musiquesList.innerHTML = `
+                <table class="favoris-tracks-table movie-tracks-table">
+                    <thead>
+                        <tr>
+                            <th class="col-num">#</th>
+                            <th class="favoris-track-cover-cell col-title">Pistes</th>
+                            <th class="col-links">Liens</th>
+                            <th class="col-duration text-center">Durée</th>
+                            <th class="favoris-track-remove col-like"></th>
+                        </tr>
+                    </thead>
+                    <tbody>` + musiques.map((track, index) => {
             let coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
-            if (track.cover && !track.cover.toLowerCase().includes('piste')) {
+            let coverFile = track.cover || '';
+            if (coverFile && !coverFile.toLowerCase().includes('piste')) {
                 coverPath = '/wp-content/themes/project-end-of-year/assets/image/Films/';
             }
-            const coverSrc = coverPath + (track.cover || 'Inception piste.png');
+            // Fallback si cover vide ou non string
+            if (!coverFile || typeof coverFile !== 'string' || coverFile === 'null' || coverFile === 'undefined') {
+                coverFile = 'Inception piste.png';
+            }
+            const coverSrc = coverPath + coverFile;
             return `
             <tr class="favoris-track" data-id="${track.id}">
-                <td>${track.id || index + 1}</td>
-                <td>
-                    <div class="movie-track-info">
-                        <img src="${coverSrc}" class="movie-track-cover" alt="${track.title || 'Titre inconnu'}">
-                        <div>
-                            <div class="movie-track-title">${track.title || 'Titre inconnu'}</div>
-                            <div class="movie-track-artist">${track.artist || 'Artiste inconnu'}</div>
-                        </div>
-                    </div>
+                <td class="favoris-track-number">${index + 1}</td>
+                <td class="favoris-track-cover-cell">
+                    <img src="${coverSrc}" class="movie-track-cover" alt="${track.title || 'Titre inconnu'}">
+                </td>
+                <td class="favoris-track-title-cell">
+                    <div class="movie-track-title">${track.title || 'Titre inconnu'}</div>
+                    <div class="movie-track-artist">${track.artist || 'Artiste inconnu'}</div>
                 </td>
                 <td class="col-links">
                     <span class="track-icons">
@@ -246,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     </span>
                 </td>
                 <td class="col-duration text-center">${track.duration || ''}</td>
-                <td class="col-like text-end">
+                <td class="favoris-track-remove col-like">
                     <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
                         <i class="bi bi-x-lg"></i>
                     </button>

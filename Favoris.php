@@ -16,15 +16,15 @@ get_header();
 
     <!-- Tabs Navigation -->
     <div class="favoris-tabs">
-        <button type="button" class="favoris-tab active" data-tab="musiques">Musiques</button>
-        <button type="button" class="favoris-tab" data-tab="films">Films</button>
+        <button type="button" class="favoris-tab" data-tab="musiques">Musiques</button>
+        <button type="button" class="favoris-tab active" data-tab="films">Films</button>
         <button type="button" class="favoris-tab" data-tab="series">Séries</button>
     </div>
 
     <div class="favoris-divider"></div>
 
     <!-- Musiques Tab Content -->
-    <div class="favoris-content active" id="musiquesContent">
+    <div class="favoris-content" id="musiquesContent">
         <div class="favoris-tracks-list" id="musiquesList">
             <!-- Les pistes favorites seront insérées ici par JS -->
         </div>
@@ -36,7 +36,7 @@ get_header();
     </div>
 
     <!-- Films Tab Content -->
-    <div class="favoris-content" id="filmsContent">
+    <div class="favoris-content active" id="filmsContent">
         <div class="favoris-grid" id="filmsGrid">
             <!-- Les films favoris seront insérés ici par JS -->
         </div>

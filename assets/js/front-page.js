@@ -148,12 +148,19 @@ function initHearts() {
           // Cas piste/musique (ex: top 5 musiques)
           mediaId = button.dataset.trackId || mediaCard?.dataset.trackId || '';
           mediaTitle = button.dataset.trackTitle || mediaCard?.dataset.trackTitle || '';
-          mediaImage = button.dataset.trackCover || mediaCard?.dataset.trackCover || '';
+          // Correction : extraire uniquement le nom de fichier pour cover
+          let coverUrl = button.dataset.trackCover || mediaCard?.dataset.trackCover || '';
+          let cover = '';
+          if (coverUrl) {
+            // Si c'est une URL, extraire le nom de fichier
+            const parts = coverUrl.split('/');
+            cover = parts[parts.length - 1];
+          }
           const artist = button.dataset.trackArtist || mediaCard?.dataset.trackArtist || '';
           const duration = button.dataset.trackDuration || mediaCard?.dataset.trackDuration || '';
           const source = button.dataset.trackSource || mediaCard?.dataset.trackSource || '';
           mediaLink = button.dataset.trackUrl || mediaCard?.dataset.trackUrl || '';
-          item = { id: String(mediaId), title: mediaTitle, artist, duration, cover: mediaImage, source, url: mediaLink };
+          item = { id: String(mediaId), title: mediaTitle, artist, duration, cover, source, url: mediaLink };
         } else {
           // Cas film : utiliser l'ID WordPress, cas série/anime : utiliser le slug
           if (mediaType === 'films') {
