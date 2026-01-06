@@ -37,10 +37,8 @@
     <header class="site-header">
         <div class="header-container container-fluid">
             <div class="header-burger" id="header-burger" aria-label="Ouvrir le menu" tabindex="0">
-                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-                    <rect y="6" width="32" height="4" rx="2" fill="#F4EFEC"/>
-                    <rect y="14" width="32" height="4" rx="2" fill="#F4EFEC"/>
-                    <rect y="22" width="32" height="4" rx="2" fill="#F4EFEC"/>
+                <svg class="burger-svg" xmlns="http://www.w3.org/2000/svg" width="39" height="34.895" viewBox="0 0 39 35" fill="none" aria-hidden="true">
+                  <path d="M35.9211 28.7368C36.7118 28.7372 37.472 29.0418 38.0443 29.5875C38.6165 30.1331 38.9569 30.878 38.9949 31.6678C39.0329 32.4576 38.7656 33.2318 38.2484 33.8298C37.7311 34.4279 37.0036 34.8041 36.2166 34.8804L35.9211 34.8947H3.07895C2.28824 34.8943 1.52799 34.5898 0.955733 34.0441C0.383476 33.4985 0.0430806 32.7535 0.00508178 31.9638C-0.032917 31.174 0.234394 30.3998 0.751623 29.8017C1.26885 29.2037 1.99635 28.8275 2.78337 28.7512L3.07895 28.7368H35.9211ZM35.9211 14.3684C36.7376 14.3684 37.5208 14.6928 38.0982 15.2702C38.6756 15.8476 39 16.6308 39 17.4474C39 18.264 38.6756 19.0471 38.0982 19.6245C37.5208 20.2019 36.7376 20.5263 35.9211 20.5263H3.07895C2.26236 20.5263 1.47922 20.2019 0.901803 19.6245C0.324388 19.0471 0 18.264 0 17.4474C0 16.6308 0.324388 15.8476 0.901803 15.2702C1.47922 14.6928 2.26236 14.3684 3.07895 14.3684H35.9211ZM35.9211 0C36.7376 0 37.5208 0.324388 38.0982 0.901803C38.6756 1.47922 39 2.26236 39 3.07895C39 3.89553 38.6756 4.67868 38.0982 5.25609C37.5208 5.83351 36.7376 6.1579 35.9211 6.1579H3.07895C2.26236 6.1579 1.47922 5.83351 0.901803 5.25609C0.324388 4.67868 0 3.89553 0 3.07895C0 2.26236 0.324388 1.47922 0.901803 0.901803C1.47922 0.324388 2.26236 0 3.07895 0H35.9211Z" fill="#F4EFEC"/>
                 </svg>
             </div>
 
@@ -83,10 +81,12 @@
             <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
                 <div class="header-search-mobile-bg" id="header-search-mobile-bg"></div>
                 <form role="search" method="get" class="header-search" id="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="margin: 0; display: none;">
-                    <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;">
-                        <span class="search-icon">🔍</span>
+                    <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;"></button>
+                    <button class="searchbar-close" id="searchbar-close" aria-label="Fermer la recherche">
+                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M6 6L22 22M22 6L6 22" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/>
+                        </svg>
                     </button>
-                    <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>">
                 </form>
                 <button class="header-search-mobile" aria-label="Recherche">
                     <span class="search-icon" aria-hidden="true" style="display: flex; align-items: center;">
@@ -95,6 +95,12 @@
                             <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                         </svg>
                     </span>
+                </button>
+                <button class="header-close-search" aria-label="Fermer la recherche" style="display:none;" type="button">
+                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <line x1="10" y1="10" x2="26" y2="26" stroke="#F4EFEC" stroke-width="3" stroke-linecap="round"/>
+                        <line x1="26" y1="10" x2="10" y2="26" stroke="#F4EFEC" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
                 </button>
                 <?php if (!is_user_logged_in()) : ?>
                     <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="btn-inscription" aria-label="S'inscrire">S'inscrire</a>
