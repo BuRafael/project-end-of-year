@@ -1,5 +1,6 @@
 <?php
 
+
 // Fonction temporaire pour créer les pages manquantes
 function cinemusic_create_missing_pages() {
     $pages = array(

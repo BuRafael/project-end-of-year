@@ -25,7 +25,6 @@ get_header();
     <!-- HERO Section -->
     <section class="hero">
         <h1>Trouvez la musique de vos films<br>et séries préférées&nbsp;!</h1>
-
         <!-- Version desktop : barre de recherche -->
         <div class="search-bar">
             <input type="text" placeholder="Rechercher…">
@@ -54,7 +53,7 @@ get_header();
             <div class="carousel-viewport">
                 <div class="carousel-track">
                     <div class="slide">
-                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/your name.jpg' ); ?>" alt="Your Name">
+                        <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Kimi no na wa.webp' ); ?>" alt="Your Name">
                         <div class="slide-content">
                             <span class="slide-title">Your Name</span>
                             <a href="<?php echo esc_url(home_url('/fiche-film/your-name')); ?>" class="btn-voir">Découvrir</a>

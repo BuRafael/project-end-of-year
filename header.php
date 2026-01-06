@@ -42,7 +42,7 @@
                 </svg>
             </div>
 
-            <div class="header-logo">
+            <div class="header-logo" id="header-logo">
                 <a href="<?php echo esc_url(home_url('/')); ?>">
                     <span class="brand-logo" aria-label="Logo Cinemusic">
                         <?php
@@ -81,6 +81,7 @@
             <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
                 <div class="header-search-mobile-bg" id="header-search-mobile-bg"></div>
                 <form role="search" method="get" class="header-search" id="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="margin: 0; display: none;">
+                    <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>" class="header-search-input" />
                     <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;"></button>
                     <button class="searchbar-close" id="searchbar-close" aria-label="Fermer la recherche">
                         <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
