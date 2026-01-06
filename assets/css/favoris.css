@@ -1,3 +1,162 @@
+/* Lien compositeur dans favoris (Hans Zimmer) */
+.favoris-compositeur-link {
+    color: #757575;
+    text-decoration: underline;
+    font-family: 'Futura', 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 100;
+    transition: color 0.2s;
+}
+.favoris-compositeur-link:hover {
+    color: #700118;
+    text-decoration: underline;
+}
+/* ===== Favoris Pistes Custom List (nouvelle maquette) ===== */
+.favoris-tracks-list-custom {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 900px;
+}
+.favoris-track-custom {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: var(--favoris-card-bg, #2A2A2A);
+    border-radius: 10px;
+    margin-bottom: 14px;
+    padding: 12px 18px;
+    position: relative;
+    min-height: 64px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.favoris-track-number-custom {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #F4EFEC;
+    min-width: 28px;
+    text-align: right;
+}
+.favoris-track-cover-custom {
+    width: 50px;
+    height: 50px;
+    border-radius: 6px;
+    object-fit: cover;
+    border: 2px solid rgba(112, 1, 24, 0.5);
+    background: #222;
+    display: block;
+}
+.favoris-track-info-custom {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    flex: 1 1 180px;
+}
+.favoris-track-title-custom {
+    font-family: 'Futura', 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--favoris-white, #F4EFEC);
+    line-height: 1.2;
+    margin-bottom: 2px;
+    word-break: break-word;
+}
+.favoris-track-artist-custom {
+    font-family: 'Futura', 'Arial', sans-serif;
+    font-size: 12px;
+    font-weight: 100;
+    color: #757575;
+    line-height: 1.1;
+    margin-bottom: 0;
+    word-break: break-word;
+}
+.favoris-track-platforms-custom {
+    display: flex;
+    gap: 7px;
+    margin-left: 18px;
+    min-width: 110px;
+}
+.favoris-track-platforms-custom i {
+    border: 2px solid #F4EFEC;
+    border-radius: 50%;
+    padding: 6px;
+    font-size: 1.1rem;
+    margin-right: 6px;
+    color: #F4EFEC;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+.favoris-track-platforms-custom i:hover {
+    border-color: #700118;
+    background: #700118;
+    color: #F4EFEC;
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(112, 1, 24, 0.4);
+}
+.favoris-track-duration-custom {
+    font-size: 1rem;
+    color: var(--favoris-gray, #5A5A5A);
+    min-width: 54px;
+    text-align: center;
+    margin-left: 18px;
+}
+.favoris-remove-track-custom {
+    background: #F4EFEC;
+    border: 2px solid #700118;
+    color: #700118;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    margin-left: 18px;
+    transition: color 0.2s, background 0.2s, border-color 0.2s, transform 0.18s;
+    padding: 0;
+    box-shadow: none;
+}
+.favoris-remove-track-custom:hover {
+    background: #700118;
+    color: #F4EFEC;
+    border-color: #700118;
+    transform: scale(1.15);
+}
+@media (max-width: 600px) {
+    .favoris-track-custom {
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px 8px;
+    }
+    .favoris-track-title-custom {
+        font-size: 14px;
+    }
+    .favoris-track-artist-custom {
+        font-size: 10px;
+    }
+    .favoris-track-cover-custom {
+        width: 38px;
+        height: 38px;
+    }
+    .favoris-track-platforms-custom {
+        min-width: 80px;
+        gap: 4px;
+        margin-left: 8px;
+    }
+    .favoris-track-duration-custom {
+        font-size: 0.9rem;
+        min-width: 38px;
+        margin-left: 8px;
+    }
+    .favoris-remove-track-custom {
+        font-size: 1.1rem;
+        margin-left: 8px;
+    }
+}
 /* ===================================
    FAVORIS PAGE STYLES
    =================================== */

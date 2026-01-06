@@ -224,56 +224,80 @@ document.addEventListener('DOMContentLoaded', function() {
 
         musiquesList.style.display = 'block';
         musiquesEmpty.style.display = 'none';
-        
-                musiquesList.innerHTML = `
-                <table class="favoris-tracks-table movie-tracks-table">
-                    <thead>
-                        <tr>
-                            <th class="col-num">#</th>
-                            <th class="favoris-track-cover-cell col-title">Pistes</th>
-                            <th class="col-links">Liens</th>
-                            <th class="col-duration text-center">Durée</th>
-                            <th class="favoris-track-remove col-like"></th>
-                        </tr>
-                    </thead>
-                    <tbody>` + musiques.map((track, index) => {
-            let coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
-            let coverFile = track.cover || '';
-            if (coverFile && !coverFile.toLowerCase().includes('piste')) {
-                coverPath = '/wp-content/themes/project-end-of-year/assets/image/Films/';
-            }
-            // Fallback si cover vide ou non string
-            if (!coverFile || typeof coverFile !== 'string' || coverFile === 'null' || coverFile === 'undefined') {
-                coverFile = 'Inception piste.png';
-            }
-            const coverSrc = coverPath + coverFile;
-            return `
-            <tr class="favoris-track" data-id="${track.id}">
-                <td class="favoris-track-number">${index + 1}</td>
-                <td class="favoris-track-cover-cell">
-                    <img src="${coverSrc}" class="movie-track-cover" alt="${track.title || 'Titre inconnu'}">
-                </td>
-                <td class="favoris-track-title-cell">
-                    <div class="movie-track-title">${track.title || 'Titre inconnu'}</div>
-                    <div class="movie-track-artist">${track.artist || 'Artiste inconnu'}</div>
-                </td>
-                <td class="col-links">
-                    <span class="track-icons">
-                        <i class="bi bi-spotify" aria-label="Spotify"></i>
-                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
-                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
-                        <i class="bi bi-apple" aria-label="Apple Music"></i>
-                    </span>
-                </td>
-                <td class="col-duration text-center">${track.duration || ''}</td>
-                <td class="favoris-track-remove col-like">
-                    <button type="button" class="favoris-remove-track" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
-                        <i class="bi bi-x-lg"></i>
-                    </button>
-                </td>
-            </tr>
-            `;
-        }).join('') + `</tbody></table>`;
+        musiquesList.innerHTML = `
+            <ol class="favoris-tracks-list-custom">
+                ${musiques.map((track, index) => {
+                    // DEBUG: Affiche la valeur de cover et le chemin final pour chaque piste
+                    if (track.title && track.title.toLowerCase().includes('inception')) {
+                        console.log('[DEBUG INCEPTION] coverFile:', track.cover, '| coverPath:', coverPath, '| coverSrc:', (coverPath + (track.cover || '')));
+                    }
+                    let coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
+                    let coverFile = track.cover ? decodeURIComponent(track.cover) : '';
+                    if (coverFile && !coverFile.toLowerCase().includes('piste')) {
+                        coverPath = '/wp-content/themes/project-end-of-year/assets/image/Films/';
+                    }
+                    // Si la cover n'existe pas dans Pistes film, on tente dans Piste séries
+                    let coverSrc = coverPath + coverFile;
+                    const filmCovers = [
+                        'inception piste.png',
+                        'la la land piste.png',
+                        'parasite piste.png',
+                        'arrival piste.png',
+                        'interstellar piste.png',
+                        'spirited away piste.png',
+                        'your name piste.png'
+                    ];
+                    // On compare sans tenir compte de la casse ni de l'extension
+                    function normalize(str) {
+                        return str ? str.trim().toLowerCase().replace(/\.(png|jpg|jpeg|webp)$/,'') : '';
+                    }
+                    const coverFileNorm = normalize(coverFile);
+                    const isFilmCover = filmCovers.some(f => normalize(f) === coverFileNorm);
+                    if (
+                        coverFile &&
+                        coverPath.includes('Pistes film')
+                    ) {
+                        if (!isFilmCover) {
+                            // On suppose que si ce n'est pas une cover de film connue, c'est peut-être une série
+                            coverPath = '/wp-content/themes/project-end-of-year/assets/image/Piste séries/';
+                            coverSrc = coverPath + coverFile;
+                        } else {
+                            // Si c'est une cover de film, on ne change pas de dossier
+                            coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
+                            coverSrc = coverPath + coverFile;
+                        }
+                    }
+                    if (!coverFile || typeof coverFile !== 'string' || coverFile === 'null' || coverFile === 'undefined') {
+                        coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
+                        coverFile = 'Inception piste.png';
+                        coverSrc = coverPath + coverFile;
+                    }
+                    return `
+                    <li class="favoris-track-custom" data-id="${track.id}">
+                        <span class="favoris-track-number-custom">${index + 1}</span>
+                        <img src="${coverSrc}" class="favoris-track-cover-custom" alt="${track.title || 'Titre inconnu'}">
+                        <div class="favoris-track-info-custom">
+                                                <div class="favoris-track-title-custom">${track.title || 'Titre inconnu'}</div>
+                                                <div class="favoris-track-artist-custom">
+                                                    ${track.artist && track.artist.toLowerCase().includes('hans zimmer')
+                                                        ? `<a href="/hans-zimmer" class="favoris-compositeur-link">Hans Zimmer</a>`
+                                                        : (track.artist || 'Artiste inconnu')}
+                                                </div>
+                        </div>
+                        <span class="favoris-track-platforms-custom">
+                            <i class="bi bi-spotify" aria-label="Spotify"></i>
+                            <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                            <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                            <i class="bi bi-apple" aria-label="Apple Music"></i>
+                        </span>
+                        <span class="favoris-track-duration-custom">${track.duration || ''}</span>
+                        <button type="button" class="favoris-remove-track-custom" data-type="musique" data-id="${track.id}" aria-label="Retirer des favoris">
+                            <i class="bi bi-x-lg"></i>
+                        </button>
+                    </li>
+                    `;
+                }).join('')}
+            </ol>`;
         attachRemoveListeners();
     }
         // Force the order of the tabs: Films, Séries, Pistes
