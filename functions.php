@@ -386,26 +386,32 @@ function cinemusic_get_user_favorites() {
 
 function cinemusic_add_user_favorite() {
     if (!is_user_logged_in() || !isset($_POST['type']) || !isset($_POST['item'])) {
-        wp_send_json_error(['message' => 'Non autorisé.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Non autorisé.']);
     }
     $user_id = get_current_user_id();
     $type = sanitize_text_field($_POST['type']);
     $item = json_decode(stripslashes($_POST['item']), true);
     $allowed = ['films', 'series', 'musiques'];
     if (!in_array($type, $allowed) || !is_array($item) || !isset($item['id'])) {
-        wp_send_json_error(['message' => 'Type ou item invalide.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Type ou item invalide.']);
     }
     $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
     if (!is_array($favorites)) {
         $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
     }
-    // Nettoyage : convertir tous les favoris films/séries en liste d'IDs si besoin
+    // Nettoyage : convertir tous les favoris films/séries en liste d'IDs si besoin, supprimer vides et doublons
     foreach (['films', 'series'] as $cat) {
         if (isset($favorites[$cat]) && is_array($favorites[$cat])) {
             $favorites[$cat] = array_map(function($f) {
                 if (is_array($f) && isset($f['id'])) return $f['id'];
                 return $f;
             }, $favorites[$cat]);
+            // Supprimer les IDs vides
+            $favorites[$cat] = array_filter($favorites[$cat], function($f) { return !empty($f); });
+            // Supprimer les doublons
+            $favorites[$cat] = array_values(array_unique($favorites[$cat]));
         }
     }
     // Pour musiques, stocker l'objet complet avec toutes les infos
@@ -438,7 +444,8 @@ function cinemusic_add_user_favorite() {
         }
         
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-        wp_send_json_success($favorites);
+        if (ob_get_length()) ob_clean();
+wp_send_json_success($favorites);
     }
     // Pour films : ID numérique, pour séries : slug ou ID accepté
     $already = false;
@@ -450,23 +457,27 @@ function cinemusic_add_user_favorite() {
     }
     if ($already) {
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-        wp_send_json_success($favorites);
+        if (ob_get_length()) ob_clean();
+wp_send_json_success($favorites);
     }
     $favorites[$type][] = $item['id'];
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-    wp_send_json_success($favorites);
+    if (ob_get_length()) ob_clean();
+wp_send_json_success($favorites);
 }
 
 function cinemusic_remove_user_favorite() {
     if (!is_user_logged_in() || !isset($_POST['type']) || !isset($_POST['id'])) {
-        wp_send_json_error(['message' => 'Non autorisé.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Non autorisé.']);
     }
     $user_id = get_current_user_id();
     $type = sanitize_text_field($_POST['type']);
     $id = sanitize_text_field($_POST['id']);
     $allowed = ['films', 'series', 'musiques'];
     if (!in_array($type, $allowed)) {
-        wp_send_json_error(['message' => 'Type invalide.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Type invalide.']);
     }
     $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
     if (!is_array($favorites)) {
@@ -480,16 +491,58 @@ function cinemusic_remove_user_favorite() {
             }
             return $fav !== $id;
         }));
+        // Nettoyage musiques : supprimer vides et doublons
+        $favorites[$type] = array_filter($favorites[$type], function($f) { return !empty($f); });
+        $favorites[$type] = array_values(array_unique($favorites[$type], SORT_REGULAR));
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-        wp_send_json_success($favorites);
+        if (ob_get_length()) ob_clean();
+wp_send_json_success($favorites);
     }
-    // Pour films/séries, logique inchangée
-    // Pour films : ID numérique, pour séries : slug ou ID accepté
-    $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
-        return (string)$fav !== (string)$id;
+    // Suppression maximale : retire toutes les variantes d'un film (ID, slug, post_name, ID du post lié au slug)
+    $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id, $type) {
+        if (empty($fav)) return false;
+        $favId = is_array($fav) && isset($fav['id']) ? $fav['id'] : $fav;
+        // Comparaison directe
+        if ((string)$favId === (string)$id) return false;
+        // Si l'un est numérique et l'autre un slug, on tente de récupérer l'ID du slug
+        if (is_numeric($favId) && !is_numeric($id)) {
+            $post = get_page_by_path($id, OBJECT, $type);
+            if ($post && (string)$post->ID === (string)$favId) return false;
+        }
+        if (!is_numeric($favId) && is_numeric($id)) {
+            $post = get_post($favId);
+            if ($post && $post->post_name === $id) return false;
+        }
+        // Si les deux sont numériques, mais pointent vers le même post
+        if (is_numeric($favId) && is_numeric($id) && (string)$favId !== (string)$id) {
+            $postA = get_post($favId);
+            $postB = get_post($id);
+            if ($postA && $postB && $postA->post_name === $postB->post_name) return false;
+        }
+        // Si les deux sont des slugs, mais pointent vers le même post
+        if (!is_numeric($favId) && !is_numeric($id) && (string)$favId !== (string)$id) {
+            $postA = get_page_by_path($favId, OBJECT, $type);
+            $postB = get_page_by_path($id, OBJECT, $type);
+            if ($postA && $postB && $postA->ID === $postB->ID) return false;
+        }
+        // Si le favori est un slug et l'ID envoyé est le post_name du post lié à l'ID numérique
+        if (!is_numeric($favId) && is_numeric($id)) {
+            $post = get_post($id);
+            if ($post && $post->post_name === $favId) return false;
+        }
+        // Si le favori est un ID numérique et l'ID envoyé est le post_name du post lié à ce favori
+        if (is_numeric($favId) && !is_numeric($id)) {
+            $post = get_post($favId);
+            if ($post && $post->post_name === $id) return false;
+        }
+        return true;
     }));
+    // Nettoyage films/séries : supprimer vides et doublons
+    $favorites[$type] = array_filter($favorites[$type], function($f) { return !empty($f); });
+    $favorites[$type] = array_values(array_unique($favorites[$type]));
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-    wp_send_json_success($favorites);
+    if (ob_get_length()) ob_clean();
+wp_send_json_success($favorites);
 }
 // === SYSTÈME DE LIKE SUR COMMENTAIRES ===
 add_action('wp_ajax_like_comment', 'theme_like_comment');
@@ -497,7 +550,8 @@ add_action('wp_ajax_unlike_comment', 'theme_unlike_comment');
 add_action('wp_ajax_get_liked_comments', 'theme_get_liked_comments');
 function theme_like_comment() {
     if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
-        wp_send_json_error(['message' => 'Non autorisé.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Non autorisé.']);
     }
     global $wpdb;
     $comment_id = intval($_POST['comment_id']);
@@ -538,7 +592,8 @@ function theme_like_comment() {
 // Nouvelle fonction : unlike un commentaire
 function theme_unlike_comment() {
     if (!is_user_logged_in() || !isset($_POST['comment_id'])) {
-        wp_send_json_error(['message' => 'Non autorisé.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Non autorisé.']);
     }
     global $wpdb;
     $comment_id = intval($_POST['comment_id']);
@@ -556,7 +611,8 @@ function theme_unlike_comment() {
 // Nouvelle fonction : récupérer les IDs des commentaires likés par l'utilisateur pour un film
 function theme_get_liked_comments() {
     if (!is_user_logged_in() || !isset($_POST['movie_id'])) {
-        wp_send_json_error(['message' => 'Non autorisé.']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Non autorisé.']);
     }
     global $wpdb;
     $user_id = get_current_user_id();
@@ -1234,7 +1290,8 @@ function add_movie_comment() {
     // check_ajax_referer('movie_comment_nonce', 'nonce');
     
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Vous devez être connecté']);
         return;
     }
     
@@ -1290,7 +1347,8 @@ function edit_movie_comment() {
     // check_ajax_referer('movie_comment_nonce', 'nonce');
     
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Vous devez être connecté']);
         return;
     }
     
@@ -1332,7 +1390,8 @@ function delete_movie_comment() {
     // check_ajax_referer('movie_comment_nonce', 'nonce');
     
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Vous devez être connecté']);
         return;
     }
     
@@ -1425,7 +1484,8 @@ add_action('after_switch_theme', 'create_composer_comments_table');
 // Ajouter un commentaire compositeur
 function add_composer_comment() {
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Vous devez être connecté']);
         return;
     }
     
@@ -1475,7 +1535,8 @@ add_action('wp_ajax_add_composer_comment', 'add_composer_comment');
 // Modifier un commentaire compositeur
 function edit_composer_comment() {
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Vous devez être connecté']);
         return;
     }
     
@@ -1515,7 +1576,8 @@ add_action('wp_ajax_edit_composer_comment', 'edit_composer_comment');
 // Supprimer un commentaire compositeur
 function delete_composer_comment() {
     if (!is_user_logged_in()) {
-        wp_send_json_error(['message' => 'Vous devez être connecté']);
+        if (ob_get_length()) ob_clean();
+wp_send_json_error(['message' => 'Vous devez être connecté']);
         return;
     }
     

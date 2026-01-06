@@ -112,9 +112,11 @@ function initHearts() {
   const likeButtons = document.querySelectorAll('.like-btn');
   console.log('[DEBUG INITHEARTS] Appel initHearts, nombre de boutons .like-btn:', likeButtons.length);
   // On charge les favoris de l'utilisateur connecté
-  getUserFavorites('films', favFilms => {
-    getUserFavorites('series', favSeries => {
-      likeButtons.forEach(button => {
+  let favFilms = [];
+  let favSeries = [];
+  // Fonction pour mettre à jour l'état des boutons (utilisée après chaque modif)
+  function updateButtons() {
+    likeButtons.forEach(button => {
         const mediaCard = button.closest('.media-card, .film-card, .serie-card, li, .track-row');
         let mediaTypeRaw = button.dataset.type || 'films';
         let mediaType = normalizeType(mediaTypeRaw);
@@ -150,23 +152,14 @@ function initHearts() {
         const favFilmsIds = favFilms.map(f => String(f.id ?? f));
         const favSeriesIds = favSeries.map(s => String(s.id ?? s));
         if (mediaType === 'films') {
-          // Log détaillé pour debug
-          console.log('[DEBUG FICHE FILM] data-id bouton:', mediaId, 'favFilms complet:', favFilms);
-          if (favFilms.length > 0) {
-            favFilms.forEach((f, i) => {
-              console.log(`[DEBUG FICHE FILM] favFilms[${i}]`, f, 'typeof:', typeof f);
-            });
-          }
           isFav = favFilmsIds.includes(mediaId);
         } else if (mediaType === 'series') {
           isFav = favSeriesIds.includes(mediaId);
         } else if (mediaTypeRaw === 'anime') {
-          // Anime: check both films and series
           isFav = favFilmsIds.includes(mediaId) || favSeriesIds.includes(mediaId);
-          // For click, prefer films if found, else series
           if (favFilmsIds.includes(mediaId)) mediaType = 'films';
           else if (favSeriesIds.includes(mediaId)) mediaType = 'series';
-          else mediaType = 'films'; // default to films for add
+          else mediaType = 'films';
         }
         // Debug log for anime/series/films
         if (mediaTypeRaw === 'anime' || mediaType === 'series' || mediaType === 'films') {
@@ -196,9 +189,7 @@ function initHearts() {
             button.style.color = '#ffffff';
           }
         }
-        button.addEventListener('click', function(e) {
-          // DEBUG LOG + test DOM
-          // (debug supprimé)
+        button.onclick = function(e) {
           e.preventDefault();
           const btn = this;
           let mediaTypeRaw = btn.dataset.type || 'films';
@@ -234,7 +225,13 @@ function initHearts() {
               }
             });
             updateFavorite('remove_user_favorite', clickType, {id: mediaId}, (data) => {
-              if (typeof initHearts === 'function') initHearts();
+              // Met à jour localement favFilms/favSeries
+              if (clickType === 'films') {
+                favFilms = favFilms.filter(f => String(f.id ?? f) !== mediaId);
+              } else if (clickType === 'series') {
+                favSeries = favSeries.filter(s => String(s.id ?? s) !== mediaId);
+              }
+              updateButtons();
             });
           } else {
             // MAJ visuelle instantanée (optimiste)
@@ -252,11 +249,24 @@ function initHearts() {
               }
             });
             updateFavorite('add_user_favorite', clickType, {id: mediaId}, (data) => {
-              if (typeof initHearts === 'function') initHearts();
+              // Ajoute localement à favFilms/favSeries
+              if (clickType === 'films') {
+                favFilms.push({id: mediaId});
+              } else if (clickType === 'series') {
+                favSeries.push({id: mediaId});
+              }
+              updateButtons();
             });
           }
-        });
+        };
       });
+  }
+  // Initialisation : charge les favoris puis met à jour les boutons
+  getUserFavorites('films', films => {
+    favFilms = films;
+    getUserFavorites('series', series => {
+      favSeries = series;
+      updateButtons();
     });
   });
 }
