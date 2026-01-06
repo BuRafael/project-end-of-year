@@ -197,6 +197,8 @@ function initHearts() {
           }
         }
         button.addEventListener('click', function(e) {
+          // DEBUG LOG + test DOM
+          // (debug supprimé)
           e.preventDefault();
           const btn = this;
           let mediaTypeRaw = btn.dataset.type || 'films';
@@ -208,35 +210,49 @@ function initHearts() {
           if (mediaTypeRaw === 'anime') {
             clickType = 'films';
           }
-          // Sélectionne tous les boutons ayant le même data-id et data-type
-          const allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"][data-type="' + btn.dataset.type + '"]');
+          let allBtns;
+          if (mediaTypeRaw === 'anime') {
+            // Pour les animés, synchronise tous les boutons ayant le même data-id, peu importe le data-type
+            allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"]');
+          } else {
+            // Pour films/séries, synchronise seulement ceux du même type
+            allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"][data-type="' + btn.dataset.type + '"]');
+          }
           if (isLiked) {
+            // MAJ visuelle instantanée (optimiste)
             allBtns.forEach(b => {
               b.setAttribute('data-liked', 'false');
               b.classList.remove('liked');
+              const path = b.querySelector('svg .svg-heart-shape');
+              if (path) {
+                path.setAttribute('fill', 'none');
+                path.setAttribute('stroke', '#888888');
+              }
               if (!b.querySelector('svg')) {
                 b.textContent = '♡';
                 b.style.color = '#ffffff';
               }
             });
             updateFavorite('remove_user_favorite', clickType, {id: mediaId}, (data) => {
-              if (!data || !data.success) {
-                if (typeof initHearts === 'function') initHearts();
-              }
+              if (typeof initHearts === 'function') initHearts();
             });
           } else {
+            // MAJ visuelle instantanée (optimiste)
             allBtns.forEach(b => {
               b.setAttribute('data-liked', 'true');
               b.classList.add('liked');
+              const path = b.querySelector('svg .svg-heart-shape');
+              if (path) {
+                path.setAttribute('fill', '#700118');
+                path.setAttribute('stroke', '#700118');
+              }
               if (!b.querySelector('svg')) {
                 b.textContent = '♥';
                 b.style.color = '#700118';
               }
             });
             updateFavorite('add_user_favorite', clickType, {id: mediaId}, (data) => {
-              if (!data || !data.success) {
-                if (typeof initHearts === 'function') initHearts();
-              }
+              if (typeof initHearts === 'function') initHearts();
             });
           }
         });
