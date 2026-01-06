@@ -175,12 +175,9 @@ if (isset($series_info[$page_slug])) {
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow" id="moviePosterImg">
-                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button"
-                            data-serie-image="<?php echo esc_url($poster_url); ?>"
-                            data-serie-id="<?php echo esc_attr($post->ID); ?>"
-                            data-serie-title="<?php echo esc_attr($title); ?>"
-                            data-serie-year="<?php echo esc_attr($aired); ?>"
-                            data-serie-slug="<?php echo esc_attr($page_slug); ?>">
+                        <button id="movieLikeBtn" class="like-btn movie-like-btn p-0" aria-pressed="false" type="button"
+                            data-type="series"
+                            data-id="<?php echo esc_attr($page_slug); ?>">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -311,21 +308,15 @@ if (isset($series_info[$page_slug])) {
     </section>
 
     <!-- ===== SERIES SIMILAIRES ===== -->
-    <section class="movie-section">
+
+    <section class="movie-section movies-section">
         <h3 class="section-title mb-3">Séries similaires</h3>
-
-        <div class="d-flex align-items-center">
-            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">
-                ❮
-            </button>
-
+        <div class="movies-carousel d-flex align-items-center">
+            <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
             <div class="row flex-grow-1 mx-3 g-3" id="similarMovies">
                 <!-- JS insère 4 séries -->
             </div>
-
-            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">
-                ❯
-            </button>
+            <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
         </div>
     </section>
 

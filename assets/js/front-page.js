@@ -104,7 +104,7 @@ function updateFavorite(action, type, item, callback) {
 
 function normalizeType(type) {
   if (type === 'film') return 'films';
-  if (type === 'serie') return 'series';
+  if (type === 'serie' || type === 'anime') return 'series';
   return type;
 }
 
@@ -116,7 +116,30 @@ function initHearts() {
   let favSeries = [];
   // Fonction pour mettre à jour l'état des boutons (utilisée après chaque modif)
   function updateButtons() {
+    // Collecte tous les boutons séries pour analyse croisée
+    const allSeriesBtns = Array.from(likeButtons).filter(b => normalizeType(b.dataset.type) === 'series');
+    // Regroupe par data-id
+    const seriesById = {};
+    allSeriesBtns.forEach(b => {
+      const id = b.dataset.id;
+      if (!seriesById[id]) seriesById[id] = [];
+      seriesById[id].push(b);
+    });
+    // Log comparatif : si plusieurs boutons pour le même id mais data-type différents, warning
+    Object.entries(seriesById).forEach(([id, btns]) => {
+      const types = btns.map(b => b.dataset.type);
+      const uniqueTypes = Array.from(new Set(types));
+      if (uniqueTypes.length > 1) {
+        console.warn('%c[SERIE][INCOHERENCE] Plusieurs data-type pour le même data-id:', 'background: #f00; color: #fff; font-size: 16px', id, uniqueTypes, btns);
+      } else {
+        console.log('%c[SERIE][OK] data-id:', 'background: #0f0; color: #111; font-size: 14px', id, 'data-type:', uniqueTypes[0], btns);
+      }
+    });
     likeButtons.forEach(button => {
+      // LOG ULTRA-VISIBLE pour debug séries/animés UNIQUEMENT
+      if (normalizeType(button.dataset.type) === 'series') {
+        console.log('%c[SERIE/ANIME][LikeBtn] data-id:', 'background: #ff0; color: #b00; font-size: 16px', button.dataset.id, 'data-type:', button.dataset.type, button);
+      }
         const mediaCard = button.closest('.media-card, .film-card, .serie-card, li, .track-row');
         let mediaTypeRaw = button.dataset.type || 'films';
         let mediaType = normalizeType(mediaTypeRaw);
@@ -155,11 +178,6 @@ function initHearts() {
           isFav = favFilmsIds.includes(mediaId);
         } else if (mediaType === 'series') {
           isFav = favSeriesIds.includes(mediaId);
-        } else if (mediaTypeRaw === 'anime') {
-          isFav = favFilmsIds.includes(mediaId) || favSeriesIds.includes(mediaId);
-          if (favFilmsIds.includes(mediaId)) mediaType = 'films';
-          else if (favSeriesIds.includes(mediaId)) mediaType = 'series';
-          else mediaType = 'films';
         }
         // Debug log for anime/series/films
         if (mediaTypeRaw === 'anime' || mediaType === 'series' || mediaType === 'films') {
@@ -198,17 +216,15 @@ function initHearts() {
           mediaId = String(mediaId);
           const isLiked = btn.getAttribute('data-liked') === 'true';
           let clickType = mediaType;
-          if (mediaTypeRaw === 'anime') {
-            clickType = 'films';
-          }
-          let allBtns;
-          if (mediaTypeRaw === 'anime') {
-            // Pour les animés, synchronise tous les boutons ayant le même data-id, peu importe le data-type
-            allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"]');
-          } else {
-            // Pour films/séries, synchronise seulement ceux du même type
-            allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"][data-type="' + btn.dataset.type + '"]');
-          }
+          // Utilise le type normalisé pour la sélection (évite les bugs entre 'series' et 'serie')
+          let allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"][data-type]');
+          allBtns = Array.from(allBtns).filter(b => normalizeType(b.dataset.type) === mediaType);
+          // Préparer l'objet favori pour Favoris.js
+          let mediaCard = btn.closest('.media-card, .film-card, .serie-card, li, .track-row');
+          let mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
+          let mediaLink = mediaCard?.querySelector('a')?.href || '';
+          let mediaImage = btn.dataset.poster || mediaCard?.querySelector('img')?.src || '';
+          let favItem = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
           if (isLiked) {
             // MAJ visuelle instantanée (optimiste)
             allBtns.forEach(b => {
@@ -225,7 +241,7 @@ function initHearts() {
               }
             });
             updateFavorite('remove_user_favorite', clickType, {id: mediaId}, (data) => {
-              // Met à jour localement favFilms/favSeries
+              if (window.FavorisPage) window.FavorisPage.removeFavorite && window.FavorisPage.removeFavorite(clickType, mediaId);
               if (clickType === 'films') {
                 favFilms = favFilms.filter(f => String(f.id ?? f) !== mediaId);
               } else if (clickType === 'series') {
@@ -250,6 +266,9 @@ function initHearts() {
             });
             updateFavorite('add_user_favorite', clickType, {id: mediaId}, (data) => {
               // Ajoute localement à favFilms/favSeries
+              if (typeof window.addFavorite === 'function') {
+                window.addFavorite(clickType === 'films' ? 'film' : 'serie', favItem);
+              }
               if (clickType === 'films') {
                 favFilms.push({id: mediaId});
               } else if (clickType === 'series') {

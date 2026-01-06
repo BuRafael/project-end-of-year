@@ -1,3 +1,12 @@
+.similar-card-title,
+.similar-card-title:hover,
+.similar-card-title:focus,
+.similar-card-title:active {
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+    position: static !important;
+}
 /* Carousel similar films card styles */
 /* Style harmonisé pour .similar-card comme sur la page films */
 .similar-card {
@@ -20,6 +29,8 @@
     border-radius: 8px;
     margin-bottom: 8px;
 }
+/* Remove background and shadow from film name in carousel */
+/* No background or shadow for film name in carousel */
 .similar-card-title {
     font-family: 'Futura', 'Arial', sans-serif;
     font-weight: 600;
@@ -36,6 +47,20 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.similar-card-title:hover,
+.similar-card-title:focus,
+.similar-card-title:active {
+    color: #181818 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    filter: none !important;
+    outline: none !important;
+    text-decoration: none !important;
 }
 /* Pseudo et date sur la même ligne dans les commentaires */
 .comment-meta-row {
@@ -1246,30 +1271,6 @@ a.movie-track-artist:hover {
 }
 
 /* Désactive tout effet hover sur .similar-card-title partout sauf front-page */
-.movies-section .similar-card-title,
-#series-section .similar-card-title {
-    color: #000 !important;
-    background: none !important;
-    box-shadow: none !important;
-    transition: none !important;
-    transform: none !important;
-    animation: none !important;
-}
-.movies-section .similar-card-title:hover,
-.movies-section .similar-card-title:focus,
-.movies-section .similar-card-title:active,
-#series-section .similar-card-title:hover,
-#series-section .similar-card-title:focus,
-#series-section .similar-card-title:active {
-    color: #000 !important;
-    background: none !important;
-    box-shadow: none !important;
-    cursor: default !important;
-    filter: none !important;
-    outline: none !important;
-    transform: none !important;
-    animation: none !important;
-}
 }
 
 /* ===== NEWSLETTER / CALL TO ACTION ===== */

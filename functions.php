@@ -810,8 +810,16 @@ function theme_scripts() {
     wp_enqueue_script('header-script', get_template_directory_uri() . '/assets/js/Header.js', array(), $version, true);
     wp_enqueue_script('footer-script', get_template_directory_uri() . '/assets/js/footer.js', array(), $version, true);
     
-    // Front page specific styles and scripts
-    if (is_front_page()) {
+    // Initialisation sûre de $current_template pour éviter les warnings
+    $current_template = '';
+    if (function_exists('get_page_template_slug')) {
+        $current_template = get_page_template_slug(get_the_ID());
+        if (empty($current_template) && is_page()) {
+            $current_template = basename(get_post_meta(get_the_ID(), '_wp_page_template', true));
+        }
+    }
+    // Front page & fiche série : charger front-page.js pour la gestion des cœurs séries/animés
+    if (is_front_page() || is_page_template('template-fiche-serie.php') || $current_template === 'template-fiche-serie.php') {
         wp_enqueue_style('front-page-style', get_template_directory_uri() . '/assets/css/front-page.css', array('header-style', 'footer-style'), $version);
         wp_enqueue_script('front-page-script', get_template_directory_uri() . '/assets/js/front-page.js', array(), $version, true);
         // Passer l'URL AJAX à front-page.js
