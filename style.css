@@ -1,3 +1,11 @@
+/* Cœur principal fiche film : blanc par défaut, rouge si liké */
+.movie-like-btn .svg-heart-main .svg-heart-shape {
+	fill: #fff;
+	transition: fill 0.2s;
+}
+.movie-like-btn.liked .svg-heart-main .svg-heart-shape {
+	fill: #c00;
+}
 .scroll-to-top svg {
 	display: block !important;
 	width: 28px !important;

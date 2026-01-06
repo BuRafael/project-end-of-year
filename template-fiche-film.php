@@ -286,26 +286,22 @@ if (isset($movie_tracks[$page_slug])) {
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow" id="moviePosterImg">
-                    <button id="movieLikeBtn" class="movie-like-btn p-0" aria-pressed="false" type="button"
-                        data-movie-id="<?php echo esc_attr($post->ID); ?>"
-                        data-movie-slug="<?php echo esc_attr($page_slug); ?>"
-                        data-movie-image="<?php echo esc_url($poster_url); ?>"
-                        data-movie-title="<?php echo esc_attr($title); ?>"
-                        data-movie-year="<?php echo esc_attr($year); ?>">
+                    <button id="movieLikeBtn" class="like-btn movie-like-btn p-0"
+                        data-type="film"
+                        data-id="<?php echo esc_attr($post->ID); ?>"
+                        aria-pressed="false" type="button">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
                     </button>
                 </div>
             </div>
-
             <!-- SYNOPSIS + META -->
             <div class="col-md-8 col-lg-9">
                 <h5 class="mb-2 movie-section-label">SYNOPSIS</h5>
                 <p class="movie-synopsis small text-light mb-4">
                     <?php echo esc_html($info['synopsis']); ?>
                 </p>
-
                 <div class="row movie-meta small">
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Durée</div>
@@ -430,6 +426,26 @@ if (isset($movie_tracks[$page_slug])) {
     const themeTrackImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Pistes film/';
     window.currentMovieSlug = '<?php echo esc_js($page_slug); ?>';
     window.movieTracks = <?php echo json_encode($movie_tracks[$page_slug] ?? []); ?>;
+</script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/front-page.js"></script>
+
+<!-- DEBUG: Vérification présence bouton like-btn -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.querySelector('.like-btn');
+    console.log('[DEBUG HTML] Bouton .like-btn trouvé ?', !!btn, btn);
+});
+</script>
+
+<!-- Place JS d'init à la toute fin -->
+<script>
+window.cinemusicAjax = {
+    ajaxurl: '<?php echo admin_url('admin-ajax.php'); ?>'
+};
+</script>
+<script src="<?php echo get_template_directory_uri(); ?>/assets/js/front-page.js"></script>
+<script>
+if(typeof initHearts==='function'){initHearts();}
 </script>
 
 

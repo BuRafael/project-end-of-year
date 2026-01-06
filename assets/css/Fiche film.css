@@ -154,7 +154,7 @@
     fill: none;
     transition: fill 0.2s, stroke 0.2s;
 }
-#movieLikeBtn.liked .svg-heart-shape {
+.movie-like-btn.liked .svg-heart-shape, #movieLikeBtn.liked .svg-heart-shape {
     stroke: #700118;
     fill: #700118;
 }
