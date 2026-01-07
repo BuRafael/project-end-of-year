@@ -31,6 +31,17 @@ $movie_info = array(
         'affiche' => 'inception affiche film.jpg',
         'year' => 2010
     ),
+    'wicked' => array(
+        'title' => 'Wicked',
+        'duration' => '2h35',
+        'rating' => '8,2/10',
+        'director' => 'Jon M. Chu',
+        'cast' => 'Cynthia Erivo, Ariana Grande, Jonathan Bailey, Ethan Slater',
+        'synopsis' => 'Dans le pays d’Oz, Elphaba, une jeune femme incomprise à la peau verte, se lie d’amitié avec la populaire Glinda. Leur destin bascule lorsque le pouvoir, l’amour et la magie les opposent, révélant la véritable histoire des sorcières d’Oz.',
+        'genres_display' => 'Comédie musicale • Fantastique • Aventure',
+        'affiche' => 'wicked.jpg',
+        'year' => 2024
+    ),
     'arrival' => array(
         'duration' => '1h56',
         'rating' => '7,9/10',
@@ -247,7 +258,12 @@ $movie_tracks = array(
 
 if (isset($movie_info[$page_slug])) {
     $info = $movie_info[$page_slug];
-    $title = ucwords(str_replace('-', ' ', $page_slug));
+    // Use the actual movie title from the info array if available, else fallback to slug
+    if (isset($info['title']) && !empty($info['title'])) {
+        $title = $info['title'];
+    } else {
+        $title = ucwords(str_replace('-', ' ', $page_slug));
+    }
     $year = $info['year'];
     $affiche = $info['affiche'];
     $genre = $info['genres_display'];
@@ -290,6 +306,8 @@ if (isset($movie_tracks[$page_slug])) {
                     <button id="movieLikeBtn" class="like-btn movie-like-btn p-0"
                         data-type="films"
                         data-id="<?php echo esc_attr($page_slug); ?>"
+                        data-movie-title="<?php echo esc_attr($title); ?>"
+                        data-movie-image="<?php echo esc_attr($affiche); ?>"
                         aria-pressed="false" type="button">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="38" height="38" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>

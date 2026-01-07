@@ -42,7 +42,7 @@ $genres = array('Action', 'Comédie', 'Drame', 'Horreur', 'Romance', 'Science-Fi
 								Dans un monde ravagé par une pandémie fongique, la société s'est effondrée et l'humanité lutte pour sa survie. Joel, un survivant marqué par la perte, accepte une mission périlleuse : escorter Ellie, une adolescente mystérieusement immunisée contre l'infection, à travers les États-Unis dévastés. Leur périple les confronte à des hordes d'infectés, des groupes hostiles et des choix moraux déchirants. Adaptation du jeu vidéo culte, "The Last of Us" explore la force des liens humains, l'espoir et la résilience face à l'effondrement du monde, dans une aventure bouleversante portée par Pedro Pascal et Bella Ramsey.
 							</p>
 						</div>
-						<a href="/the-last-of-us" class="btn-main fiche-a-la-une">Découvrir</a>
+						<a href="/last-of-us" class="btn-main fiche-a-la-une">Découvrir</a>
 					</div>
 				</div>
 			</div>

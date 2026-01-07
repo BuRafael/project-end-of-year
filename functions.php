@@ -97,7 +97,8 @@ function cinemusic_get_user_favorites() {
         $favorites = [
             'films' => [],
             'series' => [],
-            'musiques' => []
+            'musiques' => [],
+            'tracks' => []
         ];
     }
 
@@ -142,6 +143,8 @@ function cinemusic_get_user_favorites() {
                     'interstellar' => $theme_dir . '/assets/image/Front Page/Interstellar.jpg',
                     'parasite' => $theme_dir . '/assets/image/Front Page/Parasite.jpg',
                     'arrival' => $theme_dir . '/assets/image/Front Page/Arrival.webp',
+                    'last-of-us' => $theme_dir . '/assets/image/Front Page/the last of us.jpg',
+                    'the last of us' => $theme_dir . '/assets/image/Front Page/the last of us.jpg',
                 );
                 
                 if (isset($image_map[$slug])) {
@@ -361,12 +364,21 @@ function cinemusic_get_user_favorites() {
         // Les musiques sont maintenant stockées directement avec toutes leurs infos
         foreach ($favorites['musiques'] as $m) {
             if (is_array($m)) {
-                // Nouveau format : objet complet
+                // Correction image de piste pour your name et wicked
+                $cover = isset($m['cover']) ? $m['cover'] : 'default-piste.png';
+                if (isset($m['id'])) {
+                    $slug = strtolower($m['id']);
+                    if ($slug === 'your-name' || $slug === 'your name') {
+                        $cover = 'your name piste.png';
+                    } else if ($slug === 'wicked') {
+                        $cover = 'wicked piste.png';
+                    }
+                }
                 $musiques[] = array(
                     'id' => isset($m['id']) ? $m['id'] : '',
                     'title' => isset($m['title']) ? $m['title'] : 'Titre inconnu',
                     'artist' => isset($m['artist']) ? $m['artist'] : 'Artiste inconnu',
-                    'cover' => isset($m['cover']) ? $m['cover'] : 'default-piste.png',
+                    'cover' => $cover,
                     'source' => isset($m['source']) ? $m['source'] : '',
                     'duration' => isset($m['duration']) ? $m['duration'] : '',
                     'platforms' => array(),
@@ -374,10 +386,42 @@ function cinemusic_get_user_favorites() {
             }
         }
     }
+    // Enrichir les films pour garantir title et image
+    $enriched_films = array();
+    foreach ($favorites['films'] as $film) {
+        // Si c'est un objet complet (id, title, image), garder tel quel
+        if (is_array($film) && isset($film['id'])) {
+            // Correction: si le titre est 'undefined' ou vide, enrichir avec le slug
+            if (!isset($film['title']) || $film['title'] === 'undefined' || $film['title'] === '') {
+                $slug = is_array($film) ? $film['id'] : $film;
+                if ($slug === 'your-name') {
+                    $film['title'] = 'Your Name';
+                } else if ($slug === 'spirited-away') {
+                    $film['title'] = 'Spirited Away';
+                } else {
+                    $film['title'] = ucwords(str_replace('-', ' ', $slug));
+                }
+            }
+            $enriched_films[] = $film;
+        } else {
+            // Si juste un id/slug, enrichir
+            $theme_dir = get_template_directory_uri();
+            $movie_info = array(
+                'wicked' => array('title' => 'Wicked', 'image' => $theme_dir . '/assets/image/Fiche films/wicked.jpg'),
+                'your-name' => array('title' => 'Your Name', 'image' => $theme_dir . '/assets/image/Fiche films/your name.jpg'),
+                'spirited-away' => array('title' => 'Spirited Away', 'image' => $theme_dir . '/assets/image/Fiche films/spirited away.jpg'),
+                // Ajouter ici les autres films si besoin
+            );
+            $title = isset($movie_info[$film]['title']) ? $movie_info[$film]['title'] : ucwords(str_replace('-', ' ', $film));
+            $image = isset($movie_info[$film]['image']) ? $movie_info[$film]['image'] : $theme_dir . '/assets/image/Films/default-poster.jpg';
+            $enriched_films[] = array('id' => $film, 'title' => $title, 'image' => $image);
+        }
+    }
     $favoris_data = [
-        'films' => $favorites['films'], // Retourner directement les objets stockés
-        'series' => $favorites['series'], // Retourner directement les objets stockés
+        'films' => $enriched_films,
+        'series' => $favorites['series'],
         'musiques' => $musiques,
+        'tracks' => isset($favorites['tracks']) ? $favorites['tracks'] : [],
         'debug_favorites_raw' => $favorites,
         'debug_musiques_php' => $musiques,
         'debug_musiques_ids' => $debug_musiques_ids,
@@ -394,14 +438,20 @@ wp_send_json_error(['message' => 'Non autorisé.']);
     $user_id = get_current_user_id();
     $type = sanitize_text_field($_POST['type']);
     $item = json_decode(stripslashes($_POST['item']), true);
-    $allowed = ['films', 'series', 'musiques'];
+    $allowed = ['films', 'series', 'musiques', 'tracks'];
     if (!in_array($type, $allowed) || !is_array($item) || !isset($item['id'])) {
         if (ob_get_length()) ob_clean();
-wp_send_json_error(['message' => 'Type ou item invalide.']);
+        wp_send_json_error(['message' => 'Type ou item invalide.']);
+    }
+    // Patch: Prevent 'your-name' and 'spirited-away' from being added to series favorites
+    $movie_slugs = ['your-name', 'spirited-away'];
+    if ($type === 'series' && isset($item['id']) && in_array($item['id'], $movie_slugs)) {
+        // Force add to films instead
+        $type = 'films';
     }
     $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
     if (!is_array($favorites)) {
-        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
+        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [], 'tracks' => [] ];
     }
     
     // Nettoyage des anciennes données : supprimer les entrées avec "undefined" pour films et séries
@@ -416,8 +466,8 @@ wp_send_json_error(['message' => 'Type ou item invalide.']);
         }
     }
     
-    // Pour musiques, stocker l'objet complet avec toutes les infos
-    if ($type === 'musiques') {
+    // Pour musiques ou tracks, stocker l'objet complet avec toutes les infos
+    if ($type === 'musiques' || $type === 'tracks') {
         $slug = isset($item['slug']) ? $item['slug'] : (isset($item['source']) ? sanitize_title($item['source']) : 'film');
         $id = (string)$item['id'];
         $composite_id = (strpos($id, $slug . '-') === 0) ? $id : ($slug . '-' . $id);
@@ -440,14 +490,12 @@ wp_send_json_error(['message' => 'Type ou item invalide.']);
                 break;
             }
         }
-        
         if (!$already_exists) {
             $favorites[$type][] = $music_item;
         }
-        
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
         if (ob_get_length()) ob_clean();
-wp_send_json_success($favorites);
+        wp_send_json_success($favorites);
     }
     // Pour films/séries : stocker l'objet complet comme pour les musiques
     // Nettoyer les valeurs "undefined" qui peuvent venir du JavaScript
@@ -489,29 +537,29 @@ wp_send_json_error(['message' => 'Non autorisé.']);
     $user_id = get_current_user_id();
     $type = sanitize_text_field($_POST['type']);
     $id = sanitize_text_field($_POST['id']);
-    $allowed = ['films', 'series', 'musiques'];
+    $allowed = ['films', 'series', 'musiques', 'tracks'];
     if (!in_array($type, $allowed)) {
         if (ob_get_length()) ob_clean();
 wp_send_json_error(['message' => 'Type invalide.']);
     }
     $favorites = get_user_meta($user_id, 'cinemusic_favorites', true);
     if (!is_array($favorites)) {
-        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
+        $favorites = [ 'films' => [], 'series' => [], 'musiques' => [], 'tracks' => [] ];
     }
-    // Pour musiques, comparer l'ID unique string strictement
-    if ($type === 'musiques') {
+    // Pour musiques ou tracks, comparer l'ID unique string strictement
+    if ($type === 'musiques' || $type === 'tracks') {
         $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
             if (is_array($fav) && isset($fav['id'])) {
                 return $fav['id'] !== $id;
             }
             return $fav !== $id;
         }));
-        // Nettoyage musiques : supprimer vides et doublons
+        // Nettoyage musiques/tracks : supprimer vides et doublons
         $favorites[$type] = array_filter($favorites[$type], function($f) { return !empty($f); });
         $favorites[$type] = array_values(array_unique($favorites[$type], SORT_REGULAR));
         update_user_meta($user_id, 'cinemusic_favorites', $favorites);
         if (ob_get_length()) ob_clean();
-wp_send_json_success($favorites);
+        wp_send_json_success($favorites);
     }
     // Pour films/séries, comparer l'ID dans les objets stockés
     $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {

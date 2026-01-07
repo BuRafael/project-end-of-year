@@ -124,9 +124,20 @@ function normalizeType(type) {
 function initHearts() {
   const likeButtons = document.querySelectorAll('.like-btn');
   console.log('[DEBUG INITHEARTS] Appel initHearts, nombre de boutons .like-btn:', likeButtons.length);
-  // On charge les favoris de l'utilisateur connecté
-  let favFilms = [];
-  let favSeries = [];
+    // On charge les favoris de l'utilisateur connecté
+    let favFilms = [];
+    let favSeries = [];
+    // Helper: always treat 'your-name' and 'spirited-away' as films
+    function normalizeMovieId(id, title) {
+      if (!id) return id;
+      const slug = String(id).toLowerCase();
+      if (slug === 'your-name' || slug === 'spirited-away') return slug;
+      if (title && (title.toLowerCase().includes('your name') || title.toLowerCase().includes('spirited away'))) {
+        if (title.toLowerCase().includes('your name')) return 'your-name';
+        if (title.toLowerCase().includes('spirited away')) return 'spirited-away';
+      }
+      return id;
+    }
   // Fonction pour mettre à jour l'état des boutons (utilisée après chaque modif)
   function updateButtons() {
     // Collecte tous les boutons séries pour analyse croisée
@@ -157,15 +168,24 @@ function initHearts() {
         let mediaTypeRaw = button.dataset.type || 'films';
         let mediaType = normalizeType(mediaTypeRaw);
         let mediaId = '', mediaTitle = '', mediaImage = '', mediaLink = '', item = {};
-        if (mediaType === 'musiques') {
-          // Cas piste/musique (ex: top 5 musiques)
+        // Force type to 'films' for Spirited Away and Your Name and all films
+        if (
+          mediaTypeRaw === 'films' ||
+          (mediaTitle && (
+            mediaTitle.toLowerCase().includes('spirited away') ||
+            mediaTitle.toLowerCase().includes('your name')
+          ))
+        ) {
+          mediaType = 'films';
+          mediaId = normalizeMovieId(button.dataset.id, mediaTitle);
+        }
+        if (mediaType === 'musiques' || mediaTypeRaw === 'tracks') {
+          // Correction : pour les pistes de séries, on force le type 'tracks' pour l'API
           mediaId = button.dataset.trackId || mediaCard?.dataset.trackId || '';
           mediaTitle = button.dataset.trackTitle || mediaCard?.dataset.trackTitle || '';
-          // Correction : extraire uniquement le nom de fichier pour cover
           let coverUrl = button.dataset.trackCover || mediaCard?.dataset.trackCover || '';
           let cover = '';
           if (coverUrl) {
-            // Si c'est une URL, extraire le nom de fichier
             const parts = coverUrl.split('/');
             cover = parts[parts.length - 1];
           }
@@ -174,15 +194,15 @@ function initHearts() {
           const source = button.dataset.trackSource || mediaCard?.dataset.trackSource || '';
           mediaLink = button.dataset.trackUrl || mediaCard?.dataset.trackUrl || '';
           item = { id: String(mediaId), title: mediaTitle, artist, duration, cover, source, url: mediaLink };
+          mediaType = 'tracks';
         } else {
           // Cas film : utiliser l'ID WordPress, cas série/anime : utiliser le slug
           if (mediaType === 'films') {
             mediaId = button.dataset.id || '';
           } else {
-            // Pour séries/animes, utiliser le slug comme id
             mediaId = button.dataset.id || '';
           }
-          mediaId = String(mediaId); // Force string pour la comparaison
+          mediaId = String(mediaId);
           mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
           mediaLink = mediaCard?.querySelector('a')?.href || '';
           mediaImage = button.dataset.poster || mediaCard?.querySelector('img')?.src || '';
@@ -195,7 +215,12 @@ function initHearts() {
         const favFilmsIds = favFilms.map(f => String(f.id ?? f));
         const favSeriesIds = favSeries.map(s => String(s.id ?? s));
         if (mediaType === 'films') {
-          isFav = favFilmsIds.includes(mediaId);
+          // Patch: always compare normalized movie id for 'your-name' and 'spirited-away'
+          const normalizedId = normalizeMovieId(mediaId, mediaTitle);
+          // Check both slug and enriched object id
+          isFav = favFilmsIds.some(favId => {
+            return String(favId) === String(normalizedId) || String(favId) === String(mediaId);
+          });
         } else if (mediaType === 'series') {
           isFav = favSeriesIds.includes(mediaId);
         }
@@ -229,33 +254,46 @@ function initHearts() {
         }
         button.onclick = function(e) {
           e.preventDefault();
+          // Check user login status
+          let isUserLoggedIn = false;
+          try {
+            isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+          } catch (err) {}
+          if (!isUserLoggedIn) {
+            window.location.href = '/inscription';
+            return;
+          }
           const btn = this;
           let mediaTypeRaw = btn.dataset.type || 'films';
           let mediaType = normalizeType(mediaTypeRaw);
           let mediaId = btn.dataset.id || '';
           mediaId = String(mediaId);
+          // Correction : pour les pistes de séries, on force le type 'tracks' pour l'API
+          if (mediaType === 'musiques' || mediaTypeRaw === 'tracks') {
+            mediaType = 'tracks';
+          }
           const isLiked = btn.getAttribute('data-liked') === 'true';
           let clickType = mediaType;
           // Préparer l'objet favori pour Favoris.js
           let mediaCard = btn.closest('.media-card, .film-card, .serie-card, li, .track-row');
           console.log('[DEBUG] mediaCard:', mediaCard);
-          
           let titleElement = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link');
           let mediaTitle = titleElement?.textContent?.trim() || 'Titre inconnu';
           console.log('[DEBUG] titleElement:', titleElement, 'mediaTitle:', mediaTitle);
-          
           let linkElement = mediaCard?.querySelector('a');
           let mediaLink = linkElement?.href || '';
           console.log('[DEBUG] linkElement:', linkElement, 'mediaLink:', mediaLink);
-          
           let imgElement = mediaCard?.querySelector('img');
           let mediaImage = btn.dataset.poster || imgElement?.src || '';
           console.log('[DEBUG] imgElement:', imgElement, 'mediaImage:', mediaImage);
-          
           let favItem = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
           console.log('[LikeBtn Click] Type:', clickType, 'ID:', mediaId, 'Item:', favItem);
+          // Always normalize ID for 'your-name' and 'spirited-away' when adding/removing favorite
+          let normalizedId = mediaId;
+          if (clickType === 'films') {
+            normalizedId = normalizeMovieId(mediaId, mediaTitle);
+          }
           if (isLiked) {
-            // MAJ visuelle instantanée (optimiste) - seulement le bouton cliqué
             btn.setAttribute('data-liked', 'false');
             btn.classList.remove('liked');
             const path = btn.querySelector('svg .svg-heart-shape');
@@ -267,37 +305,10 @@ function initHearts() {
               btn.textContent = '♡';
               btn.style.color = '#ffffff';
             }
-            // Supprimer des favoris avec AJAX
-            updateFavorite('remove_user_favorite', clickType, {id: mediaId}, (data) => {
-              console.log('[LikeBtn] Réponse AJAX remove_user_favorite:', data);
-              if (data && data.success) {
-                if (clickType === 'films') {
-                  favFilms = favFilms.filter(f => String(f.id ?? f) !== mediaId);
-                } else if (clickType === 'series') {
-                  favSeries = favSeries.filter(s => String(s.id ?? s) !== mediaId);
-                }
-                // Mettre à jour la page favoris si elle est chargée
-                if (window.FavorisPage && window.FavorisPage.init) {
-                  window.FavorisPage.init();
-                }
-              } else {
-                console.error('[LikeBtn] Échec de la suppression des favoris:', data);
-                // Rollback UI si échec
-                btn.setAttribute('data-liked', 'true');
-                btn.classList.add('liked');
-                const path = btn.querySelector('svg .svg-heart-shape');
-                if (path) {
-                  path.setAttribute('fill', '#700118');
-                  path.setAttribute('stroke', '#700118');
-                }
-                if (!btn.querySelector('svg')) {
-                  btn.textContent = '♥';
-                  btn.style.color = '#700118';
-                }
-              }
+            updateFavorite('remove_user_favorite', clickType, {id: normalizedId}, (data) => {
+              // ...existing code...
             });
           } else {
-            // MAJ visuelle instantanée (optimiste) - seulement le bouton cliqué
             btn.setAttribute('data-liked', 'true');
             btn.classList.add('liked');
             const path = btn.querySelector('svg .svg-heart-shape');
@@ -309,34 +320,10 @@ function initHearts() {
               btn.textContent = '♥';
               btn.style.color = '#700118';
             }
-            // Ajouter aux favoris avec AJAX
-            updateFavorite('add_user_favorite', clickType, favItem, (data) => {
-              console.log('[LikeBttn] Réponse AJAX add_user_favorite:', data);
-              if (data && data.success) {
-                if (clickType === 'films') {
-                  favFilms.push({id: mediaId});
-                } else if (clickType === 'series') {
-                  favSeries.push({id: mediaId});
-                }
-                // Mettre à jour la page favoris si elle est chargée
-                if (window.FavorisPage && window.FavorisPage.init) {
-                  window.FavorisPage.init();
-                }
-              } else {
-                console.error('[LikeBtn] Échec de l\'ajout aux favoris:', data);
-                // Rollback UI si échec
-                btn.setAttribute('data-liked', 'false');
-                btn.classList.remove('liked');
-                const path = btn.querySelector('svg .svg-heart-shape');
-                if (path) {
-                  path.setAttribute('fill', 'none');
-                  path.setAttribute('stroke', '#888888');
-                }
-                if (!btn.querySelector('svg')) {
-                  btn.textContent = '♡';
-                  btn.style.color = '#ffffff';
-                }
-              }
+            // Patch: always use normalizedId for 'your-name' and 'spirited-away'
+            let patchedFavItem = { ...favItem, id: normalizedId };
+            updateFavorite('add_user_favorite', clickType, patchedFavItem, (data) => {
+              // ...existing code...
             });
           }
         };

@@ -1,16 +1,17 @@
-.comment-menu-btn {
-    color: #700118 !important;
-    background: transparent !important;
-    border-radius: 50%;
+/* Suppression du carré autour du pouce */
+.comment-like-btn {
+    background: none;
     border: none;
-    font-size: 1.3rem;
-    box-shadow: none;
-    z-index: 21;
+    border-radius: 0;
+    padding: 0;
+    color: #700118;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.2s;
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
 }
-.comment-menu-btn i {
     color: #700118 !important;
 }
 .comment-menu-dropdown button {
@@ -275,18 +276,17 @@ body .movie-page > section:last-child {
     animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 
+/* Harmonisation titres sections fiche compositeur avec fiches films/séries */
 .section-title {
-    font-family: 'Futura 100', 'Futura', 'Futura PT', 'Futura Std', Arial, sans-serif !important;
-    font-weight: bold !important;
-    font-size: 28px !important;
-    text-transform: none !important;
-    letter-spacing: 0.5px !important;
+    font-family: 'Futura', 'Futura Std', 'FuturaPT', Arial, sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 32px !important;
     color: #F4EFEC !important;
-    margin-bottom: 1.2rem;
-    text-align: left !important;
-    justify-content: flex-start !important;
-    align-items: flex-start !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 24px !important;
+    text-transform: none !important;
     margin-left: 0 !important;
+    text-align: left !important;
     position: relative;
     padding-bottom: 12px;
     animation: slideDown 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;

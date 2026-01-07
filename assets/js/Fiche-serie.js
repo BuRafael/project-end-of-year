@@ -1,6 +1,7 @@
 // ...existing code...
 
 
+
 // ...existing code...
 
 
@@ -14,6 +15,92 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+        // --- COEUR LIKE SÉRIE ---
+        const movieLikeBtn = document.getElementById('movieLikeBtn');
+        if (movieLikeBtn) {
+            // Initialisation du coeur
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ action: 'get_user_favorites', type: 'series' }).toString()
+            })
+            .then(r => r.json())
+            .then(data => {
+                let isFav = false;
+                if (data && data.success && data.data && Array.isArray(data.data.series)) {
+                    isFav = data.data.series.some(f => {
+                        if (typeof f === 'string') {
+                            return String(f) === String(movieLikeBtn.dataset.id);
+                        } else if (f && typeof f === 'object' && f.id) {
+                            return String(f.id) === String(movieLikeBtn.dataset.id);
+                        }
+                        return false;
+                    });
+                }
+                if (isFav) {
+                    movieLikeBtn.classList.add('liked');
+                    movieLikeBtn.setAttribute('data-liked', 'true');
+                    movieLikeBtn.setAttribute('aria-pressed', 'true');
+                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#700118');
+                } else {
+                    movieLikeBtn.classList.remove('liked');
+                    movieLikeBtn.setAttribute('data-liked', 'false');
+                    movieLikeBtn.setAttribute('aria-pressed', 'false');
+                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#F4EFEC');
+                }
+            });
+            // Gestion du clic
+            movieLikeBtn.onclick = function(e) {
+                e.preventDefault();
+                var isUserLoggedIn = false;
+                try {
+                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+                } catch (e) {}
+                if (!isUserLoggedIn) {
+                    window.location.href = '/inscription';
+                    return;
+                }
+                const isLiked = movieLikeBtn.getAttribute('data-liked') === 'true';
+                let posterUrl = document.getElementById('moviePosterImg')?.src || '';
+                let favTitle = document.querySelector('.movie-header h1')?.textContent || '';
+                if (!favTitle || favTitle.trim() === '') {
+                    favTitle = movieLikeBtn.getAttribute('data-title') || movieLikeBtn.getAttribute('aria-label') || 'The Last of Us';
+                }
+                const favItem = { id: movieLikeBtn.dataset.id, title: favTitle, image: posterUrl };
+                if (isLiked) {
+                    movieLikeBtn.setAttribute('data-liked', 'false');
+                    movieLikeBtn.classList.remove('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'false');
+                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#F4EFEC');
+                    fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({
+                            action: 'remove_user_favorite',
+                            type: 'series',
+                            id: movieLikeBtn.dataset.id
+                        })
+                    });
+                } else {
+                    movieLikeBtn.setAttribute('data-liked', 'true');
+                    movieLikeBtn.classList.add('liked');
+                    movieLikeBtn.setAttribute('aria-pressed', 'true');
+                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#700118');
+                    fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({
+                            action: 'add_user_favorite',
+                            type: 'series',
+                            item: JSON.stringify(favItem)
+                        })
+                    });
+                }
+            };
+        }
     // === PISTES PAR SAISON ET ÉPISODE ===
     const TRACKS_DISPLAY_COUNT = 5; // Nombre de pistes à afficher par défaut
     const allTracks = window.allTracks || {};
@@ -31,15 +118,15 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             credentials: 'same-origin',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
+            body: new URLSearchParams({ action: 'get_user_favorites', type: 'tracks' }).toString()
         })
         .then(r => r.json())
         .then(data => {
             let favoriteTrackIds = [];
-            if (data.success && data.data && Array.isArray(data.data.musiques) && data.data.musiques.length > 0) {
-                favoriteTrackIds = data.data.musiques.map(m => typeof m === 'string' ? m : m.id);
-            } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
-                favoriteTrackIds = data.data.debug_favorites_raw.musiques;
+            if (data.success && data.data && Array.isArray(data.data.tracks) && data.data.tracks.length > 0) {
+                favoriteTrackIds = data.data.tracks.map(m => typeof m === 'string' ? m : m.id);
+            } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.tracks)) {
+                favoriteTrackIds = data.data.debug_favorites_raw.tracks;
             }
             tracksTable.querySelectorAll('tr').forEach(row => {
                 const trackId = row.dataset.id;
@@ -209,40 +296,46 @@ function updateTracksMoreBtn(totalTracks) {
 // Like/unlike tracks (event delegation so it works for appended rows too)
 document.addEventListener('click', function(e) {
     if (e.target.classList.contains('track-like')) {
+        // Vérifier connexion utilisateur
+        var isUserLoggedIn = false;
+        try {
+            isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+        } catch (err) {}
+        if (!isUserLoggedIn) {
+            window.location.href = '/inscription';
+            return;
+        }
         const row = e.target.closest('tr');
         const trackId = row.dataset.id;
         const trackTitle = row.querySelector('.movie-track-title')?.textContent || '';
         const trackArtist = row.querySelector('.movie-track-artist')?.textContent || '';
         const trackDuration = row.querySelector('.col-duration')?.textContent || '';
         const trackCover = row.querySelector('.movie-track-cover')?.src || '';
-        
         // Extraire juste le nom du fichier de l'image
         const coverFileName = trackCover ? trackCover.split('/').pop() : '';
 
         e.target.classList.toggle('liked');
         const liked = e.target.classList.contains('liked');
+        // Utilise l'id composite pour la piste et type 'tracks' pour favoris
+        const serieSlug = window.currentSerieSlug || window.location.pathname.split('/').filter(p => p).pop() || 'serie';
+        const compositeId = serieSlug + '-' + trackId;
         if (liked) {
             e.target.classList.remove('bi-heart');
             e.target.classList.add('bi-heart-fill');
-            // Récupérer le slug de la page depuis l'URL
-            const pageSlug = window.location.pathname.split('/').filter(p => p).pop() || 'serie';
-            // Créer l'ID composite au format slug-trackId
-            const compositeId = pageSlug + '-' + trackId;
-            
-            // Ajouter la piste aux favoris serveur (catégorie musiques)
+            // Ajoute la piste en favoris 'tracks'
             const trackData = {
                 id: compositeId,
+                slug: serieSlug,
                 title: trackTitle,
                 artist: trackArtist,
                 duration: trackDuration,
                 cover: coverFileName,
-                slug: pageSlug,
                 source: document.querySelector('.movie-header h1')?.textContent || '',
                 url: window.location.href
             };
             const form = new URLSearchParams();
             form.append('action', 'add_user_favorite');
-            form.append('type', 'musiques');
+            form.append('type', 'tracks');
             form.append('item', JSON.stringify(trackData));
             fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                 method: 'POST',
@@ -253,14 +346,10 @@ document.addEventListener('click', function(e) {
         } else {
             e.target.classList.remove('bi-heart-fill');
             e.target.classList.add('bi-heart');
-            // Récupérer le slug de la page pour créer l'ID composite
-            const pageSlug = window.location.pathname.split('/').filter(p => p).pop() || 'serie';
-            const compositeId = pageSlug + '-' + trackId;
-            
-            // Retirer la piste des favoris serveur
+            // Retire la piste des favoris 'tracks'
             const form = new URLSearchParams();
             form.append('action', 'remove_user_favorite');
-            form.append('type', 'musiques');
+            form.append('type', 'tracks');
             form.append('id', compositeId);
             fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                 method: 'POST',
@@ -761,7 +850,7 @@ initGenericCarousel({
 });
 
 // === LIKE BUTTON (SERIE) synchronisé avec le compte utilisateur ===
-const movieLikeBtn = document.getElementById('movieLikeBtn');
+// movieLikeBtn déjà déclaré plus haut, ne pas redéclarer
 if (movieLikeBtn) {
     // Vérifier l'état de connexion utilisateur
     let isUserLoggedIn = false;
@@ -830,6 +919,15 @@ if (movieLikeBtn) {
 
         // Gestion du clic
         movieLikeBtn.addEventListener('click', function () {
+            // Vérifier connexion utilisateur
+            var isUserLoggedIn = false;
+            try {
+                isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+            } catch (e) {}
+            if (!isUserLoggedIn) {
+                window.location.href = '/inscription';
+                return;
+            }
             const icon = this.querySelector('.svg-heart-shape');
             const liked = this.classList.toggle('liked');
             this.setAttribute('aria-pressed', liked ? 'true' : 'false');

@@ -336,9 +336,17 @@ document.addEventListener('DOMContentLoaded', function() {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                const type = this.dataset.type;
+                let type = this.dataset.type;
                 const id = this.dataset.id;
-                removeFavorite(type, id);
+                // Patch: if type is 'musique', try removing from both 'musiques' and 'tracks'
+                if (type === 'musique') {
+                    // Try removing from musiques
+                    removeFavorite('musique', id);
+                    // Also try removing from tracks
+                    removeFavorite('tracks', id);
+                } else {
+                    removeFavorite(type, id);
+                }
             });
         });
     }
@@ -350,6 +358,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (type === 'film') wpType = 'films';
         else if (type === 'serie') wpType = 'series';
         else if (type === 'musique') wpType = 'musiques';
+        else if (type === 'tracks') wpType = 'tracks';
         if (!wpType) return;
         const form = new URLSearchParams();
         form.append('action', 'remove_user_favorite');
@@ -410,7 +419,15 @@ document.addEventListener('DOMContentLoaded', function() {
         loadFavorites(function(favorites) {
             renderFilms(favorites.films);
             renderSeries(favorites.series);
-            renderMusiques(favorites.musiques);
+            // Combine musiques and tracks for pistes tab
+            let pistes = [];
+            if (Array.isArray(favorites.musiques)) {
+                pistes = pistes.concat(favorites.musiques);
+            }
+            if (Array.isArray(favorites.tracks)) {
+                pistes = pistes.concat(favorites.tracks);
+            }
+            renderMusiques(pistes);
         });
     }
 

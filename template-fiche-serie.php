@@ -131,6 +131,22 @@ $series_info = array(
         'genres_display' => 'Fantasy • Action • Aventure',
         'total_tracks' => '145'
     )
+        ,
+        'last-of-us' => array(
+            'title' => 'The Last of Us',
+            'aired' => '2023',
+            'seasons' => '1',
+            'episodes_detail' => [
+                'Saison 1' => '9 épisodes',
+            ],
+            'rating' => '8,8/10',
+            'director' => 'Craig Mazin',
+            'cast' => 'Pedro Pascal, Bella Ramsey, Gabriel Luna, Anna Torv',
+            'synopsis' => "Dans un monde post-apocalyptique ravagé par une pandémie, Joel et Ellie traversent les États-Unis à la recherche d'un refuge, affrontant des dangers humains et infectés.",
+            'poster' => 'last-of-us.jpg',
+            'genres_display' => 'Drame • Aventure • Science-fiction • Survie',
+            'total_tracks' => '12'
+        )
 );
 
 // Définir les variables par défaut
@@ -148,6 +164,16 @@ if (isset($series_info[$page_slug])) {
     $poster = $series_info[$page_slug]['poster'];
     $genre = $series_info[$page_slug]['genres_display'];
     $info = $series_info[$page_slug];
+} else {
+    // Série non trouvée : affiche un message personnalisé
+    get_header();
+    echo '<main class="container py-5"><div class="alert alert-warning text-center" style="margin-top:100px;">';
+    echo '<h2>Erreur : Série introuvable</h2>';
+    echo '<p>Désolé, cette fiche série n’existe pas ou a été supprimée.</p>';
+    echo '<a href="/series" class="btn btn-main mt-3">Retour aux séries</a>';
+    echo '</div></main>';
+    get_footer();
+    exit;
 }
 
 ?>
@@ -171,7 +197,12 @@ if (isset($series_info[$page_slug])) {
             <div class="col-md-4 col-lg-3">
                 <div class="movie-poster-wrapper text-center text-md-start">
                     <?php 
-                    $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/' . $poster;
+                    // Correction pour The Last of Us : nom d'image
+                    if ($page_slug === 'last-of-us') {
+                        $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/the last of us.jpg';
+                    } else {
+                        $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/' . $poster;
+                    }
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
                          class="movie-poster img-fluid shadow" id="moviePosterImg">
@@ -251,6 +282,19 @@ if (isset($series_info[$page_slug])) {
             </select>
             <select id="episodeSelect" class="form-select form-select-sm" aria-label="Choisir un épisode">
                 <option value="" disabled selected hidden>Épisode</option>
+                <?php
+                // Affiche le nombre d'épisodes de la saison 1 pour la série courante
+                $nb_episodes = 0;
+                if (isset($info['episodes_detail']['Saison 1'])) {
+                    preg_match('/(\d+)/', $info['episodes_detail']['Saison 1'], $matches);
+                    if (isset($matches[1])) {
+                        $nb_episodes = intval($matches[1]);
+                    }
+                }
+                for ($i = 1; $i <= $nb_episodes; $i++) {
+                    echo '<option value="' . $i . '">Épisode ' . $i . '</option>';
+                }
+                ?>
             </select>
         </div>
         <div class="table-responsive">
@@ -517,6 +561,16 @@ $all_tracks_data = [
         2 => [1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => []],
         3 => [1 => [], 2 => [], 3 => [], 4 => [], 5 => [], 6 => [], 7 => [], 8 => []]
     ],
+        'last-of-us' => [
+            1 => [
+                1 => [
+                        [ 'id' => 1, 'title' => 'Main Theme', 'artist' => 'Gustavo Santaolalla', 'duration' => '2:45', 'image' => 'piste the last of us.png' ],
+                        [ 'id' => 2, 'title' => 'The Last of Us (HBO)', 'artist' => 'Gustavo Santaolalla', 'duration' => '3:10', 'image' => 'piste the last of us.png' ],
+                        [ 'id' => 3, 'title' => 'Never Let Me Down Again', 'artist' => 'Depeche Mode', 'duration' => '4:18', 'image' => 'piste the last of us.png' ]
+                    // Ajoute d'autres pistes ici si besoin
+                ]
+            ]
+        ],
 ];
 $tracks_js = isset($all_tracks_data[$page_slug]) ? json_encode($all_tracks_data[$page_slug]) : '{}';
 // Ajouter d'autres séries ici si besoin

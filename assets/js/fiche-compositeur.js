@@ -88,6 +88,8 @@ document.addEventListener('DOMContentLoaded', function() {
         tracksTable.appendChild(tr);
     }
 
+let tracksLimit = 5;
+
 // === PISTES CELEBRES ===
 const tracks = [
     { id: 1, title: "Time", film: "Inception", duration: "4:35", image: "inception affiche film.jpg" },
@@ -118,7 +120,48 @@ const tracks = [
 ];
 
 const tracksTable = document.getElementById("tracksTable");
-// Variables déjà déclarées plus haut
+// Carrousel de compositeurs similaires harmonisé (markup, fallback, scroll)
+const similarComposers = [
+    { name: 'James Newton Howard', image: window.composerImagePath + 'James Newton Howard.jpg' },
+    { name: 'Ludwig Göransson', image: window.composerImagePath + 'Ludwig Göransson.jpg' },
+    { name: 'John Powell', image: window.composerImagePath + 'John Powell.webp' },
+    { name: 'Ramin Djawadi', image: window.composerImagePath + 'Ramin Djawadi.jpg' },
+    { name: 'Steve Jablonsky', image: window.composerImagePath + 'Steve Jablonsky.jpg' },
+    { name: 'Benjamin Wallfisch', image: window.composerImagePath + 'Benjamin Wallfisch.jpg' },
+    { name: 'Junkie XL (Tom Holkenborg)', image: window.composerImagePath + 'Junkie XL (Tom Holkenborg).jpg' },
+    { name: 'Cliff Martinez', image: window.composerImagePath + 'Cliff Martinez.jpg' },
+    { name: 'Harry Gregson-Williams', image: window.composerImagePath + 'Harry Gregson-Williams.jpg' },
+    { name: 'Henry jackman', image: window.composerImagePath + 'Henry jackman.jpg' },
+    { name: 'Danny Elfman', image: window.composerImagePath + 'Danny Elfman.jpeg' }
+];
+const carousel = document.getElementById('similarComposers');
+const fallbackImg = window.composerImagePath + 'default-compositeur.jpg';
+if (carousel) {
+    similarComposers.forEach(c => {
+        const col = document.createElement('div');
+        col.className = 'col-6 col-md-3';
+        col.innerHTML = `
+            <div class="carousel-card similar-card">
+                <img src="${c.image}" class="w-100 mb-2" alt="${c.name}" onerror="this.onerror=null;this.src='${fallbackImg}'">
+                <div class="similar-card-title">${c.name}</div>
+            </div>
+        `;
+        carousel.appendChild(col);
+    });
+
+    // Flèches scroll horizontal (comme carrousel films/séries)
+    const leftArrow = document.querySelector('.composer-carousel .carousel-arrow.left');
+    const rightArrow = document.querySelector('.composer-carousel .carousel-arrow.right');
+    const row = carousel;
+    if (leftArrow && rightArrow && row) {
+        leftArrow.addEventListener('click', function() {
+            row.scrollBy({ left: -row.offsetWidth * 0.8, behavior: 'smooth' });
+        });
+        rightArrow.addEventListener('click', function() {
+            row.scrollBy({ left: row.offsetWidth * 0.8, behavior: 'smooth' });
+        });
+    }
+}
 
 function renderTracks(limit = tracksLimit) {
     if (!tracksTable) return;
@@ -126,7 +169,39 @@ function renderTracks(limit = tracksLimit) {
     tracksTable.innerHTML = '';
     const slice = tracks.slice(0, tracksLimit);
     slice.forEach(t => {
-        appendTrack(t);
+        // Génère le slug du film pour l'URL (remplace espaces/accents)
+        const slug = t.film
+            .toLowerCase()
+            .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '');
+        const filmUrl = `/fiche-film/${slug}`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td>${t.id}</td>
+            <td>
+                <div class="movie-track-info">
+                    <img src="${filmImagePath + t.image}" class="movie-track-cover" alt="${t.title}">
+                    <div>
+                        <div class="movie-track-title">${t.title}</div>
+                        <div>
+                            <a href="${filmUrl}" class="movie-track-artist" style="text-decoration:underline;">${t.film}</a>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="col-links">
+                <span class="track-icons">
+                    <i class="bi bi-spotify" aria-label="Spotify"></i>
+                    <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                    <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                    <i class="bi bi-apple" aria-label="Apple Music"></i>
+                </span>
+            </td>
+            <td class="col-duration text-center">${t.duration}</td>
+            <td class="col-like text-end"><i class="bi bi-heart track-like"></i></td>
+        `;
+        tracksTable.appendChild(tr);
     });
     if (tracksMoreBtn) {
         if (tracksLimit >= tracks.length) {
@@ -168,12 +243,12 @@ if (tracksTable) {
             });
         }
     });
-    renderTracks(TRACKS_MIN);
+    renderTracks(5);
 
     if (tracksMoreBtn) {
         tracksMoreBtn.addEventListener('click', () => {
             if (tracksLimit >= tracks.length) {
-                renderTracks(TRACKS_MIN);
+                renderTracks(5);
             } else {
                 renderTracks(tracks.length);
             }
@@ -189,12 +264,6 @@ if (tracksTable) {
         target.classList.toggle('bi-heart-fill', liked);
     });
 }
-const tracksMoreBtn = document.getElementById('tracksMoreBtn');
-const composerImgPath = typeof composerImagePath !== 'undefined' ? composerImagePath : '/wp-content/themes/project-end-of-year/assets/image/Fiche Compositeur/';
-const filmImagePath = composerImgPath.replace('Fiche Compositeur', 'Fiche films');
-
-const TRACKS_MIN = 5;
-let tracksLimit = TRACKS_MIN;
 
 function renderTracks(limit = tracksLimit) {
     if (!tracksTable) return;
@@ -309,6 +378,26 @@ function renderComment(commentData) {
         dateHtml = timeAgo;
     }
 
+    // Ajout du bouton like (pouce en l'air) avec SVG et structure identique fiche film
+    const likeCount = commentData.like_count || 0;
+    const isLiked = commentData.is_liked || false;
+    const likeBtn = `
+        <div class="comment-like-row d-flex align-items-center gap-2 mt-2">
+            <button class="comment-like-btn${isLiked ? ' liked' : ''}" aria-label="J'aime ce commentaire" data-comment-id="${commentData.id}">
+                <svg class="svg-thumb-up" viewBox="0 -0.5 21 21" width="22" height="22" style="display:inline-block;vertical-align:middle;">
+                    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                        <g id="Dribbble-Light-Preview" transform="translate(-219.000000, -760.000000)" fill="#700118">
+                            <g id="icons" transform="translate(56.000000, 160.000000)">
+                                <path d="M163,610.021159 L163,618.021159 C163,619.126159 163.93975,620.000159 165.1,620.000159 L167.199999,620.000159 L167.199999,608.000159 L165.1,608.000159 C163.93975,608.000159 163,608.916159 163,610.021159 M183.925446,611.355159 L182.100546,617.890159 C181.800246,619.131159 180.639996,620.000159 179.302297,620.000159 L169.299999,620.000159 L169.299999,608.021159 L171.104948,601.826159 C171.318098,600.509159 172.754498,599.625159 174.209798,600.157159 C175.080247,600.476159 175.599997,601.339159 175.599997,602.228159 L175.599997,607.021159 C175.599997,607.573159 176.070397,608.000159 176.649997,608.000159 L181.127196,608.000159 C182.974146,608.000159 184.340196,609.642159 183.925446,611.355159"/>
+                            </g>
+                        </g>
+                    </g>
+                </svg>
+                <span class="comment-like-count">${likeCount}</span>
+            </button>
+        </div>
+    `;
+
     col.innerHTML = `
         <div class='comment-card'>
             ${menuHtml}
@@ -320,9 +409,60 @@ function renderComment(commentData) {
                 <span class='comment-date'>${dateHtml}</span>
             </div>
             <div class='comment-text'>${commentData.comment_text}</div>
+            ${likeBtn}
         </div>
     `;
+
+    // Ajout de l'event pour le bouton like
+    const btn = col.querySelector('.comment-like-btn');
+    if (btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            fetch(window.composerComments.ajax_url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: 'like_composer_comment',
+                    comment_id: commentData.id
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const countSpan = col.querySelector('.comment-like-count');
+                    const thumbSvg = col.querySelector('.svg-thumb-up');
+                    if (countSpan) countSpan.textContent = data.data.like_count;
+                    if (thumbSvg) thumbSvg.querySelector('path').setAttribute('fill', '#700118');
+                    btn.classList.add('liked');
+                }
+            });
+        });
+    }
     return col;
+}
+
+// Charger les commentaires existants (exemple AJAX, à adapter selon backend)
+if (commentsZone) {
+    fetch(window.composerComments.ajax_url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+            action: 'get_composer_comments',
+            composer_id: window.composerComments.composer_id
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && Array.isArray(data.data)) {
+            if (data.data.length === 0) {
+                commentsZone.innerHTML = '<div class="text-center text-muted" style="font-style:italic;opacity:0.8;">c\'est silencieux ici...</div>';
+            } else {
+                data.data.forEach(comment => {
+                    commentsZone.appendChild(renderComment(comment));
+                });
+            }
+        }
+    });
 }
 
 // Publier un commentaire

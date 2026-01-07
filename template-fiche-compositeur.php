@@ -63,6 +63,7 @@ get_header();
 
     <!-- ===== PISTES CELEBRES ===== -->
     <section class="composer-section mt-5">
+        <h3 class="section-title mb-3">Pistes populaires</h3>
         <div class="table-responsive">
             <table class="table composer-tracks-table align-middle mb-3">
                 <thead>
@@ -136,10 +137,10 @@ get_header();
     <!-- ===== COMPOSITEURS SIMILAIRES ===== -->
     <section class="composer-section mt-5 mb-4">
         <h3 class="section-title mb-3">Compositeurs similaires</h3>
-        <div class="d-flex align-items-center movies-carousel composer-carousel">
+        <div class="movies-carousel composer-carousel d-flex align-items-center">
             <button class="carousel-arrow left d-flex align-items-center justify-content-center" type="button">❮</button>
-            <div class="row flex-grow-1 mx-3 g-3" id="similarComposers">
-
+            <div class="row flex-grow-1 gx-3" id="similarComposers">
+                <!-- JS injecte ici les compositeurs similaires sous forme de .col .carousel-card .similar-card -->
             </div>
             <button class="carousel-arrow right d-flex align-items-center justify-content-center" type="button">❯</button>
         </div>
@@ -152,7 +153,16 @@ get_header();
 
 <script>
     // Chemin des images pour JavaScript
-    const composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
+        window.composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
+        window.filmImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche films/';
+
+    // Initialisation des variables JS pour commentaires
+        window.composerComments = {
+        ajax_url: '<?php echo esc_js(admin_url('admin-ajax.php')); ?>',
+        composer_id: 'hans-zimmer'
+    };
+
+
 </script>
 
 <?php get_footer(); ?>

@@ -200,7 +200,7 @@ get_header();
             <div class="top-header">Top 5 series</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things.jpg' ); ?>" alt="Stranger Things">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Stranger Things2.jpg' ); ?>" alt="Stranger Things">
                     <div class="top-info">
                         <a href="<?php echo esc_url( home_url('/fiche-serie/stranger-things') ); ?>" class="top-title-link">Stranger Things</a>
                         <a href="<?php echo esc_url( home_url('/fiche-serie/stranger-things') ); ?>" class="top-composer-link">Duffer Brothers</a>
@@ -272,7 +272,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/your-name') ); ?>" class="top-title-link">Your Name</a>
                         <a href="<?php echo esc_url( home_url('/fiche-film/your-name') ); ?>" class="top-composer-link">Makoto Shinkai</a>
                     </div>
-                    <button class="like-btn movie-like-btn" data-liked="false" data-type="series" data-id="your-name" type="button" aria-label="Like">
+                    <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="your-name" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -284,7 +284,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/spirited-away') ); ?>" class="top-title-link">Spirited Away</a>
                         <a href="<?php echo esc_url( home_url('/fiche-film/spirited-away') ); ?>" class="top-composer-link">Hayao Miyazaki</a>
                     </div>
-                    <button class="like-btn movie-like-btn" data-liked="false" data-type="series" data-id="spirited-away" type="button" aria-label="Like">
+                    <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="spirited-away" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
