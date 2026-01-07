@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://use.typekit.net/isz1tod.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/assets/css/header-search-fix.css">
     <style>html,body{background:#1A1A1A!important;}</style>
     <?php wp_head(); ?>
     <script>window.ajaxurl = '<?php echo admin_url('admin-ajax.php'); ?>';</script>
@@ -79,30 +80,19 @@
             </nav>
 
             <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
-                <div class="header-search-mobile-bg" id="header-search-mobile-bg"></div>
-                <form role="search" method="get" class="header-search" id="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="margin: 0; display: none;">
-                    <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>" class="header-search-input" />
-                    <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;"></button>
-                    <button class="searchbar-close" id="searchbar-close" aria-label="Fermer la recherche">
-                        <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M6 6L22 22M22 6L6 22" stroke="#FFF" stroke-width="2.5" stroke-linecap="round"/>
-                        </svg>
-                    </button>
-                </form>
-                <button class="header-search-mobile" aria-label="Recherche">
-                    <span class="search-icon" aria-hidden="true" style="display: flex; align-items: center;">
-                        <svg width="28" height="28" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2"/>
-                            <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                    </span>
-                </button>
-                <button class="header-close-search" aria-label="Fermer la recherche" style="display:none;" type="button">
-                    <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <line x1="10" y1="10" x2="26" y2="26" stroke="#F4EFEC" stroke-width="3" stroke-linecap="round"/>
-                        <line x1="26" y1="10" x2="10" y2="26" stroke="#F4EFEC" stroke-width="3" stroke-linecap="round"/>
-                    </svg>
-                </button>
+                <?php if (!is_front_page()) : ?>
+                    <form role="search" method="get" class="header-search" id="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="margin: 0; display: flex; align-items: center;">
+                        <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>" class="header-search-input" style="margin-right: 10px;" />
+                        <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;">
+                                                        <span style="background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px;">
+                                                            <svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" class="header-search-loupe">
+                                                                    <circle cx="10" cy="10" r="7" stroke="#000" stroke-width="2"/>
+                                                                    <line x1="15.4142" y1="15" x2="20" y2="19.5858" stroke="#000" stroke-width="2" stroke-linecap="round"/>
+                                                            </svg>
+                                                        </span>
+                        </button>
+                    </form>
+                <?php endif; ?>
                 <?php if (!is_user_logged_in()) : ?>
                     <a href="<?php echo esc_url(home_url('/inscription')); ?>" class="btn-inscription" aria-label="S'inscrire">S'inscrire</a>
                 <?php else : ?>

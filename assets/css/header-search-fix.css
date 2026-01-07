@@ -1,0 +1,10 @@
+.header-search button[type="submit"] svg,
+.header-search-loupe {
+  stroke: #000 !important;
+  color: #000 !important;
+  display: inline !important;
+  width: 22px !important;
+  height: 22px !important;
+  visibility: visible !important;
+  background: none !important;
+}
