@@ -37,35 +37,52 @@ document.addEventListener('DOMContentLoaded', function() {
                 <i class="bi bi-heart track-like"></i>
             </td>
         `;
-        // Ajout de l'événement de like/dislike sur le bouton coeur
-        tr.querySelectorAll('.track-like').forEach(heart => {
-            heart.addEventListener('click', function() {
-                const trackId = tr.querySelector('td:first-child')?.textContent?.trim();
-                const isLiked = heart.classList.contains('liked');
-                // Requête AJAX pour sauvegarder le like/dislike
-                fetch(window.ajaxurl || window.wp_data?.ajax_url, {
-                    method: 'POST',
-                    credentials: 'same-origin',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({
-                        action: isLiked ? 'remove_favorite' : 'add_favorite',
-                        track_id: trackId
-                    }).toString()
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.success) {
-                        if (isLiked) {
-                            heart.classList.remove('liked');
-                            heart.classList.remove('bi-heart-fill');
-                            heart.classList.add('bi-heart');
-                        } else {
-                            heart.classList.add('liked');
-                            heart.classList.remove('bi-heart');
-                            heart.classList.add('bi-heart-fill');
-                        }
-                    }
-                });
+        tr.querySelectorAll('.track-icons i').forEach(icon => {
+            icon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const service = this.getAttribute('aria-label');
+                let url = '';
+                switch (service) {
+                    case 'Spotify':
+                        url = `https://open.spotify.com/search/${encodeURIComponent(track.title)}`;
+                        break;
+                    case 'Amazon Music':
+                        url = `https://music.amazon.fr/search/${encodeURIComponent(track.title)}`;
+                        break;
+                    case 'YouTube Music':
+                        url = `https://music.youtube.com/search?q=${encodeURIComponent(track.title)}`;
+                        break;
+                    case 'Apple Music':
+                        url = `https://music.apple.com/search/${encodeURIComponent(track.title)}`;
+                        break;
+                }
+                if (url) {
+                    window.open(url, '_blank');
+                }
+            });
+        });
+
+        const heart = tr.querySelector('.track-like');
+        let isLiked = false;
+        heart.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isLiked = !isLiked;
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: isLiked ? 'add_favorite' : 'remove_favorite',
+                    track_id: track.id
+                }).toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    heart.classList.toggle('liked', isLiked);
+                    heart.classList.toggle('bi-heart-fill', isLiked);
+                    heart.classList.toggle('bi-heart', !isLiked);
+                }
             });
         });
         tracksTable.appendChild(tr);
@@ -226,63 +243,49 @@ function renderTracks(limit = tracksLimit) {
 }
 
 if (tracksTable) {
-    renderTracks(TRACKS_MIN);
-
-    if (tracksMoreBtn) {
-        tracksMoreBtn.addEventListener('click', () => {
-            if (tracksLimit >= tracks.length) {
-                renderTracks(TRACKS_MIN);
-            } else {
-                renderTracks(tracks.length);
-            }
-    tracksTable.addEventListener('click', function (e) {
-
-    // ScrollBy identique à movies-series.js
-    const carousel = document.querySelector('.composer-carousel');
-    if (carousel) {
-        const leftArrow = carousel.querySelector('.carousel-arrow.left');
-        const rightArrow = carousel.querySelector('.carousel-arrow.right');
-        const row = carousel.querySelector('.row');
-        if (leftArrow && rightArrow && row) {
-            let card = row.querySelector('.col-6, .col-md-3');
-            let cardWidth = card ? card.offsetWidth : 250;
-            let gap = 8;
-            let scrollAmount = cardWidth + gap;
-            let cardsPerScroll = 4;
-            let totalScrollAmount = scrollAmount * cardsPerScroll;
-            
-            leftArrow.addEventListener('click', function() {
-                let currentScroll = row.scrollLeft;
-                let targetScroll = Math.max(0, Math.round(currentScroll / scrollAmount) * scrollAmount - totalScrollAmount);
-                row.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    tracksTable.querySelectorAll('tr').forEach(row => {
+        const heart = row.querySelector('.track-like');
+        let isLiked = false;
+        heart.addEventListener('click', function(e) {
+            e.stopPropagation();
+            isLiked = !isLiked;
+            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({
+                    action: isLiked ? 'add_favorite' : 'remove_favorite',
+                    track_id: row.querySelector('td:first-child').textContent.trim()
+                }).toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    heart.classList.toggle('liked', isLiked);
+                    heart.classList.toggle('bi-heart-fill', isLiked);
+                    heart.classList.toggle('bi-heart', !isLiked);
+                }
             });
-            
-            rightArrow.addEventListener('click', function() {
-                let currentScroll = row.scrollLeft;
-                let targetScroll = Math.round(currentScroll / scrollAmount) * scrollAmount + totalScrollAmount;
-                row.scrollTo({ left: targetScroll, behavior: 'smooth' });
-            });
-        }
-    }
+        });
+    });
 }
 
-// === COMMENTAIRES ===
-// Afficher un commentaire
+// Commentaires
+const commentsZone = document.getElementById('commentsZone');
+const commentInput = document.querySelector('.comment-input');
+
 function renderComment(commentData) {
     const col = document.createElement('div');
     col.className = 'col-12 col-md-3';
     col.dataset.commentId = commentData.id;
-    const menuHtml = `
-        <div class="comment-menu">
-            <button class="comment-menu-btn" aria-label="Options">
-                <i class="bi bi-three-dots-vertical"></i>
-            </button>
-            <div class="comment-menu-dropdown">
-                <button class="comment-edit-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Modifier</button>
-                <button class="comment-delete-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Supprimer</button>
-            </div>
-        </div>`;
-    
+
+    let menuHtml = "<div class='comment-menu'>";
+    menuHtml += "<button class='comment-menu-btn' aria-label='Options'><i class='bi bi-three-dots-vertical'></i></button>";
+    menuHtml += "<div class='comment-menu-dropdown'>";
+    menuHtml += `<button class='comment-edit-btn'${!commentData.is_author ? " disabled style='opacity:0.5;cursor:not-allowed;'" : ''}>Modifier</button>`;
+    menuHtml += `<button class='comment-delete-btn'${!commentData.is_author ? " disabled style='opacity:0.5;cursor:not-allowed;'" : ''}>Supprimer</button>`;
+    menuHtml += "</div></div>";
+
     let dateHtml = '';
     if (commentData.created_at) {
         const date = new Date(commentData.created_at);
@@ -291,36 +294,38 @@ function renderComment(commentData) {
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
-        let timeAgo;
-        if (diffMins < 1) timeAgo = "à l'instant";
-        else if (diffMins < 60) timeAgo = `il y a ${diffMins} min`;
-        else if (diffHours < 24) timeAgo = `il y a ${diffHours}h`;
-        else if (diffDays < 7) timeAgo = `il y a ${diffDays}j`;
-        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
-        dateHtml = `<div class="comment-date">${timeAgo}</div>`;
+        let timeAgo = '';
+        if (diffMins < 1) {
+            timeAgo = "à l'instant";
+        } else if (diffMins < 60) {
+            timeAgo = `il y a ${diffMins} min`;
+        } else if (diffHours < 24) {
+            timeAgo = `il y a ${diffHours}h`;
+        } else if (diffDays < 7) {
+            timeAgo = `il y a ${diffDays}j`;
+        } else {
+            timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+        dateHtml = timeAgo;
     }
-    
+
     col.innerHTML = `
-        <div class="comment-card">
+        <div class='comment-card'>
             ${menuHtml}
-            <div class="comment-user">
-                <span class="comment-user-avatar-wrapper">
-                    ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+            <div class='comment-user'>
+                <span class='comment-user-avatar-wrapper'>
+                    ${commentData.avatar ? `<img src='${commentData.avatar}' alt='${commentData.user_name}' class='comment-user-avatar'>` : "<i class='bi bi-person comment-user-icon'></i>"}
                 </span>
-                <span class="comment-user-name">${commentData.user_name}</span>
-                <span class="comment-date">${dateHtml.replace('<div class=\"comment-date\">','').replace('</div>','')}</span>
+                <span class='comment-user-name'>${commentData.user_name}</span>
+                <span class='comment-date'>${dateHtml}</span>
             </div>
-            <div class="comment-text">${commentData.comment_text}</div>
+            <div class='comment-text'>${commentData.comment_text}</div>
         </div>
     `;
-    
     return col;
 }
 
 // Publier un commentaire
-const commentsZone = document.getElementById('commentsZone');
-const commentInput = document.querySelector('.comment-input');
-
 if (commentInput && !commentInput.disabled && typeof composerComments !== 'undefined') {
     commentInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && this.value.trim()) {

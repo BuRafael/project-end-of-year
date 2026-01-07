@@ -5,13 +5,15 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
-                        // Bloquer tout comportement par défaut sur les clics dans le <main> Favoris
-                        var mainFavoris = document.querySelector('main.favoris-page');
-                        if (mainFavoris) {
-                            mainFavoris.addEventListener('click', function(e) {
-                                e.preventDefault();
-                            }, true);
-                        }
+        // Bloquer le comportement par défaut uniquement pour les clics non-bouton dans <main> Favoris
+        var mainFavoris = document.querySelector('main.favoris-page');
+        if (mainFavoris) {
+            mainFavoris.addEventListener('click', function(e) {
+                if (!e.target.closest('button')) {
+                    e.preventDefault();
+                }
+            }, true);
+        }
                     // Log tous les clics pour traquer l'élément déclencheur
                 // Bloquer tout submit sur la page et logger l'origine
                 document.addEventListener('submit', function(e) {
@@ -330,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Attacher les événements de suppression et empêcher la propagation du clic sur la croix
     function attachRemoveListeners() {
-        document.querySelectorAll('.favoris-remove, .favoris-remove-track').forEach(btn => {
+        document.querySelectorAll('.favoris-remove, .favoris-remove-track, .favoris-remove-track-custom').forEach(btn => {
             btn.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -359,7 +361,25 @@ document.addEventListener('DOMContentLoaded', function() {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: form.toString()
         })
-        .then(() => init());
+        .then(async response => {
+            const text = await response.text();
+            try {
+                const data = JSON.parse(text);
+                console.log('[FAVORIS REMOVE] Server response:', data);
+                if (data.success) {
+                    init();
+                } else {
+                    alert('Erreur lors de la suppression du favori.');
+                }
+            } catch (e) {
+                console.error('[FAVORIS REMOVE] Erreur JSON:', e, '\nRéponse brute:', text);
+                alert('Erreur technique lors de la suppression du favori.');
+            }
+        })
+        .catch((e) => {
+            console.error('[FAVORIS REMOVE] Erreur AJAX:', e);
+            alert('Erreur réseau lors de la suppression du favori.');
+        });
     }
 
     // Exposer removeFavorite globalement pour les autres pages

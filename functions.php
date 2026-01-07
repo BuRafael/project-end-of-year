@@ -851,7 +851,9 @@ function theme_scripts() {
     }
     
     // Fiche compositeur template styles and scripts
-    if (is_page_template('template-fiche-compositeur.php') || $current_template === 'template-fiche-compositeur.php') {
+    static $fiche_compositeur_loaded = false;
+    if ((is_page_template('template-fiche-compositeur.php') || $current_template === 'template-fiche-compositeur.php') && !$fiche_compositeur_loaded) {
+        $fiche_compositeur_loaded = true;
         wp_enqueue_style('fiche-compositeur-style', get_template_directory_uri() . '/assets/css/Fiche-compositeur.css', array('header-style', 'footer-style', 'bootstrap'), time());
         wp_enqueue_script('fiche-compositeur-script', get_template_directory_uri() . '/assets/js/fiche-compositeur.js', array('bootstrap-js'), time(), true);
 

@@ -41,23 +41,21 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
                 favoriteTrackIds = data.data.debug_favorites_raw.musiques;
             }
-            if (favoriteTrackIds.length > 0) {
-                tracksTable.querySelectorAll('tr').forEach(row => {
-                    const trackId = row.dataset.id;
-                    const heart = row.querySelector('.track-like');
-                    if (heart) {
-                        if (favoriteTrackIds.includes(trackId)) {
-                            heart.classList.add('liked');
-                            heart.classList.remove('bi-heart');
-                            heart.classList.add('bi-heart-fill');
-                        } else {
-                            heart.classList.remove('liked');
-                            heart.classList.remove('bi-heart-fill');
-                            heart.classList.add('bi-heart');
-                        }
+            tracksTable.querySelectorAll('tr').forEach(row => {
+                const trackId = row.dataset.id;
+                const heart = row.querySelector('.track-like');
+                if (heart) {
+                    if (favoriteTrackIds.includes(trackId)) {
+                        heart.classList.add('liked');
+                        heart.classList.remove('bi-heart');
+                        heart.classList.add('bi-heart-fill');
+                    } else {
+                        heart.classList.remove('liked');
+                        heart.classList.remove('bi-heart-fill');
+                        heart.classList.add('bi-heart');
                     }
-                });
-            }
+                }
+            });
         });
     }
     if (tracksTable) {

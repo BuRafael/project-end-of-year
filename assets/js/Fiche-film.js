@@ -474,8 +474,8 @@ function renderTracks(limit = tracksLimit) {
         const trackId = `${window.currentMovieSlug || ''}-${t.id}`;
         let spotifyIcon = `<i class="bi bi-spotify" aria-label="Spotify"></i>`;
         let amazonIcon = `<i class="bi bi-amazon" aria-label="Amazon Music"></i>`;
-        let youtubeIcon = `<i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i>`;
-        let appleIcon = `<i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i>`;
+        let youtubeIcon = `<i class=\"bi bi-youtube" aria-label=\"YouTube Music"></i>`;
+        let appleIcon = `<i class=\"bi bi-apple" aria-label="Apple Music"></i>`;
         // Liens streaming pour Parasite piste 4 (The Frontal Lobe of Ki Taek)
         if (window.currentMovieSlug === 'parasite' && t.id === 4 && t.title === "The Frontal Lobe of Ki Taek") {
             spotifyIcon = `<a href="https://open.spotify.com/track/3MXeAlonSYccaVnVDZWtFg" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-spotify" aria-label="Spotify"></i></a>`;
@@ -499,64 +499,64 @@ function renderTracks(limit = tracksLimit) {
         }
                                         // Liens streaming pour La La Land piste 4
                                         if (window.currentMovieSlug === 'la-la-land' && t.id === 4) {
-                                            spotifyIcon = `<a href=\"https://open.spotify.com/track/4r9hiElqKWMPT4Z3vN2exq\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-                                            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B07QPK52XM\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-                                            appleIcon = `<a href=\"https://music.apple.com/us/song/a-lovely-night/1440863825\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-                                            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=trrH4sVZ0dQ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                                            spotifyIcon = `<a href=\"https://open.spotify.com/track/4r9hiElqKWMPT4Z3vN2exq\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+                                            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B07QPK52XM\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+                                            appleIcon = `<a href=\"https://music.apple.com/us/song/a-lovely-night/1440863825\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+                                            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=trrH4sVZ0dQ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
                                         }
                                             // Liens streaming pour La La Land piste 5
                                             if (window.currentMovieSlug === 'la-la-land' && t.id === 5) {
-                                                spotifyIcon = `<a href=\"https://open.spotify.com/track/3hJJC9owUiFLe1jGrndHYw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-                                                amazonIcon = `<a href=\"https://music.amazon.com/tracks/B073T4N4RZ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-                                                appleIcon = `<a href=\"https://music.apple.com/us/song/1440864013\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-                                                youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=1V5l_LbmWlQ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                                                spotifyIcon = `<a href=\"https://open.spotify.com/track/3hJJC9owUiFLe1jGrndHYw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+                                                amazonIcon = `<a href=\"https://music.amazon.com/tracks/B073T4N4RZ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+                                                appleIcon = `<a href=\"https://music.apple.com/us/song/1440864013\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+                                                youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=1V5l_LbmWlQ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
                                             }
                                 // Liens streaming pour La La Land piste 3
                                 if (window.currentMovieSlug === 'la-la-land' && t.id === 3) {
-                                    spotifyIcon = `<a href=\"https://open.spotify.com/track/0srCPlgs0vbIG8Q3zdtmOw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-                                    amazonIcon = `<a href=\"https://music.amazon.com/tracks/B06X3QKZ5G\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-                                    appleIcon = `<a href=\"https://music.apple.com/us/song/mia-sebastians-theme/1440863816\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-                                    youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=D3ovuBdbUqk\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                                    spotifyIcon = `<a href=\"https://open.spotify.com/track/0srCPlgs0vbIG8Q3zdtmOw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+                                    amazonIcon = `<a href=\"https://music.amazon.com/tracks/B06X3QKZ5G\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+                                    appleIcon = `<a href=\"https://music.apple.com/us/song/mia-sebastians-theme/1440863816\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+                                    youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=D3ovuBdbUqk\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
                                 }
                         // Liens streaming pour La La Land piste 2
                         if (window.currentMovieSlug === 'la-la-land' && t.id === 2) {
-                            spotifyIcon = `<a href=\"https://open.spotify.com/track/2bxo7P09q1qF0fetdjMhXg\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-                            amazonIcon = `<a href=\"https://music.amazon.com/albums/B01N1EO7WD\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-                            appleIcon = `<a href=\"https://music.apple.com/jp/song/someone-in-the-crowd-from-la-la-land-soundtrack/1440895887\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-                            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=-62YbRZqxjs\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                            spotifyIcon = `<a href=\"https://open.spotify.com/track/2bxo7P09q1qF0fetdjMhXg\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+                            amazonIcon = `<a href=\"https://music.amazon.com/albums/B01N1EO7WD\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+                            appleIcon = `<a href=\"https://music.apple.com/jp/song/someone-in-the-crowd-from-la-la-land-soundtrack/1440895887\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+                            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=-62YbRZqxjs\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
                         }
                 // Liens streaming pour La La Land piste 1
                 if (window.currentMovieSlug === 'la-la-land' && t.id === 1) {
-                    spotifyIcon = `<a href=\"https://open.spotify.com/track/5kRBzRZmZTXVg8okC7SJFZ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-                    amazonIcon = `<a href=\"https://music.amazon.com/tracks/B01N1EO7WD\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-                    appleIcon = `<a href=\"https://music.apple.com/fr/song/1440894905\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-                    youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=CWnYIb2lqpo\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                    spotifyIcon = `<a href=\"https://open.spotify.com/track/5kRBzRZmZTXVg8okC7SJFZ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+                    amazonIcon = `<a href=\"https://music.amazon.com/tracks/B01N1EO7WD\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+                    appleIcon = `<a href=\"https://music.apple.com/fr/song/1440894905\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+                    youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=CWnYIb2lqpo\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
                 }
         if (window.currentMovieSlug === 'inception' && t.id === 1) {
             spotifyIcon = `<a href="https://open.spotify.com/intl-fr/track/7DU7DNVDZouvJ34tPcPxBj" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-spotify" aria-label="Spotify"></i></a>`;
             amazonIcon = `<a href="https://music.amazon.com/albums/B003U9TDII?referrer=https%3A%2F%2Fmusic.amazon.com%2F" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-amazon" aria-label="Amazon Music"></i></a>`;
-            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=BC1LcJ7DIS0\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
-            appleIcon = `<a href=\"https://music.apple.com/gb/song/half-remembered-dream/380350107\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=BC1LcJ7DIS0\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/gb/song/half-remembered-dream/380350107\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
         } else if (window.currentMovieSlug === 'inception' && t.id === 2) {
-            spotifyIcon = `<a href=\"https://open.spotify.com/track/1VCBfWtJOGPV3mtGw8mSlW\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9Q1B0\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-            appleIcon = `<a href=\"https://music.apple.com/us/song/we-built-our-own-world/380350131\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=NPGvvfPbW20\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/1VCBfWtJOGPV3mtGw8mSlW\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9Q1B0\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/us/song/we-built-our-own-world/380350131\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=NPGvvfPbW20\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
         } else if (window.currentMovieSlug === 'inception' && t.id === 3) {
-            spotifyIcon = `<a href=\"https://open.spotify.com/track/5xKVYMxOHB2XRLCUafFrz6\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9RQWI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-            appleIcon = `<a href=\"https://music.apple.com/be/song/380350137\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=OzLhXesNkCI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/5xKVYMxOHB2XRLCUafFrz6\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9RQWI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/be/song/380350137\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=OzLhXesNkCI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
         } else if (window.currentMovieSlug === 'inception' && t.id === 4) {
-            spotifyIcon = `<a href=\"https://open.spotify.com/track/7G799Mcsbvfn5TSWZ7u7gI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-            amazonIcon = `<a href=\"https://music.amazon.com/albums/B003U9TDII\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-            appleIcon = `<a href=\"https://music.apple.com/gb/album/inception-music-from-the-motion-picture/380349905\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=ZEpYcwmUkzg\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/7G799Mcsbvfn5TSWZ7u7gI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/albums/B003U9TDII\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/gb/album/inception-music-from-the-motion-picture/380349905\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=ZEpYcwmUkzg\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
         } else if (window.currentMovieSlug === 'inception' && t.id === 5) {
-            spotifyIcon = `<a href=\"https://open.spotify.com/track/3maMYEbpgp1ttMONc8Wjyr\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
-            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9TDQK\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
-            appleIcon = `<a href=\"https://music.apple.com/us/song/old-souls/380350146\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
-            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=9V1cO9LFULw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/3maMYEbpgp1ttMONc8Wjyr\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9TDQK\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/us/song/old-souls/380350146\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=9V1cO9LFULw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube" aria-label="YouTube Music"></i></a>`;
         }
         tracksTable.innerHTML += `
             <tr data-id="${trackId}">
@@ -1280,6 +1280,60 @@ function deleteComment(commentId, element) {
 
 // Charger les commentaires au démarrage
 loadComments();
+
+// --- PERSISTENCE DES LIKES DE PISTES (TRACKS) ---
+function refreshTrackLikes() {
+    if (!tracksTable) return;
+    var ajaxUrl = window.ajaxurl || (window.wp_data && window.wp_data.ajax_url);
+    fetch(ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ action: 'get_user_favorites' })
+    })
+    .then(async r => {
+        const text = await r.text();
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            console.error('Réponse AJAX non JSON:', text);
+            throw e;
+        }
+    })
+    .then(data => {
+        let favoriteTrackIds = [];
+        if (data.success && data.data && Array.isArray(data.data.musiques) && data.data.musiques.length > 0) {
+            favoriteTrackIds = data.data.musiques.map(m => typeof m === 'string' ? m : m.id);
+        } else if (data.data && data.data.debug_favorites_raw && Array.isArray(data.data.debug_favorites_raw.musiques)) {
+            favoriteTrackIds = data.data.debug_favorites_raw.musiques;
+        }
+        tracksTable.querySelectorAll('tr').forEach(row => {
+            const trackId = row.dataset.id;
+            const heart = row.querySelector('.track-like');
+            if (heart) {
+                if (favoriteTrackIds.includes(trackId)) {
+                    heart.classList.add('liked');
+                    heart.classList.remove('bi-heart');
+                    heart.classList.add('bi-heart-fill');
+                } else {
+                    heart.classList.remove('liked');
+                    heart.classList.remove('bi-heart-fill');
+                    heart.classList.add('bi-heart');
+                }
+            }
+        });
+    })
+    .catch(e => {
+        console.error('Erreur AJAX favoris pistes:', e);
+    });
+}
+// Call refreshTrackLikes after every renderTracks
+const originalRenderTracks = renderTracks;
+renderTracks = function() {
+    originalRenderTracks.apply(this, arguments);
+    setTimeout(refreshTrackLikes, 100);
+};
+
 
 // === CARROUSEL : FILMS SIMILAIRES DYNAMIQUE ===
 const defaultCover = imagePath + 'Interstellar.jpg';
