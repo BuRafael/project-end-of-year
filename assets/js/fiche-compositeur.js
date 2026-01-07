@@ -66,8 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             heart.classList.remove('bi-heart');
                             heart.classList.add('bi-heart-fill');
                         }
+                        }
+                    });
                 });
-            });
         });
         tracksTable.appendChild(tr);
     }
@@ -113,11 +114,8 @@ if (tracksTable) {
                     }
                 }
             });
-
         }
-
     });
-}
     // Afficher les 5 premières pistes
     const initialTracks = tracks.slice(0, 5);
     initialTracks.forEach(t => {
@@ -126,6 +124,7 @@ if (tracksTable) {
 
     // Fonction pour rafraîchir l'état des likes sur toutes les pistes affichées
     function refreshTrackLikes() {
+    }
         fetch(window.ajaxurl || window.wp_data?.ajax_url, {
             method: 'POST',
             credentials: 'same-origin',
@@ -161,7 +160,7 @@ tracksMoreBtnWrapper.className = 'text-center';
 tracksMoreBtnWrapper.innerHTML = '<button id="tracksMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>';
 if (tracksTable && !document.getElementById('tracksMoreBtn')) {
     tracksTable.parentNode.insertBefore(tracksMoreBtnWrapper, tracksTable.nextSibling);
-}
+});
 const tracksMoreBtn = document.getElementById('tracksMoreBtn');
 const TRACKS_MIN = 5;
 const TRACKS_STEP = 5;
@@ -393,111 +392,4 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
             });
         }
     });
-                            likeBtn.addEventListener('click', function () {
-                                // Vérifier connexion utilisateur
-                                var isUserLoggedIn = false;
-                                try {
-                                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
-                                } catch (e) {}
-                                if (!isUserLoggedIn) {
-                                    window.location.href = '/inscription';
-                                    return;
-                                }
-                                const isLiked = this.classList.contains('liked');
-                                let count = parseInt(likeCountSpan.textContent, 10) || 0;
-                                // Optimistic UI
-                                this.classList.toggle('liked');
-                                if (isLiked) {
-                                    count = Math.max(0, count-1);
-                                    this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
-                                    this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
-                                    this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
-                                } else {
-                                    count++;
-                                    this.querySelector('.svg-thumb-up').style.fill = '#700118';
-                                    this.querySelector('.svg-thumb-up').style.color = '#700118';
-                                    this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
-                                }
-                                likeCountSpan.textContent = count;
-                                // AJAX
-                                fetch(window.ajaxurl || window.wp_data?.ajax_url, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                                    body: new URLSearchParams({
-                                        action: isLiked ? 'unlike_comment' : 'like_comment',
-                                        nonce: window.movieComments?.nonce,
-                                        comment_id: commentData.id
-                                    })
-                                })
-                                .then(response => response.json())
-                                .then(data => {
-                                    if (!data.success) {
-                                        // Rollback UI
-                                        this.classList.toggle('liked');
-                                        if (isLiked) {
-                                            likeCountSpan.textContent = count+1;
-                                            this.querySelector('.svg-thumb-up').style.fill = '#700118';
-                                            this.querySelector('.svg-thumb-up').style.color = '#700118';
-                                            this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
-                                        } else {
-                                            likeCountSpan.textContent = Math.max(0, count-1);
-                                            this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
-                                            this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
-                                            this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
-                                        }
-                                        alert('Erreur lors du like.');
-                                    }
-                                })
-                                .catch((err) => {
-                                    // Rollback UI
-                                    this.classList.toggle('liked');
-                                    if (isLiked) {
-                                        likeCountSpan.textContent = count+1;
-                                        this.querySelector('.svg-thumb-up').style.fill = '#700118';
-                                        this.querySelector('.svg-thumb-up').style.color = '#700118';
-                                        this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
-                                    } else {
-                                        likeCountSpan.textContent = Math.max(0, count-1);
-                                        this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
-                                        this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
-                                        this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
-                                    }
-                                    alert('Erreur réseau lors du like.');
-                                });
-                            });
-                        }
-                        commentsZone.insertBefore(col, commentsZone.firstChild);
-                        // Gestion du menu
-                        if (commentData.is_author) {
-                            const menuBtn = col.querySelector('.comment-menu-btn');
-                            const menuDropdown = col.querySelector('.comment-menu-dropdown');
-                            menuBtn.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                menuDropdown.classList.toggle('show');
-                            });
-                            // Modifier
-                            col.querySelector('.comment-edit-btn').addEventListener('click', () => {
-                                const textEl = col.querySelector('.comment-text');
-                                const currentText = textEl.textContent;
-                                textEl.innerHTML = `<input type="text" class="comment-edit-input" value="${currentText}">`;
-                                const input = textEl.querySelector('.comment-edit-input');
-                                input.focus();
-                                input.addEventListener('keypress', (e) => {
-                                    if (e.key === 'Enter') {
-                                        editComment(commentData.id, input.value, textEl);
-                                    }
-                                });
-                                menuDropdown.classList.remove('show');
-                            });
-                            // Supprimer
-                            col.querySelector('.comment-delete-btn').addEventListener('click', () => {
-                                if (confirm('Supprimer ce commentaire ?')) {
-                                    deleteComment(commentData.id, col);
-                                }
-                            });
-                        }
-                        // Fermer le menu si on clique ailleurs
-                        document.addEventListener('click', () => {
-                            document.querySelectorAll('.comment-menu-dropdown.show').forEach(d => d.classList.remove('show'));
-                        });
-                    }
+}
