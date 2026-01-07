@@ -4,13 +4,11 @@
  */
 
 document.addEventListener('DOMContentLoaded', function() {
-    const commentInput = document.getElementById('commentInput');
-
-    // Fonction pour afficher une piste dans le tableau
+    // Fonction pour afficher une piste dans le tableau (fusion des deux versions)
     function appendTrack(track) {
         if (!tracksTable) return;
         const tr = document.createElement('tr');
-        const trackImage = track.image.includes('Hans Zimmer') ? imagePath + track.image : filmImagePath + track.image;
+        const trackImage = filmImagePath + track.image;
         let spotifyIcon = `<i class="bi bi-spotify" aria-label="Spotify"></i>`;
         let amazonIcon = `<i class="bi bi-amazon" aria-label="Amazon Music"></i>`;
         let youtubeIcon = `<i class="bi bi-youtube" aria-label="YouTube Music"></i>`;
@@ -66,9 +64,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             heart.classList.remove('bi-heart');
                             heart.classList.add('bi-heart-fill');
                         }
-                        }
-                    });
+                    }
                 });
+            });
         });
         tracksTable.appendChild(tr);
     }
@@ -76,20 +74,53 @@ document.addEventListener('DOMContentLoaded', function() {
 // === PISTES CELEBRES ===
 const tracks = [
     { id: 1, title: "Time", film: "Inception", duration: "4:35", image: "inception affiche film.jpg" },
-    { id: 2, title: "Now We Are Free", film: "Gladiator", duration: "4:15", image: "mad max fury road.jpg" }, // image alternative pour Matrix
+    { id: 2, title: "Now We Are Free", film: "Gladiator", duration: "4:15", image: "joker.JPG" },
     { id: 3, title: "Cornfield Chase", film: "Interstellar", duration: "2:06", image: "Interstellar.jpg" },
-    { id: 4, title: "Why So Serious?", film: "The Dark Knight", duration: "9:14", image: "joker.JPG" }, // image alternative pour Dark Knight
+    { id: 4, title: "Why So Serious?", film: "The Dark Knight", duration: "9:14", image: "get out.jpg" },
     { id: 5, title: "No Time for Caution", film: "Interstellar", duration: "4:06", image: "Interstellar.jpg" },
-    { id: 6, title: "He's a Pirate", film: "Pirates of the Caribbean", duration: "3:38", image: "the-prestige-md-web.jpg" },
+    { id: 6, title: "He's a Pirate", film: "Pirates of the Caribbean", duration: "3:38", image: "gravity.jpg" },
     { id: 7, title: "Mountains", film: "Interstellar", duration: "3:39", image: "Interstellar.jpg" },
     { id: 8, title: "Dream Is Collapsing", film: "Inception", duration: "2:28", image: "inception affiche film.jpg" },
-    { id: 9, title: "Tennessee", film: "Pearl Harbor", duration: "4:04", image: "arrival affiche similaire.jpg" },
-    { id: 10, title: "Earth", film: "Gladiator", duration: "3:54", image: "shutter island affiche similaire.jpg" }
+    { id: 9, title: "Tennessee", film: "Pearl Harbor", duration: "4:04", image: "Arrival.webp" },
+    { id: 10, title: "Earth", film: "Gladiator", duration: "3:54", image: "shutter island affiche similaire.jpg" },
+    { id: 11, title: "S.T.A.Y.", film: "Interstellar", duration: "6:52", image: "Interstellar.jpg" },
+    { id: 12, title: "Like a Dog Chasing Cars", film: "The Dark Knight", duration: "5:03", image: "get out.jpg" },
+    { id: 13, title: "Flight", film: "Man of Steel", duration: "5:46", image: "Arrival.webp" },
+    { id: 14, title: "What Are You Going to Do?", film: "Man of Steel", duration: "6:11", image: "Arrival.webp" },
+    { id: 15, title: "Mombasa", film: "Inception", duration: "4:54", image: "inception affiche film.jpg" },
+    { id: 16, title: "Roll Tide", film: "Crimson Tide", duration: "4:23", image: "shutter island affiche similaire.jpg" },
+    { id: 17, title: "Introduce a Little Anarchy", film: "The Dark Knight", duration: "5:25", image: "get out.jpg" },
+    { id: 18, title: "Journey to the Line", film: "The Thin Red Line", duration: "8:31", image: "Arrival.webp" },
+    { id: 19, title: "Chevaliers de Sangreal", film: "The Da Vinci Code", duration: "4:07", image: "shutter island affiche similaire.jpg" },
+    { id: 20, title: "This Land", film: "The Lion King", duration: "2:55", image: "joker.JPG" },
+    { id: 21, title: "Beautiful Lie", film: "Batman v Superman", duration: "4:17", image: "get out.jpg" },
+    { id: 22, title: "Epilogue", film: "Dunkirk", duration: "7:16", image: "Arrival.webp" },
+    { id: 23, title: "Drink Up Me Hearties", film: "Pirates of the Caribbean", duration: "4:31", image: "gravity.jpg" },
+    { id: 24, title: "My Enemy", film: "The Last Samurai", duration: "5:25", image: "shutter island affiche similaire.jpg" },
+    { id: 25, title: "Elysium", film: "Gladiator", duration: "2:48", image: "joker.JPG" }
 ];
 
 const tracksTable = document.getElementById("tracksTable");
-const imagePath = typeof composerImagePath !== 'undefined' ? composerImagePath : 'assets/image/Fiche Compositeur/';
-const filmImagePath = imagePath.replace('Fiche Compositeur', 'Fiche films');
+// Variables déjà déclarées plus haut
+
+function renderTracks(limit = tracksLimit) {
+    if (!tracksTable) return;
+    tracksLimit = limit;
+    tracksTable.innerHTML = '';
+    const slice = tracks.slice(0, tracksLimit);
+    slice.forEach(t => {
+        appendTrack(t);
+    });
+    if (tracksMoreBtn) {
+        if (tracksLimit >= tracks.length) {
+            tracksMoreBtn.style.display = 'inline-block';
+            tracksMoreBtn.innerText = 'Afficher moins';
+        } else {
+            tracksMoreBtn.style.display = 'inline-block';
+            tracksMoreBtn.innerText = 'Afficher plus…';
+        }
+    }
+}
 
 if (tracksTable) {
     // Charger les favoris utilisateur et mettre à jour les coeurs
@@ -105,73 +136,83 @@ if (tracksTable) {
             const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
             tracksTable.querySelectorAll('tr').forEach(row => {
                 let trackId = row.querySelector('td:first-child')?.textContent?.trim();
-                if (favoriteTrackIds.includes(String(trackId))) {
-                    const heart = row.querySelector('.track-like');
-                    if (heart) {
+                const heart = row.querySelector('.track-like');
+                if (heart) {
+                    if (favoriteTrackIds.includes(String(trackId))) {
                         heart.classList.add('liked');
                         heart.classList.remove('bi-heart');
                         heart.classList.add('bi-heart-fill');
+                    } else {
+                        heart.classList.remove('liked');
+                        heart.classList.remove('bi-heart-fill');
+                        heart.classList.add('bi-heart');
                     }
                 }
             });
         }
     });
-    // Afficher les 5 premières pistes
-    const initialTracks = tracks.slice(0, 5);
-    initialTracks.forEach(t => {
-        appendTrack(t);
-    });
+    renderTracks(TRACKS_MIN);
 
-    // Fonction pour rafraîchir l'état des likes sur toutes les pistes affichées
-    function refreshTrackLikes() {
-    }
-        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: new URLSearchParams({ action: 'get_user_favorites' }).toString()
-        })
-        .then(r => r.json())
-        .then(data => {
-            if (data.success && data.data && Array.isArray(data.data.musiques)) {
-                const favoriteTrackIds = data.data.musiques.map(m => String(m.id));
-                tracksTable.querySelectorAll('tr').forEach(row => {
-                    let trackId = row.querySelector('td:first-child')?.textContent?.trim();
-                    const heart = row.querySelector('.track-like');
-                    if (heart) {
-                        if (favoriteTrackIds.includes(String(trackId))) {
-                            heart.classList.add('liked');
-                            heart.classList.remove('bi-heart');
-                            heart.classList.add('bi-heart-fill');
-                        } else {
-                            heart.classList.remove('liked');
-                            heart.classList.remove('bi-heart-fill');
-                            heart.classList.add('bi-heart');
-                        }
-                    }
-                });
+    if (tracksMoreBtn) {
+        tracksMoreBtn.addEventListener('click', () => {
+            if (tracksLimit >= tracks.length) {
+                renderTracks(TRACKS_MIN);
+            } else {
+                renderTracks(tracks.length);
             }
         });
     }
 
-// === BOUTON AFFICHER PLUS/MOINS EXACTEMENT COMME FICHE FILM ===
-const tracksMoreBtnWrapper = document.createElement('div');
-tracksMoreBtnWrapper.className = 'text-center';
-tracksMoreBtnWrapper.innerHTML = '<button id="tracksMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>';
-if (tracksTable && !document.getElementById('tracksMoreBtn')) {
-    tracksTable.parentNode.insertBefore(tracksMoreBtnWrapper, tracksTable.nextSibling);
-});
+    tracksTable.addEventListener('click', function (e) {
+        const target = e.target;
+        if (!target.classList.contains('track-like')) return;
+
+        const liked = target.classList.toggle('liked');
+        target.classList.toggle('bi-heart', !liked);
+        target.classList.toggle('bi-heart-fill', liked);
+    });
+}
 const tracksMoreBtn = document.getElementById('tracksMoreBtn');
+const composerImgPath = typeof composerImagePath !== 'undefined' ? composerImagePath : '/wp-content/themes/project-end-of-year/assets/image/Fiche Compositeur/';
+const filmImagePath = composerImgPath.replace('Fiche Compositeur', 'Fiche films');
+
 const TRACKS_MIN = 5;
-const TRACKS_STEP = 5;
 let tracksLimit = TRACKS_MIN;
+
 function renderTracks(limit = tracksLimit) {
     if (!tracksTable) return;
     tracksLimit = limit;
     tracksTable.innerHTML = '';
     const slice = tracks.slice(0, tracksLimit);
-    slice.forEach((t, idx) => {
-        appendTrack(t);
+    slice.forEach(t => {
+        const coverSrc = filmImagePath + t.image;
+        const trackId = `hanszimmer-${t.id}`;
+        tracksTable.innerHTML += `
+            <tr data-id="${trackId}">
+                <td>${t.id}</td>
+                <td>
+                    <div class="composer-track-info">
+                        <img src="${coverSrc}" class="composer-track-cover" alt="${t.title}">
+                        <div>
+                            <div class="composer-track-title">${t.title}</div>
+                            <div class="composer-track-film">${t.film}</div>
+                        </div>
+                    </div>
+                </td>
+                <td class="col-links">
+                    <span class="track-icons">
+                        <i class="bi bi-spotify" aria-label="Spotify"></i>
+                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
+                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
+                        <i class="bi bi-apple" aria-label="Apple Music"></i>
+                    </span>
+                </td>
+                <td class="col-duration text-center">${t.duration}</td>
+                <td class="col-like text-end">
+                    <i class="bi bi-heart track-like"></i>
+                </td>
+            </tr>
+        `;
     });
     if (tracksMoreBtn) {
         if (tracksLimit >= tracks.length) {
@@ -183,118 +224,65 @@ function renderTracks(limit = tracksLimit) {
         }
     }
 }
-renderTracks(TRACKS_MIN);
-if (tracksMoreBtn) {
-    tracksMoreBtn.addEventListener('click', function() {
-        if (tracksLimit >= tracks.length) {
-            renderTracks(TRACKS_MIN);
-        } else {
-            const nextLimit = Math.min(tracksLimit + TRACKS_STEP, tracks.length);
-            renderTracks(nextLimit);
-        }
-    });
-}
 
-// === CARROUSEL : COMPOSITEURS SIMILAIRES (STRICTEMENT IDENTIQUE À FILMS SIMILAIRES) ===
-const allComposers = [
-    { name: "Ramin Djawadi", specialty: "Game of Thrones, Westworld", image: "Ramin Djawadi.jpg" },
-    { name: "James Newton Howard", specialty: "The Dark Knight, Hunger Games", image: "James Newton Howard.jpg" },
-    { name: "Junkie XL (Tom Holkenborg)", specialty: "Mad Max: Fury Road, Deadpool", image: "Junkie XL (Tom Holkenborg).jpg" },
-    { name: "Ludwig Göransson", specialty: "Black Panther, Tenet", image: "Ludwig Göransson.jpg" },
-    { name: "Cliff Martinez", specialty: "Drive, Solaris", image: "Cliff Martinez.jpg" },
-    { name: "Steve Jablonsky", specialty: "Transformers, The Island", image: "Steve Jablonsky.jpg" },
-    { name: "Henry Jackman", specialty: "Kingsman, Captain America", image: "Henry jackman.jpg" },
-    { name: "Benjamin Wallfisch", specialty: "Blade Runner 2049, It", image: "Benjamin Wallfisch.jpg" },
-    { name: "Harry Gregson-Williams", specialty: "Shrek, The Martian", image: "Harry Gregson-Williams.jpg" },
-    { name: "John Powell", specialty: "How to Train Your Dragon, Shrek", image: "John Powell.webp" }
-];
+if (tracksTable) {
+    renderTracks(TRACKS_MIN);
 
-const similarComposersRow = document.getElementById("similarComposers");
-if (similarComposersRow) {
-    // Générer toutes les cartes compositeur strictement comme les films similaires
-    similarComposersRow.innerHTML = '';
-    allComposers.forEach(composer => {
-        const col = document.createElement('div');
-        col.className = 'col-6 mb-3 col-md-3'; // 2 cartes sur mobile, 4 sur desktop
-        col.innerHTML = `
-            <div class="carousel-card movie-card d-flex flex-column align-items-center p-0">
-                <img src="/wp-content/themes/project-end-of-year/assets/image/Fiche Compositeur/${composer.image}" alt="${composer.name}" class="movie-card-img">
-                <div class="similar-card-title w-100 text-center py-3 px-2">${composer.name}</div>
-            </div>
-        `;
-        similarComposersRow.appendChild(col);
-    });
+    if (tracksMoreBtn) {
+        tracksMoreBtn.addEventListener('click', () => {
+            if (tracksLimit >= tracks.length) {
+                renderTracks(TRACKS_MIN);
+            } else {
+                renderTracks(tracks.length);
+            }
+    tracksTable.addEventListener('click', function (e) {
 
     // ScrollBy identique à movies-series.js
     const carousel = document.querySelector('.composer-carousel');
-    const leftArrow = carousel.querySelector('.carousel-arrow.left');
-    const rightArrow = carousel.querySelector('.carousel-arrow.right');
-    const row = carousel.querySelector('.row');
-    if (leftArrow && rightArrow && row) {
-        let card = row.querySelector('.col-6, .col-md-3, .col-12');
-        let cardWidth = card ? card.offsetWidth : 250;
-        let gap = 24;
-        let scrollAmount = cardWidth + gap;
-        leftArrow.addEventListener('click', function() {
-            row.scrollBy({ left: -(scrollAmount), behavior: 'smooth' });
-        });
-        rightArrow.addEventListener('click', function() {
-            row.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-        });
+    if (carousel) {
+        const leftArrow = carousel.querySelector('.carousel-arrow.left');
+        const rightArrow = carousel.querySelector('.carousel-arrow.right');
+        const row = carousel.querySelector('.row');
+        if (leftArrow && rightArrow && row) {
+            let card = row.querySelector('.col-6, .col-md-3');
+            let cardWidth = card ? card.offsetWidth : 250;
+            let gap = 8;
+            let scrollAmount = cardWidth + gap;
+            let cardsPerScroll = 4;
+            let totalScrollAmount = scrollAmount * cardsPerScroll;
+            
+            leftArrow.addEventListener('click', function() {
+                let currentScroll = row.scrollLeft;
+                let targetScroll = Math.max(0, Math.round(currentScroll / scrollAmount) * scrollAmount - totalScrollAmount);
+                row.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            });
+            
+            rightArrow.addEventListener('click', function() {
+                let currentScroll = row.scrollLeft;
+                let targetScroll = Math.round(currentScroll / scrollAmount) * scrollAmount + totalScrollAmount;
+                row.scrollTo({ left: targetScroll, behavior: 'smooth' });
+            });
+        }
     }
 }
 
-// Charger les commentaires existants
-function loadComments() {
-    if (!commentsZone || typeof composerComments === 'undefined') return;
-    
-    fetch(composerComments.ajax_url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            action: 'get_composer_comments',
-            composer_id: composerComments.composer_id
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success && data.data.comments.length > 0) {
-            commentsZone.innerHTML = '';
-            data.data.comments.forEach(c => {
-                renderComment(c);
-            });
-            
-            // Afficher le bouton "Afficher plus" si plus de 8 commentaires
-            const moreBtnWrapper = document.getElementById('commentsMoreBtnWrapper');
-            if (moreBtnWrapper && data.data.comments.length > 8) {
-                moreBtnWrapper.style.display = 'block';
-            }
-        } else {
-            commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
-
-        }
-        });
-    }
-
+// === COMMENTAIRES ===
 // Afficher un commentaire
 function renderComment(commentData) {
     const col = document.createElement('div');
     col.className = 'col-12 col-md-3';
     col.dataset.commentId = commentData.id;
-    
-    const menuHtml = commentData.is_author ? `
+    const menuHtml = `
         <div class="comment-menu">
             <button class="comment-menu-btn" aria-label="Options">
                 <i class="bi bi-three-dots-vertical"></i>
             </button>
             <div class="comment-menu-dropdown">
-                <button class="comment-edit-btn">Modifier</button>
-                <button class="comment-delete-btn">Supprimer</button>
+                <button class="comment-edit-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Modifier</button>
+                <button class="comment-delete-btn"${!commentData.is_author ? ' disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>Supprimer</button>
             </div>
-        </div>
-    ` : '';
+        </div>`;
     
-    // Formater la date
     let dateHtml = '';
     if (commentData.created_at) {
         const date = new Date(commentData.created_at);
@@ -303,14 +291,12 @@ function renderComment(commentData) {
         const diffMins = Math.floor(diffMs / 60000);
         const diffHours = Math.floor(diffMs / 3600000);
         const diffDays = Math.floor(diffMs / 86400000);
-        
         let timeAgo;
-        if (diffMins < 1) timeAgo = 'à l\'instant';
+        if (diffMins < 1) timeAgo = "à l'instant";
         else if (diffMins < 60) timeAgo = `il y a ${diffMins} min`;
         else if (diffHours < 24) timeAgo = `il y a ${diffHours}h`;
         else if (diffDays < 7) timeAgo = `il y a ${diffDays}j`;
-        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
-        
+        else timeAgo = date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
     
@@ -318,58 +304,23 @@ function renderComment(commentData) {
         <div class="comment-card">
             ${menuHtml}
             <div class="comment-user">
-                ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                <span class="comment-user-avatar-wrapper">
+                    ${commentData.avatar ? `<img src="${commentData.avatar}" alt="${commentData.user_name}" class="comment-user-avatar">` : '<i class="bi bi-person comment-user-icon"></i>'}
+                </span>
                 <span class="comment-user-name">${commentData.user_name}</span>
+                <span class="comment-date">${dateHtml.replace('<div class=\"comment-date\">','').replace('</div>','')}</span>
             </div>
-            ${dateHtml}
             <div class="comment-text">${commentData.comment_text}</div>
         </div>
     `;
     
-    commentsZone.insertBefore(col, commentsZone.firstChild);
-    
-    // Gestion du menu
-    if (commentData.is_author) {
-        const menuBtn = col.querySelector('.comment-menu-btn');
-        const menuDropdown = col.querySelector('.comment-menu-dropdown');
-        
-        menuBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menuDropdown.classList.toggle('show');
-        });
-        
-        // Modifier
-        col.querySelector('.comment-edit-btn').addEventListener('click', () => {
-            const textEl = col.querySelector('.comment-text');
-            const currentText = textEl.textContent;
-            textEl.innerHTML = `<input type="text" class="comment-edit-input" value="${currentText}">`;
-            const input = textEl.querySelector('.comment-edit-input');
-            input.focus();
-            
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') {
-                    editComment(commentData.id, input.value, textEl);
-                }
-            });
-            
-            menuDropdown.classList.remove('show');
-        });
-        
-        // Supprimer
-        col.querySelector('.comment-delete-btn').addEventListener('click', () => {
-            if (confirm('Supprimer ce commentaire ?')) {
-                deleteComment(commentData.id, col);
-            }
-        });
-    }
-    
-    // Fermer le menu si on clique ailleurs
-    document.addEventListener('click', () => {
-        document.querySelectorAll('.comment-menu-dropdown.show').forEach(d => d.classList.remove('show'));
-    });
+    return col;
 }
 
 // Publier un commentaire
+const commentsZone = document.getElementById('commentsZone');
+const commentInput = document.querySelector('.comment-input');
+
 if (commentInput && !commentInput.disabled && typeof composerComments !== 'undefined') {
     commentInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && this.value.trim()) {
@@ -385,11 +336,30 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success && data.data) {
-                    renderComment(data.data);
-                    commentInput.value = '';
+                if (data.success && commentsZone) {
+                    const emptyMsg = commentsZone.querySelector('.text-center');
+                    if (emptyMsg) {
+                        emptyMsg.parentElement.remove();
+                    }
+                    const newComment = renderComment({
+                        id: data.data.comment_id,
+                        user_name: data.data.user_name,
+                        avatar: data.data.avatar,
+                        comment_text: data.data.comment_text,
+                        is_author: true,
+                        created_at: data.data.created_at,
+                        like_count: 0
+                    });
+                    commentsZone.insertBefore(newComment, commentsZone.firstChild);
+                    this.value = '';
                 }
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'ajout du commentaire:', error);
             });
         }
     });
 }
+
+// Fin DOMContentLoaded
+});

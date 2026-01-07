@@ -133,7 +133,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/inception') ); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
                     <?php $inception = get_page_by_path('inception', OBJECT, 'films'); ?>
-                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" <?php if($inception) echo 'data-id="inception"'; ?> type="button" aria-label="Like">
+                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="inception" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -146,7 +146,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/la-la-land') ); ?>" class="top-composer-link">Damien Chazelle</a>
                     </div>
                     <?php $lalaland = get_page_by_path('la-la-land', OBJECT, 'films'); ?>
-                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" <?php if($lalaland) echo 'data-id="la-la-land"'; ?> type="button" aria-label="Like">
+                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="la-la-land" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -159,7 +159,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/parasite') ); ?>" class="top-composer-link">Bong Joon-ho</a>
                     </div>
                     <?php $parasite = get_page_by_path('parasite', OBJECT, 'films'); ?>
-                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" <?php if($parasite) echo 'data-id="parasite"'; ?> type="button" aria-label="Like">
+                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="parasite" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -172,7 +172,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/interstellar') ); ?>" class="top-composer-link">Christopher Nolan</a>
                     </div>
                     <?php $interstellar = get_page_by_path('interstellar', OBJECT, 'films'); ?>
-                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" <?php if($interstellar) echo 'data-id="interstellar"'; ?> type="button" aria-label="Like">
+                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="interstellar" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>
@@ -185,7 +185,7 @@ get_header();
                         <a href="<?php echo esc_url( home_url('/fiche-film/arrival') ); ?>" class="top-composer-link">Denis Villeneuve</a>
                     </div>
                     <?php $arrival = get_page_by_path('arrival', OBJECT, 'films'); ?>
-                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" <?php if($arrival) echo 'data-id="arrival"'; ?> type="button" aria-label="Like">
+                        <button class="like-btn movie-like-btn" data-liked="false" data-type="films" data-id="arrival" type="button" aria-label="Like">
                         <svg class="svg-heart-main" viewBox="0 0 24 24" width="28" height="28" aria-hidden="true" focusable="false">
                             <path class="svg-heart-shape" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                         </svg>

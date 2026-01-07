@@ -375,8 +375,8 @@ function cinemusic_get_user_favorites() {
         }
     }
     $favoris_data = [
-        'films' => enrich_favoris($favorites['films'], 'films'),
-        'series' => enrich_favoris($favorites['series'], 'series'),
+        'films' => $favorites['films'], // Retourner directement les objets stockés
+        'series' => $favorites['series'], // Retourner directement les objets stockés
         'musiques' => $musiques,
         'debug_favorites_raw' => $favorites,
         'debug_musiques_php' => $musiques,
@@ -403,19 +403,19 @@ wp_send_json_error(['message' => 'Type ou item invalide.']);
     if (!is_array($favorites)) {
         $favorites = [ 'films' => [], 'series' => [], 'musiques' => [] ];
     }
-    // Nettoyage : convertir tous les favoris films/séries en liste d'IDs si besoin, supprimer vides et doublons
+    
+    // Nettoyage des anciennes données : supprimer les entrées avec "undefined" pour films et séries
     foreach (['films', 'series'] as $cat) {
         if (isset($favorites[$cat]) && is_array($favorites[$cat])) {
-            $favorites[$cat] = array_map(function($f) {
-                if (is_array($f) && isset($f['id'])) return $f['id'];
-                return $f;
-            }, $favorites[$cat]);
-            // Supprimer les IDs vides
-            $favorites[$cat] = array_filter($favorites[$cat], function($f) { return !empty($f); });
-            // Supprimer les doublons
-            $favorites[$cat] = array_values(array_unique($favorites[$cat]));
+            $favorites[$cat] = array_values(array_filter($favorites[$cat], function($f) {
+                // Garder seulement les objets valides avec titre et image non-undefined
+                if (!is_array($f)) return false;
+                if (!isset($f['title']) || $f['title'] === 'undefined' || $f['title'] === '') return false;
+                return true;
+            }));
         }
     }
+    
     // Pour musiques, stocker l'objet complet avec toutes les infos
     if ($type === 'musiques') {
         $slug = isset($item['slug']) ? $item['slug'] : (isset($item['source']) ? sanitize_title($item['source']) : 'film');
@@ -449,20 +449,33 @@ wp_send_json_error(['message' => 'Type ou item invalide.']);
         if (ob_get_length()) ob_clean();
 wp_send_json_success($favorites);
     }
-    // Pour films : ID numérique, pour séries : slug ou ID accepté
-    $already = false;
+    // Pour films/séries : stocker l'objet complet comme pour les musiques
+    // Nettoyer les valeurs "undefined" qui peuvent venir du JavaScript
+    $title = isset($item['title']) && $item['title'] !== 'undefined' ? $item['title'] : 'Titre inconnu';
+    $image = isset($item['image']) && $item['image'] !== 'undefined' && $item['image'] !== '' ? $item['image'] : '';
+    $url = isset($item['url']) && $item['url'] !== 'undefined' ? $item['url'] : '';
+    
+    $film_or_serie_item = array(
+        'id' => $item['id'],
+        'title' => $title,
+        'image' => $image,
+        'url' => $url,
+    );
+    
+    // Vérifier si déjà dans les favoris
+    $already_exists = false;
     foreach ($favorites[$type] as $fav) {
-        if ((string)$fav === (string)$item['id']) {
-            $already = true;
+        $fav_id = is_array($fav) && isset($fav['id']) ? $fav['id'] : $fav;
+        if ((string)$fav_id === (string)$item['id']) {
+            $already_exists = true;
             break;
         }
     }
-    if ($already) {
-        update_user_meta($user_id, 'cinemusic_favorites', $favorites);
-        if (ob_get_length()) ob_clean();
-wp_send_json_success($favorites);
+    
+    if (!$already_exists) {
+        $favorites[$type][] = $film_or_serie_item;
     }
-    $favorites[$type][] = $item['id'];
+    
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
     if (ob_get_length()) ob_clean();
 wp_send_json_success($favorites);
@@ -500,52 +513,18 @@ wp_send_json_error(['message' => 'Type invalide.']);
         if (ob_get_length()) ob_clean();
 wp_send_json_success($favorites);
     }
-    // Suppression maximale : retire toutes les variantes d'un film (ID, slug, post_name, ID du post lié au slug)
-    $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id, $type) {
+    // Pour films/séries, comparer l'ID dans les objets stockés
+    $favorites[$type] = array_values(array_filter($favorites[$type], function($fav) use ($id) {
         if (empty($fav)) return false;
         $favId = is_array($fav) && isset($fav['id']) ? $fav['id'] : $fav;
-        // Comparaison directe
-        if ((string)$favId === (string)$id) return false;
-        // Si l'un est numérique et l'autre un slug, on tente de récupérer l'ID du slug
-        if (is_numeric($favId) && !is_numeric($id)) {
-            $post = get_page_by_path($id, OBJECT, $type);
-            if ($post && (string)$post->ID === (string)$favId) return false;
-        }
-        if (!is_numeric($favId) && is_numeric($id)) {
-            $post = get_post($favId);
-            if ($post && $post->post_name === $id) return false;
-        }
-        // Si les deux sont numériques, mais pointent vers le même post
-        if (is_numeric($favId) && is_numeric($id) && (string)$favId !== (string)$id) {
-            $postA = get_post($favId);
-            $postB = get_post($id);
-            if ($postA && $postB && $postA->post_name === $postB->post_name) return false;
-        }
-        // Si les deux sont des slugs, mais pointent vers le même post
-        if (!is_numeric($favId) && !is_numeric($id) && (string)$favId !== (string)$id) {
-            $postA = get_page_by_path($favId, OBJECT, $type);
-            $postB = get_page_by_path($id, OBJECT, $type);
-            if ($postA && $postB && $postA->ID === $postB->ID) return false;
-        }
-        // Si le favori est un slug et l'ID envoyé est le post_name du post lié à l'ID numérique
-        if (!is_numeric($favId) && is_numeric($id)) {
-            $post = get_post($id);
-            if ($post && $post->post_name === $favId) return false;
-        }
-        // Si le favori est un ID numérique et l'ID envoyé est le post_name du post lié à ce favori
-        if (is_numeric($favId) && !is_numeric($id)) {
-            $post = get_post($favId);
-            if ($post && $post->post_name === $id) return false;
-        }
-        return true;
+        return (string)$favId !== (string)$id;
     }));
-    // Nettoyage films/séries : supprimer vides et doublons
-    $favorites[$type] = array_filter($favorites[$type], function($f) { return !empty($f); });
-    $favorites[$type] = array_values(array_unique($favorites[$type]));
+    
     update_user_meta($user_id, 'cinemusic_favorites', $favorites);
     if (ob_get_length()) ob_clean();
 wp_send_json_success($favorites);
 }
+
 // === SYSTÈME DE LIKE SUR COMMENTAIRES ===
 add_action('wp_ajax_like_comment', 'theme_like_comment');
 add_action('wp_ajax_unlike_comment', 'theme_unlike_comment');

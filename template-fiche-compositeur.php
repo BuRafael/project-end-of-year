@@ -81,7 +81,7 @@ get_header();
         </div>
 
         <div class="text-center">
-            <button id="tracksMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>
+            <button id="tracksMoreBtn" class="btn composer-btn-light small px-5">Afficher plus…</button>
         </div>
     </section>
 
@@ -153,6 +153,13 @@ get_header();
 <script>
     // Chemin des images pour JavaScript
     const composerImagePath = '<?php echo esc_js(get_template_directory_uri()); ?>/assets/image/Fiche Compositeur/';
+    
+    // Variables pour les commentaires
+    const composerComments = {
+        ajax_url: '<?php echo esc_js(admin_url('admin-ajax.php')); ?>',
+        nonce: '<?php echo wp_create_nonce('composer_comments_nonce'); ?>',
+        composer_id: 'hans-zimmer'
+    };
 </script>
 
 <?php get_footer(); ?>
