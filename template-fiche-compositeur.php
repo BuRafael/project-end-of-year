@@ -81,7 +81,7 @@ get_header();
         </div>
 
         <div class="text-center">
-            <button id="tracksMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>
+            <button id="tracksMoreBtn" class="btn composer-btn-light small px-5">Afficher plus…</button>
         </div>
     </section>
 

@@ -472,6 +472,9 @@
 .favoris-remove-track:hover {
     color: #fff;
 }
+
+.favoris-track {
+    display: grid;
     grid-template-columns: 40px 1fr auto auto 50px;
     align-items: center;
     gap: 1rem;
