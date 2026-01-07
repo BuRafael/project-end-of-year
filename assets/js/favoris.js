@@ -362,6 +362,8 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(() => init());
     }
 
+    // Exposer removeFavorite globalement pour les autres pages
+    window.removeFavorite = removeFavorite;
 
     // Ajouter un favori (à appeler dans ton code d'ajout)
     window.addFavorite = function(type, item) {
@@ -391,6 +393,9 @@ document.addEventListener('DOMContentLoaded', function() {
             renderMusiques(favorites.musiques);
         });
     }
+
+    // Exposer init globalement pour permettre le rafraîchissement depuis d'autres pages
+    window.FavorisPage = { init: init };
 
     // Lancer l'initialisation
     init();

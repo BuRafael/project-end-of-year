@@ -75,7 +75,8 @@ function getUserFavorites(type, callback) {
 }
 
 function updateFavorite(action, type, item, callback) {
-  const form = new FormData();
+  console.log('[updateFavorite] Début:', { action, type, item });
+  const form = new URLSearchParams();
   form.append('action', action);
   form.append('type', type);
   if (action === 'add_user_favorite') {
@@ -93,13 +94,25 @@ function updateFavorite(action, type, item, callback) {
     console.error('[LikeBtn] ERREUR: Aucune URL AJAX trouvée (ni window.cinemusicAjax.ajaxurl ni window.ajaxurl)');
     return;
   }
+  console.log('[updateFavorite] URL AJAX:', ajaxUrl);
+  console.log('[updateFavorite] Données envoyées:', form.toString());
   fetch(ajaxUrl, {
     method: 'POST',
     credentials: 'same-origin',
-    body: form
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: form.toString()
   })
-    .then(r => r.json())
-    .then(data => callback(data));
+    .then(r => {
+      console.log('[updateFavorite] Réponse brute:', r);
+      return r.json();
+    })
+    .then(data => {
+      console.log('[updateFavorite] Réponse JSON:', data);
+      if (callback) callback(data);
+    })
+    .catch(err => {
+      console.error('[updateFavorite] ERREUR:', err);
+    });
 }
 
 function normalizeType(type) {
@@ -223,65 +236,107 @@ function initHearts() {
           mediaId = String(mediaId);
           const isLiked = btn.getAttribute('data-liked') === 'true';
           let clickType = mediaType;
-          // Utilise le type normalisé pour la sélection (évite les bugs entre 'series' et 'serie')
-          let allBtns = document.querySelectorAll('.like-btn[data-id="' + mediaId + '"][data-type]');
-          allBtns = Array.from(allBtns).filter(b => normalizeType(b.dataset.type) === mediaType);
           // Préparer l'objet favori pour Favoris.js
           let mediaCard = btn.closest('.media-card, .film-card, .serie-card, li, .track-row');
-          let mediaTitle = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link')?.textContent || '';
-          let mediaLink = mediaCard?.querySelector('a')?.href || '';
-          let mediaImage = btn.dataset.poster || mediaCard?.querySelector('img')?.src || '';
+          console.log('[DEBUG] mediaCard:', mediaCard);
+          
+          let titleElement = mediaCard?.querySelector('.media-title, .film-title, .serie-title, .top-title-link');
+          let mediaTitle = titleElement?.textContent?.trim() || 'Titre inconnu';
+          console.log('[DEBUG] titleElement:', titleElement, 'mediaTitle:', mediaTitle);
+          
+          let linkElement = mediaCard?.querySelector('a');
+          let mediaLink = linkElement?.href || '';
+          console.log('[DEBUG] linkElement:', linkElement, 'mediaLink:', mediaLink);
+          
+          let imgElement = mediaCard?.querySelector('img');
+          let mediaImage = btn.dataset.poster || imgElement?.src || '';
+          console.log('[DEBUG] imgElement:', imgElement, 'mediaImage:', mediaImage);
+          
           let favItem = { id: mediaId, title: mediaTitle, image: mediaImage, url: mediaLink };
+          console.log('[LikeBtn Click] Type:', clickType, 'ID:', mediaId, 'Item:', favItem);
           if (isLiked) {
-            // MAJ visuelle instantanée (optimiste)
-            allBtns.forEach(b => {
-              b.setAttribute('data-liked', 'false');
-              b.classList.remove('liked');
-              const path = b.querySelector('svg .svg-heart-shape');
-              if (path) {
-                path.setAttribute('fill', 'none');
-                path.setAttribute('stroke', '#888888');
-              }
-              if (!b.querySelector('svg')) {
-                b.textContent = '♡';
-                b.style.color = '#ffffff';
-              }
-            });
+            // MAJ visuelle instantanée (optimiste) - seulement le bouton cliqué
+            btn.setAttribute('data-liked', 'false');
+            btn.classList.remove('liked');
+            const path = btn.querySelector('svg .svg-heart-shape');
+            if (path) {
+              path.setAttribute('fill', 'none');
+              path.setAttribute('stroke', '#888888');
+            }
+            if (!btn.querySelector('svg')) {
+              btn.textContent = '♡';
+              btn.style.color = '#ffffff';
+            }
+            // Supprimer des favoris avec AJAX
             updateFavorite('remove_user_favorite', clickType, {id: mediaId}, (data) => {
-              if (window.FavorisPage) window.FavorisPage.removeFavorite && window.FavorisPage.removeFavorite(clickType, mediaId);
-              if (clickType === 'films') {
-                favFilms = favFilms.filter(f => String(f.id ?? f) !== mediaId);
-              } else if (clickType === 'series') {
-                favSeries = favSeries.filter(s => String(s.id ?? s) !== mediaId);
+              console.log('[LikeBtn] Réponse AJAX remove_user_favorite:', data);
+              if (data && data.success) {
+                if (clickType === 'films') {
+                  favFilms = favFilms.filter(f => String(f.id ?? f) !== mediaId);
+                } else if (clickType === 'series') {
+                  favSeries = favSeries.filter(s => String(s.id ?? s) !== mediaId);
+                }
+                // Mettre à jour la page favoris si elle est chargée
+                if (window.FavorisPage && window.FavorisPage.init) {
+                  window.FavorisPage.init();
+                }
+              } else {
+                console.error('[LikeBtn] Échec de la suppression des favoris:', data);
+                // Rollback UI si échec
+                btn.setAttribute('data-liked', 'true');
+                btn.classList.add('liked');
+                const path = btn.querySelector('svg .svg-heart-shape');
+                if (path) {
+                  path.setAttribute('fill', '#700118');
+                  path.setAttribute('stroke', '#700118');
+                }
+                if (!btn.querySelector('svg')) {
+                  btn.textContent = '♥';
+                  btn.style.color = '#700118';
+                }
               }
-              updateButtons();
             });
           } else {
-            // MAJ visuelle instantanée (optimiste)
-            allBtns.forEach(b => {
-              b.setAttribute('data-liked', 'true');
-              b.classList.add('liked');
-              const path = b.querySelector('svg .svg-heart-shape');
-              if (path) {
-                path.setAttribute('fill', '#700118');
-                path.setAttribute('stroke', '#700118');
+            // MAJ visuelle instantanée (optimiste) - seulement le bouton cliqué
+            btn.setAttribute('data-liked', 'true');
+            btn.classList.add('liked');
+            const path = btn.querySelector('svg .svg-heart-shape');
+            if (path) {
+              path.setAttribute('fill', '#700118');
+              path.setAttribute('stroke', '#700118');
+            }
+            if (!btn.querySelector('svg')) {
+              btn.textContent = '♥';
+              btn.style.color = '#700118';
+            }
+            // Ajouter aux favoris avec AJAX
+            updateFavorite('add_user_favorite', clickType, favItem, (data) => {
+              console.log('[LikeBttn] Réponse AJAX add_user_favorite:', data);
+              if (data && data.success) {
+                if (clickType === 'films') {
+                  favFilms.push({id: mediaId});
+                } else if (clickType === 'series') {
+                  favSeries.push({id: mediaId});
+                }
+                // Mettre à jour la page favoris si elle est chargée
+                if (window.FavorisPage && window.FavorisPage.init) {
+                  window.FavorisPage.init();
+                }
+              } else {
+                console.error('[LikeBtn] Échec de l\'ajout aux favoris:', data);
+                // Rollback UI si échec
+                btn.setAttribute('data-liked', 'false');
+                btn.classList.remove('liked');
+                const path = btn.querySelector('svg .svg-heart-shape');
+                if (path) {
+                  path.setAttribute('fill', 'none');
+                  path.setAttribute('stroke', '#888888');
+                }
+                if (!btn.querySelector('svg')) {
+                  btn.textContent = '♡';
+                  btn.style.color = '#ffffff';
+                }
               }
-              if (!b.querySelector('svg')) {
-                b.textContent = '♥';
-                b.style.color = '#700118';
-              }
-            });
-            updateFavorite('add_user_favorite', clickType, {id: mediaId}, (data) => {
-              // Ajoute localement à favFilms/favSeries
-              if (typeof window.addFavorite === 'function') {
-                window.addFavorite(clickType === 'films' ? 'film' : 'serie', favItem);
-              }
-              if (clickType === 'films') {
-                favFilms.push({id: mediaId});
-              } else if (clickType === 'series') {
-                favSeries.push({id: mediaId});
-              }
-              updateButtons();
             });
           }
         };
