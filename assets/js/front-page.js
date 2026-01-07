@@ -9,6 +9,39 @@ document.addEventListener('DOMContentLoaded', function() {
     initHearts();
     initCtaButton();
     animateCountersOnScroll();
+    initFrontPageSearchBar();
+// ========== FRONT PAGE SEARCH BAR ========== 
+function initFrontPageSearchBar() {
+  const searchBar = document.querySelector('.search-bar');
+  if (!searchBar) return;
+  const input = searchBar.querySelector('input[type="text"]');
+  const btn = searchBar.querySelector('.search-btn');
+  if (!input || !btn) return;
+
+  async function doSearch() {
+    const query = input.value.trim();
+    if (query.length === 0) return;
+    // AJAX search for posts matching the query
+    try {
+      const response = await fetch('/wp-json/wp/v2/search?search=' + encodeURIComponent(query) + '&per_page=2');
+      if (!response.ok) throw new Error('Erreur API');
+      const results = await response.json();
+      if (results.length === 1 && results[0].url) {
+        window.location.href = results[0].url;
+      } else {
+        window.location.href = '/?s=' + encodeURIComponent(query);
+      }
+    } catch (e) {
+      window.location.href = '/?s=' + encodeURIComponent(query);
+    }
+  }
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      doSearch();
+    }
+  });
+  btn.addEventListener('click', doSearch);
+}
 });
 
 /**
