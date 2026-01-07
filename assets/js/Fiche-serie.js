@@ -1,3 +1,156 @@
+// === LOGIQUE LIKE HARMONISÉE FRONT PAGE ===
+function getUserFavorites(type, callback) {
+    fetch(window.cinemusicAjax?.ajaxurl || window.ajaxurl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'action=get_user_favorites'
+    })
+        .then(r => r.json())
+        .then(data => {
+            if (data.success && data.data && data.data[type]) {
+                callback(data.data[type]);
+            } else {
+                callback([]);
+            }
+        });
+}
+
+function updateFavorite(action, type, item, callback) {
+    const form = new URLSearchParams();
+    form.append('action', action);
+    form.append('type', type);
+    if (action === 'add_user_favorite') {
+        form.append('item', JSON.stringify(item));
+    } else {
+        form.append('id', item.id);
+    }
+    let ajaxUrl = window.cinemusicAjax?.ajaxurl || window.ajaxurl;
+    fetch(ajaxUrl, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: form.toString()
+    })
+        .then(r => r.json())
+        .then(data => {
+            try {
+                localStorage.setItem('cinemusic_fav_sync', Date.now() + ':' + Math.random());
+            } catch(e) {}
+            if (callback) callback(data);
+        });
+}
+
+function normalizeType(type) {
+    if (type === 'film') return 'films';
+    if (type === 'serie' || type === 'anime') return 'series';
+    return type;
+}
+
+function initHearts() {
+    const likeButtons = document.querySelectorAll('.like-btn');
+    let favFilms = [];
+    let favSeries = [];
+    function updateButtons() {
+        likeButtons.forEach(button => {
+            let mediaTypeRaw = button.dataset.type || 'series';
+            let mediaType = normalizeType(mediaTypeRaw);
+            let mediaId = button.dataset.id || '';
+            mediaId = String(mediaId);
+            let isFav = false;
+            if (mediaType === 'films') {
+                isFav = favFilms.map(f => String(f.id ?? f)).includes(mediaId);
+            } else if (mediaType === 'series') {
+                isFav = favSeries.map(s => String(s.id ?? s)).includes(mediaId);
+            }
+            if (isFav) {
+                button.setAttribute('data-liked', 'true');
+                button.classList.add('liked');
+                const path = button.querySelector('svg .svg-heart-shape');
+                if (path) {
+                    path.setAttribute('fill', '#700118');
+                    path.setAttribute('stroke', '#700118');
+                }
+            } else {
+                button.setAttribute('data-liked', 'false');
+                button.classList.remove('liked');
+                const path = button.querySelector('svg .svg-heart-shape');
+                if (path) {
+                    path.setAttribute('fill', 'none');
+                    path.setAttribute('stroke', '#888888');
+                }
+            }
+            button.onclick = function(e) {
+                e.preventDefault();
+                let isUserLoggedIn = false;
+                try {
+                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+                } catch (err) {}
+                if (!isUserLoggedIn) {
+                    window.location.href = '/inscription';
+                    return;
+                }
+                const btn = this;
+                let mediaTypeRaw = btn.dataset.type || 'series';
+                let mediaType = normalizeType(mediaTypeRaw);
+                let mediaId = btn.dataset.id || '';
+                mediaId = String(mediaId);
+                const isLiked = btn.getAttribute('data-liked') === 'true';
+                let favItem = { id: mediaId };
+                if (isLiked) {
+                    btn.setAttribute('data-liked', 'false');
+                    btn.classList.remove('liked');
+                    const path = btn.querySelector('svg .svg-heart-shape');
+                    if (path) {
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('stroke', '#888888');
+                    }
+                    updateFavorite('remove_user_favorite', mediaType, {id: mediaId}, (data) => {
+                        getUserFavorites(mediaType, (favs) => {
+                            if (mediaType === 'films') favFilms = favs;
+                            if (mediaType === 'series') favSeries = favs;
+                            updateButtons();
+                        });
+                    });
+                } else {
+                    btn.setAttribute('data-liked', 'true');
+                    btn.classList.add('liked');
+                    const path = btn.querySelector('svg .svg-heart-shape');
+                    if (path) {
+                        path.setAttribute('fill', '#700118');
+                        path.setAttribute('stroke', '#700118');
+                    }
+                    updateFavorite('add_user_favorite', mediaType, favItem, (data) => {
+                        getUserFavorites(mediaType, (favs) => {
+                            if (mediaType === 'films') favFilms = favs;
+                            if (mediaType === 'series') favSeries = favs;
+                            updateButtons();
+                        });
+                    });
+                }
+            };
+        });
+    }
+    function refreshAllFavs() {
+        getUserFavorites('films', films => {
+            favFilms = films;
+            getUserFavorites('series', series => {
+                favSeries = series;
+                updateButtons();
+            });
+        });
+    }
+    refreshAllFavs();
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'cinemusic_fav_sync') {
+            refreshAllFavs();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    initHearts();
+});
 // ...existing code...
 
 
@@ -31,9 +184,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data && data.success && data.data && Array.isArray(data.data.series)) {
                     isFav = data.data.series.some(f => {
                         if (typeof f === 'string') {
-                            return String(f) === String(movieLikeBtn.dataset.id);
+                            return String(f) === String(movieLikeBtn.getAttribute('data-id'));
                         } else if (f && typeof f === 'object' && f.id) {
-                            return String(f.id) === String(movieLikeBtn.dataset.id);
+                            return String(f.id) === String(movieLikeBtn.getAttribute('data-id'));
                         }
                         return false;
                     });
@@ -48,6 +201,43 @@ document.addEventListener('DOMContentLoaded', function() {
                     movieLikeBtn.setAttribute('data-liked', 'false');
                     movieLikeBtn.setAttribute('aria-pressed', 'false');
                     movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#F4EFEC');
+                }
+            });
+            // Synchronisation inter-onglets/pages : écoute les changements de favoris
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'cinemusic_fav_sync') {
+                    // Recharge l'état du cœur
+                    fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({ action: 'get_user_favorites', type: 'series' }).toString()
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        let isFav = false;
+                        if (data && data.success && data.data && Array.isArray(data.data.series)) {
+                            isFav = data.data.series.some(f => {
+                                if (typeof f === 'string') {
+                                    return String(f) === String(movieLikeBtn.getAttribute('data-id'));
+                                } else if (f && typeof f === 'object' && f.id) {
+                                    return String(f.id) === String(movieLikeBtn.getAttribute('data-id'));
+                                }
+                                return false;
+                            });
+                        }
+                        if (isFav) {
+                            movieLikeBtn.classList.add('liked');
+                            movieLikeBtn.setAttribute('data-liked', 'true');
+                            movieLikeBtn.setAttribute('aria-pressed', 'true');
+                            movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#700118');
+                        } else {
+                            movieLikeBtn.classList.remove('liked');
+                            movieLikeBtn.setAttribute('data-liked', 'false');
+                            movieLikeBtn.setAttribute('aria-pressed', 'false');
+                            movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#F4EFEC');
+                        }
+                    });
                 }
             });
             // Gestion du clic
@@ -68,11 +258,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     favTitle = movieLikeBtn.getAttribute('data-title') || movieLikeBtn.getAttribute('aria-label') || 'The Last of Us';
                 }
                 const favItem = { id: movieLikeBtn.dataset.id, title: favTitle, image: posterUrl };
+                // Harmonized SVG update logic
+                const path = movieLikeBtn.querySelector('svg .svg-heart-shape');
                 if (isLiked) {
                     movieLikeBtn.setAttribute('data-liked', 'false');
                     movieLikeBtn.classList.remove('liked');
                     movieLikeBtn.setAttribute('aria-pressed', 'false');
-                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#F4EFEC');
+                    if (path) {
+                        path.setAttribute('fill', 'none');
+                        path.setAttribute('stroke', '#888888');
+                    }
                     fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                         method: 'POST',
                         credentials: 'same-origin',
@@ -82,12 +277,58 @@ document.addEventListener('DOMContentLoaded', function() {
                             type: 'series',
                             id: movieLikeBtn.dataset.id
                         })
+                    }).finally(() => {
+                        // Recharge l'état du cœur après la requête
+                        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({ action: 'get_user_favorites', type: 'series' }).toString()
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            let isFav = false;
+                            if (data && data.success && data.data && Array.isArray(data.data.series)) {
+                                isFav = data.data.series.some(f => {
+                                    if (typeof f === 'string') {
+                                        return String(f) === String(movieLikeBtn.dataset.id);
+                                    } else if (f && typeof f === 'object' && f.id) {
+                                        return String(f.id) === String(movieLikeBtn.dataset.id);
+                                    }
+                                    return false;
+                                });
+                            }
+                            if (isFav) {
+                                movieLikeBtn.classList.add('liked');
+                                movieLikeBtn.setAttribute('data-liked', 'true');
+                                movieLikeBtn.setAttribute('aria-pressed', 'true');
+                                if (path) {
+                                    path.setAttribute('fill', '#700118');
+                                    path.setAttribute('stroke', '#700118');
+                                }
+                            } else {
+                                movieLikeBtn.classList.remove('liked');
+                                movieLikeBtn.setAttribute('data-liked', 'false');
+                                movieLikeBtn.setAttribute('aria-pressed', 'false');
+                                if (path) {
+                                    path.setAttribute('fill', 'none');
+                                    path.setAttribute('stroke', '#888888');
+                                }
+                            }
+                        });
+                        // Sync across tabs/pages
+                        try {
+                            localStorage.setItem('cinemusic_fav_sync', Date.now() + ':' + Math.random());
+                        } catch(e) {}
                     });
                 } else {
                     movieLikeBtn.setAttribute('data-liked', 'true');
                     movieLikeBtn.classList.add('liked');
                     movieLikeBtn.setAttribute('aria-pressed', 'true');
-                    movieLikeBtn.querySelector('.svg-heart-shape').setAttribute('fill', '#700118');
+                    if (path) {
+                        path.setAttribute('fill', '#700118');
+                        path.setAttribute('stroke', '#700118');
+                    }
                     fetch(window.ajaxurl || window.wp_data?.ajax_url, {
                         method: 'POST',
                         credentials: 'same-origin',
@@ -97,6 +338,49 @@ document.addEventListener('DOMContentLoaded', function() {
                             type: 'series',
                             item: JSON.stringify(favItem)
                         })
+                    }).finally(() => {
+                        // Recharge l'état du cœur après la requête
+                        fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                            method: 'POST',
+                            credentials: 'same-origin',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                            body: new URLSearchParams({ action: 'get_user_favorites', type: 'series' }).toString()
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            let isFav = false;
+                            if (data && data.success && data.data && Array.isArray(data.data.series)) {
+                                isFav = data.data.series.some(f => {
+                                    if (typeof f === 'string') {
+                                        return String(f) === String(movieLikeBtn.dataset.id);
+                                    } else if (f && typeof f === 'object' && f.id) {
+                                        return String(f.id) === String(movieLikeBtn.dataset.id);
+                                    }
+                                    return false;
+                                });
+                            }
+                            if (isFav) {
+                                movieLikeBtn.classList.add('liked');
+                                movieLikeBtn.setAttribute('data-liked', 'true');
+                                movieLikeBtn.setAttribute('aria-pressed', 'true');
+                                if (path) {
+                                    path.setAttribute('fill', '#700118');
+                                    path.setAttribute('stroke', '#700118');
+                                }
+                            } else {
+                                movieLikeBtn.classList.remove('liked');
+                                movieLikeBtn.setAttribute('data-liked', 'false');
+                                movieLikeBtn.setAttribute('aria-pressed', 'false');
+                                if (path) {
+                                    path.setAttribute('fill', 'none');
+                                    path.setAttribute('stroke', '#888888');
+                                }
+                            }
+                        });
+                        // Sync across tabs/pages
+                        try {
+                            localStorage.setItem('cinemusic_fav_sync', Date.now() + ':' + Math.random());
+                        } catch(e) {}
                     });
                 }
             };

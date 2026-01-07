@@ -108,6 +108,10 @@ function updateFavorite(action, type, item, callback) {
     })
     .then(data => {
       console.log('[updateFavorite] Réponse JSON:', data);
+      // Synchronisation inter-onglets/pages : notifie les autres pages d'une modif de favoris
+      try {
+        localStorage.setItem('cinemusic_fav_sync', Date.now() + ':' + Math.random());
+      } catch(e) {}
       if (callback) callback(data);
     })
     .catch(err => {
@@ -330,12 +334,21 @@ function initHearts() {
       });
   }
   // Initialisation : charge les favoris puis met à jour les boutons
-  getUserFavorites('films', films => {
-    favFilms = films;
-    getUserFavorites('series', series => {
-      favSeries = series;
-      updateButtons();
+  function refreshAllFavs() {
+    getUserFavorites('films', films => {
+      favFilms = films;
+      getUserFavorites('series', series => {
+        favSeries = series;
+        updateButtons();
+      });
     });
+  }
+  refreshAllFavs();
+  // Synchronisation inter-onglets/pages : écoute les changements de favoris
+  window.addEventListener('storage', function(e) {
+    if (e.key === 'cinemusic_fav_sync') {
+      refreshAllFavs();
+    }
   });
 }
 
