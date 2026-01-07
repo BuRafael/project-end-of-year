@@ -690,6 +690,8 @@ function renderTracks(limit = tracksLimit) {
 
 if (tracksTable) {
     renderTracks(TRACKS_STEP);
+    // Charger les favoris de l'utilisateur après le rendu des pistes
+    setTimeout(refreshTrackLikes, 100);
 
     if (tracksMoreBtn) {
         tracksMoreBtn.addEventListener('click', () => {

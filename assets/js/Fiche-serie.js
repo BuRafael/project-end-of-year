@@ -145,10 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    if (tracksTable) {
-        refreshTrackLikes();
-    }
-
 
     // Affichage auto des pistes au chargement si selects présents
     if (seasonSelect && episodeSelect && tracksTable) {
@@ -228,6 +224,35 @@ function renderSeasonEpisodeSelects() {
 
 if (seasonSelect && episodeSelect && tracksTable) {
     renderSeasonEpisodeSelects();
+    
+    // Écouteurs pour charger les pistes et rafraîchir les likes lors du changement de saison/épisode
+    seasonSelect.addEventListener('change', function() {
+        const currentSeason = parseInt(this.value);
+        if (!currentSeason || !allTracks || !allTracks[currentSeason]) return;
+        
+        // Mettre à jour les options d'épisodes
+        episodeSelect.innerHTML = '<option value="" disabled selected hidden>Épisode</option>';
+        const episodeNums = Object.keys(allTracks[currentSeason]);
+        episodeNums.forEach(epNum => {
+            const opt = document.createElement('option');
+            opt.value = epNum;
+            opt.textContent = 'Épisode ' + epNum;
+            episodeSelect.appendChild(opt);
+        });
+        
+        if (episodeNums.length > 0) {
+            episodeSelect.value = episodeNums[0];
+            displayTracks(currentSeason, parseInt(episodeNums[0]));
+        }
+    });
+    
+    episodeSelect.addEventListener('change', function() {
+        const currentSeason = parseInt(seasonSelect.value);
+        const currentEpisode = parseInt(this.value);
+        if (currentSeason && currentEpisode) {
+            displayTracks(currentSeason, currentEpisode);
+        }
+    });
 }
 
 function renderTracksPage() {
@@ -1006,6 +1031,8 @@ function displayTracks(season, episode) {
     tracksPage = 1;
     renderTracksPage();
     updateTracksMoreBtn(currentTracks.length);
+    // Charger les favoris de l'utilisateur après le rendu des pistes
+    setTimeout(refreshTrackLikes, 100);
 }
 
 });
