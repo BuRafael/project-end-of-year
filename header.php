@@ -74,13 +74,13 @@
                             <li><a href="<?php echo esc_url(home_url('/favoris')); ?>" class="<?php echo (is_page('favoris')) ? 'active' : ''; ?>">Favoris</a></li>
                         </ul>
                         <?php
-                        ?>
-                        <ul class="header-menu">
-                            <li><a href="<?php echo esc_url(home_url('/nos-films')); ?>" class="<?php echo (is_page('nos-films')) ? 'active' : ''; ?>">Films</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/nos-series')); ?>" class="<?php echo (is_page('nos-series')) ? 'active' : ''; ?>">Séries</a></li>
-                            <li><a href="<?php echo esc_url(home_url('/favoris')); ?>" class="<?php echo (is_page('favoris')) ? 'active' : ''; ?>">Favoris</a></li>
-                        </ul>
-                        <?php
+                    },
+                ));
+                ?>
+            </nav>
+
+            <div class="header-right" style="display: flex; align-items: center; gap: 8px;">
+                <?php if (!is_front_page()) : ?>
                     <form role="search" method="get" class="header-search" id="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>" style="margin: 0; display: flex; align-items: center;">
                         <input type="search" name="s" placeholder="Rechercher..." aria-label="<?php esc_attr_e('Rechercher', 'project-end-of-year'); ?>" class="header-search-input" style="margin-right: 10px;" />
                         <button type="submit" aria-label="<?php esc_attr_e('Valider la recherche', 'project-end-of-year'); ?>" style="background: none; border: none; padding: 0 6px 0 0; display: flex; align-items: center; cursor: pointer;">
