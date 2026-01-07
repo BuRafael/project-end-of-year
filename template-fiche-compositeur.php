@@ -56,12 +56,6 @@ get_header();
                             2 Oscars, 4 Grammy Awards, 2 Golden Globes, 3 Classical BRIT Awards
                         </div>
                     </div>
-                    <div class="col-12">
-                        <div class="composer-meta-label" style="color: rgba(112, 1, 24, 1);">Collaborations notables</div>
-                        <div class="composer-meta-value text-white">
-                            Christopher Nolan, Ridley Scott, Ron Howard, Denis Villeneuve
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -87,7 +81,7 @@ get_header();
         </div>
 
         <div class="text-center">
-            <button id="tracksMoreBtn" class="btn composer-btn-light small px-5">Afficher plus…</button>
+            <button id="tracksMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>
         </div>
     </section>
 
@@ -135,7 +129,7 @@ get_header();
         </div>
 
         <div class="text-center mt-4" id="commentsMoreBtnWrapper" style="display: none;">
-            <button id="commentsMoreBtn" class="btn composer-btn-light small px-5">Afficher plus…</button>
+            <button id="commentsMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>
         </div>
     </section>
 

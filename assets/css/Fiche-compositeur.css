@@ -20,6 +20,9 @@
 .carousel-card {
     flex: 0 0 calc(25% - 12px);
     min-width: 200px;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    padding: 0 4px;
 }
 @media (max-width: 1200px) {
     .carousel-card {
@@ -29,11 +32,13 @@
 @media (max-width: 768px) {
     .carousel-card {
         flex: 0 0 calc(50% - 8px);
+        min-width: 160px;
     }
 }
 @media (max-width: 480px) {
     .carousel-card {
         flex: 0 0 100%;
+        min-width: 120px;
     }
 }
 
@@ -84,10 +89,10 @@
 }
 /* Espace toutes les sections des fiches compositeur */
 body .movie-page > section {
-    margin-top: 64px !important;
-    margin-bottom: 64px !important;
-    padding-top: 24px !important;
-    padding-bottom: 24px !important;
+    margin-top: 32px !important;
+    margin-bottom: 32px !important;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
 }
 body .movie-page > section:first-child {
     margin-top: 0 !important;

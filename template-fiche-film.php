@@ -23,10 +23,10 @@ $page_slug = isset($post->post_name) ? $post->post_name : 'inception';
 $movie_info = array(
     'inception' => array(
         'duration' => '2h28',
-        'rating' => '8,8/10',
+        'rating' => '9/10',
         'director' => 'Christopher Nolan',
         'cast' => 'Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy, Dileep Rao, Ken Watanabe',
-        'synopsis' => 'Dom Cobb est un voleur expérimenté dans l\'art périlleux de l\'extraction : sa spécialité consiste à s\'approprier les secrets les plus précieux d\'un individu, enfouis au plus profond de son subconscient, pendant qu\'il rêve et que son esprit est particulièrement vulnérable. Très recherché pour ses talents dans l\'univers trouble de l\'espionnage industriel, Cobb est aussi devenu un fugitif traqué dans le monde entier. Cependant, une ultime mission pourrait lui permettre de retrouver sa vie d\'avant.',
+        'synopsis' => 'Dom Cobb est un voleur expérimenté, considéré comme le meilleur dans l’art dangereux de l’extraction : il s’introduit dans le subconscient des gens via une technologie de rêve partagé pour voler leurs secrets quand leur esprit est le plus vulnérable. Recherché et fugitif à travers le monde, il a tout perdu de ce qu’il aimait. Une dernière mission pourrait lui permettre de retrouver sa vie d’avant : au lieu de subtiliser une idée, Cobb et son équipe doivent implanter une idée dans l’esprit d’une cible — une opération appelée inception. S’ils y parviennent, cela pourrait être le crime parfait, mais rien ne les avait préparés à un ennemi aussi redoutable, qui semble avoir systématiquement un temps d’avance.',
         'genres_display' => 'Action • Science-fiction • Thriller',
         'affiche' => 'inception affiche film.jpg',
         'year' => 2010
@@ -67,6 +67,7 @@ $movie_info = array(
         'director' => 'Damien Chazelle',
         'cast' => 'Ryan Gosling, Emma Stone, John Legend, J.K. Simmons',
         'synopsis' => 'Mia, une actrice en devenir, et Sebastian, un passionné de jazz, tentent de réaliser leurs rêves à Los Angeles. Leur histoire d’amour est mise à l’épreuve par leurs ambitions.',
+            'synopsis' => 'Au cœur de Los Angeles, Mia, une actrice en devenir, sert des cafés entre deux auditions. De son côté, Sebastian, passionné de jazz, joue du piano dans des clubs miteux pour joindre les deux bouts. Tous deux sont bien loin de la vie rêvée à laquelle ils aspirent… Le destin va réunir ces doux rêveurs, mais leur coup de foudre résistera-t-il aux tentations, aux déceptions et à la vie trépidante d’Hollywood ?',
         'genres_display' => 'Comédie musicale • Drame • Romance',
         'affiche' => 'La La Land.jpg',
         'year' => 2016
@@ -76,7 +77,7 @@ $movie_info = array(
         'rating' => '8,6/10',
         'director' => 'Bong Joon-ho',
         'cast' => 'Song Kang-ho, Lee Sun-kyun, Cho Yeo-jeong, Choi Woo-shik',
-        'synopsis' => 'La famille Kim, au chômage, s’intéresse de près à la richissime famille Park. Un enchaînement d’événements inattendus va lier leur destin.',
+        'synopsis' => 'Toute la famille de Ki-taek est au chômage, et s’intéresse fortement au train de vie de la richissime famille Park. Un jour, leur fils réussit à se faire recommander pour donner des cours particuliers d’anglais chez les Park. C’est le début d’un engrenage incontrôlable, dont personne ne sortira véritablement indemne…',
         'genres_display' => 'Thriller • Drame • Comédie noire',
         'affiche' => 'Parasite.jpg',
         'year' => 2019
@@ -302,6 +303,22 @@ if (isset($movie_tracks[$page_slug])) {
                 <p class="movie-synopsis small text-light mb-4">
                     <?php echo esc_html($info['synopsis']); ?>
                 </p>
+                <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    var btn = document.querySelector('.show-more-synopsis');
+                    if (btn) {
+                        btn.addEventListener('click', function() {
+                            var short = document.querySelector('.synopsis-short');
+                            var full = document.querySelector('.synopsis-full');
+                            if (short && full) {
+                                short.style.display = 'none';
+                                full.style.display = 'inline';
+                                btn.style.display = 'none';
+                            }
+                        });
+                    }
+                });
+                </script>
                 <div class="row movie-meta small">
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: rgba(112, 1, 24, 1);">Durée</div>

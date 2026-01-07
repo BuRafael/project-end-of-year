@@ -140,7 +140,7 @@ if (similarComposersRow) {
     similarComposersRow.innerHTML = '';
     allComposers.forEach(composer => {
         const col = document.createElement('div');
-        col.className = 'col-6 col-md-3 mb-3';
+        col.className = 'col-6 mb-3 col-md-3';
         col.innerHTML = `
             <div class="similar-card">
                 <img src="${composerImgPath}${composer.image}" alt="${composer.name}">
@@ -161,7 +161,7 @@ if (similarComposersRow) {
             let cardWidth = card ? card.offsetWidth : 250;
             let gap = 8;
             let scrollAmount = cardWidth + gap;
-            let cardsPerScroll = 4; // Nombre de cartes à défiler
+            let cardsPerScroll = 4;
             let totalScrollAmount = scrollAmount * cardsPerScroll;
             
             leftArrow.addEventListener('click', function() {
@@ -213,7 +213,6 @@ function renderComment(commentData) {
         dateHtml = `<div class="comment-date">${timeAgo}</div>`;
     }
     
-    let initialLikeCount = (typeof commentData.like_count === 'number' && !isNaN(commentData.like_count)) ? commentData.like_count : 0;
     col.innerHTML = `
         <div class="comment-card">
             ${menuHtml}
@@ -239,13 +238,11 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
     commentInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && this.value.trim()) {
             const commentText = this.value.trim();
-            
             fetch(composerComments.ajax_url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
                     action: 'add_composer_comment',
-                    nonce: composerComments.nonce,
                     composer_id: composerComments.composer_id,
                     comment_text: commentText
                 })
@@ -279,5 +276,3 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
 
 // Fin DOMContentLoaded
 });
-
-

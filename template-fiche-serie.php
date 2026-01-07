@@ -192,6 +192,22 @@ if (isset($series_info[$page_slug])) {
                     <?php echo esc_html($info['synopsis']); ?>
                 </p>
                 <div class="row movie-meta small">
+                                    <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        var btn = document.querySelector('.show-more-synopsis');
+                                        if (btn) {
+                                            btn.addEventListener('click', function() {
+                                                var short = document.querySelector('.synopsis-short');
+                                                var full = document.querySelector('.synopsis-full');
+                                                if (short && full) {
+                                                    short.style.display = 'none';
+                                                    full.style.display = 'inline';
+                                                    btn.style.display = 'none';
+                                                }
+                                            });
+                                        }
+                                    });
+                                    </script>
                     <div class="col-6 col-sm-3 mb-3">
                         <div class="movie-meta-label" style="color: #700118; font-family: 'Futura Demi', 'Futura', Arial, sans-serif; font-size: 1rem; font-weight: 600;">Saisons</div>
                         <div class="movie-meta-value" style="font-family: 'Futura', 'Futura Std', Arial, sans-serif; font-size: 1rem; color: #F4EFEC; font-weight: 400; letter-spacing: 0.1px;">
