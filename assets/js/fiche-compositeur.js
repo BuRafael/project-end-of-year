@@ -63,27 +63,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         const heart = tr.querySelector('.track-like');
+        const compositeId = `hanszimmer-${track.id}`;
+        heart.setAttribute('data-id', compositeId);
         let isLiked = false;
         heart.addEventListener('click', function(e) {
             e.stopPropagation();
             isLiked = !isLiked;
-            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    action: isLiked ? 'add_favorite' : 'remove_favorite',
-                    track_id: track.id
-                }).toString()
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    heart.classList.toggle('liked', isLiked);
-                    heart.classList.toggle('bi-heart-fill', isLiked);
-                    heart.classList.toggle('bi-heart', !isLiked);
-                }
-            });
+            if (isLiked) {
+                heart.classList.add('liked');
+                heart.classList.remove('bi-heart');
+                heart.classList.add('bi-heart-fill');
+                const trackData = {
+                    id: compositeId,
+                    title: track.title,
+                    artist: track.artist || '',
+                    duration: track.duration || '',
+                    cover: track.image || '',
+                    source: 'Hans Zimmer',
+                    url: window.location.href,
+                    slug: 'hanszimmer'
+                };
+                const form = new URLSearchParams();
+                form.append('action', 'add_user_favorite');
+                form.append('type', 'musiques');
+                form.append('item', JSON.stringify(trackData));
+                fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                }).then(r => r.json()).then(() => {
+                    // Optionnel: refreshTrackLikes();
+                });
+            } else {
+                heart.classList.remove('liked');
+                heart.classList.remove('bi-heart-fill');
+                heart.classList.add('bi-heart');
+                const form = new URLSearchParams();
+                form.append('action', 'remove_user_favorite');
+                form.append('type', 'musiques');
+                form.append('id', compositeId);
+                fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: form.toString()
+                }).then(r => r.json()).then(() => {
+                    // Optionnel: refreshTrackLikes();
+                });
+            }
         });
         tracksTable.appendChild(tr);
     }

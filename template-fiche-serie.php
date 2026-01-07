@@ -79,7 +79,7 @@ $series_info = array(
         'director' => 'The Duffer Brothers',
         'cast' => 'Winona Ryder, David Harbour, Finn Wolfhard, Millie Bobby Brown, Gaten Matarazzo, Caleb McLaughlin, Noah Schnapp, Sadie Sink',
         'synopsis' => 'Quand un enfant disparaît mystérieusement en 1983, ses amis, sa famille et la police locale doivent affronter des forces et des mystères bien plus grands que la réalité. Stranger Things mélange l\'angoisse, la nostalgie et la science-fiction pour raconter une histoire captivante où rien n\'est ce qu\'il semble être. Une série qui a captivé des millions de fans à travers le monde.',
-        'poster' => 'Stranger Things2.jpg',
+        'poster' => 'Stranger Things2.jpg', // (no change needed, already correct)
         'genres_display' => 'Science-fiction • Drame • Mystère',
         'total_tracks' => '207' // Total de pistes dans toute la série
     ),
@@ -201,7 +201,7 @@ if (isset($series_info[$page_slug])) {
                     if ($page_slug === 'last-of-us') {
                         $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/the last of us.jpg';
                     } else {
-                        $poster_url = get_template_directory_uri() . '/assets/image/Fiche série/' . $poster;
+                        $poster_url = get_template_directory_uri() . '/assets/image/Front Page/' . $poster;
                     }
                     ?>
                     <img src="<?php echo esc_url($poster_url); ?>" alt="Affiche <?php echo esc_attr($title); ?>"
