@@ -454,23 +454,110 @@ const TRACKS_STEP = 5;
 let tracksLimit = currentMovieSlug === 'inception' ? tracks.length : TRACKS_MIN;
 
 function renderTracks(limit = tracksLimit) {
+    // ...existing code...
+    // ...existing code...
 
     if (!tracksTable) return;
     tracksLimit = limit;
     tracksTable.innerHTML = '';
     const slice = tracks.slice(0, tracksLimit);
-    slice.forEach(t => {
+    slice.forEach((t, idx) => {
         const artistHtml = t.artist === 'Hans Zimmer'
             ? `<a href="${window.location.origin}/hans-zimmer" class="movie-track-artist" style="cursor: pointer;">${t.artist}</a>`
             : `<div class="movie-track-artist">${t.artist}</div>`;
 
-        // Déterminer le chemin correct selon si c'est une image de piste ou d'affiche
-        let coverPath = trackImagePath; // Par défaut, utiliser le dossier des pistes
+        let coverPath = trackImagePath;
         if (t.cover && !t.cover.toLowerCase().includes('piste')) {
-            coverPath = imagePath; // Si ce n'est pas une piste, utiliser le dossier des affiches
+            coverPath = imagePath;
         }
         const coverSrc = coverPath + (t.cover || 'Inception piste.png');
         const trackId = `${window.currentMovieSlug || ''}-${t.id}`;
+        let spotifyIcon = `<i class="bi bi-spotify" aria-label="Spotify"></i>`;
+        let amazonIcon = `<i class="bi bi-amazon" aria-label="Amazon Music"></i>`;
+        let youtubeIcon = `<i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i>`;
+        let appleIcon = `<i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i>`;
+        // Liens streaming pour Parasite piste 4 (The Frontal Lobe of Ki Taek)
+        if (window.currentMovieSlug === 'parasite' && t.id === 4 && t.title === "The Frontal Lobe of Ki Taek") {
+            spotifyIcon = `<a href="https://open.spotify.com/track/3MXeAlonSYccaVnVDZWtFg" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href="https://music.amazon.com/albums/B07YVHQ929" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href="https://music.apple.com/us/album/parasite-original-motion-picture-soundtrack/1482778417" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href="https://www.youtube.com/results?search_query=The+Frontal+Lobe+of+Ki+Taek+Parasite+OST" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-youtube" aria-label="YouTube Music"></i></a>`;
+        }
+        // Liens streaming pour Parasite piste 1 (Opening)
+        if (window.currentMovieSlug === 'parasite' && t.id === 1) {
+            spotifyIcon = `<a href="https://open.spotify.com/track/7gJmuTmwIc7d71ZrOfFv9P" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href="https://open.spotify.com/album/32wOhLTLnq6kis3xkRN2ei" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href="https://music.apple.com/us/album/parasite-original-motion-picture-soundtrack/1482778417" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href="https://www.youtube.com/watch?v=ttKyPsVeBxs" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-youtube" aria-label="YouTube Music"></i></a>`;
+        }
+        // Liens streaming pour Parasite piste 3 (On the Way to Rich House)
+        if (window.currentMovieSlug === 'parasite' && t.id === 3 && t.title === "On the Way to Rich House") {
+            spotifyIcon = `<a href="https://open.spotify.com/track/3HKVmoMyFn3R0tvXV1oSZK" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href="https://music.amazon.com/albums/B07YVHQ929" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            appleIcon = `<a href="https://music.apple.com/us/album/parasite-original-motion-picture-soundtrack/1482778417" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-apple" aria-label="Apple Music"></i></a>`;
+            youtubeIcon = `<a href="https://www.youtube.com/playlist?list=PLfzW_wEeYxk77oftmx-rKnJJZaxNF466v" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-youtube" aria-label="YouTube Music"></i></a>`;
+        }
+                                        // Liens streaming pour La La Land piste 4
+                                        if (window.currentMovieSlug === 'la-la-land' && t.id === 4) {
+                                            spotifyIcon = `<a href=\"https://open.spotify.com/track/4r9hiElqKWMPT4Z3vN2exq\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+                                            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B07QPK52XM\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+                                            appleIcon = `<a href=\"https://music.apple.com/us/song/a-lovely-night/1440863825\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+                                            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=trrH4sVZ0dQ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                                        }
+                                            // Liens streaming pour La La Land piste 5
+                                            if (window.currentMovieSlug === 'la-la-land' && t.id === 5) {
+                                                spotifyIcon = `<a href=\"https://open.spotify.com/track/3hJJC9owUiFLe1jGrndHYw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+                                                amazonIcon = `<a href=\"https://music.amazon.com/tracks/B073T4N4RZ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+                                                appleIcon = `<a href=\"https://music.apple.com/us/song/1440864013\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+                                                youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=1V5l_LbmWlQ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                                            }
+                                // Liens streaming pour La La Land piste 3
+                                if (window.currentMovieSlug === 'la-la-land' && t.id === 3) {
+                                    spotifyIcon = `<a href=\"https://open.spotify.com/track/0srCPlgs0vbIG8Q3zdtmOw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+                                    amazonIcon = `<a href=\"https://music.amazon.com/tracks/B06X3QKZ5G\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+                                    appleIcon = `<a href=\"https://music.apple.com/us/song/mia-sebastians-theme/1440863816\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+                                    youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=D3ovuBdbUqk\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                                }
+                        // Liens streaming pour La La Land piste 2
+                        if (window.currentMovieSlug === 'la-la-land' && t.id === 2) {
+                            spotifyIcon = `<a href=\"https://open.spotify.com/track/2bxo7P09q1qF0fetdjMhXg\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+                            amazonIcon = `<a href=\"https://music.amazon.com/albums/B01N1EO7WD\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+                            appleIcon = `<a href=\"https://music.apple.com/jp/song/someone-in-the-crowd-from-la-la-land-soundtrack/1440895887\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+                            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=-62YbRZqxjs\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                        }
+                // Liens streaming pour La La Land piste 1
+                if (window.currentMovieSlug === 'la-la-land' && t.id === 1) {
+                    spotifyIcon = `<a href=\"https://open.spotify.com/track/5kRBzRZmZTXVg8okC7SJFZ\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+                    amazonIcon = `<a href=\"https://music.amazon.com/tracks/B01N1EO7WD\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+                    appleIcon = `<a href=\"https://music.apple.com/fr/song/1440894905\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+                    youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=CWnYIb2lqpo\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+                }
+        if (window.currentMovieSlug === 'inception' && t.id === 1) {
+            spotifyIcon = `<a href="https://open.spotify.com/intl-fr/track/7DU7DNVDZouvJ34tPcPxBj" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-spotify" aria-label="Spotify"></i></a>`;
+            amazonIcon = `<a href="https://music.amazon.com/albums/B003U9TDII?referrer=https%3A%2F%2Fmusic.amazon.com%2F" target="_blank" rel="noopener" style="color:inherit;"><i class="bi bi-amazon" aria-label="Amazon Music"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=BC1LcJ7DIS0\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/gb/song/half-remembered-dream/380350107\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+        } else if (window.currentMovieSlug === 'inception' && t.id === 2) {
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/1VCBfWtJOGPV3mtGw8mSlW\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9Q1B0\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/us/song/we-built-our-own-world/380350131\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=NPGvvfPbW20\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+        } else if (window.currentMovieSlug === 'inception' && t.id === 3) {
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/5xKVYMxOHB2XRLCUafFrz6\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9RQWI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/be/song/380350137\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=OzLhXesNkCI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+        } else if (window.currentMovieSlug === 'inception' && t.id === 4) {
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/7G799Mcsbvfn5TSWZ7u7gI\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/albums/B003U9TDII\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/gb/album/inception-music-from-the-motion-picture/380349905\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=ZEpYcwmUkzg\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+        } else if (window.currentMovieSlug === 'inception' && t.id === 5) {
+            spotifyIcon = `<a href=\"https://open.spotify.com/track/3maMYEbpgp1ttMONc8Wjyr\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-spotify\" aria-label=\"Spotify\"></i></a>`;
+            amazonIcon = `<a href=\"https://music.amazon.com/tracks/B003U9TDQK\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-amazon\" aria-label=\"Amazon Music\"></i></a>`;
+            appleIcon = `<a href=\"https://music.apple.com/us/song/old-souls/380350146\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-apple\" aria-label=\"Apple Music\"></i></a>`;
+            youtubeIcon = `<a href=\"https://www.youtube.com/watch?v=9V1cO9LFULw\" target=\"_blank\" rel=\"noopener\" style=\"color:inherit;\"><i class=\"bi bi-youtube\" aria-label=\"YouTube Music\"></i></a>`;
+        }
         tracksTable.innerHTML += `
             <tr data-id="${trackId}">
                 <td>${t.id}</td>
@@ -485,10 +572,10 @@ function renderTracks(limit = tracksLimit) {
                 </td>
                 <td class="col-links">
                     <span class="track-icons">
-                        <i class="bi bi-spotify" aria-label="Spotify"></i>
-                        <i class="bi bi-amazon" aria-label="Amazon Music"></i>
-                        <i class="bi bi-youtube" aria-label="YouTube Music"></i>
-                        <i class="bi bi-apple" aria-label="Apple Music"></i>
+                        ${spotifyIcon}
+                        ${amazonIcon}
+                        ${youtubeIcon}
+                        ${appleIcon}
                     </span>
                 </td>
                 <td class="col-duration text-center">${t.duration}</td>
@@ -1305,14 +1392,64 @@ const allSimilarMovies = getSimilarMovies(slug);
     initGenericCarousel({
         containerId: 'similarMovies',
         items: allSimilarMovies,
-        getCardHtml: (m) => `
-            <div class="col-6 col-md-3">
-                <div class="similar-card">
-                    <img src="${m.img}" alt="${m.title}">
-                    <div class="similar-card-title">${m.title}</div>
+        getCardHtml: (m) => {
+                        if (m.title.toLowerCase() === 'shutter island') {
+                            return `
+                            <div class="col-6 mb-3 col-md-3">
+                                <a href="/film/shutter-island/" class="similar-card-link">
+                                    <div class="similar-card">
+                                        <img src="${m.img}" alt="${m.title}">
+                                        <div class="similar-card-title">${m.title}</div>
+                                    </div>
+                                </a>
+                            </div>
+                            `;
+                        }
+            if (m.title.toLowerCase() === 'interstellar') {
+                return `
+                <div class="col-6 mb-3 col-md-3">
+                    <a href="/film/interstellar/" class="similar-card-link">
+                        <div class="similar-card">
+                            <img src="${m.img}" alt="${m.title}">
+                            <div class="similar-card-title">${m.title}</div>
+                        </div>
+                    </a>
                 </div>
-            </div>
-        `
+                `;
+            }
+            if (m.title.toLowerCase() === 'arrival') {
+                return `
+                <div class="col-6 mb-3 col-md-3">
+                    <a href="/film/arrival/" class="similar-card-link">
+                        <div class="similar-card">
+                            <img src="${m.img}" alt="${m.title}">
+                            <div class="similar-card-title">${m.title}</div>
+                        </div>
+                    </a>
+                </div>
+                `;
+            }
+            if (m.title.toLowerCase() === 'parasite') {
+                return `
+                <div class="col-6 mb-3 col-md-3">
+                    <a href="/film/parasite/" class="similar-card-link">
+                        <div class="similar-card">
+                            <img src="${m.img}" alt="${m.title}">
+                            <div class="similar-card-title">${m.title}</div>
+                        </div>
+                    </a>
+                </div>
+                `;
+            }
+            return `
+                <div class="col-6 mb-3 col-md-3">
+                    <div class="similar-card">
+                        <img src="${m.img}" alt="${m.title}">
+                        <div class="similar-card-title">${m.title}</div>
+                    </div>
+                </div>
+            `;
+        }
     });
 
 

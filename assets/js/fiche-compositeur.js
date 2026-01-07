@@ -1,83 +1,86 @@
-
-
-// Fonction pour afficher une piste dans le tableau
-function appendTrack(track) {
-    if (!tracksTable) return;
-    const tr = document.createElement('tr');
-    const trackImage = track.image.includes('Hans Zimmer') ? imagePath + track.image : filmImagePath + track.image;
-    tr.innerHTML = `
-        <td>${track.id}</td>
-        <td>
-            <div class="composer-track-info">
-                <img src="${trackImage}" class="composer-track-cover" alt="${track.title}">
-                <div>
-                    <div class="composer-track-title">${track.title}</div>
-                    <div class="composer-track-film">${track.film}</div>
-                </div>
-            </div>
-        </td>
-        <td class="col-links">
-            <span class="track-icons">
-                <i class="bi bi-spotify" aria-label="Spotify"></i>
-                <i class="bi bi-amazon" aria-label="Amazon Music"></i>
-                <i class="bi bi-youtube" aria-label="YouTube Music"></i>
-                <i class="bi bi-apple" aria-label="Apple Music"></i>
-            </span>
-        </td>
-        <td class="col-duration text-center">${track.duration}</td>
-        <td class="col-like text-end">
-            <i class="bi bi-heart track-like"></i>
-        </td>
-    `;
-    // Ajout de l'événement de like/dislike sur le bouton coeur
-    tr.querySelectorAll('.track-like').forEach(heart => {
-        heart.addEventListener('click', function() {
-            const trackId = tr.querySelector('td:first-child')?.textContent?.trim();
-            const isLiked = heart.classList.contains('liked');
-            // Requête AJAX pour sauvegarder le like/dislike
-            fetch(window.ajaxurl || window.wp_data?.ajax_url, {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    action: isLiked ? 'remove_favorite' : 'add_favorite',
-                    track_id: trackId
-                }).toString()
-            })
-            .then(r => r.json())
-            .then(data => {
-                if (data.success) {
-                    if (isLiked) {
-                        heart.classList.remove('liked');
-                        heart.classList.remove('bi-heart-fill');
-                        heart.classList.add('bi-heart');
-                    } else {
-                        heart.classList.add('liked');
-                        heart.classList.remove('bi-heart');
-                        heart.classList.add('bi-heart-fill');
-                    }
-                }
-            });
-        });
-    });
-    tracksTable.appendChild(tr);
-}
 /**
  * Fiche Compositeur JavaScript
  * Gère les pistes, commentaires, filmographie et interactions
  */
 
 document.addEventListener('DOMContentLoaded', function() {
+    const commentInput = document.getElementById('commentInput');
+
+    // Fonction pour afficher une piste dans le tableau
+    function appendTrack(track) {
+        if (!tracksTable) return;
+        const tr = document.createElement('tr');
+        const trackImage = track.image.includes('Hans Zimmer') ? imagePath + track.image : filmImagePath + track.image;
+        let spotifyIcon = `<i class="bi bi-spotify" aria-label="Spotify"></i>`;
+        let amazonIcon = `<i class="bi bi-amazon" aria-label="Amazon Music"></i>`;
+        let youtubeIcon = `<i class="bi bi-youtube" aria-label="YouTube Music"></i>`;
+        let appleIcon = `<i class="bi bi-apple" aria-label="Apple Music"></i>`;
+        tr.innerHTML = `
+            <td>${track.id}</td>
+            <td>
+                <div class="composer-track-info">
+                    <img src="${trackImage}" class="composer-track-cover" alt="${track.title}">
+                    <div>
+                        <div class="composer-track-title">${track.title}</div>
+                        <div class="composer-track-film">${track.film}</div>
+                    </div>
+                </div>
+            </td>
+            <td class="col-links">
+                <span class="track-icons">
+                    ${spotifyIcon}
+                    ${amazonIcon}
+                    ${youtubeIcon}
+                    ${appleIcon}
+                </span>
+            </td>
+            <td class="col-duration text-center">${track.duration}</td>
+            <td class="col-like text-end">
+                <i class="bi bi-heart track-like"></i>
+            </td>
+        `;
+        // Ajout de l'événement de like/dislike sur le bouton coeur
+        tr.querySelectorAll('.track-like').forEach(heart => {
+            heart.addEventListener('click', function() {
+                const trackId = tr.querySelector('td:first-child')?.textContent?.trim();
+                const isLiked = heart.classList.contains('liked');
+                // Requête AJAX pour sauvegarder le like/dislike
+                fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                    method: 'POST',
+                    credentials: 'same-origin',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({
+                        action: isLiked ? 'remove_favorite' : 'add_favorite',
+                        track_id: trackId
+                    }).toString()
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.success) {
+                        if (isLiked) {
+                            heart.classList.remove('liked');
+                            heart.classList.remove('bi-heart-fill');
+                            heart.classList.add('bi-heart');
+                        } else {
+                            heart.classList.add('liked');
+                            heart.classList.remove('bi-heart');
+                            heart.classList.add('bi-heart-fill');
+                        }
+                });
+            });
+        });
+        tracksTable.appendChild(tr);
+    }
 
 // === PISTES CELEBRES ===
 const tracks = [
     { id: 1, title: "Time", film: "Inception", duration: "4:35", image: "inception affiche film.jpg" },
-    { id: 2, title: "Now We Are Free", film: "Gladiator", duration: "4:15", image: "matrix affiche similaire.jpg" },
-    { id: 3, title: "Cornfield Chase", film: "Interstellar", duration: "2:06", image: "interstellar affiche similaire.jpg" },
-    { id: 4, title: "Why So Serious?", film: "The Dark Knight", duration: "9:14", image: "Dark city.jpg" },
-    { id: 5, title: "No Time for Caution", film: "Interstellar", duration: "4:06", image: "interstellar affiche similaire.jpg" },
+    { id: 2, title: "Now We Are Free", film: "Gladiator", duration: "4:15", image: "mad max fury road.jpg" }, // image alternative pour Matrix
+    { id: 3, title: "Cornfield Chase", film: "Interstellar", duration: "2:06", image: "Interstellar.jpg" },
+    { id: 4, title: "Why So Serious?", film: "The Dark Knight", duration: "9:14", image: "joker.JPG" }, // image alternative pour Dark Knight
+    { id: 5, title: "No Time for Caution", film: "Interstellar", duration: "4:06", image: "Interstellar.jpg" },
     { id: 6, title: "He's a Pirate", film: "Pirates of the Caribbean", duration: "3:38", image: "the-prestige-md-web.jpg" },
-    { id: 7, title: "Mountains", film: "Interstellar", duration: "3:39", image: "interstellar affiche similaire.jpg" },
+    { id: 7, title: "Mountains", film: "Interstellar", duration: "3:39", image: "Interstellar.jpg" },
     { id: 8, title: "Dream Is Collapsing", film: "Inception", duration: "2:28", image: "inception affiche film.jpg" },
     { id: 9, title: "Tennessee", film: "Pearl Harbor", duration: "4:04", image: "arrival affiche similaire.jpg" },
     { id: 10, title: "Earth", film: "Gladiator", duration: "3:54", image: "shutter island affiche similaire.jpg" }
@@ -115,7 +118,6 @@ if (tracksTable) {
 
     });
 }
-    // ...existing code...
     // Afficher les 5 premières pistes
     const initialTracks = tracks.slice(0, 5);
     initialTracks.forEach(t => {
@@ -153,32 +155,46 @@ if (tracksTable) {
         });
     }
 
-    // Bouton "Afficher plus"
-    const tracksMoreBtn = document.getElementById('tracksMoreBtn');
-    let showingAll = false;
-    
+// === BOUTON AFFICHER PLUS/MOINS EXACTEMENT COMME FICHE FILM ===
+const tracksMoreBtnWrapper = document.createElement('div');
+tracksMoreBtnWrapper.className = 'text-center';
+tracksMoreBtnWrapper.innerHTML = '<button id="tracksMoreBtn" class="btn movie-btn-light small px-5">Afficher plus…</button>';
+if (tracksTable && !document.getElementById('tracksMoreBtn')) {
+    tracksTable.parentNode.insertBefore(tracksMoreBtnWrapper, tracksTable.nextSibling);
+}
+const tracksMoreBtn = document.getElementById('tracksMoreBtn');
+const TRACKS_MIN = 5;
+const TRACKS_STEP = 5;
+let tracksLimit = TRACKS_MIN;
+function renderTracks(limit = tracksLimit) {
+    if (!tracksTable) return;
+    tracksLimit = limit;
+    tracksTable.innerHTML = '';
+    const slice = tracks.slice(0, tracksLimit);
+    slice.forEach((t, idx) => {
+        appendTrack(t);
+    });
     if (tracksMoreBtn) {
-        tracksMoreBtn.addEventListener('click', function() {
-            if (!showingAll) {
-                // Afficher toutes les pistes restantes
-                const remainingTracks = tracks.slice(5);
-                remainingTracks.forEach(t => {
-                    appendTrack(t);
-                });
-                this.textContent = 'Afficher moins…';
-                showingAll = true;
-                refreshTrackLikes();
-            } else {
-                // Afficher moins : on retire les pistes au-delà de 5
-                while (tracksTable.rows.length > 5) {
-                    tracksTable.deleteRow(tracksTable.rows.length - 1);
-                }
-                this.textContent = 'Afficher plus…';
-                showingAll = false;
-                refreshTrackLikes();
-            }
-        });
+        if (tracksLimit >= tracks.length) {
+            tracksMoreBtn.style.display = 'inline-block';
+            tracksMoreBtn.innerText = 'Afficher moins';
+        } else {
+            tracksMoreBtn.style.display = 'inline-block';
+            tracksMoreBtn.innerText = 'Afficher plus…';
+        }
     }
+}
+renderTracks(TRACKS_MIN);
+if (tracksMoreBtn) {
+    tracksMoreBtn.addEventListener('click', function() {
+        if (tracksLimit >= tracks.length) {
+            renderTracks(TRACKS_MIN);
+        } else {
+            const nextLimit = Math.min(tracksLimit + TRACKS_STEP, tracks.length);
+            renderTracks(nextLimit);
+        }
+    });
+}
 
 // === CARROUSEL : COMPOSITEURS SIMILAIRES (STRICTEMENT IDENTIQUE À FILMS SIMILAIRES) ===
 const allComposers = [
@@ -200,7 +216,7 @@ if (similarComposersRow) {
     similarComposersRow.innerHTML = '';
     allComposers.forEach(composer => {
         const col = document.createElement('div');
-        col.className = 'col-6 col-md-3 mb-3';
+        col.className = 'col-6 mb-3 col-md-3'; // 2 cartes sur mobile, 4 sur desktop
         col.innerHTML = `
             <div class="carousel-card movie-card d-flex flex-column align-items-center p-0">
                 <img src="/wp-content/themes/project-end-of-year/assets/image/Fiche Compositeur/${composer.image}" alt="${composer.name}" class="movie-card-img">
@@ -258,9 +274,8 @@ function loadComments() {
             commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
 
         }
-    });
-}
-}
+        });
+    }
 
 // Afficher un commentaire
 function renderComment(commentData) {
@@ -360,96 +375,129 @@ if (commentInput && !commentInput.disabled && typeof composerComments !== 'undef
     commentInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && this.value.trim()) {
             const commentText = this.value.trim();
-            
             fetch(composerComments.ajax_url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                 body: new URLSearchParams({
                     action: 'add_composer_comment',
-                    nonce: composerComments.nonce,
                     composer_id: composerComments.composer_id,
                     comment_text: commentText
                 })
             })
-            .then(response => {
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    // Supprimer le message vide
-                    const emptyMsg = commentsZone.querySelector('.text-center');
-                    if (emptyMsg) {
-                        emptyMsg.parentElement.remove();
-                    }
-                    
-                    renderComment({
-                        id: data.data.comment_id,
-                        user_name: data.data.user_name,
-                        avatar: data.data.avatar,
-                        comment_text: data.data.comment_text,
-                        is_author: true,
-                        created_at: data.data.created_at
-                    });
-                    
-                    this.value = '';
-                } else {
-                    console.error('Erreur:', data);
+                if (data.success && data.data) {
+                    renderComment(data.data);
+                    commentInput.value = '';
                 }
-            })
-            .catch(error => {
-                console.error('Erreur fetch:', error);
             });
         }
     });
-
-
-// Modifier un commentaire
-function editComment(commentId, newText, textElement) {
-    fetch(composerComments.ajax_url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            action: 'edit_composer_comment',
-            nonce: composerComments.nonce,
-            comment_id: commentId,
-            comment_text: newText
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            textElement.textContent = newText;
-        }
-    });
-}
-
-// Supprimer un commentaire
-function deleteComment(commentId, element) {
-    fetch(composerComments.ajax_url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-            action: 'delete_composer_comment',
-            nonce: composerComments.nonce,
-            comment_id: commentId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            element.remove();
-            
-            // Réafficher le message vide si plus de commentaires
-            if (commentsZone.children.length === 0) {
-                commentsZone.innerHTML = '<div class="col-12"><p class="text-center" style="color: rgba(244, 239, 236, 1); font-style: italic; opacity: 0.7;">C\'est silencieux ici...</p></div>';
-            }
-        }
-    });
-}
-
-loadComments();
-
-// === CARROUSEL : COMPOSITEURS SIMILAIRES ===
-// ...existing code...
-
-
+                            likeBtn.addEventListener('click', function () {
+                                // Vérifier connexion utilisateur
+                                var isUserLoggedIn = false;
+                                try {
+                                    isUserLoggedIn = !!JSON.parse(document.body.getAttribute('data-user-logged-in'));
+                                } catch (e) {}
+                                if (!isUserLoggedIn) {
+                                    window.location.href = '/inscription';
+                                    return;
+                                }
+                                const isLiked = this.classList.contains('liked');
+                                let count = parseInt(likeCountSpan.textContent, 10) || 0;
+                                // Optimistic UI
+                                this.classList.toggle('liked');
+                                if (isLiked) {
+                                    count = Math.max(0, count-1);
+                                    this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
+                                    this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
+                                    this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
+                                } else {
+                                    count++;
+                                    this.querySelector('.svg-thumb-up').style.fill = '#700118';
+                                    this.querySelector('.svg-thumb-up').style.color = '#700118';
+                                    this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
+                                }
+                                likeCountSpan.textContent = count;
+                                // AJAX
+                                fetch(window.ajaxurl || window.wp_data?.ajax_url, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: new URLSearchParams({
+                                        action: isLiked ? 'unlike_comment' : 'like_comment',
+                                        nonce: window.movieComments?.nonce,
+                                        comment_id: commentData.id
+                                    })
+                                })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (!data.success) {
+                                        // Rollback UI
+                                        this.classList.toggle('liked');
+                                        if (isLiked) {
+                                            likeCountSpan.textContent = count+1;
+                                            this.querySelector('.svg-thumb-up').style.fill = '#700118';
+                                            this.querySelector('.svg-thumb-up').style.color = '#700118';
+                                            this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
+                                        } else {
+                                            likeCountSpan.textContent = Math.max(0, count-1);
+                                            this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
+                                            this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
+                                            this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
+                                        }
+                                        alert('Erreur lors du like.');
+                                    }
+                                })
+                                .catch((err) => {
+                                    // Rollback UI
+                                    this.classList.toggle('liked');
+                                    if (isLiked) {
+                                        likeCountSpan.textContent = count+1;
+                                        this.querySelector('.svg-thumb-up').style.fill = '#700118';
+                                        this.querySelector('.svg-thumb-up').style.color = '#700118';
+                                        this.querySelector('.svg-thumb-up path').setAttribute('fill', '#700118');
+                                    } else {
+                                        likeCountSpan.textContent = Math.max(0, count-1);
+                                        this.querySelector('.svg-thumb-up').style.fill = '#1A1A1A';
+                                        this.querySelector('.svg-thumb-up').style.color = '#1A1A1A';
+                                        this.querySelector('.svg-thumb-up path').setAttribute('fill', '#1A1A1A');
+                                    }
+                                    alert('Erreur réseau lors du like.');
+                                });
+                            });
+                        }
+                        commentsZone.insertBefore(col, commentsZone.firstChild);
+                        // Gestion du menu
+                        if (commentData.is_author) {
+                            const menuBtn = col.querySelector('.comment-menu-btn');
+                            const menuDropdown = col.querySelector('.comment-menu-dropdown');
+                            menuBtn.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                menuDropdown.classList.toggle('show');
+                            });
+                            // Modifier
+                            col.querySelector('.comment-edit-btn').addEventListener('click', () => {
+                                const textEl = col.querySelector('.comment-text');
+                                const currentText = textEl.textContent;
+                                textEl.innerHTML = `<input type="text" class="comment-edit-input" value="${currentText}">`;
+                                const input = textEl.querySelector('.comment-edit-input');
+                                input.focus();
+                                input.addEventListener('keypress', (e) => {
+                                    if (e.key === 'Enter') {
+                                        editComment(commentData.id, input.value, textEl);
+                                    }
+                                });
+                                menuDropdown.classList.remove('show');
+                            });
+                            // Supprimer
+                            col.querySelector('.comment-delete-btn').addEventListener('click', () => {
+                                if (confirm('Supprimer ce commentaire ?')) {
+                                    deleteComment(commentData.id, col);
+                                }
+                            });
+                        }
+                        // Fermer le menu si on clique ailleurs
+                        document.addEventListener('click', () => {
+                            document.querySelectorAll('.comment-menu-dropdown.show').forEach(d => d.classList.remove('show'));
+                        });
+                    }

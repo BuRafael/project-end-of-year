@@ -753,7 +753,7 @@ initGenericCarousel({
     containerId: 'similarMovies',
     items: allSimilarSeries,
     getCardHtml: (serie) => `
-        <div class="col-6 col-md-3">
+        <div class="col-6 mb-3 col-md-3">
             <div class="similar-card">
                 <img src="${serie.image}" alt="${serie.title}" class="similar-card-img" onerror="this.onerror=null;this.src='${serieImagePath}placeholder.jpg';">
                 <div class="similar-card-title">${serie.title}</div>

@@ -203,37 +203,23 @@ if (!empty($profil_error)) {
         border: 2px solid #232323;
     }
     .btn-profil-action {
-        background: #fff;
-        color: #700118;
-        border: 1.5px solid #700118;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-weight: 600;
-        font-size: 0.98rem;
-        box-shadow: none;
-        transition: background 0.2s, color 0.2s, border 0.2s;
-        cursor: pointer;
+        background: #F4EFEC !important;
+        color: #700118 !important;
+        border: 2px solid #F4EFEC !important;
+        border-radius: 9px !important;
+        padding: 10px 24px !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+        font-size: 1.02rem !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+        margin-left: 0 !important;
+        transition: background 0.2s, color 0.2s, border 0.2s !important;
+        cursor: pointer !important;
     }
     .btn-profil-action:hover, .btn-profil-action:focus {
-        background: #700118;
-        color: #fff;
-        border: 1.5px solid #700118;
-    }
-    .btn-profil-action {
-        background: #fff;
-        color: #700118;
-        border: 1.5px solid #700118;
-        border-radius: 8px;
-        padding: 8px 16px;
-        font-weight: 600;
-        font-size: 0.98rem;
-        box-shadow: none;
-        transition: background 0.2s, color 0.2s, border 0.2s;
-    }
-    .btn-profil-action:hover {
-        background: #700118;
-        color: #fff;
-        border: 1.5px solid #700118;
+        background: #700118 !important;
+        color: #F4EFEC !important;
+        border: 2px solid #700118 !important;
     }
     .profil-section input[type="text"],
     .profil-section input[type="password"] {
