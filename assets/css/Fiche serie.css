@@ -1,42 +1,60 @@
 /* --- SYNCHRONIZED STYLES WITH FICHE FILM --- */
+/* Harmonisation avec Fiche film.css */
 .similar-card {
-    background: rgba(244, 239, 236, 1);
-    border-radius: 8px;
-    padding: 10px 10px 12px;
-    text-align: center;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 12px 8px 8px 8px;
+    min-height: 220px;
+    cursor: pointer;
+    transition: none;
     box-sizing: border-box;
     margin-bottom: 16px;
     width: 100%;
 }
-@media (max-width: 768px) {
-    .similar-card {
-        min-width: 160px;
-        max-width: 100%;
-    }
-}
-@media (max-width: 480px) {
-    .similar-card {
-        min-width: 120px;
-        max-width: 100%;
-    }
-}
-.similar-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(112, 1, 24, 0.25);
 }
 .similar-card img {
-    display: block;
     width: 100%;
-    height: 220px;
+    height: 160px;
     object-fit: cover;
-    object-position: 50% 18%;
-    background: #0c0c0c;
-    border-radius: 6px;
-    border: 3px solid rgba(0, 0, 0, 0.5);
-    margin-bottom: 10px;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    margin-bottom: 8px;
+}
+/* Harmonisation avec Fiche film.css */
+.similar-card-title {
+    font-family: 'Futura', 'Arial', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #181818;
+    text-align: center;
+    margin-top: 4px;
+    margin-bottom: 0;
+    min-height: 2.6em;
+    max-height: 2.6em;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+.similar-card-title:hover,
+.similar-card-title:focus,
+.similar-card-title:active {
+    color: #181818 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    cursor: default !important;
+    filter: none !important;
+    outline: none !important;
+    text-decoration: none !important;
+}
 }
 .similar-card:hover img {
     transform: scale(1.05);
@@ -71,41 +89,6 @@
     margin: 0 12px;
 }
 /* Remove hover, filter, and transition effects from carousel card image and series name */
-#series-section .similar-card-img,
-#series-section .similar-card-img:hover,
-#series-section .similar-card-img:focus,
-#series-section .similar-card-img:active {
-    filter: none !important;
-    transition: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    transform: none !important;
-    cursor: default !important;
-}
-#series-section .similar-card-title,
-#series-section .similar-card-title:hover,
-#series-section .similar-card-title:focus,
-#series-section .similar-card-title:active {
-    filter: none !important;
-    transition: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    transform: none !important;
-    cursor: default !important;
-}
-/* FORCE REMOVE ALL SHADOW, HOVER, ELEVATION EFFECTS ON CAROUSEL CARDS */
-#series-section .similar-card,
-#series-section .similar-card:hover,
-#series-section .similar-card:focus,
-#series-section .similar-card:active {
-    box-shadow: none !important;
-    background: none !important;
-    transform: none !important;
-    transition: none !important;
-    filter: none !important;
-    outline: none !important;
-    cursor: default !important;
-}
 .movie-sub {
     margin-left: 2px;
     color: #888;
