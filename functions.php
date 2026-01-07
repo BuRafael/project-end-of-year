@@ -836,7 +836,7 @@ function theme_scripts() {
     wp_enqueue_style('footer-style', get_template_directory_uri() . '/assets/css/footer.css', array('base-style'), $version);
     
     // Header and Footer scripts (loaded on all pages)
-    wp_enqueue_script('header-script', get_template_directory_uri() . '/assets/js/Header.js', array(), $version, true);
+    wp_enqueue_script('header-script', get_template_directory_uri() . '/assets/js/header.js', array(), $version, true);
     wp_enqueue_script('footer-script', get_template_directory_uri() . '/assets/js/footer.js', array(), $version, true);
     
     // Initialisation sûre de $current_template pour éviter les warnings

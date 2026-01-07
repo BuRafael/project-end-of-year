@@ -229,12 +229,12 @@ document.addEventListener('DOMContentLoaded', function() {
         musiquesList.innerHTML = `
             <ol class="favoris-tracks-list-custom">
                 ${musiques.map((track, index) => {
+                    let coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
+                    let coverFile = track.cover ? decodeURIComponent(track.cover) : '';
                     // DEBUG: Affiche la valeur de cover et le chemin final pour chaque piste
                     if (track.title && track.title.toLowerCase().includes('inception')) {
                         console.log('[DEBUG INCEPTION] coverFile:', track.cover, '| coverPath:', coverPath, '| coverSrc:', (coverPath + (track.cover || '')));
                     }
-                    let coverPath = '/wp-content/themes/project-end-of-year/assets/image/Pistes film/';
-                    let coverFile = track.cover ? decodeURIComponent(track.cover) : '';
                     if (coverFile && !coverFile.toLowerCase().includes('piste')) {
                         coverPath = '/wp-content/themes/project-end-of-year/assets/image/Films/';
                     }
