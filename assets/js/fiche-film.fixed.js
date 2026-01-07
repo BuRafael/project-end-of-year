@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(r => r.json())
         .then(data => {
             if (data.success && data.data && Array.isArray(data.data.musiques)) {
-                const favoriteTrackIds = new Set(data.data.musiques.map(m => String(m)));
+                const favoriteTrackIds = new Set(data.data.musiques.map(m => typeof m === 'object' && m.id ? String(m.id) : String(m)));
                 tracksTable.querySelectorAll('tr').forEach(row => {
                     let uniqueId = getTrackUniqueId(row);
                     const heart = row.querySelector('.track-like');
