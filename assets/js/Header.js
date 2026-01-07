@@ -49,6 +49,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         overlay.addEventListener('click', closeMenu);
         window.addEventListener('resize', closeMenu);
+        // Accessibilité : ouvrir/fermer avec Entrée ou Espace
+        burger.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+                var isOpen = nav.classList.toggle('open');
+                if (isOpen) {
+                    overlay.classList.add('active');
+                    header.classList.add('header-menu-open');
+                } else {
+                    overlay.classList.remove('active');
+                    header.classList.remove('header-menu-open');
+                }
+            }
+        });
     }
 });
 

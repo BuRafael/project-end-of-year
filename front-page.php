@@ -127,7 +127,7 @@ get_header();
             <div class="top-header">Top 5 films</div>
             <ul class="top-list">
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/inception.jpg' ); ?>" alt="Inception">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Inception.jpg' ); ?>" alt="Inception">
                     <div class="top-info">
                         <a href="<?php echo esc_url( home_url('/fiche-film/inception') ); ?>" class="top-title-link">Inception</a>
                         <a href="<?php echo esc_url( home_url('/fiche-film/inception') ); ?>" class="top-composer-link">Christopher Nolan</a>
@@ -153,7 +153,7 @@ get_header();
                     </button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/parasite.jpg' ); ?>" alt="Parasite">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Parasite.jpg' ); ?>" alt="Parasite">
                     <div class="top-info">
                         <a href="<?php echo esc_url( home_url('/fiche-film/parasite') ); ?>" class="top-title-link">Parasite</a>
                         <a href="<?php echo esc_url( home_url('/fiche-film/parasite') ); ?>" class="top-composer-link">Bong Joon-ho</a>
@@ -166,7 +166,7 @@ get_header();
                     </button>
                 </li>
                 <li>
-                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/interstellar.jpg' ); ?>" alt="Interstellar">
+                    <img src="<?php echo esc_url( get_template_directory_uri() . '/assets/image/Front Page/Interstellar.jpg' ); ?>" alt="Interstellar">
                     <div class="top-info">
                         <a href="<?php echo esc_url( home_url('/fiche-film/interstellar') ); ?>" class="top-title-link">Interstellar</a>
                         <a href="<?php echo esc_url( home_url('/fiche-film/interstellar') ); ?>" class="top-composer-link">Christopher Nolan</a>
